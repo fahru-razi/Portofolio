@@ -1,0 +1,4811 @@
+
+<!doctype html>
+<html data-root="../../../" lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="csrf-token" content="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+    <meta name="theme-color" content="#1A4A8C" />
+    <link rel="manifest" href="../../../html/manifest.webmanifest" />
+    <link rel="icon" href="../../../img/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../img/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" href="../../../img/apple-touch-icon.png?v=2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Absensi" />
+    <title>Dashboard Manajer · Rina</title>
+    
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/ibm-plex-sans-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/plus-jakarta-sans-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/fonts.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="../../../css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/theme.css"
+    />
+    <link rel="stylesheet" href="../../../css/push.css"
+    />
+    
+<link rel="stylesheet" href="../../../css/dashboard.css" />
+
+    <style>
+      /* Form logout dibungkus supaya method-nya POST (bukan link GET) —
+         lihat auth.py: /auth/logout adalah POST-only untuk mencegah CSRF
+         logout lewat <img>/<a> pihak ketiga. Reset tampilan <button> agar
+         identik dengan link sidebar/bottom-nav di sekitarnya. */
+      .logout-form {
+        margin: 0;
+        padding: 0;
+        display: contents; /* form tidak mengubah layout flex/grid induk */
+      }
+      /* [FIX] Sebelumnya `all: unset` + `display: inherit`. Karena parent
+         .logout-form adalah `display: contents`, `inherit` menghasilkan
+         `contents` juga (bukan `flex`), sehingga tombol kehilangan seluruh
+         layout bottom-nav. Sekarang hanya reset tampilan bawaan <button>;
+         layout diatur oleh selector konteks masing-masing (main.css). */
+      button.as-link {
+        background: none;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Sidebar desktop: tombol tetap selebar item menu lain. */
+      .sidebar .logout-form button.as-link {
+        display: flex;
+        width: 100%;
+      }
+    </style>
+  <script>(()=>{const R="../../../",f=window.fetch;window.fetch=(u,o={})=>{u=String(u);if((o.method||"GET").toUpperCase()!=="GET")return Promise.resolve(new Response(JSON.stringify({ok:true,demo:true}),{headers:{"Content-Type":"application/json"}}));if(u[0]==="/")u=u.indexOf("/static/")===0?R+u.slice(8):R+"html"+u;return f(u,o)};document.addEventListener("submit",e=>{e.preventDefault();alert("Mode demo: aksi disimulasikan dan tidak disimpan.")},true)})()</script><link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+  <body
+    class="role-manager"
+  >
+    
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-brand">
+        <img
+          class="brand-logo"
+          src="../../../img/Logo-App-wide.jpg"
+          alt=""
+          width="70"
+          height="36"
+          decoding="async"
+        />
+        <span>CC Indonesia</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar">RI</div>
+        <div>
+          <div class="sidebar-user-name">
+            Rina
+          </div>
+          <div class="sidebar-user-role">Manager</div>
+        </div>
+        <div id="notif-bell-wrap" style="margin-left: auto"></div>
+      </div>
+
+      <nav class="sidebar-nav">
+         
+        <a
+          href="../../../html/manager/dashboard/index.html"
+          class="active"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          Dashboard
+        </a>
+        <a
+          href="../../../html/manager/employees/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          Karyawan
+        </a>
+
+        
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="14" x2="12" y2="14" />
+            <line x1="8" y1="18" x2="16" y2="18" />
+          </svg>
+          <span>Jadwal</span>
+        </a>
+        <a
+          href="../../../html/manager/leaves/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          Pengajuan izin
+        </a>
+        <a
+          href="../../../html/manager/shifts/master/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          Konfigurasi Shift
+        </a>
+        <a
+          href="../../../html/manager/company-calendar/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="15" x2="16" y2="15" />
+          </svg>
+          Kalender
+        </a>
+        <a
+          href="../../../html/manager/corrections/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Koreksi
+        </a>
+        <a
+          href="../../../html/manager/reports/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          Laporan
+        </a>
+        <a
+          href="../../../html/manager/production/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+            <circle cx="7.5" cy="11" r="2" />
+            <circle cx="16.5" cy="11" r="2" />
+          </svg>
+          Produksi
+        </a>
+        <a
+          href="../../../html/manager/offices/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Kantor
+        </a>
+        
+        <a
+          href="../../../html/manager/equipment/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+          Perlengkapan
+        </a>
+        
+        <a
+          href="../../../html/manager/departments/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+            <line x1="12" y1="12" x2="12" y2="16" />
+            <line x1="10" y1="14" x2="14" y2="14" />
+          </svg>
+          Departemen
+        </a>
+
+         
+      </nav>
+
+
+      <div class="sidebar-footer">
+        
+        <div class="lang-switcher" aria-label="Pilih bahasa">
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+        <form method="post" action="../../../html/auth/logout" class="logout-form">
+          <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+          <button type="submit" class="sidebar-logout as-link">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </aside>
+        
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-inner">
+        <span class="mobile-topbar-title">CC Indonesia</span>
+        <div
+          class="lang-switcher lang-switcher--mobile"
+          aria-label="Pilih bahasa"
+        >
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+      </div>
+    </div>
+     
+
+    <div class="main-wrap">
+        
+      <main class="page-content" id="main-content">
+        
+
+
+
+
+
+<div class="dash-body">
+
+  
+  <header class="dm-hero">
+    <div class="dm-hero-left">
+      <p class="dm-hero-greet">
+        Selamat pagi, Rina <span aria-hidden="true">👋</span>
+      </p>
+      <h1 class="dm-hero-title">Dashboard Manajer</h1>
+    </div>
+    <div class="dm-hero-time" aria-label="Tanggal dan waktu saat ini">
+      <div class="dm-hero-date">
+        <span class="dm-hero-day">Jumat</span>
+        <span class="dm-hero-datefull">13 November 2026</span>
+      </div>
+      <div class="dm-hero-clock">
+        <span class="dm-clock" id="dm-clock">--:--:--</span>
+        <span class="dm-clock-tz">WIB</span>
+      </div>
+    </div>
+  </header>
+
+  
+  
+
+  
+  
+  <div class="mgr-section-label">Tim hari ini</div>
+  <div class="mgr-stat-row">
+    <div class="mgr-stat-card mgr-stat-neutral">
+      <span class="mgr-stat-lbl">Total</span>
+      <span class="mgr-stat-num">62</span>
+      <span class="mgr-stat-pct">100%</span>
+    </div>
+    <div class="mgr-stat-card mgr-stat-success" >
+      <span class="mgr-stat-lbl">Hadir</span>
+      <span class="mgr-stat-num">34</span>
+      <span class="mgr-stat-pct">54.8%</span>
+    </div>
+    <div class="mgr-stat-card mgr-stat-warn" >
+      <span class="mgr-stat-lbl">Terlambat</span>
+      <span class="mgr-stat-num">1</span>
+      <span class="mgr-stat-pct">1.6%</span>
+    </div>
+    <div class="mgr-stat-card mgr-stat-info" data-zero="true">
+      <span class="mgr-stat-lbl">Izin</span>
+      <span class="mgr-stat-num">0</span>
+      <span class="mgr-stat-pct">0%</span>
+    </div>
+    <div class="mgr-stat-card mgr-stat-sick" >
+      <span class="mgr-stat-lbl">Sakit</span>
+      <span class="mgr-stat-num">1</span>
+      <span class="mgr-stat-pct">1.6%</span>
+    </div>
+    <div class="mgr-stat-card mgr-stat-danger" >
+      <span class="mgr-stat-lbl">Alpa</span>
+      <span class="mgr-stat-num">1</span>
+      <span class="mgr-stat-pct">1.6%</span>
+    </div>
+    <div class="mgr-stat-card mgr-stat-pending" data-zero="true">
+      <span class="mgr-stat-lbl">Belum absen</span>
+      <span class="mgr-stat-num">25</span>
+      <span class="mgr-stat-pct">40.3%</span>
+    </div>
+  </div>
+
+  
+
+  
+  
+  <div class="mgr-section-label">Ringkasan per shift</div>
+  <div class="mgr-shift-breakdown">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+      
+    
+
+    <article class="mgr-shift-card">
+      <div class="mgr-shift-card-header">
+        <div class="mgr-shift-card-heading">
+          <h2 class="mgr-shift-name">Shift 3 - Produksi</h2>
+          <p class="mgr-shift-total">Total: 11 orang</p>
+        </div>
+        <span class="mgr-shift-badge mgr-shift-badge--ok">
+          <span class="mgr-shift-badge-dot"></span>11 / 11 Hadir
+        </span>
+      </div>
+
+      
+      <div class="mgr-shift-bar" role="img"
+           aria-label="11 hadir, 0 terlambat, 0 izin/sakit, 0 alpa, 0 belum absen">
+        
+          <span class="seg seg--hadir"   style="width: 100.0%"></span>
+          
+          
+          
+          
+        
+      </div>
+
+      <div class="mgr-shift-stats">
+        <div class="mgr-shift-stat mgr-shift-stat--hadir">
+          <span class="mgr-shift-stat-lbl">Hadir</span>
+          <span class="mgr-shift-stat-num">11</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--late">
+          <span class="mgr-shift-stat-lbl">Telat</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--izin">
+          <span class="mgr-shift-stat-lbl">Izin</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--absent">
+          <span class="mgr-shift-stat-lbl">Alpa</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--pending">
+          <span class="mgr-shift-stat-lbl">Belum</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+      </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+      
+    
+
+    <article class="mgr-shift-card">
+      <div class="mgr-shift-card-header">
+        <div class="mgr-shift-card-heading">
+          <h2 class="mgr-shift-name">Manajemen / Kantor</h2>
+          <p class="mgr-shift-total">Total: 5 orang</p>
+        </div>
+        <span class="mgr-shift-badge mgr-shift-badge--ok">
+          <span class="mgr-shift-badge-dot"></span>4 / 5 Hadir
+        </span>
+      </div>
+
+      
+      <div class="mgr-shift-bar" role="img"
+           aria-label="4 hadir, 0 terlambat, 0 izin/sakit, 0 alpa, 0 belum absen">
+        
+          <span class="seg seg--hadir"   style="width: 80.0%"></span>
+          
+          
+          
+          
+        
+      </div>
+
+      <div class="mgr-shift-stats">
+        <div class="mgr-shift-stat mgr-shift-stat--hadir">
+          <span class="mgr-shift-stat-lbl">Hadir</span>
+          <span class="mgr-shift-stat-num">4</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--late">
+          <span class="mgr-shift-stat-lbl">Telat</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--izin">
+          <span class="mgr-shift-stat-lbl">Izin</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--absent">
+          <span class="mgr-shift-stat-lbl">Alpa</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--pending">
+          <span class="mgr-shift-stat-lbl">Belum</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+      </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+      
+    
+
+    <article class="mgr-shift-card">
+      <div class="mgr-shift-card-header">
+        <div class="mgr-shift-card-heading">
+          <h2 class="mgr-shift-name">Staff</h2>
+          <p class="mgr-shift-total">Total: 3 orang</p>
+        </div>
+        <span class="mgr-shift-badge mgr-shift-badge--ok">
+          <span class="mgr-shift-badge-dot"></span>3 / 3 Hadir
+        </span>
+      </div>
+
+      
+      <div class="mgr-shift-bar" role="img"
+           aria-label="2 hadir, 1 terlambat, 0 izin/sakit, 0 alpa, 0 belum absen">
+        
+          <span class="seg seg--hadir"   style="width: 66.67%"></span>
+          <span class="seg seg--late"    style="width: 33.33%"></span>
+          
+          
+          
+        
+      </div>
+
+      <div class="mgr-shift-stats">
+        <div class="mgr-shift-stat mgr-shift-stat--hadir">
+          <span class="mgr-shift-stat-lbl">Hadir</span>
+          <span class="mgr-shift-stat-num">2</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--late">
+          <span class="mgr-shift-stat-lbl">Telat</span>
+          <span class="mgr-shift-stat-num">1</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--izin">
+          <span class="mgr-shift-stat-lbl">Izin</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--absent">
+          <span class="mgr-shift-stat-lbl">Alpa</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--pending">
+          <span class="mgr-shift-stat-lbl">Belum</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+      </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+      
+    
+
+    <article class="mgr-shift-card">
+      <div class="mgr-shift-card-header">
+        <div class="mgr-shift-card-heading">
+          <h2 class="mgr-shift-name">Shift 1 - Supervisor</h2>
+          <p class="mgr-shift-total">Total: 1 orang</p>
+        </div>
+        <span class="mgr-shift-badge mgr-shift-badge--ok">
+          <span class="mgr-shift-badge-dot"></span>1 / 1 Hadir
+        </span>
+      </div>
+
+      
+      <div class="mgr-shift-bar" role="img"
+           aria-label="1 hadir, 0 terlambat, 0 izin/sakit, 0 alpa, 0 belum absen">
+        
+          <span class="seg seg--hadir"   style="width: 100.0%"></span>
+          
+          
+          
+          
+        
+      </div>
+
+      <div class="mgr-shift-stats">
+        <div class="mgr-shift-stat mgr-shift-stat--hadir">
+          <span class="mgr-shift-stat-lbl">Hadir</span>
+          <span class="mgr-shift-stat-num">1</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--late">
+          <span class="mgr-shift-stat-lbl">Telat</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--izin">
+          <span class="mgr-shift-stat-lbl">Izin</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--absent">
+          <span class="mgr-shift-stat-lbl">Alpa</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--pending">
+          <span class="mgr-shift-stat-lbl">Belum</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+      </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+      
+    
+
+    <article class="mgr-shift-card">
+      <div class="mgr-shift-card-header">
+        <div class="mgr-shift-card-heading">
+          <h2 class="mgr-shift-name">Shift 1 - Produksi</h2>
+          <p class="mgr-shift-total">Total: 6 orang</p>
+        </div>
+        <span class="mgr-shift-badge mgr-shift-badge--ok">
+          <span class="mgr-shift-badge-dot"></span>5 / 6 Hadir
+        </span>
+      </div>
+
+      
+      <div class="mgr-shift-bar" role="img"
+           aria-label="5 hadir, 0 terlambat, 0 izin/sakit, 1 alpa, 0 belum absen">
+        
+          <span class="seg seg--hadir"   style="width: 83.33%"></span>
+          
+          
+          <span class="seg seg--absent"  style="width: 16.67%"></span>
+          
+        
+      </div>
+
+      <div class="mgr-shift-stats">
+        <div class="mgr-shift-stat mgr-shift-stat--hadir">
+          <span class="mgr-shift-stat-lbl">Hadir</span>
+          <span class="mgr-shift-stat-num">5</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--late">
+          <span class="mgr-shift-stat-lbl">Telat</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--izin">
+          <span class="mgr-shift-stat-lbl">Izin</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--absent">
+          <span class="mgr-shift-stat-lbl">Alpa</span>
+          <span class="mgr-shift-stat-num">1</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--pending">
+          <span class="mgr-shift-stat-lbl">Belum</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+      </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+      
+    
+
+    <article class="mgr-shift-card">
+      <div class="mgr-shift-card-header">
+        <div class="mgr-shift-card-heading">
+          <h2 class="mgr-shift-name">Shift 2 - Supervisor</h2>
+          <p class="mgr-shift-total">Total: 2 orang</p>
+        </div>
+        <span class="mgr-shift-badge mgr-shift-badge--idle">
+          <span class="mgr-shift-badge-dot"></span>Belum Mulai
+        </span>
+      </div>
+
+      
+      <div class="mgr-shift-bar" role="img"
+           aria-label="0 hadir, 0 terlambat, 0 izin/sakit, 0 alpa, 2 belum absen">
+        
+          
+          
+          
+          
+          <span class="seg seg--pending" style="width: 100.0%"></span>
+        
+      </div>
+
+      <div class="mgr-shift-stats">
+        <div class="mgr-shift-stat mgr-shift-stat--hadir">
+          <span class="mgr-shift-stat-lbl">Hadir</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--late">
+          <span class="mgr-shift-stat-lbl">Telat</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--izin">
+          <span class="mgr-shift-stat-lbl">Izin</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--absent">
+          <span class="mgr-shift-stat-lbl">Alpa</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--pending">
+          <span class="mgr-shift-stat-lbl">Belum</span>
+          <span class="mgr-shift-stat-num">2</span>
+        </div>
+      </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+      
+    
+
+    <article class="mgr-shift-card">
+      <div class="mgr-shift-card-header">
+        <div class="mgr-shift-card-heading">
+          <h2 class="mgr-shift-name">Shift 2 - Produksi</h2>
+          <p class="mgr-shift-total">Total: 23 orang</p>
+        </div>
+        <span class="mgr-shift-badge mgr-shift-badge--idle">
+          <span class="mgr-shift-badge-dot"></span>Belum Mulai
+        </span>
+      </div>
+
+      
+      <div class="mgr-shift-bar" role="img"
+           aria-label="0 hadir, 0 terlambat, 0 izin/sakit, 0 alpa, 23 belum absen">
+        
+          
+          
+          
+          
+          <span class="seg seg--pending" style="width: 100.0%"></span>
+        
+      </div>
+
+      <div class="mgr-shift-stats">
+        <div class="mgr-shift-stat mgr-shift-stat--hadir">
+          <span class="mgr-shift-stat-lbl">Hadir</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--late">
+          <span class="mgr-shift-stat-lbl">Telat</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--izin">
+          <span class="mgr-shift-stat-lbl">Izin</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--absent">
+          <span class="mgr-shift-stat-lbl">Alpa</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--pending">
+          <span class="mgr-shift-stat-lbl">Belum</span>
+          <span class="mgr-shift-stat-num">23</span>
+        </div>
+      </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+      
+    
+
+    <article class="mgr-shift-card">
+      <div class="mgr-shift-card-header">
+        <div class="mgr-shift-card-heading">
+          <h2 class="mgr-shift-name">Shift 3 - Produksi Eksternal</h2>
+          <p class="mgr-shift-total">Total: 9 orang</p>
+        </div>
+        <span class="mgr-shift-badge mgr-shift-badge--ok">
+          <span class="mgr-shift-badge-dot"></span>8 / 9 Hadir
+        </span>
+      </div>
+
+      
+      <div class="mgr-shift-bar" role="img"
+           aria-label="8 hadir, 0 terlambat, 1 izin/sakit, 0 alpa, 0 belum absen">
+        
+          <span class="seg seg--hadir"   style="width: 88.89%"></span>
+          
+          <span class="seg seg--izin" style="width: 11.11%"></span>
+          
+          
+        
+      </div>
+
+      <div class="mgr-shift-stats">
+        <div class="mgr-shift-stat mgr-shift-stat--hadir">
+          <span class="mgr-shift-stat-lbl">Hadir</span>
+          <span class="mgr-shift-stat-num">8</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--late">
+          <span class="mgr-shift-stat-lbl">Telat</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--izin">
+          <span class="mgr-shift-stat-lbl">Izin</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--sakit">
+          <span class="mgr-shift-stat-lbl">Sakit</span>
+          <span class="mgr-shift-stat-num">1</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--absent">
+          <span class="mgr-shift-stat-lbl">Alpa</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--pending">
+          <span class="mgr-shift-stat-lbl">Belum</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+      </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+      
+    
+
+    <article class="mgr-shift-card">
+      <div class="mgr-shift-card-header">
+        <div class="mgr-shift-card-heading">
+          <h2 class="mgr-shift-name">Shift 3 - Supervisor Eksternal</h2>
+          <p class="mgr-shift-total">Total: 1 orang</p>
+        </div>
+        <span class="mgr-shift-badge mgr-shift-badge--ok">
+          <span class="mgr-shift-badge-dot"></span>1 / 1 Hadir
+        </span>
+      </div>
+
+      
+      <div class="mgr-shift-bar" role="img"
+           aria-label="1 hadir, 0 terlambat, 0 izin/sakit, 0 alpa, 0 belum absen">
+        
+          <span class="seg seg--hadir"   style="width: 100.0%"></span>
+          
+          
+          
+          
+        
+      </div>
+
+      <div class="mgr-shift-stats">
+        <div class="mgr-shift-stat mgr-shift-stat--hadir">
+          <span class="mgr-shift-stat-lbl">Hadir</span>
+          <span class="mgr-shift-stat-num">1</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--late">
+          <span class="mgr-shift-stat-lbl">Telat</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--izin">
+          <span class="mgr-shift-stat-lbl">Izin</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--absent">
+          <span class="mgr-shift-stat-lbl">Alpa</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--pending">
+          <span class="mgr-shift-stat-lbl">Belum</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+      </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+      
+    
+
+    <article class="mgr-shift-card">
+      <div class="mgr-shift-card-header">
+        <div class="mgr-shift-card-heading">
+          <h2 class="mgr-shift-name">Shift 3 - Supervisor Internal</h2>
+          <p class="mgr-shift-total">Total: 1 orang</p>
+        </div>
+        <span class="mgr-shift-badge mgr-shift-badge--ok">
+          <span class="mgr-shift-badge-dot"></span>1 / 1 Hadir
+        </span>
+      </div>
+
+      
+      <div class="mgr-shift-bar" role="img"
+           aria-label="1 hadir, 0 terlambat, 0 izin/sakit, 0 alpa, 0 belum absen">
+        
+          <span class="seg seg--hadir"   style="width: 100.0%"></span>
+          
+          
+          
+          
+        
+      </div>
+
+      <div class="mgr-shift-stats">
+        <div class="mgr-shift-stat mgr-shift-stat--hadir">
+          <span class="mgr-shift-stat-lbl">Hadir</span>
+          <span class="mgr-shift-stat-num">1</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--late">
+          <span class="mgr-shift-stat-lbl">Telat</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--izin">
+          <span class="mgr-shift-stat-lbl">Izin</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        
+        <div class="mgr-shift-stat mgr-shift-stat--absent">
+          <span class="mgr-shift-stat-lbl">Alpa</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+        <div class="mgr-shift-stat mgr-shift-stat--pending">
+          <span class="mgr-shift-stat-lbl">Belum</span>
+          <span class="mgr-shift-stat-num">0</span>
+        </div>
+      </div>
+    </article>
+    
+  </div>
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+
+  <section class="mgr-table-section" aria-labelledby="att-title">
+    <div class="mgr-table-topbar">
+      <h2 class="mgr-table-title" id="att-title">Daftar Kehadiran</h2>
+    </div>
+
+    <div class="mgr-table-card">
+      <div class="mgr-filters">
+        <div class="mgr-filters-row">
+        <div class="mgr-filter-tabs" id="filter-tabs-status" role="group" aria-label="Filter status">
+          <button type="button" class="mgr-filter-tab active" aria-pressed="true"  onclick="filterTable(this, 'all', 'status')">Semua <span class="mgr-count">62</span></button>
+          <button type="button" class="mgr-filter-tab" aria-pressed="false" onclick="filterTable(this, 'present', 'status')">Hadir <span class="mgr-count mgr-count--hadir">33</span></button>
+          <button type="button" class="mgr-filter-tab" aria-pressed="false" onclick="filterTable(this, 'late', 'status')">Terlambat <span class="mgr-count mgr-count--late">1</span></button>
+          <button type="button" class="mgr-filter-tab" aria-pressed="false" onclick="filterTable(this, 'extra_off', 'status')">Izin <span class="mgr-count mgr-count--izin">0</span></button>
+          <button type="button" class="mgr-filter-tab" aria-pressed="false" onclick="filterTable(this, 'sick', 'status')">Sakit <span class="mgr-count mgr-count--sakit">1</span></button>
+          <button type="button" class="mgr-filter-tab" aria-pressed="false" onclick="filterTable(this, 'absent', 'status')">Alpa <span class="mgr-count mgr-count--absent">1</span></button>
+          <button type="button" class="mgr-filter-tab" aria-pressed="false" onclick="filterTable(this, 'pending', 'status')">Belum Absen <span class="mgr-count mgr-count--pending">25</span></button>
+          <button type="button" class="mgr-filter-tab" aria-pressed="false" onclick="filterTable(this, 'day_off', 'status')">Libur</button>
+        </div>
+        <label class="mgr-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="search" id="dm-search" autocomplete="off"
+                 placeholder="Cari nama, ID, atau catatan..."
+                 aria-label="Cari karyawan" />
+        </label>
+        </div>
+
+        
+        <div class="mgr-shift-chips" id="filter-tabs-shift" role="group" aria-label="Filter shift">
+          <button type="button" class="mgr-shift-chip active" aria-pressed="true" data-shift="all"
+                  onclick="filterTable(this, 'all', 'shift')">Semua Shift</button>
+          
+          <button type="button" class="mgr-shift-chip" aria-pressed="false" data-shift="shift_3_produksi"
+                  onclick="filterTable(this, this.dataset.shift, 'shift')">Shift 3 - Produksi</button>
+          
+          <button type="button" class="mgr-shift-chip" aria-pressed="false" data-shift="management"
+                  onclick="filterTable(this, this.dataset.shift, 'shift')">Manajemen / Kantor</button>
+          
+          <button type="button" class="mgr-shift-chip" aria-pressed="false" data-shift="staff"
+                  onclick="filterTable(this, this.dataset.shift, 'shift')">Staff</button>
+          
+          <button type="button" class="mgr-shift-chip" aria-pressed="false" data-shift="shift_1_supervisor"
+                  onclick="filterTable(this, this.dataset.shift, 'shift')">Shift 1 - Supervisor</button>
+          
+          <button type="button" class="mgr-shift-chip" aria-pressed="false" data-shift="shift_1_produksi"
+                  onclick="filterTable(this, this.dataset.shift, 'shift')">Shift 1 - Produksi</button>
+          
+          <button type="button" class="mgr-shift-chip" aria-pressed="false" data-shift="shift_2_supervisor"
+                  onclick="filterTable(this, this.dataset.shift, 'shift')">Shift 2 - Supervisor</button>
+          
+          <button type="button" class="mgr-shift-chip" aria-pressed="false" data-shift="shift_2_produksi"
+                  onclick="filterTable(this, this.dataset.shift, 'shift')">Shift 2 - Produksi</button>
+          
+          <button type="button" class="mgr-shift-chip" aria-pressed="false" data-shift="shift_3_produksi_eksternal"
+                  onclick="filterTable(this, this.dataset.shift, 'shift')">Shift 3 - Produksi Eksternal</button>
+          
+          <button type="button" class="mgr-shift-chip" aria-pressed="false" data-shift="shift_3_supervisor_eksternal"
+                  onclick="filterTable(this, this.dataset.shift, 'shift')">Shift 3 - Supervisor Eksternal</button>
+          
+          <button type="button" class="mgr-shift-chip" aria-pressed="false" data-shift="shift_3_supervisor_internal"
+                  onclick="filterTable(this, this.dataset.shift, 'shift')">Shift 3 - Supervisor Internal</button>
+          
+        </div>
+        
+      </div>
+
+      <div class="table-wrap">
+        <table class="mgr-table" id="attendance-table">
+          <thead>
+            <tr>
+              <th>Karyawan</th>
+              <th>Shift & Jadwal</th>
+              <th>Presensi (Masuk — Keluar)</th>
+              <th>Status</th>
+              <th>Lokasi / Radius</th>
+              <th>Keterangan & Catatan Sistem</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi_eksternal"
+                data-search="gilang wijaya cc-0052 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">GI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Gilang Wijaya">Gilang Wijaya</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0052">Produksi • CC-0052</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi Eksternal</span>
+                <span class="shift-sched">23:30 – 07:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>22:51</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>07:31</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Cabang (±41m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Cabang</span><span class="loc-dist">±41m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_supervisor_eksternal"
+                data-search="hana setiawan cc-0061 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">HA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Hana Setiawan">Hana Setiawan</span>
+                    
+                    <span class="mgr-emp-dept" title="Supervisor • CC-0061">Supervisor • CC-0061</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Supervisor Eksternal</span>
+                <span class="shift-sched">23:30 – 07:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>22:51</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>07:49</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Cabang (±66m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Cabang</span><span class="loc-dist">±66m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi_eksternal"
+                data-search="nanda pratama cc-0055 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">NA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Nanda Pratama">Nanda Pratama</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0055">Produksi • CC-0055</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi Eksternal</span>
+                <span class="shift-sched">23:30 – 07:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>22:52</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>07:42</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Cabang (±48m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Cabang</span><span class="loc-dist">±48m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi_eksternal"
+                data-search="putri firmansyah cc-0053 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">PU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Putri Firmansyah">Putri Firmansyah</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0053">Produksi • CC-0053</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi Eksternal</span>
+                <span class="shift-sched">23:30 – 07:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>22:58</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>07:38</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Cabang (±50m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Cabang</span><span class="loc-dist">±50m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi_eksternal"
+                data-search="kirana saputra cc-0056 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">KI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Kirana Saputra">Kirana Saputra</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0056">Produksi • CC-0056</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi Eksternal</span>
+                <span class="shift-sched">23:30 – 07:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:03</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>07:41</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Cabang (±52m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Cabang</span><span class="loc-dist">±52m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi_eksternal"
+                data-search="oki susilo cc-0058 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">OK</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Oki Susilo">Oki Susilo</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0058">Produksi • CC-0058</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi Eksternal</span>
+                <span class="shift-sched">23:30 – 07:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:04</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>07:42</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Cabang (±76m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Cabang</span><span class="loc-dist">±76m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi_eksternal"
+                data-search="oki firmansyah cc-0057 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">OK</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Oki Firmansyah">Oki Firmansyah</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0057">Produksi • CC-0057</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi Eksternal</span>
+                <span class="shift-sched">23:30 – 07:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:17</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>07:49</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Cabang (±57m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Cabang</span><span class="loc-dist">±57m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi_eksternal"
+                data-search="lukman wijaya cc-0059 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">LU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Lukman Wijaya">Lukman Wijaya</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0059">Produksi • CC-0059</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi Eksternal</span>
+                <span class="shift-sched">23:30 – 07:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:19</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>07:48</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Cabang (±75m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Cabang</span><span class="loc-dist">±75m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_supervisor_internal"
+                data-search="hana nugroho cc-0062 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">HA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Hana Nugroho">Hana Nugroho</span>
+                    
+                    <span class="mgr-emp-dept" title="Supervisor • CC-0062">Supervisor • CC-0062</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Supervisor Internal</span>
+                <span class="shift-sched">23:45 – 08:15 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:21</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:18</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±13m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±13m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="eko permata cc-0002 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">EK</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Eko Permata">Eko Permata</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0002">Produksi • CC-0002</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:23</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:10</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±31m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±31m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi_eksternal"
+                data-search="sari saputra cc-0054 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">SA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Sari Saputra">Sari Saputra</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0054">Produksi • CC-0054</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi Eksternal</span>
+                <span class="shift-sched">23:30 – 07:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:23</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>07:30</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Cabang (±24m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Cabang</span><span class="loc-dist">±24m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="tegar pratama cc-0009 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">TE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Tegar Pratama">Tegar Pratama</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0009">Produksi • CC-0009</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:23</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:07</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±43m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±43m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="budi susilo cc-0004 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">BU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Budi Susilo">Budi Susilo</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0004">Produksi • CC-0004</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:26</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:05</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±23m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±23m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="lukman kusuma cc-0008 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">LU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Lukman Kusuma">Lukman Kusuma</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0008">Produksi • CC-0008</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:37</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:09</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±56m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±56m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="budi permata cc-0010 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">BU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Budi Permata">Budi Permata</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0010">Produksi • CC-0010</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:42</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:02</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±67m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±67m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="rangga anggraini cc-0011 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">RA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Rangga Anggraini">Rangga Anggraini</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0011">Produksi • CC-0011</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:45</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:12</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±32m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±32m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="citra handayani cc-0005 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">CI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Citra Handayani">Citra Handayani</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0005">Produksi • CC-0005</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:46</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:16</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±36m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±36m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="maya pratama cc-0003 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">MA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Maya Pratama">Maya Pratama</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0003">Produksi • CC-0003</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:48</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:12</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±59m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±59m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="sari lestari cc-0006 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">SA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Sari Lestari">Sari Lestari</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0006">Produksi • CC-0006</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:49</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:07</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±22m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±22m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="kirana handayani cc-0001 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">KI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Kirana Handayani">Kirana Handayani</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0001">Produksi • CC-0001</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:50</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:18</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±41m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±41m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_3_produksi"
+                data-search="dewi saputra cc-0007 lintas hari">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">DE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Dewi Saputra">Dewi Saputra</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0007">Produksi • CC-0007</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi</span>
+                <span class="shift-sched">00:00 – 08:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>23:51</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>08:19</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±46m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±46m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Lintas hari">Lintas hari</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="management"
+                data-search="budi anggraini cc-0013 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">BU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Budi Anggraini">Budi Anggraini</span>
+                    
+                    <span class="mgr-emp-dept" title="Manajemen • CC-0013">Manajemen • CC-0013</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Kantor</span>
+                <span class="shift-sched">07:30 – 16:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>06:50</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±54m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±54m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="management"
+                data-search="gilang permata cc-0012 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">GI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Gilang Permata">Gilang Permata</span>
+                    
+                    <span class="mgr-emp-dept" title="Manajemen • CC-0012">Manajemen • CC-0012</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Kantor</span>
+                <span class="shift-sched">07:30 – 16:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>06:50</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±31m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±31m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="management"
+                data-search="citra nugroho cc-0014 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">CI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Citra Nugroho">Citra Nugroho</span>
+                    
+                    <span class="mgr-emp-dept" title="Manajemen • CC-0014">Manajemen • CC-0014</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Kantor</span>
+                <span class="shift-sched">07:30 – 16:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>06:58</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±23m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±23m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="management"
+                data-search="nanda firmansyah cc-0015 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">NA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Nanda Firmansyah">Nanda Firmansyah</span>
+                    
+                    <span class="mgr-emp-dept" title="Manajemen • CC-0015">Manajemen • CC-0015</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Kantor</span>
+                <span class="shift-sched">07:30 – 16:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>07:13</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±7m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±7m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="staff"
+                data-search="hana kusuma cc-0018 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">HA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Hana Kusuma">Hana Kusuma</span>
+                    
+                    <span class="mgr-emp-dept" title="Staff • CC-0018">Staff • CC-0018</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Staff</span>
+                <span class="shift-sched">07:30 – 16:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>07:19</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±78m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±78m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_1_produksi"
+                data-search="nanda wijaya cc-0021 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">NA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Nanda Wijaya">Nanda Wijaya</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0021">Produksi • CC-0021</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 1 - Produksi</span>
+                <span class="shift-sched">08:00 – 16:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>07:22</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±33m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±33m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_1_supervisor"
+                data-search="sari pratama cc-0020 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">SA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Sari Pratama">Sari Pratama</span>
+                    
+                    <span class="mgr-emp-dept" title="Supervisor • CC-0020">Supervisor • CC-0020</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 1 - Supervisor</span>
+                <span class="shift-sched">07:45 – 16:15 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>07:22</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±4m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±4m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="staff"
+                data-search="citra anggraini cc-0017 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">CI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Citra Anggraini">Citra Anggraini</span>
+                    
+                    <span class="mgr-emp-dept" title="Staff • CC-0017">Staff • CC-0017</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Staff</span>
+                <span class="shift-sched">07:30 – 16:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>07:24</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±23m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±23m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_1_produksi"
+                data-search="dewi setiawan cc-0024 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">DE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Dewi Setiawan">Dewi Setiawan</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0024">Produksi • CC-0024</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 1 - Produksi</span>
+                <span class="shift-sched">08:00 – 16:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>07:24</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±20m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±20m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_1_produksi"
+                data-search="budi firmansyah cc-0022 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">BU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Budi Firmansyah">Budi Firmansyah</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0022">Produksi • CC-0022</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 1 - Produksi</span>
+                <span class="shift-sched">08:00 – 16:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>07:25</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±45m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±45m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_1_produksi"
+                data-search="hana lestari cc-0025 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">HA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Hana Lestari">Hana Lestari</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0025">Produksi • CC-0025</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 1 - Produksi</span>
+                <span class="shift-sched">08:00 – 16:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>07:32</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±69m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±69m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--present"
+                data-status="present"
+                data-shift="shift_1_produksi"
+                data-search="tegar santoso cc-0023 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">TE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Tegar Santoso">Tegar Santoso</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0023">Produksi • CC-0023</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 1 - Produksi</span>
+                <span class="shift-sched">08:00 – 16:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>07:46</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-present"><i></i>Hadir</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--present" title="Kantor Pusat (±29m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±29m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--late"
+                data-status="late"
+                data-shift="staff"
+                data-search="citra firmansyah cc-0019 telat 28m">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">CI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Citra Firmansyah">Citra Firmansyah</span>
+                    
+                    <span class="mgr-emp-dept" title="Staff • CC-0019">Staff • CC-0019</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Staff</span>
+                <span class="shift-sched">07:30 – 16:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-box">
+                  <span>07:58</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                  <span>– : –</span>
+                </span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-late"><i></i>Terlambat</span>
+                
+              </td>
+
+              <td>
+                
+                
+                <span class="loc-cell loc-cell--late" title="Kantor Pusat (±14m)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span class="loc-text">Kantor Pusat</span><span class="loc-dist">±14m</span>
+                </span>
+                
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--warn" title="Telat 28m">Telat 28m</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--sick"
+                data-status="sick"
+                data-shift="shift_3_produksi_eksternal"
+                data-search="joko wijaya cc-0060 sakit, istirahat">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">JO</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Joko Wijaya">Joko Wijaya</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0060">Produksi • CC-0060</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 3 - Produksi Eksternal</span>
+                <span class="shift-sched">23:30 – 07:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-sick"><i></i>Sakit</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Sakit, istirahat">Sakit, istirahat</span>
+                
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--absent"
+                data-status="absent"
+                data-shift="shift_1_produksi"
+                data-search="budi setiawan cc-0026 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">BU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Budi Setiawan">Budi Setiawan</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0026">Produksi • CC-0026</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 1 - Produksi</span>
+                <span class="shift-sched">08:00 – 16:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-absent"><i></i>Alpa</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="budi hidayat cc-0032 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">BU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Budi Hidayat">Budi Hidayat</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0032">Produksi • CC-0032</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="budi wijaya cc-0030 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">BU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Budi Wijaya">Budi Wijaya</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0030">Produksi • CC-0030</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="citra saputra cc-0049 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">CI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Citra Saputra">Citra Saputra</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0049">Produksi • CC-0049</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="dewi nugroho cc-0038 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">DE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Dewi Nugroho">Dewi Nugroho</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0038">Produksi • CC-0038</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="dewi prasetyo cc-0043 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">DE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Dewi Prasetyo">Dewi Prasetyo</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0043">Produksi • CC-0043</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="dewi santoso cc-0047 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">DE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Dewi Santoso">Dewi Santoso</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0047">Produksi • CC-0047</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="eko prasetyo cc-0034 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">EK</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Eko Prasetyo">Eko Prasetyo</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0034">Produksi • CC-0034</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="eko wijaya cc-0036 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">EK</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Eko Wijaya">Eko Wijaya</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0036">Produksi • CC-0036</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="fitri nugroho cc-0042 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">FI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Fitri Nugroho">Fitri Nugroho</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0042">Produksi • CC-0042</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="gilang saputra cc-0045 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">GI</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Gilang Saputra">Gilang Saputra</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0045">Produksi • CC-0045</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="hana santoso cc-0031 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">HA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Hana Santoso">Hana Santoso</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0031">Produksi • CC-0031</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="joko permata cc-0040 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">JO</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Joko Permata">Joko Permata</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0040">Produksi • CC-0040</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="joko prasetyo cc-0035 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">JO</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Joko Prasetyo">Joko Prasetyo</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0035">Produksi • CC-0035</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="lukman firmansyah cc-0046 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">LU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Lukman Firmansyah">Lukman Firmansyah</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0046">Produksi • CC-0046</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="maya kusuma cc-0029 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">MA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Maya Kusuma">Maya Kusuma</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0029">Produksi • CC-0029</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="sari firmansyah cc-0041 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">SA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Sari Firmansyah">Sari Firmansyah</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0041">Produksi • CC-0041</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="sari permata cc-0033 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">SA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Sari Permata">Sari Permata</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0033">Produksi • CC-0033</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="sari prasetyo cc-0037 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">SA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Sari Prasetyo">Sari Prasetyo</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0037">Produksi • CC-0037</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="sari susilo cc-0048 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">SA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Sari Susilo">Sari Susilo</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0048">Produksi • CC-0048</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_supervisor"
+                data-search="tegar hidayat cc-0027 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">TE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Tegar Hidayat">Tegar Hidayat</span>
+                    
+                    <span class="mgr-emp-dept" title="Supervisor • CC-0027">Supervisor • CC-0027</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Supervisor</span>
+                <span class="shift-sched">15:45 – 00:15 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_supervisor"
+                data-search="tegar kusuma cc-0028 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">TE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Tegar Kusuma">Tegar Kusuma</span>
+                    
+                    <span class="mgr-emp-dept" title="Supervisor • CC-0028">Supervisor • CC-0028</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Supervisor</span>
+                <span class="shift-sched">15:45 – 00:15 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="tegar prasetyo cc-0039 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">TE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Tegar Prasetyo">Tegar Prasetyo</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0039">Produksi • CC-0039</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="tegar saputra cc-0050 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">TE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Tegar Saputra">Tegar Saputra</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0050">Produksi • CC-0050</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="tegar wijaya cc-0044 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">TE</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Tegar Wijaya">Tegar Wijaya</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0044">Produksi • CC-0044</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--pending"
+                data-status="pending"
+                data-shift="shift_2_produksi"
+                data-search="wulan nugroho cc-0051 ">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">WU</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Wulan Nugroho">Wulan Nugroho</span>
+                    
+                    <span class="mgr-emp-dept" title="Produksi • CC-0051">Produksi • CC-0051</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Shift 2 - Produksi</span>
+                <span class="shift-sched">16:00 – 00:00 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-pending"><i></i>Belum Absen</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+            </tr>
+            
+            
+            
+            
+            
+            <tr class="row--day_off"
+                data-status="day_off"
+                data-shift="management"
+                data-search="nanda ramadhan cc-0016 keperluan pribadi">
+
+              <td>
+                <div class="mgr-employee-cell">
+                  <div class="mgr-avatar">NA</div>
+                  <div class="mgr-emp-text">
+                    <span class="mgr-emp-name" title="Nanda Ramadhan">Nanda Ramadhan</span>
+                    
+                    <span class="mgr-emp-dept" title="Manajemen • CC-0016">Manajemen • CC-0016</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="shift-chip">Kantor</span>
+                <span class="shift-sched">07:30 – 16:30 WIB</span>
+              </td>
+
+              <td>
+                
+                <span class="presence-empty"><span class="presence-dot"></span>– : –</span>
+                
+              </td>
+
+              <td>
+                <span class="status-pill pill-off">Libur</span>
+                
+              </td>
+
+              <td>
+                <span class="cell-dash">—</span>
+              </td>
+
+              <td>
+                
+                  <span class="note-chip note-chip--neutral" title="Keperluan pribadi">Keperluan pribadi</span>
+                
+              </td>
+            </tr>
+            
+            <tr class="mgr-empty-row" id="table-no-match" hidden>
+              <td colspan="6" class="mgr-empty">Tidak ada karyawan yang cocok dengan filter atau pencarian.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-row-counter">
+        <span>Menampilkan <strong id="table-visible-count">62</strong> dari <strong>62</strong> karyawan</span>
+      </div>
+    </div>
+  </section>
+
+  
+  
+  <div class="mgr-section-label">Menunggu persetujuan (6)</div>
+  <div class="mgr-pending-list">
+    
+    <div class="mgr-pending-item" id="leave-e3c7fa65-b165-4af0-a81f-d1a41b26a0c8">
+      <div class="mgr-avatar mgr-avatar-sm">MA</div>
+      <div class="mgr-pending-info">
+        <span class="mgr-pending-name">Maya Pratama</span>
+        <span class="mgr-pending-detail">Izin · 16 November 2026</span>
+      </div>
+      <div class="mgr-pending-actions">
+        <button class="btn-approve" onclick="reviewLeave('e3c7fa65-b165-4af0-a81f-d1a41b26a0c8','approved')">Setuju</button>
+        <button class="btn-reject"  onclick="reviewLeave('e3c7fa65-b165-4af0-a81f-d1a41b26a0c8','rejected')">Tolak</button>
+      </div>
+    </div>
+    
+    <div class="mgr-pending-item" id="leave-db783411-3871-4adf-874f-5512a493557d">
+      <div class="mgr-avatar mgr-avatar-sm">LU</div>
+      <div class="mgr-pending-info">
+        <span class="mgr-pending-name">Lukman Kusuma</span>
+        <span class="mgr-pending-detail">Izin · 17 November 2026</span>
+      </div>
+      <div class="mgr-pending-actions">
+        <button class="btn-approve" onclick="reviewLeave('db783411-3871-4adf-874f-5512a493557d','approved')">Setuju</button>
+        <button class="btn-reject"  onclick="reviewLeave('db783411-3871-4adf-874f-5512a493557d','rejected')">Tolak</button>
+      </div>
+    </div>
+    
+    <div class="mgr-pending-item" id="leave-66f2311b-f4cc-4394-afe2-b6b2dac28691">
+      <div class="mgr-avatar mgr-avatar-sm">BU</div>
+      <div class="mgr-pending-info">
+        <span class="mgr-pending-name">Budi Anggraini</span>
+        <span class="mgr-pending-detail">Sakit · 18 November 2026</span>
+      </div>
+      <div class="mgr-pending-actions">
+        <button class="btn-approve" onclick="reviewLeave('66f2311b-f4cc-4394-afe2-b6b2dac28691','approved')">Setuju</button>
+        <button class="btn-reject"  onclick="reviewLeave('66f2311b-f4cc-4394-afe2-b6b2dac28691','rejected')">Tolak</button>
+      </div>
+    </div>
+    
+    <div class="mgr-pending-item" id="leave-442dabc9-e9ba-4fff-a4f9-56bbeeb41e4b">
+      <div class="mgr-avatar mgr-avatar-sm">SA</div>
+      <div class="mgr-pending-info">
+        <span class="mgr-pending-name">Sari Pratama</span>
+        <span class="mgr-pending-detail">Izin · 19 November 2026</span>
+      </div>
+      <div class="mgr-pending-actions">
+        <button class="btn-approve" onclick="reviewLeave('442dabc9-e9ba-4fff-a4f9-56bbeeb41e4b','approved')">Setuju</button>
+        <button class="btn-reject"  onclick="reviewLeave('442dabc9-e9ba-4fff-a4f9-56bbeeb41e4b','rejected')">Tolak</button>
+      </div>
+    </div>
+    
+    <div class="mgr-pending-item" id="leave-6ded6024-02c7-4c87-989f-564b1e8e23f2">
+      <div class="mgr-avatar mgr-avatar-sm">HA</div>
+      <div class="mgr-pending-info">
+        <span class="mgr-pending-name">Hana Lestari</span>
+        <span class="mgr-pending-detail">Izin · 20 November 2026</span>
+      </div>
+      <div class="mgr-pending-actions">
+        <button class="btn-approve" onclick="reviewLeave('6ded6024-02c7-4c87-989f-564b1e8e23f2','approved')">Setuju</button>
+        <button class="btn-reject"  onclick="reviewLeave('6ded6024-02c7-4c87-989f-564b1e8e23f2','rejected')">Tolak</button>
+      </div>
+    </div>
+    
+    <div class="mgr-pending-item" id="leave-690e1b6b-bfd5-4d48-9416-3c5b34687e9a">
+      <div class="mgr-avatar mgr-avatar-sm">KI</div>
+      <div class="mgr-pending-info">
+        <span class="mgr-pending-name">Kirana Saputra</span>
+        <span class="mgr-pending-detail">Sakit · 16 November 2026</span>
+      </div>
+      <div class="mgr-pending-actions">
+        <button class="btn-approve" onclick="reviewLeave('690e1b6b-bfd5-4d48-9416-3c5b34687e9a','approved')">Setuju</button>
+        <button class="btn-reject"  onclick="reviewLeave('690e1b6b-bfd5-4d48-9416-3c5b34687e9a','rejected')">Tolak</button>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+
+
+      </main>
+    </div>
+
+     
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+       
+      <a
+        href="../../../html/manager/dashboard/index.html"
+        class="active"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a
+        href="../../../html/manager/employees/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+        </svg>
+        <span>Karyawan</span>
+      </a>
+      <a
+        href="../../../html/manager/shift-schedule/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="14" x2="12" y2="14" />
+          <line x1="8" y1="18" x2="16" y2="18" />
+        </svg>
+        <span>Jadwal</span>
+      </a>
+      <a
+        href="../../../html/manager/leaves/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Izin</span>
+      </a>
+      <a
+        href="../../../html/manager/company-calendar/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="15" x2="16" y2="15" />
+        </svg>
+        <span>Kalender</span>
+      </a>
+      <a
+        href="../../../html/manager/reports/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        <span>Laporan</span>
+      </a>
+      <a
+        href="../../../html/manager/production/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+          <circle cx="7.5" cy="11" r="2" />
+          <circle cx="16.5" cy="11" r="2" />
+        </svg>
+        <span>Produksi</span>
+      </a>
+      <a
+        href="../../../html/manager/corrections/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+        <span>Koreksi</span>
+      </a>
+      <a
+        href="../../../html/manager/offices/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+          />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Kantor</span>
+      </a>
+      
+      <a
+        href="../../../html/manager/equipment/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <line x1="8" y1="21" x2="16" y2="21" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+        <span>Alat</span>
+      </a>
+      
+      <a
+        href="../../../html/manager/departments/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+          <line x1="12" y1="12" x2="12" y2="16" />
+          <line x1="10" y1="14" x2="14" y2="14" />
+        </svg>
+        <span>Departemen</span>
+      </a>
+      <a
+        href="../../../html/manager/shifts/master/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span>Konfigurasi Shift</span>
+      </a>
+      <form method="post" action="../../../html/auth/logout" class="logout-form">
+        <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+        <button type="submit" class="as-link">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </form>
+
+       
+    </nav>
+    
+    
+    <script src="../../../js/core.js"></script>
+    
+    
+<script>
+  /* Check-in / GPS dihapus dari dashboard manajer — tidak ada lagi window.APP.OFFICES,
+     CHECKIN_STATE, atau gps.js di halaman ini. */
+  window.CSRF_TOKEN = "IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk";
+  window.I18N = {
+    confirmApprove: "Setujui pengajuan ini?",
+    confirmReject:  "Tolak pengajuan ini?",
+    requestError:   "Terjadi kesalahan. Coba lagi.",
+    rejectReasonPrompt:   "Alasan penolakan (wajib diisi):",
+    rejectReasonRequired: "Alasan penolakan wajib diisi.",
+    notifTitle:     "Notifikasi",
+    notifMarkAllRead: "Tandai semua dibaca",
+    notifLoading:   "Memuat…",
+    notifEmpty:     "Tidak ada notifikasi",
+    notifError:     "Gagal memuat notifikasi",
+  };
+  window.APP = { I18N: window.I18N, CSRF_TOKEN: window.CSRF_TOKEN };
+</script>
+<script src="../../../js/dashboard.js"></script>
+
+    <script src="../../../js/app.js"></script>
+    
+    <script>
+      window.I18N = Object.assign({}, window.I18N, {
+      notifTitle: "Notifikasi",
+      notifMarkAllRead: "Tandai semua dibaca",
+      notifLoading: "Memuat\u2026",
+      notifEmpty: "Tidak ada notifikasi",
+      notifError: "Gagal memuat notifikasi"});
+    </script>
+    <script src="../../../js/notifications.js"></script>
+    <script src="../../../js/push.js"></script>
+    
+    <script>
+      // Form logout mengirim POST via fetch, lalu redirect manual berdasarkan
+      // JSON {"redirect": "..."} dari server — pola yang sama dengan
+      // login.js. Tanpa ini, submit form native menampilkan JSON mentah
+      // di layar alih-alih membawa user ke halaman login.
+      document.querySelectorAll(".logout-form").forEach(function (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const btn = form.querySelector("button[type=submit]");
+          if (btn) btn.disabled = true;
+          try { if (window.Push) await window.Push.forgetDevice(); } catch {}
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": form.querySelector(
+                  'input[name="csrf_token"]',
+                ).value,
+              },
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              /* respons bukan JSON — abaikan, pakai fallback di bawah */
+            }
+            window.location.href = data.redirect || "/auth/login";
+          } catch {
+            // Gagal terhubung ke server: tetap arahkan ke login supaya
+            // user tidak macet di halaman dengan sesi yang mungkin sudah
+            // tidak valid.
+            window.location.href = "/auth/login";
+          }
+        });
+      });
+    </script>
+    
+  </body>
+</html>

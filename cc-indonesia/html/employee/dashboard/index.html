@@ -1,0 +1,993 @@
+
+<!doctype html>
+<html data-root="../../../" lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="csrf-token" content="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+    <meta name="theme-color" content="#1A4A8C" />
+    <link rel="manifest" href="../../../html/manifest.webmanifest" />
+    <link rel="icon" href="../../../img/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../img/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" href="../../../img/apple-touch-icon.png?v=2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Absensi" />
+    <title>Absensi — Nanda</title>
+    
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/ibm-plex-sans-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/plus-jakarta-sans-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/fonts.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="../../../css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/theme.css"
+    />
+    <link rel="stylesheet" href="../../../css/push.css"
+    />
+    
+<link
+  rel="stylesheet"
+  href="../../../css/employee_dashboard.css"
+/>
+
+    <style>
+      /* Form logout dibungkus supaya method-nya POST (bukan link GET) —
+         lihat auth.py: /auth/logout adalah POST-only untuk mencegah CSRF
+         logout lewat <img>/<a> pihak ketiga. Reset tampilan <button> agar
+         identik dengan link sidebar/bottom-nav di sekitarnya. */
+      .logout-form {
+        margin: 0;
+        padding: 0;
+        display: contents; /* form tidak mengubah layout flex/grid induk */
+      }
+      /* [FIX] Sebelumnya `all: unset` + `display: inherit`. Karena parent
+         .logout-form adalah `display: contents`, `inherit` menghasilkan
+         `contents` juga (bukan `flex`), sehingga tombol kehilangan seluruh
+         layout bottom-nav. Sekarang hanya reset tampilan bawaan <button>;
+         layout diatur oleh selector konteks masing-masing (main.css). */
+      button.as-link {
+        background: none;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Sidebar desktop: tombol tetap selebar item menu lain. */
+      .sidebar .logout-form button.as-link {
+        display: flex;
+        width: 100%;
+      }
+    </style>
+  <script>(()=>{const R="../../../",f=window.fetch;window.fetch=(u,o={})=>{u=String(u);if((o.method||"GET").toUpperCase()!=="GET")return Promise.resolve(new Response(JSON.stringify({ok:true,demo:true}),{headers:{"Content-Type":"application/json"}}));if(u[0]==="/")u=u.indexOf("/static/")===0?R+u.slice(8):R+"html"+u;return f(u,o)};document.addEventListener("submit",e=>{e.preventDefault();alert("Mode demo: aksi disimulasikan dan tidak disimpan.")},true)})()</script><link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+  <body
+    class="role-employee"
+  >
+    
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-brand">
+        <img
+          class="brand-logo"
+          src="../../../img/Logo-App-wide.jpg"
+          alt=""
+          width="70"
+          height="36"
+          decoding="async"
+        />
+        <span>CC Indonesia</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar">NA</div>
+        <div>
+          <div class="sidebar-user-name">
+            Nanda
+          </div>
+          <div class="sidebar-user-role">Employee</div>
+        </div>
+        <div id="notif-bell-wrap" style="margin-left: auto"></div>
+      </div>
+
+      <nav class="sidebar-nav">
+         
+        <a
+          href="../../../html/employee/dashboard/index.html"
+          class="active"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Absensi
+        </a>
+        <a
+          href="../../../html/employee/history/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Riwayat
+        </a>
+        <a
+          href="../../../html/employee/leave/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="9" y1="13" x2="15" y2="13" />
+          </svg>
+          Pengajuan izin
+        </a>
+        <a
+          href="../../../html/employee/shift-swap/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M16 3l4 4-4 4" />
+            <line x1="20" y1="7" x2="7" y2="7" />
+            <path d="M8 21l-4-4 4-4" />
+            <line x1="4" y1="17" x2="17" y2="17" />
+          </svg>
+          Tukar Shift
+        </a>
+        <a
+          href="../../../html/employee/profile/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Profil Saya
+        </a>
+
+         
+      </nav>
+
+
+      <div class="sidebar-footer">
+        
+        <div class="lang-switcher" aria-label="Pilih bahasa">
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+        <form method="post" action="../../../html/auth/logout" class="logout-form">
+          <input type="hidden" name="csrf_token" value="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+          <button type="submit" class="sidebar-logout as-link">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </aside>
+        
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-inner">
+        <span class="mobile-topbar-title">CC Indonesia</span>
+        <div
+          class="lang-switcher lang-switcher--mobile"
+          aria-label="Pilih bahasa"
+        >
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+      </div>
+    </div>
+     
+
+    <div class="main-wrap">
+        
+      <main class="page-content" id="main-content">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+
+
+
+  
+    
+    
+  
+
+
+  
+
+
+
+
+  
+    
+  
+
+
+
+  
+
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-left">
+      <p class="page-header-sub">Selamat pagi</p>
+      <p class="page-header-name">Nanda Wijaya</p>
+    </div>
+    <div class="ed-header-pill">
+      <div class="ed-header-date">
+        <span class="ed-header-day">Jumat</span>
+        <span class="ed-header-date-full">
+          13 November 2026
+        </span>
+      </div>
+      <span class="ed-header-divider"></span>
+      <div class="ed-clock">
+        <span id="ed-clock-time">09:52:27</span>
+        <span class="ed-clock-tz">WIB</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dash-body">
+
+  
+  <div class="ed-location-bar">
+    <div class="ed-location-left">
+      <svg class="ed-pin-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+        <circle cx="12" cy="9" r="2.5" />
+      </svg>
+      <span class="ed-location-text" id="ed-location-text">
+        Kamu lagi di:
+        
+          <strong>Kantor Pusat</strong>
+          <span class="ed-location-verified">(area udah kevalidasi)</span>
+        
+      </span>
+    </div>
+    <div class="ed-location-right">
+      <span class="ed-gps-radius">GPS Radius: <span id="gps-accuracy">—</span></span>
+      <div class="gps-status gps-detecting" id="gps-status" role="status" aria-live="polite">
+        <span class="ed-gps-dot"></span>
+        <span class="gps-status-text">Mendeteksi lokasi...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    
+    <div class="dash-col-left">
+      <div class="ed-card">
+        <p class="ed-card-label">Catatan Presensi</p>
+
+        <div class="ed-status-hero ed-status-hero--active">
+          <div class="ed-status-hero-top">
+            <div class="ed-status-hero-left">
+              <span class="ed-status-hero-date">Jumat, 13 November 2026</span>
+              <span class="ed-status-hero-caption">Jangan lupa check-out ya kalau udah kelar.</span>
+            </div>
+            <span class="ed-status-hero-badge ed-pill--active">Sedang Bekerja</span>
+          </div>
+
+          
+          
+          
+          <div class="ed-progress"
+               id="ed-progress"
+               data-checkin-iso="2026-11-13T07:22:00"
+               data-checkout-iso=""
+               data-target-minutes="480">
+            <div class="ed-progress-top">
+              <span class="ed-progress-label">Progres Jam Kerja Hari Ini</span>
+              <span class="ed-progress-value" id="ed-progress-value">
+                0j 0m / 8 jam
+              </span>
+            </div>
+            <div class="ed-progress-track">
+              <div class="ed-progress-fill " id="ed-progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+          
+        </div>
+
+        <div class="ed-stat-grid">
+          <div class="ed-stat-box">
+            <span class="ed-stat-label">Jam Masuk</span>
+            <span class="ed-stat-value ed-stat-value--set">
+              07:22
+            </span>
+            <span class="ed-stat-caption ">Tepat waktu</span>
+          </div>
+          <div class="ed-stat-box">
+            <span class="ed-stat-label">Jam Keluar</span>
+            <span class="ed-stat-value ">
+              --:--
+            </span>
+            <span class="ed-stat-caption">Belum checkout</span>
+          </div>
+          <div class="ed-stat-box">
+            <span class="ed-stat-label">Total Jam Kerja</span>
+            <span class="ed-stat-value " id="ed-total-worked">
+              0j 0m
+            </span>
+            <span class="ed-stat-caption">Target: 8 jam</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    
+    <div class="dash-col-right">
+      <div class="ed-card">
+        <p class="ed-card-label">Jadwal Shift Hari Ini</p>
+
+        
+        <p class="ed-shift-title">Shift 1 - Produksi · 08:00–16:00 WIB</p>
+
+        <div class="ed-shift-rows">
+          <div class="ed-shift-row ed-shift-row--in">
+            <div class="ed-shift-row-icon ed-shift-row-icon--in">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" />
+                <polyline points="10 17 15 12 10 7" />
+                <line x1="15" y1="12" x2="3" y2="12" />
+              </svg>
+            </div>
+            <div class="ed-shift-row-body">
+              <div class="ed-shift-row-top">
+                <span class="ed-shift-row-title">Check-in Resmi</span>
+                <span class="ed-shift-row-time">06:00 – 08:00</span>
+              </div>
+              <div class="ed-shift-row-bottom">
+                <span class="ed-shift-row-caption">
+                  Toleransi sampai 09:00 WIB
+                </span>
+                <span class="ed-tag ed-tag--ok">Tepat Waktu</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ed-shift-row ed-shift-row--out">
+            <div class="ed-shift-row-icon ed-shift-row-icon--out">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </div>
+            <div class="ed-shift-row-body">
+              <div class="ed-shift-row-top">
+                <span class="ed-shift-row-title">Check-out Resmi</span>
+                <span class="ed-shift-row-time">08:00 – 18:00</span>
+              </div>
+              <div class="ed-shift-row-bottom">
+                <span class="ed-shift-row-caption">Kalau jam kerja udah cukup</span>
+                <span class="ed-tag ed-tag--ok">Aktif</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
+        
+        
+          
+          <button class="ed-cta-btn ed-cta-btn--success" id="btn-main" onclick="openCheckoutConfirm()" disabled>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Check-out Sekarang
+          </button>
+          
+
+        
+        
+
+        <p class="ed-cta-caption" id="checkin-note">tinggal klik buat check-out
+        </p>
+      </div>
+    </div>
+    
+  </div>
+  
+
+  
+  
+  
+  <div class="ed-card ed-recap-card">
+    <div class="ed-recap-header">
+      <p class="ed-card-label" style="margin-bottom: 0">
+        Rekapitulasi Kehadiran
+        <span class="ed-recap-period">(Periode November 2026)</span>
+      </p>
+      <a class="ed-recap-link" href="../../../html/employee/history/index.html">
+        Lihat Riwayat Lengkap
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+      </a>
+    </div>
+
+    <div class="ed-recap-grid">
+      
+      <div class="ed-recap-stat ed-recap-stat--present">
+        <div class="ed-recap-stat-top">
+          <span class="ed-recap-icon ed-recap-icon--present">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="9 12 11 14 15 10" /></svg>
+          </span>
+          <span class="ed-recap-titles">
+            <span class="ed-recap-title">Hadir Tepat Waktu</span>
+            <span class="ed-recap-subtitle">Periode November 2026</span>
+          </span>
+          <span class="ed-recap-badge ed-recap-badge--present">Sesuai Jadwal</span>
+        </div>
+        <div class="ed-recap-value-row">
+          <span class="ed-recap-num">9</span>
+          <span class="ed-recap-unit">Hari</span>
+          <span class="ed-recap-caption">dari 11 hari kerja bulan ini</span>
+        </div>
+        <div class="ed-recap-bar"><div class="ed-recap-bar-fill ed-recap-bar-fill--present" style="width: 81%"></div></div>
+      </div>
+
+      
+      <div class="ed-recap-stat ed-recap-stat--late">
+        <div class="ed-recap-stat-top">
+          <span class="ed-recap-icon ed-recap-icon--late">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+          </span>
+          <span class="ed-recap-titles">
+            <span class="ed-recap-title">Terlambat Datang</span>
+            <span class="ed-recap-subtitle">Catatan keterlambatan</span>
+          </span>
+          <span class="ed-recap-badge ed-recap-badge--late">Total 16 Menit</span>
+        </div>
+        <div class="ed-recap-value-row">
+          <span class="ed-recap-num ed-recap-num--warn">1</span>
+          <span class="ed-recap-unit">Kali</span>
+          <span class="ed-recap-caption">tercatat bulan ini</span>
+        </div>
+        <div class="ed-recap-bar"><div class="ed-recap-bar-fill ed-recap-bar-fill--late" style="width: 9%"></div></div>
+      </div>
+
+      
+      <div class="ed-recap-stat ed-recap-stat--absent">
+        <div class="ed-recap-stat-top">
+          <span class="ed-recap-icon ed-recap-icon--absent">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><line x1="17" y1="8" x2="22" y2="13" /><line x1="22" y1="8" x2="17" y2="13" /></svg>
+          </span>
+          <span class="ed-recap-titles">
+            <span class="ed-recap-title">Alpa / Tanpa Keterangan</span>
+            <span class="ed-recap-subtitle">Ketidakhadiran tanpa izin</span>
+          </span>
+          <span class="ed-recap-badge ed-recap-badge--absent">0 Kejadian</span>
+        </div>
+        <div class="ed-recap-value-row">
+          <span class="ed-recap-num ">0</span>
+          <span class="ed-recap-unit">Hari</span>
+          <span class="ed-recap-caption">tercatat bulan berjalan</span>
+        </div>
+        <div class="ed-recap-bar"><div class="ed-recap-bar-fill ed-recap-bar-fill--absent" style="width: 0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  
+  <div class="modal-overlay" id="checkout-confirm-overlay">
+    <div class="modal-box modal-box-sm ed-confirm-box">
+      <button type="button" class="modal-close ed-confirm-close" onclick="closeCheckoutConfirm()" aria-label="Tutup">&times;</button>
+      <div class="modal-body">
+        <div class="ed-confirm-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </div>
+        <span class="modal-title ed-confirm-title">Udah mau cabut?</span>
+        <p class="modal-desc ed-confirm-desc">
+          Jam kerja bakal berhenti keitung begitu kamu check-out. Kalau kerjaan masih ada, gaskeun lanjut dulu aja.
+        </p>
+      </div>
+      <div class="modal-footer ed-confirm-footer">
+        <button type="button" class="ed-confirm-btn ed-confirm-btn--stay" onclick="closeCheckoutConfirm()">
+          Lanjut Kerja Dulu
+        </button>
+        <button type="button" class="ed-confirm-btn ed-confirm-btn--go" id="checkout-confirm-btn" onclick="confirmCheckout()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Ya, Check-out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openCheckoutConfirm() {
+      var overlay = document.getElementById("checkout-confirm-overlay");
+      if (overlay) overlay.classList.add("open");
+    }
+    function closeCheckoutConfirm() {
+      var overlay = document.getElementById("checkout-confirm-overlay");
+      if (overlay) overlay.classList.remove("open");
+    }
+    function confirmCheckout() {
+      closeCheckoutConfirm();
+      if (typeof doCheckin === "function") doCheckin("checkout");
+    }
+  </script>
+
+  <script>
+    window.OFFICES = [
+      
+      { lat: -6.2088, lng: 106.8456, radius_meters: 150, name: "Kantor Pusat" }
+      
+    ];window.CHECKIN_STATE = "in";
+    window.CHECKOUT_TOO_EARLY = false;
+    window.CAN_CHECKOUT       = true;
+    window.CHECKOUT_OPEN      = "08:00";
+    window.CSRF_TOKEN         = "ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M";
+  </script>
+</div>
+
+      </main>
+    </div>
+
+     
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+       
+      <a
+        href="../../../html/employee/dashboard/index.html"
+        class="active"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+          />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Absensi</span>
+      </a>
+      <a
+        href="../../../html/employee/history/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+        <span>Riwayat</span>
+      </a>
+      <a
+        href="../../../html/employee/leave/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Izin</span>
+      </a>
+      <a
+        href="../../../html/employee/shift-swap/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M16 3l4 4-4 4" />
+          <line x1="20" y1="7" x2="7" y2="7" />
+          <path d="M8 21l-4-4 4-4" />
+          <line x1="4" y1="17" x2="17" y2="17" />
+        </svg>
+        <span>Tukar Shift</span>
+      </a>
+      <a
+        href="../../../html/employee/profile/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>Profil</span>
+      </a>
+      <form method="post" action="../../../html/auth/logout" class="logout-form">
+        <input type="hidden" name="csrf_token" value="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+        <button type="submit" class="as-link">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </form>
+
+       
+    </nav>
+    
+    
+    <script src="../../../js/core.js"></script>
+    
+    
+<script>
+  window.I18N = {
+    gpsOfficeNotConfigured:
+      "Kantor belum dikonfigurasi. Hubungi manajer.",
+    gpsOfficeNotFound: "Kantor tidak ditemukan",
+    gpsTapCheckOut: "klik untuk check-out",
+    gpsTapCheckIn: "klik untuk check-in",
+    gpsWaiting: "Menunggu sinyal GPS...",
+    gpsDetecting: "Mendeteksi lokasi...",
+    gpsInsideArea: "Dalam Radius Presensi",
+    gpsOutsideArea: "Di luar area",
+    gpsDistanceUnknown: "jarak tidak diketahui",
+    gpsMetersFromOffice: "m dari kantor",
+    gpsKmFromOffice: "km dari kantor",
+    gpsAtOffice: "Anda berada di",
+    gpsPermissionDenied:
+      "Izin GPS ditolak. Aktifkan di pengaturan browser.",
+    gpsSignalUnavailable:
+      "Sinyal GPS tidak tersedia. Coba di luar ruangan.",
+    gpsTimedOut: "Waktu deteksi GPS habis. Coba lagi.",
+    gpsError: "GPS tidak tersedia.",
+    gpsOutsideOffice: "Anda di luar area kantor",
+    gpsBrowserNoSupport: "Browser tidak mendukung GPS.",
+    gpsNotSupported: "GPS tidak didukung",
+    gpsNotReady: "GPS belum siap. Tunggu sebentar.",
+    gpsProcessing: "Memproses...",
+    gpsUpdatingPage: "Memperbarui halaman...",
+    gpsConnectionError: "Koneksi bermasalah. Periksa internet Anda.",
+    checkoutTooEarly:
+      "Check-out tersedia mulai pukul 08:00 WIB.",
+    checkoutOpenAt: "Check-out tersedia mulai pukul {time} WIB.",
+    checkinOpenAt: "Check-in dibuka pukul {time} WIB",
+    cutoffReachedAt: "Absensi sudah ditutup (cutoff: {cutoff})",
+    checkInCutoffPassed: "Batas waktu check-in telah terlewati.",
+    confirmApprove: "Setujui pengajuan izin ini?",
+    confirmReject: "Tolak pengajuan izin ini?",
+    requestError: "Terjadi kesalahan. Coba lagi.",
+    gpsRetry: "Coba Lagi",
+  };
+</script>
+<script src="../../../js/device-id.js"></script>
+<script src="../../../js/gps.js"></script>
+<script>
+  // Jam digital header — WIB, tik tiap detik. Render awal sudah diisi
+  // server (current_time_label) supaya tidak "kedip" sebelum JS jalan.
+  (function () {
+    "use strict";
+    var el = document.getElementById("ed-clock-time");
+    if (!el) return;
+    function tick() {
+      try {
+        var parts = new Intl.DateTimeFormat("en-GB", {
+          timeZone: "Asia/Jakarta",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        }).formatToParts(new Date());
+        var get = function (t) {
+          var p = parts.find(function (x) { return x.type === t; });
+          return p ? p.value : "--";
+        };
+        el.textContent = get("hour") + ":" + get("minute") + ":" + get("second");
+      } catch (e) {
+        /* Intl/timeZone tidak didukung — biarkan nilai render server tampil */
+      }
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
+<script>
+  // Progres jam kerja — hitung live dari check_in_at, biar nggak macet di
+  // "0j 0m" sepanjang hari. working_minutes di DB cuma keisi pas checkout,
+  // jadi selama masih aktif kerja kita hitung sendiri di sini tiap detik.
+  (function () {
+    "use strict";
+    var box = document.getElementById("ed-progress");
+    if (!box) return;
+
+    var checkinIso = box.getAttribute("data-checkin-iso");
+    var checkoutIso = box.getAttribute("data-checkout-iso");
+    if (!checkinIso || checkoutIso) return; // sudah checkout — nilai statis dari server sudah final
+
+    var targetMinutes = parseInt(box.getAttribute("data-target-minutes"), 10) || 0;
+    var checkinDate = new Date(checkinIso);
+    if (isNaN(checkinDate.getTime()) || !targetMinutes) return;
+
+    var valueEl = document.getElementById("ed-progress-value");
+    var fillEl = document.getElementById("ed-progress-fill");
+    var totalEl = document.getElementById("ed-total-worked");
+
+    function formatJm(mins) {
+      var h = Math.floor(mins / 60);
+      var m = mins % 60;
+      return h + "j " + m + "m";
+    }
+
+    function tick() {
+      var elapsedMin = Math.max(
+        0,
+        Math.floor((Date.now() - checkinDate.getTime()) / 60000),
+      );
+      var pct = Math.min(100, Math.floor((elapsedMin / targetMinutes) * 100));
+
+      if (fillEl) fillEl.style.width = pct + "%";
+      var targetLabel = Math.floor(targetMinutes / 60) + " jam";
+      if (valueEl) {
+        valueEl.textContent = formatJm(elapsedMin) + " / " + targetLabel;
+      }
+      if (totalEl) {
+        totalEl.textContent = formatJm(elapsedMin);
+        totalEl.classList.add("ed-stat-value--set");
+      }
+    }
+
+    tick();
+    setInterval(tick, 30000); // update tiap 30 detik — cukup buat "real-time" tanpa boros
+  })();
+</script>
+
+    <script src="../../../js/app.js"></script>
+    
+    <script>
+      window.I18N = Object.assign({}, window.I18N, {
+      notifTitle: "Notifikasi",
+      notifMarkAllRead: "Tandai semua dibaca",
+      notifLoading: "Memuat\u2026",
+      notifEmpty: "Tidak ada notifikasi",
+      notifError: "Gagal memuat notifikasi"});
+    </script>
+    <script src="../../../js/notifications.js"></script>
+    <script src="../../../js/push.js"></script>
+    
+    <script>
+      window.TRACKING_CFG = {
+        statusUrl: "/employee/location/status",
+        pingUrl: "/employee/location/ping",
+        intervalSeconds: 600,
+        statusPollSeconds: 60,
+        i18n: {
+          active: "Lokasi dibagikan (GPS)",
+          onDuty: "Lokasi dibagikan",
+          viaOffice: "GPS mati \u00b7 terdeteksi di jaringan kantor",
+          viaIp: "GPS mati \u00b7 perkiraan kasar via IP",
+          gpsOff: "GPS mati \u00b7 lokasi tidak terkirim"
+        }
+      };
+    </script>
+    <script src="../../../js/tracking.js"></script>
+    
+    <script>
+      // Form logout mengirim POST via fetch, lalu redirect manual berdasarkan
+      // JSON {"redirect": "..."} dari server — pola yang sama dengan
+      // login.js. Tanpa ini, submit form native menampilkan JSON mentah
+      // di layar alih-alih membawa user ke halaman login.
+      document.querySelectorAll(".logout-form").forEach(function (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const btn = form.querySelector("button[type=submit]");
+          if (btn) btn.disabled = true;
+          try { if (window.Push) await window.Push.forgetDevice(); } catch {}
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": form.querySelector(
+                  'input[name="csrf_token"]',
+                ).value,
+              },
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              /* respons bukan JSON — abaikan, pakai fallback di bawah */
+            }
+            window.location.href = data.redirect || "/auth/login";
+          } catch {
+            // Gagal terhubung ke server: tetap arahkan ke login supaya
+            // user tidak macet di halaman dengan sesi yang mungkin sudah
+            // tidak valid.
+            window.location.href = "/auth/login";
+          }
+        });
+      });
+    </script>
+    
+  </body>
+</html>

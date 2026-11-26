@@ -1,0 +1,2424 @@
+/* =============================================================================
+   shift_schedule.css — Jadwal Shift (Manager)  (v4.0 — Card List + 2-Panel Modal)
+   ============================================================================= */
+
+/* ── Responsive columns (legacy compat) ─────────────────────────────────── */
+.sched-col-office,
+.sched-col-period,
+.sched-col-upcoming {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .sched-col-office {
+    display: table-cell;
+  }
+}
+@media (min-width: 900px) {
+  .sched-col-period,
+  .sched-col-upcoming {
+    display: table-cell;
+  }
+}
+
+/* ── Kolom jam kerja & week strip: sembunyikan di mobile ─────────────────── */
+.ss-week-cell,
+.ss-time-col {
+  display: none;
+}
+@media (min-width: 600px) {
+  .ss-time-col {
+    display: table-cell;
+  }
+}
+@media (min-width: 900px) {
+  .ss-week-cell {
+    display: table-cell;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EMPLOYEE CARD LIST — replaces plain table rows
+   ─────────────────────────────────────────────────────────────────────────
+   Setiap row karyawan = kartu horizontal dengan 4 zona:
+     [avatar + nama + dept] [shift badge + jam] [7 hari mini] [aksi]
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Tabel tetap ada untuk DOM compatibility, tapi row-nya di-style sebagai card */
+.mgr-table.ss-card-table {
+  border-collapse: separate;
+  border-spacing: 0 6px;
+  font-size: 0.83rem;
+  background: transparent;
+}
+
+.mgr-table.ss-card-table thead th {
+  background: transparent;
+  border-bottom: none;
+  padding: 0 1rem 0.2rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+
+/* Hide "Aksi" header — tombol sudah jelas */
+.mgr-table.ss-card-table th:last-child {
+  display: none;
+}
+
+/* ── Card row ─────────────────────────────────────────────────────────────── */
+.mgr-table.ss-card-table tbody tr[data-emp-id] {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(15, 37, 64, 0.04);
+  transition:
+    box-shadow 0.16s,
+    transform 0.16s;
+  cursor: default;
+}
+.mgr-table.ss-card-table tbody tr[data-emp-id]:hover {
+  box-shadow: 0 4px 14px rgba(15, 37, 64, 0.09);
+  transform: translateY(-1px);
+  background: var(--bg-card);
+}
+.mgr-table.ss-card-table tbody tr[data-emp-id] td {
+  border-bottom: none;
+  background: transparent;
+  padding: 0.8rem 0.85rem;
+  vertical-align: middle;
+}
+.mgr-table.ss-card-table tbody tr[data-emp-id] td:first-child {
+  border-radius: 10px 0 0 10px;
+  padding-left: 1.1rem;
+}
+.mgr-table.ss-card-table tbody tr[data-emp-id] td:last-child {
+  border-radius: 0 10px 10px 0;
+  padding-right: 1rem;
+}
+
+/* ── Avatar + nama + dept ─────────────────────────────────────────────────── */
+.ss-emp-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 150px;
+}
+.ss-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px; /* square-ish, bukan circle */
+  background: var(--brand-light, #eaf2f8);
+  color: var(--brand, #1b4f72);
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  letter-spacing: 0.03em;
+}
+.ss-emp-name {
+  display: block;
+  font-weight: 600;
+  font-size: 0.84rem;
+  color: var(--text-primary, #0f2537);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+.ss-emp-dept {
+  display: block;
+  font-size: 0.68rem;
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--text-faint, #8dabbe);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+/* ── Shift name cell (kolom 2) ────────────────────────────────────────────── */
+.ss-shift-cell {
+  min-width: 120px;
+}
+
+/* Badge utama — 5 varian warna: KANTOR / PAGI / SIANG / MALAM / LIBUR */
+.ss-shift-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+/* Titik dinonaktifkan secara global */
+.ss-shift-badge::before {
+  display: none;
+}
+
+/* KANTOR / MANAGEMENT — navy brand */
+.ss-shift-badge--management {
+  background: var(--sm-bg, #e8f2ff);
+  color: var(--sm-text, #143358);
+  border-color: var(--sm-border, #8bbcf0);
+}
+/* PAGI — amber */
+.ss-shift-badge--pagi {
+  background: var(--s1-bg, #fef3de);
+  color: var(--s1-text, #7c3a00);
+  border-color: var(--s1-border, #f5c87a);
+}
+/* SIANG — teal */
+.ss-shift-badge--siang {
+  background: var(--s4-bg, #e0f4fa);
+  color: var(--s4-text, #0b4155);
+  border-color: var(--s4-border, #74c6df);
+}
+/* MALAM — indigo */
+.ss-shift-badge--malam {
+  background: var(--s2-bg, #f0eaff);
+  color: var(--s2-text, #3b1a6b);
+  border-color: var(--s2-border, #c4a8f0);
+}
+/* LIBUR / OFF */
+.ss-shift-badge--libur {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+.ss-shift-badge--unassigned {
+  background: #f8fafc;
+  color: var(--text-faint, #8dabbe);
+  border-color: var(--border, #e2e8ef);
+  font-weight: 500;
+}
+.ss-shift-badge--unassigned::before {
+  display: none;
+}
+
+/* ── Jam kerja visual cell (kolom 3 — timeline bar) ──────────────────────── */
+.ss-time-cell {
+  min-width: 160px;
+}
+.ss-time-bar {
+  position: absolute;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--_bar-color, var(--brand, #1b4f72));
+  min-width: 4px;
+}
+.ss-time-duration {
+  display: none; /* checkin/checkout window tidak ditampilkan lagi */
+}
+
+/* Warna bar per kategori shift */
+.ss-time-bar--management {
+  background: var(--sm-ink, #1d6fa4);
+}
+.ss-time-bar--pagi {
+  background: var(--s1-ink, #b45309);
+}
+.ss-time-bar--siang {
+  background: var(--s4-ink, #0e7490);
+}
+.ss-time-bar--malam {
+  background: var(--s2-ink, #6d28d9);
+}
+.ss-time-bar--libur {
+  background: #94a3b8;
+}
+
+/* ── 7-hari dot strip dengan tanggal ─────────────────────────────────────── */
+.ss-week-strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+  /* Strip diisi JS setelah halaman tampil. Ruang yang sama (7 dot 36×42px +
+     6 gap 4px) dicadangkan sejak awal agar tinggi/lebar 100+ baris tidak
+     berubah saat terisi (sebelumnya CLS ≈ 0,31). */
+  min-height: 42px;
+  min-width: 276px;
+}
+
+/* ─ Palet 5 warna dot ─ */
+/* Kantor/management — navy */
+.ss-day-dot--management {
+  background: var(--sm-bg, #e8f2ff);
+  color: var(--sm-text, #143358);
+}
+/* Pagi — amber */
+.ss-day-dot--pagi {
+  background: var(--s1-bg, #fef3de);
+  color: var(--s1-text, #7c3a00);
+}
+/* Siang — teal */
+.ss-day-dot--siang {
+  background: var(--s4-bg, #e0f4fa);
+  color: var(--s4-text, #0b4155);
+}
+/* Malam — indigo */
+.ss-day-dot--malam {
+  background: var(--s2-bg, #f0eaff);
+  color: var(--s2-text, #3b1a6b);
+}
+/* Libur/OFF — slate */
+.ss-day-dot--off {
+  background: #f1f5f9;
+  color: #4d5b6e;
+  font-size: 0.52rem;
+}
+/* Empty/unassigned */
+.ss-day-dot--empty {
+  background: var(--border-light, #eef2f6);
+  color: #40596a;
+  font-size: 0.52rem;
+}
+
+/* ── Aksi button (Atur Periode) ───────────────────────────────────────────── */
+.ss-action-cell {
+  text-align: right;
+  white-space: nowrap;
+}
+.ss-btn-period {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  background: var(--accent, #d4860a);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: "IBM Plex Sans", sans-serif;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    box-shadow 0.15s;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(180, 83, 9, 0.2);
+}
+.ss-btn-period:hover {
+  background: var(--accent-dark, #b45309);
+  box-shadow: 0 3px 8px rgba(180, 83, 9, 0.3);
+}
+.ss-btn-period svg {
+  flex-shrink: 0;
+}
+/* Kecil di mobile — icon only */
+@media (max-width: 767px) {
+  .ss-btn-period span {
+    display: none;
+  }
+  .ss-btn-period {
+    padding: 0.45rem;
+    width: 34px;
+    height: 34px;
+    justify-content: center;
+    border-radius: 8px;
+  }
+}
+
+/* ── Periode label kecil di bawah tombol ──────────────────────────────────── */
+.ss-period-label {
+  display: block;
+  font-size: 0.63rem;
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--text-faint, #8dabbe);
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODAL BULK ASSIGN — 2-PANEL REDESIGN (gambar 4)
+   ─────────────────────────────────────────────────────────────────────────
+   Struktur:
+     .modal-box.modal-box-bulk
+       .modal-header (step indicator)
+       .bulk-panels                  ← flex row
+         .bulk-panel-left            ← scroll karyawan
+         .bulk-panel-divider
+         .bulk-panel-right           ← sticky config
+       .modal-footer
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Override ukuran modal untuk bulk */
+.modal-box-bulk {
+  max-width: 740px;
+  max-height: 94vh;
+}
+
+/* ── Step indicator header ───────────────────────────────────────────────── */
+.bulk-step-header {
+  padding: 1.1rem 1.35rem 1rem;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+.bulk-step-header .modal-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+/* ── 2-panel layout ──────────────────────────────────────────────────────── */
+.bulk-panels {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.bulk-panel-left {
+  flex: 1 1 55%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  padding: 1rem 1.1rem;
+  border-right: 1px solid var(--border-light);
+}
+
+.bulk-panel-right {
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.1rem;
+  overflow-y: auto;
+  background: var(--bg, #f7f8fa);
+}
+
+/* Chips terpilih di atas panel kanan */
+.bulk-selected-chips-wrap {
+  margin-bottom: 0.9rem;
+}
+.bulk-selected-chips-label {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-faint, #8dabbe);
+  font-family: "IBM Plex Sans", sans-serif;
+  margin-bottom: 0.35rem;
+}
+
+/* Shift preview strip di kanan (timeline visual) */
+.bulk-shift-preview {
+  margin-top: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #e2e8ef);
+  border-radius: 8px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  display: none; /* shown by JS */
+}
+.bulk-shift-preview.visible {
+  display: block;
+}
+.bulk-shift-preview-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.3rem;
+  font-size: 0.78rem;
+}
+.bulk-shift-timeline {
+  position: relative;
+  height: 6px;
+  background: var(--border-light, #eef2f6);
+  border-radius: 99px;
+  margin: 0.4rem 0;
+  overflow: visible;
+}
+.bulk-shift-bar {
+  position: absolute;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--brand, #1b4f72);
+}
+.bulk-timeline-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+.bulk-shift-meta {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+}
+
+/* Divider vertikal di tengah */
+.bulk-panel-divider {
+  display: none; /* redundant — border-right on left panel sudah cukup */
+}
+
+/* Section label dalam panel kanan */
+.bulk-section-label {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-faint, #8dabbe);
+  font-family: "IBM Plex Sans", sans-serif;
+  margin-bottom: 0.45rem;
+  margin-top: 0.9rem;
+}
+.bulk-section-label:first-child {
+  margin-top: 0;
+}
+
+/* Date group */
+.bulk-date-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+
+/* ── Employee strip di modal ─────────────────────────────────────────────── */
+.sched-emp-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+}
+.sched-emp-strip-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+.sched-emp-strip-dept {
+  font-size: 0.73rem;
+  color: var(--text-faint);
+  margin-top: 1px;
+}
+
+/* ── Shift hint ──────────────────────────────────────────────────────────── */
+.sched-shift-hint {
+  font-size: 0.73rem;
+  color: var(--text-faint);
+  margin-top: 0.3rem;
+  min-height: 1rem;
+}
+
+/* ── Swap arrow ──────────────────────────────────────────────────────────── */
+.sched-swap-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0;
+  color: var(--text-faint);
+}
+
+/* ── Swap preview ────────────────────────────────────────────────────────── */
+.sched-swap-preview {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.sched-swap-preview-label {
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+.sched-preview-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0;
+  font-size: 0.82rem;
+}
+.sched-preview-row + .sched-preview-row {
+  border-top: 1px solid var(--border-light);
+}
+.sched-preview-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHIFT COLOR SYSTEM — 7 Shift
+   Urutan pagi → malam:
+     shift_3    06:00–14:00  hijau
+     shift_1    07:00–15:00  kuning
+     management 08:30–17:30  biru
+     shift_4    11:00–19:00  ungu muda
+     shift_2    16:00–00:00  ungu tua  (crosses_midnight)
+     shift_5    17:00–01:00  merah     (crosses_midnight)
+     shift_6    23:00–08:00  hitam     (crosses_midnight)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Badge chip — dipakai di seluruh halaman */
+.shift-badge,
+.shift-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+.shift-badge--shift_3,
+.shift-chip--shift_3 {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.shift-badge--shift_1,
+.shift-chip--shift_1 {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.shift-badge--management,
+.shift-chip--management {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.shift-badge--shift_4,
+.shift-chip--shift_4 {
+  background: #fdf4ff;
+  color: #7e22ce;
+}
+
+/* Shift malam — subtle border kiri */
+.shift-badge--shift_2,
+.shift-chip--shift_2 {
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+
+.shift-badge--shift_5,
+.shift-chip--shift_5 {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.shift-badge--shift_6,
+.shift-chip--shift_6 {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+/* Ikon malam kecil */
+.shift-midnight-icon {
+  font-size: 10px;
+  opacity: 0.65;
+  margin-left: 2px;
+}
+
+/* ── Warna dot kecil (timeline / legend) ─────────────────────────────────── */
+.shift-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.shift-dot--shift_3 {
+  background: #16a34a;
+}
+.shift-dot--shift_1 {
+  background: #ca8a04;
+}
+.shift-dot--management {
+  background: #1d4ed8;
+}
+.shift-dot--shift_4 {
+  background: #7e22ce;
+}
+.shift-dot--shift_2 {
+  background: #6d28d9;
+}
+.shift-dot--shift_5 {
+  background: #991b1b;
+}
+.shift-dot--shift_6 {
+  background: #0f172a;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BULK ASSIGN
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.bulk-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  margin-bottom: 0.7rem;
+}
+.bulk-toolbar .form-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8rem;
+}
+.bulk-toolbar .form-select {
+  min-width: 0;
+  max-width: 140px;
+  font-size: 0.8rem;
+}
+
+.bulk-emp-table-wrap {
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.85rem;
+}
+.bulk-emp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+.bulk-emp-table thead {
+  position: sticky;
+  top: 0;
+  background: var(--bg-card, #fff);
+  z-index: 1;
+}
+.bulk-emp-table th {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.bulk-emp-table td {
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid var(--border-light, #f0f0f0);
+  vertical-align: middle;
+}
+.bulk-emp-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.bulk-emp-table tbody tr:hover {
+  background: var(--bg-hover, #f8f9fb);
+}
+.bulk-emp-table tbody tr.bulk-hidden {
+  display: none;
+}
+
+.bulk-emp-table .col-check {
+  width: 36px;
+  text-align: center;
+}
+.bulk-emp-table input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: var(--primary, #3b5bdb);
+}
+
+.bulk-footer-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+.bulk-selected-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.bulk-selected-count {
+  font-weight: 700;
+  color: var(--primary, #3b5bdb);
+}
+.bulk-footer-row .form-select {
+  flex: 1;
+  min-width: 180px;
+}
+
+.bulk-date-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.bulk-info-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-size: 0.73rem;
+  color: var(--text-faint);
+  padding: 0.5rem 0.65rem;
+  background: var(--bg, #f5f7fa);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+}
+
+/* Informasi khusus shift malam dalam bulk assign */
+.bulk-midnight-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-size: 0.73rem;
+  color: #6d28d9;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+}
+
+.bulk-select-all-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  background: var(--bg, #f5f7fa);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+.bulk-select-all-row:hover {
+  background: var(--bg-hover, #eef0f6);
+}
+
+.bulk-empty-row td {
+  text-align: center;
+  color: var(--text-faint);
+  padding: 1.5rem 0;
+  font-size: 0.82rem;
+}
+
+.bulk-loading-row td {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+.bulk-loading-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--primary, #3b5bdb);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Chips karyawan terpilih ─────────────────────────────────────────────── */
+.bulk-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-height: 2rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg, #f5f7fa);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  max-height: 100px;
+  overflow-y: auto;
+}
+.bulk-chips-empty {
+  font-size: 0.73rem;
+  color: var(--text-faint);
+  align-self: center;
+}
+.bulk-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.45rem 0.18rem 0.55rem;
+  background: var(--primary, #3b5bdb);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  white-space: nowrap;
+  max-width: 180px;
+}
+.bulk-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bulk-chip-remove {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+.bulk-chip-remove:hover {
+  color: #fff;
+}
+
+/* Row highlight untuk baris yang terpilih */
+.bulk-emp-table tbody tr.bulk-row-selected {
+  background: color-mix(in srgb, var(--primary, #3b5bdb) 8%, transparent);
+}
+.bulk-emp-table tbody tr.bulk-row-selected:hover {
+  background: color-mix(in srgb, var(--primary, #3b5bdb) 13%, transparent);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHIFT STAT CARDS — satu kartu per shift_type aktif
+   ─────────────────────────────────────────────────────────────────────────
+   Desain: grid responsif, setiap kartu punya color-strip atas sesuai
+   warna shift (color_hex dari DB), angka besar, label kecil, dan
+   time-range shift di bawah sebagai konteks.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ss-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.65rem;
+  margin-bottom: 1.25rem;
+}
+
+.ss-stat-card {
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 10px;
+  padding: 0.9rem 1rem 0.8rem;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition:
+    box-shadow 0.15s,
+    transform 0.15s;
+}
+.ss-stat-card:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Garis warna atas — identitas shift */
+.ss-stat-card-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Badge chip kecil di pojok kanan atas */
+.ss-stat-card-badge {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.7rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.12rem 0.45rem;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+/* Angka utama */
+.ss-stat-num {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 0.35rem;
+  margin-bottom: 0.25rem;
+  font-variant-numeric: tabular-nums;
+  /* Warna di-set inline dari JS */
+}
+
+/* Label nama shift */
+.ss-stat-label {
+  display: block;
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--text-primary, #111);
+  margin-bottom: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Jam kerja — konteks informatif */
+.ss-stat-time {
+  display: block;
+  font-size: 0.67rem;
+  color: var(--text-faint, #9ca3af);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Kartu khusus "Belum di-assign" — warna netral */
+.ss-stat-card--unassigned .ss-stat-num {
+  color: var(--text-faint, #9ca3af);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SWAP SEARCHABLE EMPLOYEE PICKER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.swap-search-wrap {
+  position: relative;
+}
+
+.swap-search-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 0;
+  right: 0;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: var(--radius-sm, 6px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.swap-dd-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.swap-dd-item:hover {
+  background: var(--bg-hover, #f4f6fb);
+}
+.swap-dd-item + .swap-dd-item {
+  border-top: 1px solid var(--border-light, #f0f0f0);
+}
+
+.swap-dd-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--primary, #3b5bdb);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.swap-dd-info {
+  flex: 1;
+  min-width: 0;
+}
+.swap-dd-name {
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: var(--text-primary, #111);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.swap-dd-dept {
+  font-size: 0.7rem;
+  color: var(--text-faint, #9ca3af);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swap-dd-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.12rem 0.5rem;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.swap-dd-empty {
+  padding: 0.85rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-faint, #9ca3af);
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STAT CARD — Filter aktif
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ss-stat-card {
+  cursor: pointer;
+  user-select: none;
+}
+.ss-stat-card:hover {
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Kartu aktif: ring warna, sedikit terangkat */
+.ss-stat-card--active {
+  outline: 2px solid var(--_card-color, #3b5bdb);
+  outline-offset: 2px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Kartu non-aktif saat ada filter: redup */
+.ss-stat-grid:has(.ss-stat-card--active)
+  .ss-stat-card:not(.ss-stat-card--active) {
+  opacity: 0.45;
+}
+
+/* Fallback untuk browser tanpa :has() */
+.ss-stat-card--dimmed {
+  opacity: 0.45;
+}
+
+/* ── Pill label filter aktif di header tabel ─────────────────────────────── */
+.ss-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.35rem 0.18rem 0.6rem;
+  background: var(--primary-light, #eff6ff);
+  color: var(--primary, #3b5bdb);
+  border: 1px solid var(--primary, #3b5bdb);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  animation: pill-in 0.15s ease;
+}
+@keyframes pill-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.ss-filter-pill button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary, #3b5bdb);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0.1rem;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.ss-filter-pill button:hover {
+  opacity: 1;
+}
+
+/* ── Shift badge tanpa titik ─────────────────────────────────────────────── */
+.ss-shift-badge--nodot::before {
+  display: none;
+}
+.ss-shift-badge--nodot {
+  gap: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   WEEK STRIP — Visualisasi hari/tanggal (Gambar 3/4)
+   Satu card per hari: hari & tanggal dalam 1 kotak berwarna, tanpa teks terpisah
+   ═══════════════════════════════════════════════════════════════════════════ */
+.ss-day-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 34px;
+}
+/* Label hari dan tanggal disembunyikan — semua masuk dalam .ss-day-dot */
+.ss-day-label {
+  display: none;
+}
+.ss-day-date {
+  display: none;
+}
+.ss-day-dot {
+  width: 36px;
+  height: 42px;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  font-family: "IBM Plex Mono", monospace;
+  line-height: 1;
+  transition: transform 0.1s;
+}
+/* Elemen hari (SEN/SEL/...) di dalam dot — dirender via JS */
+.ss-day-dot-day {
+  font-size: 0.52rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-family: "IBM Plex Sans", sans-serif;
+  opacity: 0.9; /* 0.75 membuat label hari <4.5:1 di dot pagi */
+  line-height: 1;
+}
+/* Elemen angka tanggal di dalam dot */
+.ss-day-dot-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: "IBM Plex Mono", monospace;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Today highlight */
+.ss-day-pill--today .ss-day-dot {
+  outline: 2px solid var(--brand, #1b4f72);
+  outline-offset: 2px;
+}
+.ss-day-pill--today .ss-day-dot-day,
+.ss-day-pill--today .ss-day-dot-num {
+  color: inherit;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BULK STEPS — Fixed asymmetry: garis tidak tumpang tindih teks
+   ═══════════════════════════════════════════════════════════════════════════ */
+.bulk-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  padding: 0.25rem 0;
+}
+.bulk-step {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  position: relative;
+  /* Tidak pakai flex:1 — biarkan content menentukan lebar num+label */
+}
+/* Garis penghubung antar step — di luar .bulk-step, sebagai elemen fleksibel */
+.bulk-step-line {
+  flex: 1;
+  height: 1.5px;
+  background: var(--border, #e2e8ef);
+  min-width: 20px;
+  margin: 0 0.5rem;
+  transition: background 0.2s;
+  align-self: center;
+}
+.bulk-step.step-done + .bulk-step .bulk-step-line,
+.bulk-step.step-done .bulk-step-line {
+  background: var(--brand, #1b4f72);
+}
+/* Hapus ::after pseudo yang lama — diganti .bulk-step-line */
+.bulk-step:not(:last-child)::after {
+  content: none;
+}
+.bulk-step--last {
+  /* Step terakhir tidak butuh garis */
+  flex-shrink: 0;
+}
+.bulk-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: "IBM Plex Mono", monospace;
+  flex-shrink: 0;
+  z-index: 1;
+  border: 2px solid var(--border, #e2e8ef);
+  background: var(--bg-card, #fff);
+  color: var(--text-faint, #8dabbe);
+  transition: all 0.2s;
+}
+.bulk-step.step-active .bulk-step-num {
+  background: var(--brand, #1b4f72);
+  border-color: var(--brand, #1b4f72);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.15);
+}
+.bulk-step.step-done .bulk-step-num {
+  background: var(--success, #15803d);
+  border-color: var(--success, #15803d);
+  color: #fff;
+}
+.bulk-step-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-faint, #8dabbe);
+  font-family: "IBM Plex Sans", sans-serif;
+  white-space: nowrap;
+}
+.bulk-step.step-active .bulk-step-label {
+  color: var(--text-primary, #0f2537);
+}
+.bulk-step.step-done .bulk-step-label {
+  color: var(--success, #15803d);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   JAM KERJA — Bar lebih tebal & berwarna (Gambar 2 perbaikan)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.ss-time-bar-wrap {
+  position: relative;
+  height: 8px;
+  background: var(--border-light, #eef2f6);
+  border-radius: 99px;
+  margin: 5px 0 2px;
+  width: 130px;
+  overflow: hidden;
+}
+.ss-time-range {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary, #2c3e50);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE — Desktop berbagai ukuran, laptop, tablet, HP (Gambar 4 fix)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Tablet portrait (768–899px): tampilkan time, sembunyikan week */
+@media (min-width: 768px) and (max-width: 899px) {
+  .ss-time-col {
+    display: table-cell;
+  }
+  .ss-week-cell {
+    display: none;
+  }
+}
+
+/* Tablet landscape & laptop kecil */
+@media (min-width: 601px) and (max-width: 740px) {
+  .modal-box-bulk {
+    max-width: calc(100% - 2rem);
+    width: 100%;
+  }
+  .bulk-panels {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .bulk-panel-left {
+    border-right: none;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .bulk-panel-right {
+    flex: 0 0 auto;
+  }
+}
+
+@media (min-width: 741px) and (max-width: 900px) {
+  .modal-box-bulk {
+    max-width: 720px;
+  }
+  .bulk-panel-right {
+    flex: 0 0 240px;
+  }
+}
+
+/* Layar medium (tablet landscape + laptop) */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .ss-emp-name {
+    max-width: 180px;
+  }
+  .ss-day-dot {
+    width: 32px;
+    height: 38px;
+    font-size: 0.58rem;
+  }
+  .ss-day-dot-day {
+    font-size: 0.48rem;
+  }
+  .ss-day-dot-num {
+    font-size: 0.65rem;
+  }
+  .ss-day-pill {
+    min-width: 32px;
+  }
+}
+
+/* Layar lebar (>=1200px) */
+@media (min-width: 1200px) {
+  .ss-emp-name {
+    max-width: 240px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FIX #3 — mgr-table-header: cari + filter departemen proporsional
+   Pada layar kecil, blok kanan (search + filter) dibuat full-width dan stack
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 680px) {
+  .mgr-table-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+  /* Blok kanan (search + filter) menjadi row penuh */
+  .mgr-table-header > div:last-child {
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  /* Search input dan filter select sama lebarnya */
+  .mgr-table-header > div:last-child > div[style*="position: relative"] {
+    flex: 1;
+  }
+  #emp-search-main {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  #dept-filter {
+    flex: 1;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FIX #4 — Bulk modal mobile: layout vertikal + panel kanan tidak menutupi kiri
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  .modal-box-bulk {
+    max-width: 100%;
+    max-height: 96vh;
+    border-radius: 14px;
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Step header: kompak di mobile */
+  .bulk-step-header {
+    padding: 0.85rem 1rem 0.75rem;
+  }
+  .bulk-step-header .modal-header-row {
+    margin-bottom: 0.75rem;
+  }
+
+  /* Steps: sembunyikan label semua kecuali yang aktif */
+  .bulk-step-label {
+    display: none;
+  }
+  .bulk-step.step-active .bulk-step-label {
+    display: block;
+    font-size: 0.68rem;
+  }
+  .bulk-step-line {
+    min-width: 14px;
+  }
+  .bulk-step-num {
+    width: 24px;
+    height: 24px;
+    font-size: 0.65rem;
+  }
+
+  /* Panel: susun vertikal, scrollable bersama */
+  .bulk-panels {
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: none;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Panel kiri: batasi tinggi agar panel kanan tetap terlihat */
+  .bulk-panel-left {
+    flex: 0 0 auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-light);
+    padding: 0.75rem;
+    max-height: 300px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Tabel karyawan di dalam panel kiri: bisa scroll */
+  .bulk-emp-table-wrap {
+    max-height: 200px;
+    flex: 1;
+  }
+
+  /* Panel kanan: auto height, tidak menyembunyikan panel kiri */
+  .bulk-panel-right {
+    flex: 0 0 auto;
+    background: var(--bg, #f7f8fa);
+    padding: 0.75rem;
+    overflow-y: visible;
+  }
+
+  /* Chips container: lebih kecil di mobile */
+  .bulk-chips-container {
+    max-height: 70px;
+  }
+
+  /* Toolbar search di modal: stack vertikal jika perlu */
+  .bulk-toolbar {
+    flex-wrap: wrap;
+  }
+  .bulk-toolbar .form-select {
+    max-width: none;
+    flex: 1;
+  }
+
+  /* Tabel utama: sembunyikan week di mobile */
+  .ss-week-cell {
+    display: none !important;
+  }
+}
+
+@media (max-width: 479px) {
+  .modal-box-bulk {
+    max-width: 100vw;
+    width: 100%;
+    border-radius: 14px 14px 0 0;
+    margin: auto 0 0;
+    max-height: 93vh;
+  }
+  .bulk-panel-left {
+    max-height: 280px;
+  }
+  .bulk-emp-table-wrap {
+    max-height: 180px;
+  }
+  .ss-time-col {
+    display: none !important;
+  }
+  .ss-week-cell {
+    display: none !important;
+  }
+  .mgr-table.ss-card-table {
+    font-size: 0.78rem;
+  }
+  .ss-emp-name {
+    max-width: 110px;
+    font-size: 0.8rem;
+  }
+  .ss-btn-period span {
+    display: none;
+  }
+  .ss-btn-period {
+    padding: 0.4rem;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+  }
+  #emp-search-main {
+    min-width: 120px !important;
+  }
+}
+
+/* =============================================================================
+   Swap Approval Panel (Manager)
+   ============================================================================= */
+
+/* Panel container */
+.swap-approval-panel {
+  /* border-left dihapus — panel sekarang bagian dari card utama */
+}
+/* Empty state: tidak ada pengajuan swap */
+.swap-approval-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.75rem 1rem;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+/* ── Tab switcher: Jadwal / Tukar Shift ──────────────────────────────────── */
+.ss-view-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.6rem 1rem 0;
+  border-bottom: 1px solid var(--border-light, rgba(0, 0, 0, 0.07));
+}
+
+.ss-view-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+  border-radius: 6px 6px 0 0;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+  white-space: nowrap;
+}
+.ss-view-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-subtle, rgba(0, 0, 0, 0.03));
+}
+.ss-view-tab--active {
+  color: var(--brand-dark, #1e3a5f);
+  border-bottom-color: var(--brand-dark, #1e3a5f);
+  background: none;
+}
+.ss-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5px;
+  background: var(--warning-mid, #f59e0b);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 9px;
+}
+
+.swap-approval-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: var(--warning-mid, #f59e0b);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 10px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SWAP ROW LIST — tabel padat, satu baris per pengajuan
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.swap-row-list {
+  padding: 0 0 0.75rem;
+}
+
+/* ── Kolom definisi (shared antara header & row) ── */
+/* [pengaju] [pertukaran] [penerima] [tanggal/durasi] [diajukan] [catatan] [aksi] */
+.swap-row-header,
+.swap-row {
+  display: grid;
+  grid-template-columns:
+    minmax(130px, 1.2fr) /* pengaju */
+    minmax(200px, 1.8fr) /* pertukaran shift */
+    minmax(130px, 1.2fr) /* penerima */
+    120px /* tanggal & durasi */
+    90px /* diajukan */
+    minmax(120px, 1fr) /* catatan */
+    auto; /* aksi */
+  align-items: center;
+  column-gap: 0;
+}
+
+/* ── Header kolom ── */
+.swap-row-header {
+  padding: 0 1.1rem 0.3rem;
+  border-bottom: 2px solid var(--warning-mid, #f59e0b);
+}
+.swap-row-header > span {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint, #94a3b8);
+  padding: 0 0.5rem;
+  white-space: nowrap;
+}
+.swap-row-header .swap-col-person--b {
+  text-align: left;
+}
+
+/* ── Data row ── */
+.swap-row {
+  border-bottom: 1px solid var(--border-light, rgba(0, 0, 0, 0.06));
+  padding: 0.55rem 1.1rem;
+  transition: background 0.13s;
+}
+.swap-row:last-child {
+  border-bottom: none;
+}
+.swap-row:hover {
+  background: var(--bg-subtle, rgba(0, 0, 0, 0.022));
+}
+
+/* Semua sel dalam row: padding kiri-kanan konsisten */
+.swap-row > div {
+  padding: 0 0.5rem;
+}
+
+/* ── Kolom: Pengaju & Penerima (identik secara style) ── */
+.swap-col-person {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.swap-person-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0;
+}
+.swap-person-avatar--a {
+  background: var(--brand, #1b4f72);
+}
+.swap-person-avatar--b {
+  background: var(--accent, #d97706);
+}
+
+.swap-person-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+.swap-person-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-main, #0f2540);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.swap-person-dept {
+  font-size: 0.67rem;
+  color: var(--text-faint, #94a3b8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Kolom: Pertukaran shift — dua jalur A dan B ── */
+.swap-col-shift {
+  min-width: 0;
+}
+
+.swap-exchange-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Satu jalur = [chip lama] → [chip baru], dengan label A/B di kiri */
+.swap-lane {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.swap-lane-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  width: 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.swap-lane--a .swap-lane-label {
+  color: var(--brand, #1b4f72);
+}
+.swap-lane--b .swap-lane-label {
+  color: var(--accent, #d97706);
+}
+
+.swap-lane-arrow {
+  color: var(--text-faint, #b0bec5);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+}
+
+/* Chip dalam lane: lebih kecil & compact */
+.swap-lane-chip {
+  font-size: 0.67rem !important;
+  padding: 0.12rem 0.45rem !important;
+  line-height: 1.3 !important;
+  white-space: nowrap;
+}
+
+/* Chip "gets" (hasil tukar) — lebih menonjol */
+.swap-lane-chip--gets {
+  font-weight: 700 !important;
+  box-shadow: 0 0 0 1.5px currentColor;
+}
+
+/* ── Kolom: Tanggal & Durasi ── */
+.swap-col-date {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.swap-date-range {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-main, #0f2540);
+  line-height: 1.3;
+}
+.swap-duration-chip {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--brand, #1b4f72);
+  background: rgba(27, 79, 114, 0.08);
+  border-radius: 10px;
+  padding: 0.05rem 0.4rem;
+  width: fit-content;
+}
+
+/* ── Kolom: Diajukan ── */
+.swap-col-submitted {
+  font-size: 0.72rem;
+  color: var(--text-faint, #94a3b8);
+  white-space: nowrap;
+}
+
+/* ── Kolom: Catatan ── */
+.swap-col-notes {
+  min-width: 0;
+}
+.swap-note-line {
+  font-size: 0.71rem;
+  color: var(--text-secondary, #64748b);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.swap-note-who {
+  font-weight: 600;
+  color: var(--text-main, #0f2540);
+}
+.swap-note-empty {
+  color: var(--text-faint, #94a3b8);
+  font-size: 0.72rem;
+}
+
+/* ── Kolom: Aksi ── */
+.swap-col-actions {
+  display: flex;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+/* Empty state */
+.swap-empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-faint, #94a3b8);
+  font-size: 0.84rem;
+}
+
+/* Individual approval card */
+.swap-approval-card {
+  border-bottom: 1px solid var(--border-light, rgba(0, 0, 0, 0.07));
+  padding: 1rem 1.25rem;
+  transition: background 0.15s;
+}
+.swap-approval-card:last-child {
+  border-bottom: none;
+}
+.swap-approval-card:hover {
+  background: var(--bg-subtle, rgba(0, 0, 0, 0.02));
+}
+
+/* Progress stepper */
+.swap-progress-stepper {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  margin-bottom: 0.85rem;
+}
+
+.swap-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.swap-step-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border-mid, #cbd5e1);
+  border: 2px solid var(--border-mid, #cbd5e1);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.swap-step-line {
+  position: absolute;
+  top: 4px;
+  left: calc(50% + 5px);
+  width: calc(100% - 10px);
+  height: 2px;
+  background: var(--border-mid, #cbd5e1);
+}
+
+.swap-step--done .swap-step-dot {
+  background: var(--success-mid, #22c55e);
+  border-color: var(--success-mid, #22c55e);
+}
+.swap-step--done .swap-step-line {
+  background: var(--success-mid, #22c55e);
+}
+
+.swap-step--active .swap-step-dot {
+  background: #fff;
+  border-color: var(--warning-mid, #f59e0b);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  animation: pulseDot 1.6s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.08);
+  }
+}
+
+.swap-step-label {
+  font-size: 0.67rem;
+  color: var(--text-faint);
+  margin-top: 4px;
+  text-align: center;
+  white-space: nowrap;
+}
+.swap-step--done .swap-step-label {
+  color: var(--success-mid, #22c55e);
+  font-weight: 600;
+}
+.swap-step--active .swap-step-label {
+  color: var(--warning-mid, #f59e0b);
+  font-weight: 700;
+}
+
+/* Body: parties + meta */
+.swap-approval-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.swap-approval-parties {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.swap-approval-person {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+  min-width: 130px;
+}
+
+.swap-approval-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--brand, #0f3460);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.swap-approval-avatar--b {
+  background: var(--accent, #e8a838);
+}
+
+.swap-approval-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+.swap-approval-dept {
+  font-size: 0.71rem;
+  color: var(--text-faint);
+  margin-bottom: 3px;
+}
+
+.swap-approval-arrow {
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+/* Meta row */
+.swap-approval-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary, #64748b);
+  flex-wrap: wrap;
+}
+.swap-approval-meta-sep {
+  color: var(--border-mid);
+}
+
+/* Notes */
+.swap-approval-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.swap-approval-note {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--bg-subtle, rgba(0, 0, 0, 0.03));
+  border-radius: 5px;
+  padding: 0.3rem 0.55rem;
+}
+
+/* Action buttons */
+.swap-approval-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.swap-btn-mgr {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+  font-family: inherit;
+}
+.swap-btn-mgr:active {
+  transform: scale(0.97);
+}
+
+.swap-btn-mgr--approve {
+  background: var(--success-bg, #d1fae5);
+  color: var(--success-text, #065f46);
+  border: 1px solid var(--success-border, #6ee7b7);
+}
+.swap-btn-mgr--approve:hover {
+  background: var(--success-mid, #22c55e);
+  color: #fff;
+  border-color: var(--success-mid, #22c55e);
+}
+
+.swap-btn-mgr--reject {
+  background: var(--danger-bg, #fee2e2);
+  color: var(--danger-text, #991b1b);
+  border: 1px solid var(--danger-border, #fca5a5);
+}
+.swap-btn-mgr--reject:hover {
+  background: var(--danger-mid, #ef4444);
+  color: #fff;
+  border-color: var(--danger-mid, #ef4444);
+}
+
+/* Modal summary */
+.swap-approval-modal-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem;
+  background: var(--bg-subtle, rgba(0, 0, 0, 0.03));
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+.swap-approval-modal-party {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 110px;
+}
+.swap-approval-modal-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--brand, #0f3460);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.swap-approval-modal-avatar--b {
+  background: var(--accent, #e8a838);
+}
+.swap-approval-modal-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+.swap-approval-modal-shift {
+  font-size: 0.7rem;
+  color: var(--text-faint);
+}
+.swap-approval-modal-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+.swap-approval-modal-notice {
+  margin-top: 0.6rem;
+  font-size: 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 6px;
+}
+.swap-approval-modal-notice--approve {
+  background: var(--success-bg, #d1fae5);
+  color: var(--success-text, #065f46);
+  border: 1px solid var(--success-border, #6ee7b7);
+}
+.swap-approval-modal-notice--reject {
+  background: var(--warning-bg, #fef3c7);
+  color: var(--warning-text, #92400e);
+  border: 1px solid var(--warning-border, #fcd34d);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .swap-approval-parties {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .swap-approval-arrow {
+    transform: rotate(90deg);
+    margin: 0 auto;
+  }
+  .swap-step-label {
+    font-size: 0.6rem;
+  }
+}
+/* =============================================================================
+   Tab: Jadwal 1 Bulan
+   ============================================================================= */
+
+.ss-month-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--border, #e2e8ef);
+  background: #fff;
+  color: var(--text-secondary, #45607a);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.ss-month-nav-btn:hover {
+  background: var(--brand-xlight, #f4f9fc);
+  border-color: var(--accent, #d4860a);
+  color: var(--accent, #d4860a);
+}
+
+.ss-month-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary, #12283c);
+  min-width: 120px;
+  text-align: center;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.ss-month-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border, #e2e8ef);
+  font-size: 0.72rem;
+  color: var(--text-secondary, #45607a);
+}
+.ss-month-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ss-month-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ss-month-dot--pagi {
+  background: var(--s1-border, #f5c87a);
+  box-shadow: inset 0 0 0 1.5px var(--s1-text, #7c3a00);
+}
+.ss-month-dot--siang {
+  background: var(--s4-border, #74c6df);
+  box-shadow: inset 0 0 0 1.5px var(--s4-text, #0b4155);
+}
+.ss-month-dot--malam {
+  background: var(--s2-border, #c4a8f0);
+  box-shadow: inset 0 0 0 1.5px var(--s2-text, #3b1a6b);
+}
+.ss-month-dot--unassigned {
+  background: #e2e8ef;
+  box-shadow: inset 0 0 0 1.5px var(--text-faint, #8dabbe);
+}
+
+.ss-month-table-wrap {
+  max-height: 70vh;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.ss-month-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+/* Header baris tanggal — sticky di ATAS, tetap terlihat seperti bar
+   navigasi saat tabel discroll ke bawah (banyak karyawan). */
+.ss-month-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: #f8f9fa;
+  box-shadow: 0 1px 0 var(--border, #e2e8ef);
+}
+
+.ss-month-emp-col {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #fff;
+  min-width: 200px;
+  max-width: 200px;
+  width: 200px;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-right: 1px solid var(--border, #e2e8ef);
+}
+/* Kolom nama DI DALAM header — sticky ganda (atas + kiri), jadi harus di
+   atas segalanya (pojok kiri-atas grid) saat scroll dua arah. */
+.ss-month-table thead .ss-month-emp-col {
+  z-index: 4;
+  background: #f8f9fa;
+}
+
+.ss-month-day-col {
+  width: 34px;
+  min-width: 34px;
+  max-width: 34px;
+  text-align: center;
+  padding: 0.35rem 0.15rem;
+  font-weight: 600;
+  color: var(--text-secondary, #45607a);
+}
+.ss-month-day-col--weekend {
+  background: #fff7ed;
+}
+.ss-month-day-num {
+  display: block;
+  font-size: 0.72rem;
+  line-height: 1.1;
+}
+.ss-month-day-dow {
+  display: block;
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--text-faint, #8dabbe);
+  text-transform: uppercase;
+}
+
+.ss-month-cell {
+  text-align: center;
+  padding: 0.4rem 0.15rem;
+  border-bottom: 1px solid var(--border, #eef1f5);
+}
+.ss-month-table tbody tr:hover .ss-month-emp-col,
+.ss-month-table tbody tr:hover .ss-month-cell {
+  background: var(--brand-xlight, #f4f9fc);
+}
+.ss-month-table tbody tr:hover .ss-month-emp-col {
+  background: var(--brand-xlight, #f4f9fc);
+}
+
+/* =============================================================================
+   Tab: Riwayat Tukar Shift
+   ============================================================================= */
+
+.swap-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.swap-status-badge--approved {
+  background: var(--success-bg, #dcfce7);
+  color: var(--success, #15803d);
+}
+.swap-status-badge--rejected {
+  background: var(--danger-bg, #fee2e2);
+  color: var(--danger, #b91c1c);
+}
+.swap-status-badge--cancelled {
+  background: #f1f5f9;
+  color: var(--text-secondary, #45607a);
+}
+
+.swap-col-submitted--stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  white-space: normal;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .ss-month-emp-col {
+    min-width: 150px;
+    max-width: 150px;
+    width: 150px;
+  }
+  .ss-month-legend {
+    gap: 0.6rem;
+    font-size: 0.68rem;
+  }
+}
+/* ══════════════════════════════════════════════════════════════════════════
+   MODAL: Konfirmasi Override Kuota Tukar Shift (Manager)
+   ══════════════════════════════════════════════════════════════════════════ */
+.swap-quota-warn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--danger-bg, #fee2e2);
+  color: var(--danger, #b91c1c);
+  margin: 0 auto 0.85rem;
+}
+
+.swap-quota-warn-detail {
+  background: var(--bg, #f8fafc);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius-xs, 8px);
+  padding: 0.65rem 0.85rem;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #45607a);
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.swap-quota-warn-detail strong {
+  color: var(--danger, #b91c1c);
+  font-weight: 700;
+}
+
+/* Pastikan modal konfirmasi override tampil di atas modal-swap yang masih
+   terbuka di belakangnya (nested modal). */
+#modal-swap-quota-warning.open {
+  z-index: 10000;
+}

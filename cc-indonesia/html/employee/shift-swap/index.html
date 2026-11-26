@@ -1,0 +1,1257 @@
+
+<!doctype html>
+<html data-root="../../../" lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="csrf-token" content="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+    <meta name="theme-color" content="#1A4A8C" />
+    <link rel="manifest" href="../../../html/manifest.webmanifest" />
+    <link rel="icon" href="../../../img/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../img/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" href="../../../img/apple-touch-icon.png?v=2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Absensi" />
+    <title>Tukar Shift</title>
+    
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/ibm-plex-sans-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/plus-jakarta-sans-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/fonts.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="../../../css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/theme.css"
+    />
+    <link rel="stylesheet" href="../../../css/push.css"
+    />
+    
+<link
+  rel="stylesheet"
+  href="../../../css/shift_schedule.css"
+/>
+<link
+  rel="stylesheet"
+  href="../../../css/shift_swap.css"
+/>
+
+    <style>
+      /* Form logout dibungkus supaya method-nya POST (bukan link GET) —
+         lihat auth.py: /auth/logout adalah POST-only untuk mencegah CSRF
+         logout lewat <img>/<a> pihak ketiga. Reset tampilan <button> agar
+         identik dengan link sidebar/bottom-nav di sekitarnya. */
+      .logout-form {
+        margin: 0;
+        padding: 0;
+        display: contents; /* form tidak mengubah layout flex/grid induk */
+      }
+      /* [FIX] Sebelumnya `all: unset` + `display: inherit`. Karena parent
+         .logout-form adalah `display: contents`, `inherit` menghasilkan
+         `contents` juga (bukan `flex`), sehingga tombol kehilangan seluruh
+         layout bottom-nav. Sekarang hanya reset tampilan bawaan <button>;
+         layout diatur oleh selector konteks masing-masing (main.css). */
+      button.as-link {
+        background: none;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Sidebar desktop: tombol tetap selebar item menu lain. */
+      .sidebar .logout-form button.as-link {
+        display: flex;
+        width: 100%;
+      }
+    </style>
+  <script>(()=>{const R="../../../",f=window.fetch;window.fetch=(u,o={})=>{u=String(u);if((o.method||"GET").toUpperCase()!=="GET")return Promise.resolve(new Response(JSON.stringify({ok:true,demo:true}),{headers:{"Content-Type":"application/json"}}));if(u[0]==="/")u=u.indexOf("/static/")===0?R+u.slice(8):R+"html"+u;return f(u,o)};document.addEventListener("submit",e=>{e.preventDefault();alert("Mode demo: aksi disimulasikan dan tidak disimpan.")},true)})()</script><link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+  <body
+    class="role-employee"
+  >
+    
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-brand">
+        <img
+          class="brand-logo"
+          src="../../../img/Logo-App-wide.jpg"
+          alt=""
+          width="70"
+          height="36"
+          decoding="async"
+        />
+        <span>CC Indonesia</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar">NA</div>
+        <div>
+          <div class="sidebar-user-name">
+            Nanda
+          </div>
+          <div class="sidebar-user-role">Employee</div>
+        </div>
+        <div id="notif-bell-wrap" style="margin-left: auto"></div>
+      </div>
+
+      <nav class="sidebar-nav">
+         
+        <a
+          href="../../../html/employee/dashboard/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Absensi
+        </a>
+        <a
+          href="../../../html/employee/history/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Riwayat
+        </a>
+        <a
+          href="../../../html/employee/leave/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="9" y1="13" x2="15" y2="13" />
+          </svg>
+          Pengajuan izin
+        </a>
+        <a
+          href="../../../html/employee/shift-swap/index.html"
+          class="active"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M16 3l4 4-4 4" />
+            <line x1="20" y1="7" x2="7" y2="7" />
+            <path d="M8 21l-4-4 4-4" />
+            <line x1="4" y1="17" x2="17" y2="17" />
+          </svg>
+          Tukar Shift
+        </a>
+        <a
+          href="../../../html/employee/profile/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Profil Saya
+        </a>
+
+         
+      </nav>
+
+
+      <div class="sidebar-footer">
+        
+        <div class="lang-switcher" aria-label="Pilih bahasa">
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+        <form method="post" action="../../../html/auth/logout" class="logout-form">
+          <input type="hidden" name="csrf_token" value="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+          <button type="submit" class="sidebar-logout as-link">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </aside>
+        
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-inner">
+        <span class="mobile-topbar-title">CC Indonesia</span>
+        <div
+          class="lang-switcher lang-switcher--mobile"
+          aria-label="Pilih bahasa"
+        >
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+      </div>
+    </div>
+     
+
+    <div class="main-wrap">
+        
+      <main class="page-content" id="main-content">
+         
+<div class="page-header">
+  <h1 class="page-title">Tukar Shift</h1>
+  <p class="page-subtitle">
+    Ajukan permintaan tukar shift sementara dengan rekan kerjamu
+  </p>
+</div>
+
+
+<div class="swap-page-wrap">
+   
+
+  
+  <div class="swap-hero">
+    <div class="swap-hero-left">
+      <div class="swap-hero-icon">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      </div>
+      <div>
+        <div class="swap-hero-label">Shift Saya Saat Ini</div>
+        
+        <div class="swap-hero-value">
+          <span class="shift-chip shift-chip--shift_1_produksi">
+            Shift 1 - Produksi
+          </span>
+          <span class="swap-hero-time">08:00 – 16:00</span>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="swap-hero-right">
+      
+      <div class="swap-hero-right-block">
+        <span class="swap-hero-date-label">Hari ini</span>
+        <span class="swap-hero-date-val">13 November 2026</span>
+      </div>
+      
+    </div>
+  </div>
+
+  
+  <div
+    class="swap-quota-summary"
+    id="swapQuotaSummary"
+    data-exceeded="false"
+    data-unlimited="true"
+    data-year="2026"
+    data-month="11"
+  >
+    <div class="swap-quota-item">
+      <span class="swap-quota-item-label">Jatah Kuota Total</span>
+      <span class="swap-quota-item-value" id="quotaTotalValue">
+        Unlimited
+      </span>
+    </div>
+    <div class="swap-quota-divider"></div>
+    <div class="swap-quota-item">
+      <span class="swap-quota-item-label">Kuota Terpakai</span>
+      <span class="swap-quota-item-value" id="quotaUsedValue"
+        >0</span
+      >
+    </div>
+    <div class="swap-quota-divider"></div>
+    <div class="swap-quota-item">
+      <span class="swap-quota-item-label">Sisa Kuota</span>
+      <span
+        class="swap-quota-item-value swap-quota-item-value--remaining"
+        id="quotaRemainingValue"
+      >
+        Unlimited
+      </span>
+    </div>
+    
+  </div>
+
+  
+  <div class="swap-flash-area">
+      
+  </div>
+  
+
+  <div class="swap-tabs">
+    <button class="swap-tab active" onclick="switchTab('sent', this)">
+      Pengajuan Saya 
+    </button>
+    <button class="swap-tab" onclick="switchTab('received', this)">
+      Permintaan Masuk 
+    </button>
+  </div>
+
+  
+  <div id="tab-sent">
+    
+    <div class="swap-empty">
+      <svg
+        width="44"
+        height="44"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.4"
+      >
+        <path d="M8 7h12M8 12h8M8 17h5" />
+        <path d="M3 7l1.5 1.5L6 7M3 12l1.5 1.5L6 12" />
+      </svg>
+      <div class="swap-empty-title">Belum ada pengajuan</div>
+      <div class="swap-empty-sub">
+        Klik tombol + untuk membuat pengajuan baru.
+      </div>
+    </div>
+    
+  </div>
+
+  
+  <div id="tab-received" style="display: none">
+    
+    <div class="swap-empty">
+      <svg
+        width="44"
+        height="44"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.4"
+      >
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+      </svg>
+      <div class="swap-empty-title">Tidak ada permintaan masuk</div>
+    </div>
+    
+  </div>
+
+           
+
+  <div class="swap-sidebar">
+    
+    <button class="swap-sidebar-cta" onclick="openRequestModal()" type="button">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+      Ajukan Tukar Shift
+    </button>
+
+    
+    <div class="swap-sidebar-panel">
+      <div class="swap-sidebar-panel-head">
+        <div class="swap-sidebar-panel-icon">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <path d="M8 7h12M8 12h8M8 17h5" />
+            <path d="M3 7l1.5 1.5L6 7M3 12l1.5 1.5L6 12" />
+          </svg>
+        </div>
+        <span class="swap-sidebar-panel-title">Pengajuan Saya</span>
+      </div>
+      <div class="swap-sidebar-panel-body">
+        <div class="swap-stat-row">
+          <span class="swap-stat-label">
+            <span
+              class="swap-stat-label-dot"
+              style="background: var(--warning-mid)"
+            ></span>
+            Menunggu respons
+          </span>
+          <span class="swap-stat-val swap-stat-val--pending"
+            >0</span
+          >
+        </div>
+        <div class="swap-stat-row">
+          <span class="swap-stat-label">
+            <span
+              class="swap-stat-label-dot"
+              style="background: var(--success-mid)"
+            ></span>
+            Disetujui
+          </span>
+          <span class="swap-stat-val swap-stat-val--accepted"
+            >0</span
+          >
+        </div>
+        <div class="swap-stat-row">
+          <span class="swap-stat-label">
+            <span
+              class="swap-stat-label-dot"
+              style="background: var(--danger)"
+            ></span>
+            Ditolak
+          </span>
+          <span class="swap-stat-val swap-stat-val--rejected"
+            >0</span
+          >
+        </div>
+        <div class="swap-stat-row">
+          <span class="swap-stat-label">
+            <span
+              class="swap-stat-label-dot"
+              style="background: var(--border)"
+            ></span>
+            Total pengajuan
+          </span>
+          <span class="swap-stat-val">0</span>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="swap-sidebar-panel">
+      <div class="swap-sidebar-panel-head">
+        <div
+          class="swap-sidebar-panel-icon"
+          style="background: var(--warning-bg); color: var(--warning)"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+          </svg>
+        </div>
+        <span class="swap-sidebar-panel-title">Permintaan Masuk</span>
+      </div>
+      <div class="swap-sidebar-panel-body">
+        <div class="swap-stat-row">
+          <span class="swap-stat-label">
+            <span
+              class="swap-stat-label-dot"
+              style="background: var(--accent)"
+            ></span>
+            Perlu ditanggapi
+          </span>
+          <span class="swap-stat-val swap-stat-val--pending"
+            >0</span
+          >
+        </div>
+        <div class="swap-stat-row">
+          <span class="swap-stat-label">
+            <span
+              class="swap-stat-label-dot"
+              style="background: var(--success-mid)"
+            ></span>
+            Pernah disetujui
+          </span>
+          <span class="swap-stat-val swap-stat-val--accepted"
+            >0</span
+          >
+        </div>
+        <div class="swap-stat-row">
+          <span class="swap-stat-label">
+            <span
+              class="swap-stat-label-dot"
+              style="background: var(--border)"
+            ></span>
+            Total diterima
+          </span>
+          <span class="swap-stat-val">0</span>
+        </div>
+      </div>
+    </div>
+
+     
+    <div class="swap-sidebar-panel">
+      <div class="swap-sidebar-panel-head">
+        <div
+          class="swap-sidebar-panel-icon"
+          style="background: var(--brand-light); color: var(--brand)"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        </div>
+        <span class="swap-sidebar-panel-title">Shift Aktif Saya</span>
+      </div>
+      <div class="swap-sidebar-panel-body">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.3rem;
+          "
+        >
+          <span class="shift-chip shift-chip--shift_1_produksi"
+            >Shift 1 - Produksi</span
+          >
+        </div>
+        <div class="swap-sidebar-shift-block">
+          <div class="swap-sidebar-shift-row">
+            <span class="swap-sidebar-shift-key">Jam kerja</span>
+            <span
+              style="
+                font-family: &quot;IBM Plex Mono&quot;, monospace;
+                font-size: 0.78rem;
+                font-weight: 700;
+                color: var(--text-primary);
+              "
+              >08:00 – 16:00</span
+            >
+          </div>
+          
+          <div
+            class="swap-sidebar-shift-row"
+            style="
+              padding-top: 0.3rem;
+              border-top: 1px solid var(--border-light);
+            "
+          >
+            <span class="swap-sidebar-shift-key">Departemen</span>
+            <span
+              style="
+                font-size: 0.73rem;
+                color: var(--text-secondary);
+                font-weight: 600;
+              "
+              >Produksi</span
+            >
+          </div>
+           
+        </div>
+      </div>
+    </div>
+     
+    <div class="swap-sidebar-panel">
+      <div class="swap-sidebar-panel-head">
+        <div
+          class="swap-sidebar-panel-icon"
+          style="background: #f0eaff; color: #6d28d9"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+        </div>
+        <span class="swap-sidebar-panel-title">Cara Kerja</span>
+      </div>
+      <div class="swap-sidebar-panel-body">
+        <div class="swap-sidebar-guide-item">
+          <div class="swap-sidebar-guide-num">1</div>
+          <span class="swap-sidebar-guide-text"
+            >Klik <strong>Ajukan Tukar Shift</strong> dan pilih rekan serta
+            tanggal yang diinginkan.</span
+          >
+        </div>
+        <div class="swap-sidebar-guide-item">
+          <div class="swap-sidebar-guide-num">2</div>
+          <span class="swap-sidebar-guide-text"
+            >Rekan kamu akan mendapat notifikasi dan bisa menerima atau menolak
+            permintaan.</span
+          >
+        </div>
+        <div class="swap-sidebar-guide-item">
+          <div class="swap-sidebar-guide-num">3</div>
+          <span class="swap-sidebar-guide-text"
+            >Jadwal otomatis berubah sesuai durasi tukar, lalu kembali ke jadwal
+            normal.</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+ 
+<button
+  class="swap-fab"
+  onclick="openRequestModal()"
+  aria-label="Buat Pengajuan Baru"
+>
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+</button>
+
+
+<div
+  class="swap-modal-overlay"
+  id="requestModalOverlay"
+  onclick="closeRequestModalOnBg(event)"
+>
+  <div
+    class="swap-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="requestModalHeading"
+  >
+    <div class="swap-modal-title">
+      <span id="requestModalHeading">Ajukan Tukar Shift</span>
+      <button
+        class="swap-modal-close"
+        onclick="closeRequestModal()"
+        aria-label="Tutup"
+      >
+        ✕
+      </button>
+    </div>
+
+    <form
+      method="POST"
+      action="../../../html/employee/shift-swap/request"
+      id="swapReqForm"
+    >
+      <input type="hidden" name="csrf_token" value="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+      <input type="hidden" name="target_id" id="inputTargetId" />
+
+      <div class="form-group" id="inputSwapDate-wrapper">
+        <label class="form-label" for="inputSwapDate">
+          Tanggal mulai tukar <span class="required-star">*</span>
+        </label>
+        <input
+          type="date"
+          name="swap_date"
+          id="inputSwapDate"
+          class="form-input"
+          min="2026-11-13"
+          required
+          aria-required="true"
+        />
+        <div class="form-error-msg">Tanggal wajib diisi.</div>
+      </div>
+
+      <div class="form-group" id="inputSwapEnd-wrapper">
+        <label class="form-label" for="inputSwapEnd">
+          Tanggal selesai tukar <span class="required-star">*</span>
+          <span
+            style="
+              font-size: 0.7rem;
+              font-weight: 400;
+              color: var(--text-faint);
+            "
+          >
+            (maks. 7 hari dari tanggal mulai)
+          </span>
+        </label>
+        <input
+          type="date"
+          name="swap_end_date"
+          id="inputSwapEnd"
+          class="form-input"
+          min="2026-11-13"
+          required
+          aria-required="true"
+          oninput="onSwapEndChange()"
+        />
+        <div class="form-error-msg">Tanggal selesai wajib diisi.</div>
+        <div class="swap-dur-calc" id="durCalc" style="display: none">
+          <div class="swap-dur-calc-inner">
+            <span id="durCalcText">—</span>
+          </div>
+        </div>
+      </div>
+
+      <input
+        type="hidden"
+        name="duration_days"
+        id="inputDurationDays"
+        value="1"
+      />
+
+      <div class="form-group" id="searchEmpWrapper">
+        <label class="form-label" for="searchEmp">
+          Rekan yang diajak tukar <span class="required-star">*</span>
+        </label>
+        <div style="position: relative">
+          <input
+            type="text"
+            id="searchEmp"
+            class="form-input"
+            placeholder="Ketik nama karyawan…"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+            oninput="searchCandidates(this.value)"
+          />
+          <span
+            style="
+              position: absolute;
+              right: 0.75rem;
+              top: 50%;
+              transform: translateY(-50%);
+              color: var(--text-faint);
+              pointer-events: none;
+            "
+          >
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="swap-search-results"
+          id="searchResults"
+          role="listbox"
+          style="display: none"
+        ></div>
+        <div id="selectedEmpChip" style="display: none">
+          <span class="swap-emp-chip">
+            <span id="selectedEmpName"></span>
+            <button
+              type="button"
+              class="swap-emp-chip-remove"
+              onclick="clearSelectedEmp()"
+              aria-label="Hapus"
+            >
+              ✕
+            </button>
+          </span>
+        </div>
+        <div class="form-error-msg">
+          Pilih rekan yang ingin diajak tukar shift.
+        </div>
+      </div>
+
+      <div
+        id="swapPreview"
+        class="sched-swap-preview"
+        style="display: none"
+        data-my-shift-type="shift_1_produksi"
+        data-my-shift-name="Shift 1 - Produksi"
+      >
+        <div class="sched-swap-preview-label">Preview pertukaran</div>
+        <div class="sched-preview-row">
+          <span class="sched-preview-name" id="previewMyName">Kamu</span>
+          <span id="previewMyShift">—</span>
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+          <span id="previewTargetShift">—</span>
+        </div>
+        <div class="sched-preview-row">
+          <span class="sched-preview-name" id="previewTargetName">Rekan</span>
+          <span id="previewTargetShiftOrig">—</span>
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+          <span id="previewMyShiftTarget">—</span>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin: 0.1rem 0 0.5rem">
+        <label class="form-label" for="swapNote">
+          Catatan
+          <span
+            style="
+              font-size: 0.7rem;
+              font-weight: 400;
+              color: var(--text-faint);
+            "
+            >(opsional)</span
+          >
+        </label>
+        <textarea
+          name="note"
+          id="swapNote"
+          class="form-input"
+          rows="2"
+          placeholder="Alasan atau keterangan tambahan…"
+        ></textarea>
+      </div>
+
+      <div
+        id="swapQuotaFormWarning"
+        class="swap-quota-form-warning"
+        style="display: none"
+        role="alert"
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          style="flex-shrink: 0"
+        >
+          <path
+            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+          />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+        <span id="swapQuotaFormWarningText">
+          Kuota tukar shift bulan ini sudah habis. Pengajuan tidak dapat
+          dikirim.
+        </span>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-full"
+        style="padding: 0.75rem"
+        id="submitSwapBtn"
+        disabled
+      >
+        Kirim Pengajuan
+      </button>
+    </form>
+  </div>
+</div>
+
+
+<div
+  class="respond-modal-overlay"
+  id="respondModalOverlay"
+  onclick="closeRespondModalOnBg(event)"
+>
+  <div
+    class="respond-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="respondModalTitle"
+  >
+    <div class="swap-modal-title">
+      <span id="respondModalTitle">Konfirmasi</span>
+      <button
+        class="swap-modal-close"
+        onclick="closeRespondModal()"
+        aria-label="Tutup"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div id="respondModalBody"></div>
+
+    <form method="POST" id="respondForm">
+      <input type="hidden" name="csrf_token" value="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+      <input type="hidden" name="action" id="respondAction" />
+
+      <div class="form-group">
+        <label class="form-label" for="respondNote">Catatan (opsional)</label>
+        <textarea
+          name="note"
+          id="respondNote"
+          class="form-input"
+          rows="2"
+          placeholder="Catatan untuk pengaju…"
+        ></textarea>
+      </div>
+
+      <div class="respond-modal-actions">
+        <button
+          type="button"
+          onclick="closeRespondModal()"
+          class="swap-btn--back"
+        >
+          Kembali
+        </button>
+        <button
+          type="submit"
+          id="respondSubmitBtn"
+          class="swap-btn--confirm-accept"
+        >
+          Konfirmasi
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  window.__SWAP_QUOTA_STATUS__ = {
+    quota: null,
+    is_unlimited: true,
+    used: 0,
+    remaining: null,
+    exceeded: false,
+    year: 2026,
+    month: 11
+  };
+  window.__SWAP_QUOTA_STATUS_URL__ = "/employee/shift-swap/quota-status";
+</script>
+<script src="../../../js/shift_swap.js"></script>
+
+      </main>
+    </div>
+
+     
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+       
+      <a
+        href="../../../html/employee/dashboard/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+          />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Absensi</span>
+      </a>
+      <a
+        href="../../../html/employee/history/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+        <span>Riwayat</span>
+      </a>
+      <a
+        href="../../../html/employee/leave/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Izin</span>
+      </a>
+      <a
+        href="../../../html/employee/shift-swap/index.html"
+        class="active"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M16 3l4 4-4 4" />
+          <line x1="20" y1="7" x2="7" y2="7" />
+          <path d="M8 21l-4-4 4-4" />
+          <line x1="4" y1="17" x2="17" y2="17" />
+        </svg>
+        <span>Tukar Shift</span>
+      </a>
+      <a
+        href="../../../html/employee/profile/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>Profil</span>
+      </a>
+      <form method="post" action="../../../html/auth/logout" class="logout-form">
+        <input type="hidden" name="csrf_token" value="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+        <button type="submit" class="as-link">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </form>
+
+       
+    </nav>
+    
+    
+    <script src="../../../js/core.js"></script>
+    
+    
+    <script src="../../../js/app.js"></script>
+    
+    <script>
+      window.I18N = Object.assign({}, window.I18N, {
+      notifTitle: "Notifikasi",
+      notifMarkAllRead: "Tandai semua dibaca",
+      notifLoading: "Memuat\u2026",
+      notifEmpty: "Tidak ada notifikasi",
+      notifError: "Gagal memuat notifikasi"});
+    </script>
+    <script src="../../../js/notifications.js"></script>
+    <script src="../../../js/push.js"></script>
+    
+    <script>
+      window.TRACKING_CFG = {
+        statusUrl: "/employee/location/status",
+        pingUrl: "/employee/location/ping",
+        intervalSeconds: 600,
+        statusPollSeconds: 60,
+        i18n: {
+          active: "Lokasi dibagikan (GPS)",
+          onDuty: "Lokasi dibagikan",
+          viaOffice: "GPS mati \u00b7 terdeteksi di jaringan kantor",
+          viaIp: "GPS mati \u00b7 perkiraan kasar via IP",
+          gpsOff: "GPS mati \u00b7 lokasi tidak terkirim"
+        }
+      };
+    </script>
+    <script src="../../../js/tracking.js"></script>
+    
+    <script>
+      // Form logout mengirim POST via fetch, lalu redirect manual berdasarkan
+      // JSON {"redirect": "..."} dari server — pola yang sama dengan
+      // login.js. Tanpa ini, submit form native menampilkan JSON mentah
+      // di layar alih-alih membawa user ke halaman login.
+      document.querySelectorAll(".logout-form").forEach(function (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const btn = form.querySelector("button[type=submit]");
+          if (btn) btn.disabled = true;
+          try { if (window.Push) await window.Push.forgetDevice(); } catch {}
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": form.querySelector(
+                  'input[name="csrf_token"]',
+                ).value,
+              },
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              /* respons bukan JSON — abaikan, pakai fallback di bawah */
+            }
+            window.location.href = data.redirect || "/auth/login";
+          } catch {
+            // Gagal terhubung ke server: tetap arahkan ke login supaya
+            // user tidak macet di halaman dengan sesi yang mungkin sudah
+            // tidak valid.
+            window.location.href = "/auth/login";
+          }
+        });
+      });
+    </script>
+    
+  </body>
+</html>

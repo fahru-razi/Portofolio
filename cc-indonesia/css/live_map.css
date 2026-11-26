@@ -1,0 +1,103 @@
+/* live_map.css — peta lokasi karyawan (eksekutif) */
+:root {
+  --lm-live: #15803d;
+  --lm-office: #2874a6;
+  --lm-approx: #7c3aed;
+  --lm-gpsoff: #6b7280;
+  --lm-stale: #d97706;
+  --lm-nodata: #9ca3af;
+}
+
+/* Header memakai kelas global .page-header (main.css/theme.css) supaya seragam
+   dengan halaman lain. .page-content sengaja tanpa padding horizontal —
+   setiap halaman membawa padding sendiri, itulah fungsi .lm-body. */
+.lm-actions { display: flex; align-items: center; gap: 10px; }
+.lm-updated { font-size: .8rem; color: var(--text-muted); white-space: nowrap; }
+
+.lm-body { padding: 1.25rem 1.5rem 0; }
+
+.lm-banner {
+  margin: 0 0 12px; padding: 8px 12px; border-radius: var(--radius-sm);
+  background: var(--brand-light); color: var(--brand-dark); font-size: .85rem;
+}
+
+.lm-wrap { display: grid; grid-template-columns: 340px 1fr; gap: 12px; align-items: start; }
+
+.lm-panel {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px; box-shadow: var(--shadow-xs);
+  max-height: calc(100vh - 210px); overflow-y: auto;
+}
+.lm-h { margin: 14px 0 6px; font-size: .78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; }
+.lm-h:first-child { margin-top: 0; }
+
+.lm-summary { display: flex; flex-wrap: wrap; gap: 6px; }
+.lm-chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px;
+  border: 1px solid var(--border); border-radius: 999px; background: var(--bg);
+  font-size: .78rem; color: var(--text-secondary); cursor: pointer;
+}
+.lm-chip.active { border-color: var(--brand-mid); background: var(--brand-light); color: var(--brand-dark); }
+.lm-chip b { font-weight: 700; }
+
+.lm-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; background: var(--lm-nodata); }
+.lm-dot.live { background: var(--lm-live); }
+.lm-dot.office_network { background: var(--lm-office); }
+.lm-dot.approximate { background: var(--lm-approx); }
+.lm-dot.gps_off { background: var(--lm-gpsoff); }
+.lm-dot.stale { background: var(--lm-stale); }
+.lm-dot.no_data { background: var(--lm-nodata); }
+
+.lm-offices { display: grid; gap: 6px; }
+.lm-office {
+  display: flex; justify-content: space-between; gap: 8px; padding: 7px 9px;
+  border: 1px solid var(--border-light); border-radius: var(--radius-sm);
+  background: var(--bg-card); cursor: pointer; font-size: .85rem; text-align: left; width: 100%;
+}
+.lm-office:hover { background: var(--brand-xlight); }
+.lm-office small { color: var(--text-muted); }
+
+.lm-search { width: 100%; margin-bottom: 8px; }
+.lm-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.lm-item {
+  display: flex; align-items: flex-start; gap: 8px; padding: 7px 8px;
+  border-radius: var(--radius-sm); cursor: pointer; border: 1px solid transparent;
+}
+.lm-item:hover { background: var(--brand-xlight); border-color: var(--border-light); }
+.lm-item .lm-dot { margin-top: 5px; }
+.lm-item-name { font-size: .88rem; color: var(--text-primary); font-weight: 600; }
+.lm-item-meta { font-size: .76rem; color: var(--text-muted); }
+.lm-item.nocoords { cursor: default; opacity: .8; }
+.lm-tag-visit { color: var(--accent-dark); font-weight: 600; }
+.lm-empty { padding: 14px 4px; font-size: .85rem; color: var(--text-muted); }
+
+.lm-mapbox { position: relative; }
+#lm-map {
+  height: calc(100vh - 210px); min-height: 440px; width: 100%;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--brand-xlight); z-index: 0;
+}
+.lm-legend {
+  display: flex; flex-wrap: wrap; gap: 10px 14px; margin-top: 8px;
+  font-size: .76rem; color: var(--text-muted);
+}
+.lm-legend span { display: inline-flex; align-items: center; gap: 5px; }
+
+.lm-note { margin: 12px 0 0; font-size: .78rem; color: var(--text-muted); max-width: 900px; }
+
+/* popup */
+.lm-pop b { display: block; font-size: .92rem; color: var(--text-primary); }
+.lm-pop div { font-size: .8rem; color: var(--text-secondary); margin-top: 2px; }
+.lm-pop .lm-pop-warn { color: var(--accent-dark); }
+
+@media (max-width: 640px) {
+  .lm-body { padding: .85rem .9rem 0; }
+  .lm-actions { flex-direction: column; align-items: flex-end; gap: 4px; }
+}
+
+@media (max-width: 900px) {
+  .lm-wrap { grid-template-columns: 1fr; }
+  .lm-mapbox { order: -1; }
+  #lm-map { height: 55vh; min-height: 320px; }
+  .lm-panel { max-height: none; }
+}

@@ -1,0 +1,72 @@
+/* push.css — kartu ajakan notifikasi + saklar (Fase 2). Memakai token tema
+   yang sudah ada; nilai setelah koma adalah cadangan. */
+.push-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin: 0 0 1rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-left: 4px solid var(--primary, #1a4a8c);
+  border-radius: 12px;
+}
+.push-card__icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.push-card__body {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+.push-card__title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+}
+.push-card__text {
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text-secondary, #6b7280);
+}
+.push-card__actions,
+.push-toggle__row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.push-btn {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1.5px solid var(--border, #e5e7eb);
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.push-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.push-btn--primary {
+  background: var(--primary, #1a4a8c);
+  border-color: var(--primary, #1a4a8c);
+  color: #fff;
+}
+.push-btn--ghost {
+  background: transparent;
+  color: var(--text-primary, #111827);
+}
+.push-btn--ghost:hover:not(:disabled) {
+  background: var(--bg-subtle, #f3f4f6);
+}
+
+.push-toggle__msg {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6b7280);
+}

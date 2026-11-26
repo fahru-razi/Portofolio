@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Credit Eligibility Prediction — dari data pemohon sampai dampak bisnis</title>
+<meta name="description" content="Proyek intern Home Credit Indonesia: memprediksi kelayakan kredit 307.511 pemohon, dijelaskan lewat visualisasi dari data sampai dampak.">
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="css/demo.css">
+<script src="js/app.js" defer></script>
+<link rel="stylesheet" href="../avatar.css"><script src="../avatar.js" defer></script></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="gh" x1="0" x2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#4ade80"/></linearGradient>
+  <linearGradient id="gv" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#4ade80"/></linearGradient>
+</defs></svg>
+<header class="top">
+  <h1>&gt;_ Credit Eligibility Prediction</h1>
+  <p class="note">Project Based Intern · Home Credit Indonesia · Data Scientist · <a href="../index.html#proyek">Kembali ke portofolio</a> · <a href="https://github.com/fahru-razi/Project-Based-Intern-Data-Scientist-at-Home-Credit-Indonesia" target="_blank" rel="noopener">Kode di GitHub</a></p>
+</header>
+
+<section class="flow" aria-label="Alur kerja dan tools">
+  <p class="tl" style="margin-top:0">Ringkasan proyek</p>
+  <ol class="steps fs" aria-label="Ringkasan proyek">
+    <li><span class="ic" aria-hidden="true">DB</span><div><b>307.511 pemohon</b><span>122 kolom · Kaggle Home Credit</span></div></li>
+    <li><span class="ic" aria-hidden="true">?</span><div><b>Layak atau tidak</b><span>keputusan kredit dari data permohonan</span></div></li>
+    <li><span class="ic" aria-hidden="true">y</span><div><b>TARGET (dibalik)</b><span>1 = layak, 0 = gagal bayar (8,1%)</span></div></li>
+    <li><span class="ic" aria-hidden="true">ML</span><div><b>Logistic Regression &amp; LightGBM</b><span>SMOTE + PCA 95%</span></div></li>
+    <li><span class="ic" aria-hidden="true">Δ</span><div><b>LightGBM terpilih</b><span>akurasi 91,2% · recall 98,9% · F1 95,4%</span></div></li>
+  </ol>
+  <p class="tl">Data &amp; pemrograman</p>
+  <ul class="tools" aria-label="Tools data"><li>Python</li><li>Jupyter Notebook</li><li>pandas</li><li>NumPy</li></ul>
+  <p class="tl">Statistik &amp; machine learning</p>
+  <ul class="tools" aria-label="Tools statistik dan machine learning"><li>scikit-learn</li><li>LightGBM</li><li>imbalanced-learn</li><li>mlxtend</li></ul>
+  <p class="tl">Visualisasi</p>
+  <ul class="tools" aria-label="Tools visualisasi"><li>Matplotlib</li><li>Seaborn</li><li>Plotly</li><li>igraph</li></ul>
+</section>
+
+<main>
+<p class="hint"><strong>Cara membaca:</strong> enam tahap, dari memahami data sampai dampak bisnis. Setiap keputusan teknis disertai alasan statistiknya, dan setiap visual bisa diklik atau digeser.</p>
+<div class="stpw"><div class="tg stp" id="stp" role="group" aria-label="Tahap proyek"></div></div>
+<div class="crs" id="cr" aria-live="polite"></div>
+<div class="nav"><button type="button" id="prv">← Sebelumnya</button><button type="button" id="nxt">Berikutnya →</button></div>
+<p class="team">Sumber data: <a href="https://www.kaggle.com/datasets/julianocosta/home-credit" target="_blank" rel="noopener">Home Credit di Kaggle</a>. Semua angka pada halaman ini berasal dari notebook proyek. Jumlah pemohon pada matriks keputusan dihitung ulang dari akurasi, presisi, dan recall yang tercetak di notebook, dan cocok persis dengan akurasi aslinya.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,3913 @@
+
+<!doctype html>
+<html data-root="../../../../" lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="csrf-token" content="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+    <meta name="theme-color" content="#1A4A8C" />
+    <link rel="manifest" href="../../../../html/manifest.webmanifest" />
+    <link rel="icon" href="../../../../img/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../../img/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" href="../../../../img/apple-touch-icon.png?v=2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Absensi" />
+    <title>Konfigurasi Shift</title>
+    
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../../fonts/ibm-plex-sans-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../../fonts/plus-jakarta-sans-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../css/fonts.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="../../../../css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../css/theme.css"
+    />
+    <link rel="stylesheet" href="../../../../css/push.css"
+    />
+    
+<link
+  rel="stylesheet"
+  href="../../../../css/shift_master.css"
+/>
+
+    <style>
+      /* Form logout dibungkus supaya method-nya POST (bukan link GET) —
+         lihat auth.py: /auth/logout adalah POST-only untuk mencegah CSRF
+         logout lewat <img>/<a> pihak ketiga. Reset tampilan <button> agar
+         identik dengan link sidebar/bottom-nav di sekitarnya. */
+      .logout-form {
+        margin: 0;
+        padding: 0;
+        display: contents; /* form tidak mengubah layout flex/grid induk */
+      }
+      /* [FIX] Sebelumnya `all: unset` + `display: inherit`. Karena parent
+         .logout-form adalah `display: contents`, `inherit` menghasilkan
+         `contents` juga (bukan `flex`), sehingga tombol kehilangan seluruh
+         layout bottom-nav. Sekarang hanya reset tampilan bawaan <button>;
+         layout diatur oleh selector konteks masing-masing (main.css). */
+      button.as-link {
+        background: none;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Sidebar desktop: tombol tetap selebar item menu lain. */
+      .sidebar .logout-form button.as-link {
+        display: flex;
+        width: 100%;
+      }
+    </style>
+  <script>(()=>{const R="../../../../",f=window.fetch;window.fetch=(u,o={})=>{u=String(u);if((o.method||"GET").toUpperCase()!=="GET")return Promise.resolve(new Response(JSON.stringify({ok:true,demo:true}),{headers:{"Content-Type":"application/json"}}));if(u[0]==="/")u=u.indexOf("/static/")===0?R+u.slice(8):R+"html"+u;return f(u,o)};document.addEventListener("submit",e=>{e.preventDefault();alert("Mode demo: aksi disimulasikan dan tidak disimpan.")},true)})()</script><link rel="stylesheet" href="../../../../../avatar.css"><script src="../../../../../avatar.js" defer></script></head>
+  <body
+    class="role-manager"
+  >
+    
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-brand">
+        <img
+          class="brand-logo"
+          src="../../../../img/Logo-App-wide.jpg"
+          alt=""
+          width="70"
+          height="36"
+          decoding="async"
+        />
+        <span>CC Indonesia</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar">RI</div>
+        <div>
+          <div class="sidebar-user-name">
+            Rina
+          </div>
+          <div class="sidebar-user-role">Manager</div>
+        </div>
+        <div id="notif-bell-wrap" style="margin-left: auto"></div>
+      </div>
+
+      <nav class="sidebar-nav">
+         
+        <a
+          href="../../../../html/manager/dashboard/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          Dashboard
+        </a>
+        <a
+          href="../../../../html/manager/employees/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          Karyawan
+        </a>
+
+        
+        <a
+          href="../../../../html/manager/shift-schedule/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="14" x2="12" y2="14" />
+            <line x1="8" y1="18" x2="16" y2="18" />
+          </svg>
+          <span>Jadwal</span>
+        </a>
+        <a
+          href="../../../../html/manager/leaves/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          Pengajuan izin
+        </a>
+        <a
+          href="../../../../html/manager/shifts/master/index.html"
+          class="active"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          Konfigurasi Shift
+        </a>
+        <a
+          href="../../../../html/manager/company-calendar/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="15" x2="16" y2="15" />
+          </svg>
+          Kalender
+        </a>
+        <a
+          href="../../../../html/manager/corrections/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Koreksi
+        </a>
+        <a
+          href="../../../../html/manager/reports/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          Laporan
+        </a>
+        <a
+          href="../../../../html/manager/production/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+            <circle cx="7.5" cy="11" r="2" />
+            <circle cx="16.5" cy="11" r="2" />
+          </svg>
+          Produksi
+        </a>
+        <a
+          href="../../../../html/manager/offices/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Kantor
+        </a>
+        
+        <a
+          href="../../../../html/manager/equipment/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+          Perlengkapan
+        </a>
+        
+        <a
+          href="../../../../html/manager/departments/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+            <line x1="12" y1="12" x2="12" y2="16" />
+            <line x1="10" y1="14" x2="14" y2="14" />
+          </svg>
+          Departemen
+        </a>
+
+         
+      </nav>
+
+
+      <div class="sidebar-footer">
+        
+        <div class="lang-switcher" aria-label="Pilih bahasa">
+           
+          <a
+            href="../../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+        <form method="post" action="../../../../html/auth/logout" class="logout-form">
+          <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+          <button type="submit" class="sidebar-logout as-link">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </aside>
+        
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-inner">
+        <span class="mobile-topbar-title">CC Indonesia</span>
+        <div
+          class="lang-switcher lang-switcher--mobile"
+          aria-label="Pilih bahasa"
+        >
+           
+          <a
+            href="../../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+      </div>
+    </div>
+     
+
+    <div class="main-wrap">
+        
+      <main class="page-content" id="main-content">
+         
+<div class="page-header page-header--std">
+  <div class="page-header-inner">
+    <div class="page-header-left">
+      <p class="page-header-sub">Manajemen</p>
+      <h1 class="page-header-name">Konfigurasi Shift</h1>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Tambah Shift
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+  
+  <div class="sm-scheduler-banner">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      width="16"
+      height="16"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+    <div>
+      <div class="sm-scheduler-title">
+        Status Auto-Absent Scheduler
+      </div>
+      <div class="sm-scheduler-jobs">
+         
+        <span class="sm-job-chip" id="chip-auto-absent-realtime">
+          <span class="sm-dot warn"></span>
+           Scheduler tidak terdeteksi 
+        </span>
+      </div>
+      <div
+        style="font-size: 0.68rem; color: var(--text-faint); margin-top: 0.4rem"
+      >
+        Semua shift dicakup otomatis oleh satu job interval — tidak perlu
+        konfigurasi scheduler per shift.
+      </div>
+    </div>
+  </div>
+
+  
+  
+  <div class="sm-shift-grid">
+        
+
+    <div class="sm-shift-card" id="card-d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 3 - Produksi</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef">
+              00:00 – 08:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef">
+              22:00 – 01:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef">
+              01:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef">
+              00:00 – 10:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;22:00 \u2013 01:00&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;00:00 \u2013 10:00&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: false, &#34;cutoff_time&#34;: &#34;01:00&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 3 - Produksi&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_3_produksi&#34;, &#34;type_label&#34;: &#34;Shift 3 - Produksi&#34;, &#34;work_end&#34;: &#34;08:00&#34;, &#34;work_start&#34;: &#34;00:00&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef', 'Shift 3 - Produksi', 'shift_3_produksi')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Manajemen / Kantor</div>
+         
+        <span
+          class="sm-shift-type-badge"
+          style="background:#eff6ff; color:#1d4ed8"
+        >
+          Kantor
+        </span>
+        
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0">
+              07:30 – 16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0">
+              05:30 – 11:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0">
+              11:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0">
+              07:30 – 18:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;05:30 \u2013 11:00&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;07:30 \u2013 18:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: false, &#34;cutoff_time&#34;: &#34;11:00&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Manajemen / Kantor&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;management&#34;, &#34;type_label&#34;: &#34;Kantor&#34;, &#34;work_end&#34;: &#34;16:30&#34;, &#34;work_start&#34;: &#34;07:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0', 'Manajemen / Kantor', 'management')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-8d48ebc7-656d-448e-9440-f86528b2db7e">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 1 - Inventaris</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-8d48ebc7-656d-448e-9440-f86528b2db7e">
+              07:30 – 16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-8d48ebc7-656d-448e-9440-f86528b2db7e">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-8d48ebc7-656d-448e-9440-f86528b2db7e">
+              05:30 – 08:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-8d48ebc7-656d-448e-9440-f86528b2db7e">
+              08:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-8d48ebc7-656d-448e-9440-f86528b2db7e">
+              07:30 – 18:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-8d48ebc7-656d-448e-9440-f86528b2db7e">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-8d48ebc7-656d-448e-9440-f86528b2db7e"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-8d48ebc7-656d-448e-9440-f86528b2db7e"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('8d48ebc7-656d-448e-9440-f86528b2db7e', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;05:30 \u2013 08:30&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;07:30 \u2013 18:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: false, &#34;cutoff_time&#34;: &#34;08:30&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;8d48ebc7-656d-448e-9440-f86528b2db7e&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 1 - Inventaris&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_1_inventaris&#34;, &#34;type_label&#34;: &#34;Shift 1 - Inventaris&#34;, &#34;work_end&#34;: &#34;16:30&#34;, &#34;work_start&#34;: &#34;07:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('8d48ebc7-656d-448e-9440-f86528b2db7e', 'Shift 1 - Inventaris', 'shift_1_inventaris')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-01c4c0d0-f04d-4964-94fd-1dc49fd97a05">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 1 - IT</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-01c4c0d0-f04d-4964-94fd-1dc49fd97a05">
+              07:30 – 16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-01c4c0d0-f04d-4964-94fd-1dc49fd97a05">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-01c4c0d0-f04d-4964-94fd-1dc49fd97a05">
+              05:30 – 08:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-01c4c0d0-f04d-4964-94fd-1dc49fd97a05">
+              08:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-01c4c0d0-f04d-4964-94fd-1dc49fd97a05">
+              07:30 – 18:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-01c4c0d0-f04d-4964-94fd-1dc49fd97a05">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-01c4c0d0-f04d-4964-94fd-1dc49fd97a05"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-01c4c0d0-f04d-4964-94fd-1dc49fd97a05"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('01c4c0d0-f04d-4964-94fd-1dc49fd97a05', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;05:30 \u2013 08:30&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;07:30 \u2013 18:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: false, &#34;cutoff_time&#34;: &#34;08:30&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;01c4c0d0-f04d-4964-94fd-1dc49fd97a05&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 1 - IT&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_1_it&#34;, &#34;type_label&#34;: &#34;Shift 1 - IT&#34;, &#34;work_end&#34;: &#34;16:30&#34;, &#34;work_start&#34;: &#34;07:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('01c4c0d0-f04d-4964-94fd-1dc49fd97a05', 'Shift 1 - IT', 'shift_1_it')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-52185fb3-9e8b-4d4f-8b98-118539379bfa">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 1 - Quality Control</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-52185fb3-9e8b-4d4f-8b98-118539379bfa">
+              07:30 – 16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-52185fb3-9e8b-4d4f-8b98-118539379bfa">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-52185fb3-9e8b-4d4f-8b98-118539379bfa">
+              05:30 – 11:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-52185fb3-9e8b-4d4f-8b98-118539379bfa">
+              11:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-52185fb3-9e8b-4d4f-8b98-118539379bfa">
+              07:30 – 18:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-52185fb3-9e8b-4d4f-8b98-118539379bfa">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-52185fb3-9e8b-4d4f-8b98-118539379bfa"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-52185fb3-9e8b-4d4f-8b98-118539379bfa"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('52185fb3-9e8b-4d4f-8b98-118539379bfa', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;05:30 \u2013 11:00&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;07:30 \u2013 18:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: false, &#34;cutoff_time&#34;: &#34;11:00&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;52185fb3-9e8b-4d4f-8b98-118539379bfa&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 1 - Quality Control&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_1_quality_control&#34;, &#34;type_label&#34;: &#34;Shift 1 - Quality Control&#34;, &#34;work_end&#34;: &#34;16:30&#34;, &#34;work_start&#34;: &#34;07:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('52185fb3-9e8b-4d4f-8b98-118539379bfa', 'Shift 1 - Quality Control', 'shift_1_quality_control')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-c924a624-643d-4f95-8585-57f7725b620b">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Staff</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-c924a624-643d-4f95-8585-57f7725b620b">
+              07:30 – 16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-c924a624-643d-4f95-8585-57f7725b620b">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-c924a624-643d-4f95-8585-57f7725b620b">
+              05:30 – 08:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-c924a624-643d-4f95-8585-57f7725b620b">
+              08:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-c924a624-643d-4f95-8585-57f7725b620b">
+              07:30 – 18:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-c924a624-643d-4f95-8585-57f7725b620b">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-c924a624-643d-4f95-8585-57f7725b620b"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-c924a624-643d-4f95-8585-57f7725b620b"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('c924a624-643d-4f95-8585-57f7725b620b', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;05:30 \u2013 08:30&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;07:30 \u2013 18:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: false, &#34;cutoff_time&#34;: &#34;08:30&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;c924a624-643d-4f95-8585-57f7725b620b&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Staff&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;staff&#34;, &#34;type_label&#34;: &#34;Staff&#34;, &#34;work_end&#34;: &#34;16:30&#34;, &#34;work_start&#34;: &#34;07:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('c924a624-643d-4f95-8585-57f7725b620b', 'Staff', 'staff')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-277f2c8a-6a10-45a3-a2d4-4cdb15665bd8">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 1 - Supervisor</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-277f2c8a-6a10-45a3-a2d4-4cdb15665bd8">
+              07:45 – 16:15
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-277f2c8a-6a10-45a3-a2d4-4cdb15665bd8">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-277f2c8a-6a10-45a3-a2d4-4cdb15665bd8">
+              05:45 – 08:45
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-277f2c8a-6a10-45a3-a2d4-4cdb15665bd8">
+              08:45
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-277f2c8a-6a10-45a3-a2d4-4cdb15665bd8">
+              07:45 – 18:15
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-277f2c8a-6a10-45a3-a2d4-4cdb15665bd8">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-277f2c8a-6a10-45a3-a2d4-4cdb15665bd8"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-277f2c8a-6a10-45a3-a2d4-4cdb15665bd8"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('277f2c8a-6a10-45a3-a2d4-4cdb15665bd8', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;05:45 \u2013 08:45&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;07:45 \u2013 18:15&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: false, &#34;cutoff_time&#34;: &#34;08:45&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;277f2c8a-6a10-45a3-a2d4-4cdb15665bd8&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 1 - Supervisor&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_1_supervisor&#34;, &#34;type_label&#34;: &#34;Shift 1 - Supervisor&#34;, &#34;work_end&#34;: &#34;16:15&#34;, &#34;work_start&#34;: &#34;07:45&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('277f2c8a-6a10-45a3-a2d4-4cdb15665bd8', 'Shift 1 - Supervisor', 'shift_1_supervisor')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-076ca7cf-84d3-4d11-842a-b7a09021b4c3">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Lembur</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-076ca7cf-84d3-4d11-842a-b7a09021b4c3">
+              08:00 – 16:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-076ca7cf-84d3-4d11-842a-b7a09021b4c3">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-076ca7cf-84d3-4d11-842a-b7a09021b4c3">
+              06:00 – 10:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-076ca7cf-84d3-4d11-842a-b7a09021b4c3">
+              10:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-076ca7cf-84d3-4d11-842a-b7a09021b4c3">
+              08:00 – 18:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-076ca7cf-84d3-4d11-842a-b7a09021b4c3">
+              0 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-076ca7cf-84d3-4d11-842a-b7a09021b4c3"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-076ca7cf-84d3-4d11-842a-b7a09021b4c3"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('076ca7cf-84d3-4d11-842a-b7a09021b4c3', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;06:00 \u2013 10:00&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;08:00 \u2013 18:00&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: false, &#34;cutoff_time&#34;: &#34;10:00&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;076ca7cf-84d3-4d11-842a-b7a09021b4c3&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 0, &#34;name&#34;: &#34;Lembur&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;lembur&#34;, &#34;type_label&#34;: &#34;Lembur&#34;, &#34;work_end&#34;: &#34;16:00&#34;, &#34;work_start&#34;: &#34;08:00&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('076ca7cf-84d3-4d11-842a-b7a09021b4c3', 'Lembur', 'lembur')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-11429828-4793-4fd1-895e-334ecab307b2">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 1 - Produksi</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-11429828-4793-4fd1-895e-334ecab307b2">
+              08:00 – 16:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-11429828-4793-4fd1-895e-334ecab307b2">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-11429828-4793-4fd1-895e-334ecab307b2">
+              06:00 – 09:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-11429828-4793-4fd1-895e-334ecab307b2">
+              09:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-11429828-4793-4fd1-895e-334ecab307b2">
+              08:00 – 18:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-11429828-4793-4fd1-895e-334ecab307b2">
+              5 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-11429828-4793-4fd1-895e-334ecab307b2"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-11429828-4793-4fd1-895e-334ecab307b2"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('11429828-4793-4fd1-895e-334ecab307b2', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;06:00 \u2013 09:00&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;08:00 \u2013 18:00&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: false, &#34;cutoff_time&#34;: &#34;09:00&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;11429828-4793-4fd1-895e-334ecab307b2&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 5, &#34;name&#34;: &#34;Shift 1 - Produksi&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_1_produksi&#34;, &#34;type_label&#34;: &#34;Shift 1 - Produksi&#34;, &#34;work_end&#34;: &#34;16:00&#34;, &#34;work_start&#34;: &#34;08:00&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('11429828-4793-4fd1-895e-334ecab307b2', 'Shift 1 - Produksi', 'shift_1_produksi')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-950c3140-348b-4f31-af7f-d187c47b537f">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 2 - Inventaris</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-950c3140-348b-4f31-af7f-d187c47b537f">
+              15:30 – 00:30
+              <span class="sm-info-plus">+1</span>
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-950c3140-348b-4f31-af7f-d187c47b537f">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-950c3140-348b-4f31-af7f-d187c47b537f">
+              13:30 – 16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-950c3140-348b-4f31-af7f-d187c47b537f">
+              16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-950c3140-348b-4f31-af7f-d187c47b537f">
+              15:30 – +02:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-950c3140-348b-4f31-af7f-d187c47b537f">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-950c3140-348b-4f31-af7f-d187c47b537f"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-950c3140-348b-4f31-af7f-d187c47b537f"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('950c3140-348b-4f31-af7f-d187c47b537f', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;13:30 \u2013 16:30&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;15:30 \u2013 +02:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: true, &#34;cutoff_time&#34;: &#34;16:30&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;950c3140-348b-4f31-af7f-d187c47b537f&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 2 - Inventaris&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_2_inventaris&#34;, &#34;type_label&#34;: &#34;Shift 2 - Inventaris&#34;, &#34;work_end&#34;: &#34;00:30&#34;, &#34;work_start&#34;: &#34;15:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('950c3140-348b-4f31-af7f-d187c47b537f', 'Shift 2 - Inventaris', 'shift_2_inventaris')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-34a4cc53-c4f0-4b63-be0d-59976595f001">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 2 - IT</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-34a4cc53-c4f0-4b63-be0d-59976595f001">
+              15:30 – 00:30
+              <span class="sm-info-plus">+1</span>
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-34a4cc53-c4f0-4b63-be0d-59976595f001">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-34a4cc53-c4f0-4b63-be0d-59976595f001">
+              13:30 – 16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-34a4cc53-c4f0-4b63-be0d-59976595f001">
+              16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-34a4cc53-c4f0-4b63-be0d-59976595f001">
+              15:30 – +02:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-34a4cc53-c4f0-4b63-be0d-59976595f001">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-34a4cc53-c4f0-4b63-be0d-59976595f001"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-34a4cc53-c4f0-4b63-be0d-59976595f001"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('34a4cc53-c4f0-4b63-be0d-59976595f001', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;13:30 \u2013 16:30&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;15:30 \u2013 +02:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: true, &#34;cutoff_time&#34;: &#34;16:30&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;34a4cc53-c4f0-4b63-be0d-59976595f001&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 2 - IT&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_2_it&#34;, &#34;type_label&#34;: &#34;Shift 2 - IT&#34;, &#34;work_end&#34;: &#34;00:30&#34;, &#34;work_start&#34;: &#34;15:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('34a4cc53-c4f0-4b63-be0d-59976595f001', 'Shift 2 - IT', 'shift_2_it')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-e0b147b1-ac11-474d-8f1c-a07832975971">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 2 - Quality Control</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-e0b147b1-ac11-474d-8f1c-a07832975971">
+              15:30 – 00:30
+              <span class="sm-info-plus">+1</span>
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-e0b147b1-ac11-474d-8f1c-a07832975971">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-e0b147b1-ac11-474d-8f1c-a07832975971">
+              13:30 – 16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-e0b147b1-ac11-474d-8f1c-a07832975971">
+              16:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-e0b147b1-ac11-474d-8f1c-a07832975971">
+              15:30 – +02:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-e0b147b1-ac11-474d-8f1c-a07832975971">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-e0b147b1-ac11-474d-8f1c-a07832975971"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-e0b147b1-ac11-474d-8f1c-a07832975971"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('e0b147b1-ac11-474d-8f1c-a07832975971', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;13:30 \u2013 16:30&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;15:30 \u2013 +02:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: true, &#34;cutoff_time&#34;: &#34;16:30&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;e0b147b1-ac11-474d-8f1c-a07832975971&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 2 - Quality Control&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_2_quality_control&#34;, &#34;type_label&#34;: &#34;Shift 2 - Quality Control&#34;, &#34;work_end&#34;: &#34;00:30&#34;, &#34;work_start&#34;: &#34;15:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('e0b147b1-ac11-474d-8f1c-a07832975971', 'Shift 2 - Quality Control', 'shift_2_quality_control')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-29b94fa4-1ded-4186-bfe0-040e8455e0f3">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 2 - Supervisor</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-29b94fa4-1ded-4186-bfe0-040e8455e0f3">
+              15:45 – 00:15
+              <span class="sm-info-plus">+1</span>
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-29b94fa4-1ded-4186-bfe0-040e8455e0f3">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-29b94fa4-1ded-4186-bfe0-040e8455e0f3">
+              13:45 – 17:15
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-29b94fa4-1ded-4186-bfe0-040e8455e0f3">
+              17:15
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-29b94fa4-1ded-4186-bfe0-040e8455e0f3">
+              15:45 – +02:15
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-29b94fa4-1ded-4186-bfe0-040e8455e0f3">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-29b94fa4-1ded-4186-bfe0-040e8455e0f3"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-29b94fa4-1ded-4186-bfe0-040e8455e0f3"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('29b94fa4-1ded-4186-bfe0-040e8455e0f3', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;13:45 \u2013 17:15&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;15:45 \u2013 +02:15&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: true, &#34;cutoff_time&#34;: &#34;17:15&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;29b94fa4-1ded-4186-bfe0-040e8455e0f3&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 2 - Supervisor&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_2_supervisor&#34;, &#34;type_label&#34;: &#34;Shift 2 - Supervisor&#34;, &#34;work_end&#34;: &#34;00:15&#34;, &#34;work_start&#34;: &#34;15:45&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('29b94fa4-1ded-4186-bfe0-040e8455e0f3', 'Shift 2 - Supervisor', 'shift_2_supervisor')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-86100dcc-4f60-4db1-bfa1-3f544967d143">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 2 - Produksi</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-86100dcc-4f60-4db1-bfa1-3f544967d143">
+              16:00 – 00:00
+              <span class="sm-info-plus">+1</span>
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-86100dcc-4f60-4db1-bfa1-3f544967d143">
+              Hari yang sama dengan jam mulai
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-86100dcc-4f60-4db1-bfa1-3f544967d143">
+              14:00 – 18:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-86100dcc-4f60-4db1-bfa1-3f544967d143">
+              18:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-86100dcc-4f60-4db1-bfa1-3f544967d143">
+              16:00 – +02:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-86100dcc-4f60-4db1-bfa1-3f544967d143">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-86100dcc-4f60-4db1-bfa1-3f544967d143"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-86100dcc-4f60-4db1-bfa1-3f544967d143"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('86100dcc-4f60-4db1-bfa1-3f544967d143', {&#34;attendance_date_offset&#34;: 0, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;14:00 \u2013 18:00&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;16:00 \u2013 +02:00&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: true, &#34;cutoff_time&#34;: &#34;18:00&#34;, &#34;date_offset_label&#34;: &#34;Hari yang sama dengan jam mulai&#34;, &#34;id&#34;: &#34;86100dcc-4f60-4db1-bfa1-3f544967d143&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 2 - Produksi&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_2_produksi&#34;, &#34;type_label&#34;: &#34;Shift 2 - Produksi&#34;, &#34;work_end&#34;: &#34;00:00&#34;, &#34;work_start&#34;: &#34;16:00&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('86100dcc-4f60-4db1-bfa1-3f544967d143', 'Shift 2 - Produksi', 'shift_2_produksi')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-05280e2a-9ed6-426b-aacd-e085ef922694">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 3 - Inventaris</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-05280e2a-9ed6-426b-aacd-e085ef922694">
+              23:30 – 08:30
+              <span class="sm-info-plus">+1</span>
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-05280e2a-9ed6-426b-aacd-e085ef922694">
+              Hari berikutnya (+1)
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-05280e2a-9ed6-426b-aacd-e085ef922694">
+              21:30 – 01:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-05280e2a-9ed6-426b-aacd-e085ef922694">
+              01:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-05280e2a-9ed6-426b-aacd-e085ef922694">
+              23:30 – +10:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-05280e2a-9ed6-426b-aacd-e085ef922694">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-05280e2a-9ed6-426b-aacd-e085ef922694"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-05280e2a-9ed6-426b-aacd-e085ef922694"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('05280e2a-9ed6-426b-aacd-e085ef922694', {&#34;attendance_date_offset&#34;: 1, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;21:30 \u2013 01:00&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;23:30 \u2013 +10:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: true, &#34;cutoff_time&#34;: &#34;01:00&#34;, &#34;date_offset_label&#34;: &#34;Hari berikutnya (+1)&#34;, &#34;id&#34;: &#34;05280e2a-9ed6-426b-aacd-e085ef922694&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 3 - Inventaris&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_3_inventaris&#34;, &#34;type_label&#34;: &#34;Shift 3 - Inventaris&#34;, &#34;work_end&#34;: &#34;08:30&#34;, &#34;work_start&#34;: &#34;23:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('05280e2a-9ed6-426b-aacd-e085ef922694', 'Shift 3 - Inventaris', 'shift_3_inventaris')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-bf024c03-dc09-4b53-a4c9-edf8ae0b3da1">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 3 - Produksi Eksternal</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-bf024c03-dc09-4b53-a4c9-edf8ae0b3da1">
+              23:30 – 07:30
+              <span class="sm-info-plus">+1</span>
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-bf024c03-dc09-4b53-a4c9-edf8ae0b3da1">
+              Hari berikutnya (+1)
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-bf024c03-dc09-4b53-a4c9-edf8ae0b3da1">
+              21:30 – 01:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-bf024c03-dc09-4b53-a4c9-edf8ae0b3da1">
+              01:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-bf024c03-dc09-4b53-a4c9-edf8ae0b3da1">
+              23:30 – +09:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-bf024c03-dc09-4b53-a4c9-edf8ae0b3da1">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-bf024c03-dc09-4b53-a4c9-edf8ae0b3da1"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-bf024c03-dc09-4b53-a4c9-edf8ae0b3da1"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('bf024c03-dc09-4b53-a4c9-edf8ae0b3da1', {&#34;attendance_date_offset&#34;: 1, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;21:30 \u2013 01:00&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;23:30 \u2013 +09:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: true, &#34;cutoff_time&#34;: &#34;01:00&#34;, &#34;date_offset_label&#34;: &#34;Hari berikutnya (+1)&#34;, &#34;id&#34;: &#34;bf024c03-dc09-4b53-a4c9-edf8ae0b3da1&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 3 - Produksi Eksternal&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_3_produksi_eksternal&#34;, &#34;type_label&#34;: &#34;Shift 3 - Produksi Eksternal&#34;, &#34;work_end&#34;: &#34;07:30&#34;, &#34;work_start&#34;: &#34;23:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('bf024c03-dc09-4b53-a4c9-edf8ae0b3da1', 'Shift 3 - Produksi Eksternal', 'shift_3_produksi_eksternal')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-145cf3c6-89aa-4711-bf38-cb3eba75ec76">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 3 - Quality Control</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-145cf3c6-89aa-4711-bf38-cb3eba75ec76">
+              23:30 – 08:30
+              <span class="sm-info-plus">+1</span>
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-145cf3c6-89aa-4711-bf38-cb3eba75ec76">
+              Hari berikutnya (+1)
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-145cf3c6-89aa-4711-bf38-cb3eba75ec76">
+              21:30 – 01:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-145cf3c6-89aa-4711-bf38-cb3eba75ec76">
+              01:00
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-145cf3c6-89aa-4711-bf38-cb3eba75ec76">
+              23:30 – +10:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-145cf3c6-89aa-4711-bf38-cb3eba75ec76">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-145cf3c6-89aa-4711-bf38-cb3eba75ec76"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-145cf3c6-89aa-4711-bf38-cb3eba75ec76"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('145cf3c6-89aa-4711-bf38-cb3eba75ec76', {&#34;attendance_date_offset&#34;: 1, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;21:30 \u2013 01:00&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;23:30 \u2013 +10:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: true, &#34;cutoff_time&#34;: &#34;01:00&#34;, &#34;date_offset_label&#34;: &#34;Hari berikutnya (+1)&#34;, &#34;id&#34;: &#34;145cf3c6-89aa-4711-bf38-cb3eba75ec76&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 3 - Quality Control&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_3_quality_control&#34;, &#34;type_label&#34;: &#34;Shift 3 - Quality Control&#34;, &#34;work_end&#34;: &#34;08:30&#34;, &#34;work_start&#34;: &#34;23:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('145cf3c6-89aa-4711-bf38-cb3eba75ec76', 'Shift 3 - Quality Control', 'shift_3_quality_control')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-d1fa56f9-5be7-4c3d-8ee4-ec97d2809185">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 3 - Supervisor Eksternal</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-d1fa56f9-5be7-4c3d-8ee4-ec97d2809185">
+              23:30 – 07:30
+              <span class="sm-info-plus">+1</span>
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-d1fa56f9-5be7-4c3d-8ee4-ec97d2809185">
+              Hari berikutnya (+1)
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-d1fa56f9-5be7-4c3d-8ee4-ec97d2809185">
+              21:30 – 00:45
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-d1fa56f9-5be7-4c3d-8ee4-ec97d2809185">
+              00:45
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-d1fa56f9-5be7-4c3d-8ee4-ec97d2809185">
+              23:30 – +09:30
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-d1fa56f9-5be7-4c3d-8ee4-ec97d2809185">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-d1fa56f9-5be7-4c3d-8ee4-ec97d2809185"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-d1fa56f9-5be7-4c3d-8ee4-ec97d2809185"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('d1fa56f9-5be7-4c3d-8ee4-ec97d2809185', {&#34;attendance_date_offset&#34;: 1, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;21:30 \u2013 00:45&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;23:30 \u2013 +09:30&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: true, &#34;cutoff_time&#34;: &#34;00:45&#34;, &#34;date_offset_label&#34;: &#34;Hari berikutnya (+1)&#34;, &#34;id&#34;: &#34;d1fa56f9-5be7-4c3d-8ee4-ec97d2809185&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 3 - Supervisor Eksternal&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_3_supervisor_eksternal&#34;, &#34;type_label&#34;: &#34;Shift 3 - Supervisor Eksternal&#34;, &#34;work_end&#34;: &#34;07:30&#34;, &#34;work_start&#34;: &#34;23:30&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('d1fa56f9-5be7-4c3d-8ee4-ec97d2809185', 'Shift 3 - Supervisor Eksternal', 'shift_3_supervisor_eksternal')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+       
+
+    <div class="sm-shift-card" id="card-e6d52868-343c-4cf3-8abb-11cd35fa169d">
+      <div
+        class="sm-shift-card-accent"
+        style="background:#4f6ef7"
+      ></div>
+
+      <div class="sm-shift-card-header">
+        <div class="sm-shift-name">Shift 3 - Supervisor Internal</div>
+         
+      </div>
+
+      <div class="sm-info-rows">
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row sm-info-row--hero">
+            <span class="sm-info-label">Jam Kerja</span>
+            <span class="sm-info-val" id="val-range-e6d52868-343c-4cf3-8abb-11cd35fa169d">
+              23:45 – 08:15
+              <span class="sm-info-plus">+1</span>
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Tanggal Kerja</span>
+            <span class="sm-info-val" id="val-offset-e6d52868-343c-4cf3-8abb-11cd35fa169d">
+              Hari berikutnya (+1)
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-in</span>
+            <span class="sm-info-val" id="val-checkin-window-e6d52868-343c-4cf3-8abb-11cd35fa169d">
+              21:45 – 00:45
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Batas Check-in</span>
+            <span class="sm-info-val cutoff" id="val-cutoff-e6d52868-343c-4cf3-8abb-11cd35fa169d">
+              00:45
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Window Check-out</span>
+            <span class="sm-info-val" id="val-checkout-window-e6d52868-343c-4cf3-8abb-11cd35fa169d">
+              23:45 – +10:15
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Toleransi Terlambat</span>
+            <span class="sm-info-val" id="val-tol-e6d52868-343c-4cf3-8abb-11cd35fa169d">
+              1 mnt
+            </span>
+          </div>
+        </div>
+
+        
+        <div class="sm-info-group">
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-in</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkin-e6d52868-343c-4cf3-8abb-11cd35fa169d"
+            >
+              Nonaktif
+            </span>
+          </div>
+          <div class="sm-info-row">
+            <span class="sm-info-label">Pengingat Check-out</span>
+            <span
+              class="sm-info-val is-off"
+              id="val-notify-checkout-e6d52868-343c-4cf3-8abb-11cd35fa169d"
+            >
+              Nonaktif
+            </span>
+          </div>
+        </div>
+      </div>
+
+       
+      <div class="sm-synced-row">
+        <span class="sm-synced-dot warn"></span>
+        Scheduler tidak terdeteksi
+      </div>
+      
+
+      
+      <div class="sm-card-actions">
+        <button
+          class="sm-btn-edit"
+          onclick="openEditModal('e6d52868-343c-4cf3-8abb-11cd35fa169d', {&#34;attendance_date_offset&#34;: 1, &#34;checkin_open_before_minutes&#34;: 120, &#34;checkin_window_label&#34;: &#34;21:45 \u2013 00:45&#34;, &#34;checkout_grace_minutes&#34;: 120, &#34;checkout_window_label&#34;: &#34;23:45 \u2013 +10:15&#34;, &#34;color_hex&#34;: &#34;#4f6ef7&#34;, &#34;crosses_midnight&#34;: true, &#34;cutoff_time&#34;: &#34;00:45&#34;, &#34;date_offset_label&#34;: &#34;Hari berikutnya (+1)&#34;, &#34;id&#34;: &#34;e6d52868-343c-4cf3-8abb-11cd35fa169d&#34;, &#34;is_active&#34;: true, &#34;late_tolerance_minutes&#34;: 1, &#34;name&#34;: &#34;Shift 3 - Supervisor Internal&#34;, &#34;notify_checkin_enabled&#34;: false, &#34;notify_checkin_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkin_offset_min&#34;: 15, &#34;notify_checkout_enabled&#34;: false, &#34;notify_checkout_label&#34;: &#34;Nonaktif&#34;, &#34;notify_checkout_offset_min&#34;: 0, &#34;shift_type&#34;: &#34;shift_3_supervisor_internal&#34;, &#34;type_label&#34;: &#34;Shift 3 - Supervisor Internal&#34;, &#34;work_end&#34;: &#34;08:15&#34;, &#34;work_start&#34;: &#34;23:45&#34;})"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="sm-btn-delete"
+          onclick="deleteShift('e6d52868-343c-4cf3-8abb-11cd35fa169d', 'Shift 3 - Supervisor Internal', 'shift_3_supervisor_internal')"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="12"
+            height="12"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+          </svg>
+          Hapus
+        </button>
+      </div>
+    </div>
+    
+  </div>
+
+  
+</div>
+ 
+<div class="modal-overlay" id="modal-edit-shift" style="display: none">
+  <div class="modal-box" style="max-width: 480px">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-edit-title"
+        >Edit Shift</span
+      >
+      <button class="modal-close" onclick="closeEditModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="sm-form-grid">
+        <div class="form-group full">
+          <label class="form-label"
+            >Nama Shift <span class="req">*</span></label
+          >
+          <input
+            type="text"
+            class="form-input"
+            id="edit-name"
+            placeholder="e.g. Inventaris 1 — Gudang A"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"
+            >Jam Mulai <span class="req">*</span></label
+          >
+          <input type="time" class="form-input" id="edit-work-start" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"
+            >Jam Selesai <span class="req">*</span></label
+          >
+          <input type="time" class="form-input" id="edit-work-end" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"
+            >Batas Check-in <span class="req">*</span></label
+          >
+          <input type="time" class="form-input" id="edit-cutoff" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Toleransi Terlambat (mnt)</label>
+          <input
+            type="number"
+            class="form-input"
+            id="edit-tolerance"
+            min="0"
+            max="120"
+            step="5"
+            placeholder="15"
+          />
+        </div>
+
+        <div class="form-group">
+          <label
+            class="form-label"
+            style="display: flex; align-items: center; gap: 0.3rem"
+          >
+            Buka Check-in Sebelum (mnt)
+            <span
+              title="Berapa menit sebelum jam kerja, check-in sudah bisa dilakukan."
+              style="cursor: help; color: var(--text-faint)"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="12"
+                height="12"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+            </span>
+          </label>
+          <input
+            type="number"
+            class="form-input"
+            id="edit-checkin-open-before"
+            min="0"
+            max="480"
+            step="15"
+            placeholder="120"
+          />
+        </div>
+
+        <div class="form-group">
+          <label
+            class="form-label"
+            style="display: flex; align-items: center; gap: 0.3rem"
+          >
+            Toleransi Check-out Setelah (mnt)
+            <span
+              title="Berapa menit setelah jam selesai, check-out masih diperbolehkan."
+              style="cursor: help; color: var(--text-faint)"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                width="12"
+                height="12"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+            </span>
+          </label>
+          <input
+            type="number"
+            class="form-input"
+            id="edit-checkout-grace"
+            min="0"
+            max="480"
+            step="15"
+            placeholder="120"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Warna Label</label>
+          <div style="display: flex; gap: 0.5rem; align-items: center">
+            <input
+              type="color"
+              id="edit-color"
+              style="
+                width: 42px;
+                height: 36px;
+                padding: 2px;
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                cursor: pointer;
+              "
+            />
+            <input
+              type="text"
+              class="form-input"
+              id="edit-color-hex"
+              maxlength="7"
+              placeholder="#1e8449"
+              style="font-family: monospace; font-size: 0.8rem"
+            />
+          </div>
+        </div>
+
+        <div
+          class="form-group full"
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0;
+          "
+        >
+          <input
+            type="checkbox"
+            id="edit-crosses-midnight"
+            style="
+              width: 16px;
+              height: 16px;
+              cursor: pointer;
+              accent-color: var(--primary);
+            "
+          />
+          <label
+            for="edit-crosses-midnight"
+            style="font-size: 0.8rem; font-weight: 500; cursor: pointer"
+          >
+            Shift melewati tengah malam
+          </label>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label" for="edit-date-offset">
+            Tanggal Kerja (shift_date)
+          </label>
+          <select class="form-select" id="edit-date-offset">
+            <option value="0">Hari yang sama dengan jam mulai</option>
+            <option value="1">Hari berikutnya (+1)</option>
+          </select>
+          <div style="font-size: 0.68rem; color: var(--text-faint); margin-top: 0.3rem">
+            Tanggal absensi yang dicatat untuk shift ini. Pilih "Hari berikutnya" untuk shift malam yang mulai ±23:30 tetapi dihitung sebagai kehadiran hari esoknya. Hanya berlaku untuk shift yang melewati tengah malam. Mengubahnya memengaruhi perhitungan data lama.
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="sm-notify-section">
+        <div class="sm-notify-title">Pengingat Absensi</div>
+
+        <div class="sm-notify-row" id="edit-notify-checkin-row">
+          <div class="form-label-toggle">
+            <label class="toggle-switch">
+              <input
+                type="checkbox"
+                id="edit-notify-checkin-enabled"
+                aria-label="Ingatkan check-in"
+              />
+              <span class="toggle-track"
+                ><span class="toggle-thumb"></span
+              ></span>
+            </label>
+            <span class="toggle-label-text"
+              >Ingatkan check-in</span
+            >
+          </div>
+          <div class="sm-notify-offset">
+            <input
+              type="number"
+              class="form-input"
+              id="edit-notify-checkin-offset"
+              min="0"
+              max="480"
+              step="5"
+              value="15"
+            />
+            <span class="sm-notify-unit">mnt sebelum jam mulai</span>
+          </div>
+          <div class="sm-notify-preview" id="edit-notify-checkin-preview"></div>
+        </div>
+
+        <div class="sm-notify-row" id="edit-notify-checkout-row">
+          <div class="form-label-toggle">
+            <label class="toggle-switch">
+              <input
+                type="checkbox"
+                id="edit-notify-checkout-enabled"
+                aria-label="Ingatkan check-out"
+              />
+              <span class="toggle-track"
+                ><span class="toggle-thumb"></span
+              ></span>
+            </label>
+            <span class="toggle-label-text"
+              >Ingatkan check-out</span
+            >
+          </div>
+          <div class="sm-notify-offset">
+            <input
+              type="number"
+              class="form-input"
+              id="edit-notify-checkout-offset"
+              min="0"
+              max="480"
+              step="5"
+              value="0"
+            />
+            <span class="sm-notify-unit">mnt setelah jam selesai</span>
+          </div>
+          <div class="sm-notify-preview" id="edit-notify-checkout-preview"></div>
+        </div>
+      </div>
+
+      <div class="sm-form-note" style="margin-top: 0.85rem">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="13"
+          height="13"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span
+          >Batas Check-in = jam terakhir karyawan bisa absen; lewat jam
+          ini sistem mencatat "Tidak Hadir". Buka Check-in = seberapa awal
+          sistem menerima absensi masuk. Toleransi Check-out = berapa lama
+          setelah jam selesai absensi pulang masih bisa dilakukan.</span
+        >
+      </div>
+
+      <div class="sm-reschedule-notice">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="13"
+          height="13"
+        >
+          <path
+            d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+          />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+        <span
+          >Mengubah Batas Check-in akan memperbarui jadwal auto-absent
+          otomatis.</span
+        >
+      </div>
+
+      <div
+        id="edit-error"
+        class="form-error"
+        style="display: none; margin-top: 0.75rem"
+      ></div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeEditModal()">
+        Batal
+      </button>
+      <button
+        class="btn-modal-submit"
+        id="btn-edit-submit"
+        onclick="submitEdit()"
+      >
+        <svg
+          class="spin"
+          id="edit-spin"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          width="14"
+          height="14"
+          style="display: none"
+        >
+          <path
+            d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83
+                   M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
+          />
+        </svg>
+        Simpan & Perbarui Scheduler
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="modal-add-shift" style="display: none">
+  <div class="modal-box" style="max-width: 480px">
+    <div class="modal-header">
+      <span class="modal-title">Tambah Shift Baru</span>
+      <button class="modal-close" onclick="closeAddModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="sm-form-grid">
+        
+        <div class="form-group full">
+          <label class="form-label"
+            >Nama Shift <span class="req">*</span></label
+          >
+          <input
+            type="text"
+            class="form-input"
+            id="add-name"
+            placeholder="e.g. Produksi 3 — Malam"
+            autocomplete="off"
+          />
+        </div>
+
+        
+        <div class="form-group full" id="add-type-group">
+          <label
+            class="form-label"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <span>Kode Shift <span class="req">*</span></span>
+            <a
+              href="#"
+              class="sm-type-edit-link"
+              id="add-type-toggle"
+              onclick="toggleSlugEdit(event)"
+            >
+              Ubah kode
+            </a>
+          </label>
+          
+          <div class="sm-type-preview" id="add-type-preview">
+            <span id="add-type-preview-text">—</span>
+          </div>
+          
+          <input
+            type="text"
+            class="form-input sm-type-manual"
+            id="add-shift-type"
+            pattern="^[a-z][a-z0-9_]{1,30}$"
+            placeholder="contoh: shift_gudang_3"
+            autocomplete="off"
+            style="
+              display: none;
+              font-family: &quot;IBM Plex Mono&quot;, monospace;
+              font-size: 0.82rem;
+            "
+          />
+          <div class="sm-type-hint" id="add-type-hint" style="display: none">
+            Gunakan huruf kecil, angka, dan underscore. Awali dengan
+            huruf.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"
+            >Jam Mulai <span class="req">*</span></label
+          >
+          <input type="time" class="form-input" id="add-work-start" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"
+            >Jam Selesai <span class="req">*</span></label
+          >
+          <input type="time" class="form-input" id="add-work-end" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"
+            >Batas Check-in <span class="req">*</span></label
+          >
+          <input type="time" class="form-input" id="add-cutoff" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Toleransi Terlambat (mnt)</label>
+          <input
+            type="number"
+            class="form-input"
+            id="add-tolerance"
+            min="0"
+            max="120"
+            step="5"
+            value="15"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"
+            >Buka Check-in Sebelum (mnt)</label
+          >
+          <input
+            type="number"
+            class="form-input"
+            id="add-checkin-open-before"
+            min="0"
+            max="480"
+            step="15"
+            value="120"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"
+            >Toleransi Check-out Setelah (mnt)</label
+          >
+          <input
+            type="number"
+            class="form-input"
+            id="add-checkout-grace"
+            min="0"
+            max="480"
+            step="15"
+            value="120"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Warna Label</label>
+          <div style="display: flex; gap: 0.5rem; align-items: center">
+            <input
+              type="color"
+              id="add-color"
+              value="#4f6ef7"
+              style="
+                width: 42px;
+                height: 36px;
+                padding: 2px;
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                cursor: pointer;
+              "
+            />
+            <input
+              type="text"
+              class="form-input"
+              id="add-color-hex"
+              maxlength="7"
+              value="#4f6ef7"
+              style="font-family: monospace; font-size: 0.8rem"
+            />
+          </div>
+        </div>
+
+        <div
+          class="form-group full"
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0;
+          "
+        >
+          <input
+            type="checkbox"
+            id="add-crosses-midnight"
+            style="
+              width: 16px;
+              height: 16px;
+              cursor: pointer;
+              accent-color: var(--primary);
+            "
+          />
+          <label
+            for="add-crosses-midnight"
+            style="font-size: 0.8rem; font-weight: 500; cursor: pointer"
+          >
+            Shift melewati tengah malam
+          </label>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label" for="add-date-offset">
+            Tanggal Kerja (shift_date)
+          </label>
+          <select class="form-select" id="add-date-offset">
+            <option value="0">Hari yang sama dengan jam mulai</option>
+            <option value="1">Hari berikutnya (+1)</option>
+          </select>
+          <div style="font-size: 0.68rem; color: var(--text-faint); margin-top: 0.3rem">
+            Tanggal absensi yang dicatat untuk shift ini. Pilih "Hari berikutnya" untuk shift malam yang mulai ±23:30 tetapi dihitung sebagai kehadiran hari esoknya. Hanya berlaku untuk shift yang melewati tengah malam. Mengubahnya memengaruhi perhitungan data lama.
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="sm-notify-section">
+        <div class="sm-notify-title">Pengingat Absensi</div>
+
+        <div class="sm-notify-row" id="add-notify-checkin-row">
+          <div class="form-label-toggle">
+            <label class="toggle-switch">
+              <input
+                type="checkbox"
+                id="add-notify-checkin-enabled"
+                aria-label="Ingatkan check-in"
+              />
+              <span class="toggle-track"
+                ><span class="toggle-thumb"></span
+              ></span>
+            </label>
+            <span class="toggle-label-text"
+              >Ingatkan check-in</span
+            >
+          </div>
+          <div class="sm-notify-offset">
+            <input
+              type="number"
+              class="form-input"
+              id="add-notify-checkin-offset"
+              min="0"
+              max="480"
+              step="5"
+              value="15"
+            />
+            <span class="sm-notify-unit">mnt sebelum jam mulai</span>
+          </div>
+          <div class="sm-notify-preview" id="add-notify-checkin-preview"></div>
+        </div>
+
+        <div class="sm-notify-row" id="add-notify-checkout-row">
+          <div class="form-label-toggle">
+            <label class="toggle-switch">
+              <input
+                type="checkbox"
+                id="add-notify-checkout-enabled"
+                aria-label="Ingatkan check-out"
+              />
+              <span class="toggle-track"
+                ><span class="toggle-thumb"></span
+              ></span>
+            </label>
+            <span class="toggle-label-text"
+              >Ingatkan check-out</span
+            >
+          </div>
+          <div class="sm-notify-offset">
+            <input
+              type="number"
+              class="form-input"
+              id="add-notify-checkout-offset"
+              min="0"
+              max="480"
+              step="5"
+              value="0"
+            />
+            <span class="sm-notify-unit">mnt setelah jam selesai</span>
+          </div>
+          <div class="sm-notify-preview" id="add-notify-checkout-preview"></div>
+        </div>
+      </div>
+
+      <div class="sm-form-note" style="margin-top: 0.85rem">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="13"
+          height="13"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span
+          >Shift baru akan diterapkan ke semua kantor aktif secara
+          otomatis.</span
+        >
+      </div>
+
+      <div
+        id="add-error"
+        class="form-error"
+        style="display: none; margin-top: 0.75rem"
+      ></div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeAddModal()">
+        Batal
+      </button>
+      <button
+        class="btn-modal-submit"
+        id="btn-add-submit"
+        onclick="submitAdd()"
+      >
+        <svg
+          class="spin"
+          id="add-spin"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          width="14"
+          height="14"
+          style="display: none"
+        >
+          <path
+            d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83
+                   M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
+          />
+        </svg>
+        Simpan Shift Baru
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div class="sm-toast" id="sm-toast"></div>
+
+
+      </main>
+    </div>
+
+     
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+       
+      <a
+        href="../../../../html/manager/dashboard/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a
+        href="../../../../html/manager/employees/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+        </svg>
+        <span>Karyawan</span>
+      </a>
+      <a
+        href="../../../../html/manager/shift-schedule/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="14" x2="12" y2="14" />
+          <line x1="8" y1="18" x2="16" y2="18" />
+        </svg>
+        <span>Jadwal</span>
+      </a>
+      <a
+        href="../../../../html/manager/leaves/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Izin</span>
+      </a>
+      <a
+        href="../../../../html/manager/company-calendar/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="15" x2="16" y2="15" />
+        </svg>
+        <span>Kalender</span>
+      </a>
+      <a
+        href="../../../../html/manager/reports/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        <span>Laporan</span>
+      </a>
+      <a
+        href="../../../../html/manager/production/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+          <circle cx="7.5" cy="11" r="2" />
+          <circle cx="16.5" cy="11" r="2" />
+        </svg>
+        <span>Produksi</span>
+      </a>
+      <a
+        href="../../../../html/manager/corrections/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+        <span>Koreksi</span>
+      </a>
+      <a
+        href="../../../../html/manager/offices/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+          />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Kantor</span>
+      </a>
+      
+      <a
+        href="../../../../html/manager/equipment/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <line x1="8" y1="21" x2="16" y2="21" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+        <span>Alat</span>
+      </a>
+      
+      <a
+        href="../../../../html/manager/departments/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+          <line x1="12" y1="12" x2="12" y2="16" />
+          <line x1="10" y1="14" x2="14" y2="14" />
+        </svg>
+        <span>Departemen</span>
+      </a>
+      <a
+        href="../../../../html/manager/shifts/master/index.html"
+        class="active"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span>Konfigurasi Shift</span>
+      </a>
+      <form method="post" action="../../../../html/auth/logout" class="logout-form">
+        <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+        <button type="submit" class="as-link">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </form>
+
+       
+    </nav>
+    
+    
+    <script src="../../../../js/core.js"></script>
+    
+    
+<script>
+  const SHIFT_DATA     = [{"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "22:00 \u2013 01:00", "checkout_grace_minutes": 120, "checkout_window_label": "00:00 \u2013 10:00", "color_hex": "#4f6ef7", "crosses_midnight": false, "cutoff_time": "01:00", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "d1bc4a7f-ddd6-4dcb-94f4-4338f2791fef", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 3 - Produksi", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_3_produksi", "type_label": "Shift 3 - Produksi", "work_end": "08:00", "work_start": "00:00"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "05:30 \u2013 11:00", "checkout_grace_minutes": 120, "checkout_window_label": "07:30 \u2013 18:30", "color_hex": "#4f6ef7", "crosses_midnight": false, "cutoff_time": "11:00", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "5ddcaa74-0eb6-48fc-921a-32bb96bd7ae0", "is_active": true, "late_tolerance_minutes": 1, "name": "Manajemen / Kantor", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "management", "type_label": "Kantor", "work_end": "16:30", "work_start": "07:30"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "05:30 \u2013 08:30", "checkout_grace_minutes": 120, "checkout_window_label": "07:30 \u2013 18:30", "color_hex": "#4f6ef7", "crosses_midnight": false, "cutoff_time": "08:30", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "8d48ebc7-656d-448e-9440-f86528b2db7e", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 1 - Inventaris", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_1_inventaris", "type_label": "Shift 1 - Inventaris", "work_end": "16:30", "work_start": "07:30"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "05:30 \u2013 08:30", "checkout_grace_minutes": 120, "checkout_window_label": "07:30 \u2013 18:30", "color_hex": "#4f6ef7", "crosses_midnight": false, "cutoff_time": "08:30", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "01c4c0d0-f04d-4964-94fd-1dc49fd97a05", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 1 - IT", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_1_it", "type_label": "Shift 1 - IT", "work_end": "16:30", "work_start": "07:30"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "05:30 \u2013 11:00", "checkout_grace_minutes": 120, "checkout_window_label": "07:30 \u2013 18:30", "color_hex": "#4f6ef7", "crosses_midnight": false, "cutoff_time": "11:00", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "52185fb3-9e8b-4d4f-8b98-118539379bfa", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 1 - Quality Control", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_1_quality_control", "type_label": "Shift 1 - Quality Control", "work_end": "16:30", "work_start": "07:30"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "05:30 \u2013 08:30", "checkout_grace_minutes": 120, "checkout_window_label": "07:30 \u2013 18:30", "color_hex": "#4f6ef7", "crosses_midnight": false, "cutoff_time": "08:30", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "c924a624-643d-4f95-8585-57f7725b620b", "is_active": true, "late_tolerance_minutes": 1, "name": "Staff", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "staff", "type_label": "Staff", "work_end": "16:30", "work_start": "07:30"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "05:45 \u2013 08:45", "checkout_grace_minutes": 120, "checkout_window_label": "07:45 \u2013 18:15", "color_hex": "#4f6ef7", "crosses_midnight": false, "cutoff_time": "08:45", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "277f2c8a-6a10-45a3-a2d4-4cdb15665bd8", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 1 - Supervisor", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_1_supervisor", "type_label": "Shift 1 - Supervisor", "work_end": "16:15", "work_start": "07:45"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "06:00 \u2013 10:00", "checkout_grace_minutes": 120, "checkout_window_label": "08:00 \u2013 18:00", "color_hex": "#4f6ef7", "crosses_midnight": false, "cutoff_time": "10:00", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "076ca7cf-84d3-4d11-842a-b7a09021b4c3", "is_active": true, "late_tolerance_minutes": 0, "name": "Lembur", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "lembur", "type_label": "Lembur", "work_end": "16:00", "work_start": "08:00"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "06:00 \u2013 09:00", "checkout_grace_minutes": 120, "checkout_window_label": "08:00 \u2013 18:00", "color_hex": "#4f6ef7", "crosses_midnight": false, "cutoff_time": "09:00", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "11429828-4793-4fd1-895e-334ecab307b2", "is_active": true, "late_tolerance_minutes": 5, "name": "Shift 1 - Produksi", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_1_produksi", "type_label": "Shift 1 - Produksi", "work_end": "16:00", "work_start": "08:00"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "13:30 \u2013 16:30", "checkout_grace_minutes": 120, "checkout_window_label": "15:30 \u2013 +02:30", "color_hex": "#4f6ef7", "crosses_midnight": true, "cutoff_time": "16:30", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "950c3140-348b-4f31-af7f-d187c47b537f", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 2 - Inventaris", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_2_inventaris", "type_label": "Shift 2 - Inventaris", "work_end": "00:30", "work_start": "15:30"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "13:30 \u2013 16:30", "checkout_grace_minutes": 120, "checkout_window_label": "15:30 \u2013 +02:30", "color_hex": "#4f6ef7", "crosses_midnight": true, "cutoff_time": "16:30", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "34a4cc53-c4f0-4b63-be0d-59976595f001", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 2 - IT", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_2_it", "type_label": "Shift 2 - IT", "work_end": "00:30", "work_start": "15:30"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "13:30 \u2013 16:30", "checkout_grace_minutes": 120, "checkout_window_label": "15:30 \u2013 +02:30", "color_hex": "#4f6ef7", "crosses_midnight": true, "cutoff_time": "16:30", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "e0b147b1-ac11-474d-8f1c-a07832975971", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 2 - Quality Control", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_2_quality_control", "type_label": "Shift 2 - Quality Control", "work_end": "00:30", "work_start": "15:30"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "13:45 \u2013 17:15", "checkout_grace_minutes": 120, "checkout_window_label": "15:45 \u2013 +02:15", "color_hex": "#4f6ef7", "crosses_midnight": true, "cutoff_time": "17:15", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "29b94fa4-1ded-4186-bfe0-040e8455e0f3", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 2 - Supervisor", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_2_supervisor", "type_label": "Shift 2 - Supervisor", "work_end": "00:15", "work_start": "15:45"}, {"attendance_date_offset": 0, "checkin_open_before_minutes": 120, "checkin_window_label": "14:00 \u2013 18:00", "checkout_grace_minutes": 120, "checkout_window_label": "16:00 \u2013 +02:00", "color_hex": "#4f6ef7", "crosses_midnight": true, "cutoff_time": "18:00", "date_offset_label": "Hari yang sama dengan jam mulai", "id": "86100dcc-4f60-4db1-bfa1-3f544967d143", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 2 - Produksi", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_2_produksi", "type_label": "Shift 2 - Produksi", "work_end": "00:00", "work_start": "16:00"}, {"attendance_date_offset": 1, "checkin_open_before_minutes": 120, "checkin_window_label": "21:30 \u2013 01:00", "checkout_grace_minutes": 120, "checkout_window_label": "23:30 \u2013 +10:30", "color_hex": "#4f6ef7", "crosses_midnight": true, "cutoff_time": "01:00", "date_offset_label": "Hari berikutnya (+1)", "id": "05280e2a-9ed6-426b-aacd-e085ef922694", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 3 - Inventaris", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_3_inventaris", "type_label": "Shift 3 - Inventaris", "work_end": "08:30", "work_start": "23:30"}, {"attendance_date_offset": 1, "checkin_open_before_minutes": 120, "checkin_window_label": "21:30 \u2013 01:00", "checkout_grace_minutes": 120, "checkout_window_label": "23:30 \u2013 +09:30", "color_hex": "#4f6ef7", "crosses_midnight": true, "cutoff_time": "01:00", "date_offset_label": "Hari berikutnya (+1)", "id": "bf024c03-dc09-4b53-a4c9-edf8ae0b3da1", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 3 - Produksi Eksternal", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_3_produksi_eksternal", "type_label": "Shift 3 - Produksi Eksternal", "work_end": "07:30", "work_start": "23:30"}, {"attendance_date_offset": 1, "checkin_open_before_minutes": 120, "checkin_window_label": "21:30 \u2013 01:00", "checkout_grace_minutes": 120, "checkout_window_label": "23:30 \u2013 +10:30", "color_hex": "#4f6ef7", "crosses_midnight": true, "cutoff_time": "01:00", "date_offset_label": "Hari berikutnya (+1)", "id": "145cf3c6-89aa-4711-bf38-cb3eba75ec76", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 3 - Quality Control", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_3_quality_control", "type_label": "Shift 3 - Quality Control", "work_end": "08:30", "work_start": "23:30"}, {"attendance_date_offset": 1, "checkin_open_before_minutes": 120, "checkin_window_label": "21:30 \u2013 00:45", "checkout_grace_minutes": 120, "checkout_window_label": "23:30 \u2013 +09:30", "color_hex": "#4f6ef7", "crosses_midnight": true, "cutoff_time": "00:45", "date_offset_label": "Hari berikutnya (+1)", "id": "d1fa56f9-5be7-4c3d-8ee4-ec97d2809185", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 3 - Supervisor Eksternal", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_3_supervisor_eksternal", "type_label": "Shift 3 - Supervisor Eksternal", "work_end": "07:30", "work_start": "23:30"}, {"attendance_date_offset": 1, "checkin_open_before_minutes": 120, "checkin_window_label": "21:45 \u2013 00:45", "checkout_grace_minutes": 120, "checkout_window_label": "23:45 \u2013 +10:15", "color_hex": "#4f6ef7", "crosses_midnight": true, "cutoff_time": "00:45", "date_offset_label": "Hari berikutnya (+1)", "id": "e6d52868-343c-4cf3-8abb-11cd35fa169d", "is_active": true, "late_tolerance_minutes": 1, "name": "Shift 3 - Supervisor Internal", "notify_checkin_enabled": false, "notify_checkin_label": "Nonaktif", "notify_checkin_offset_min": 15, "notify_checkout_enabled": false, "notify_checkout_label": "Nonaktif", "notify_checkout_offset_min": 0, "shift_type": "shift_3_supervisor_internal", "type_label": "Shift 3 - Supervisor Internal", "work_end": "08:15", "work_start": "23:45"}];
+  const SCHEDULER_INFO = {};
+  const CSRF_TOKEN     = document.querySelector('meta[name="csrf-token"]').content;
+</script>
+<script
+  src="../../../../js/shift_master.js"
+  defer
+></script>
+
+
+    <script src="../../../../js/app.js"></script>
+    
+    <script>
+      window.I18N = Object.assign({}, window.I18N, {
+      notifTitle: "Notifikasi",
+      notifMarkAllRead: "Tandai semua dibaca",
+      notifLoading: "Memuat\u2026",
+      notifEmpty: "Tidak ada notifikasi",
+      notifError: "Gagal memuat notifikasi"});
+    </script>
+    <script src="../../../../js/notifications.js"></script>
+    <script src="../../../../js/push.js"></script>
+    
+    <script>
+      // Form logout mengirim POST via fetch, lalu redirect manual berdasarkan
+      // JSON {"redirect": "..."} dari server — pola yang sama dengan
+      // login.js. Tanpa ini, submit form native menampilkan JSON mentah
+      // di layar alih-alih membawa user ke halaman login.
+      document.querySelectorAll(".logout-form").forEach(function (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const btn = form.querySelector("button[type=submit]");
+          if (btn) btn.disabled = true;
+          try { if (window.Push) await window.Push.forgetDevice(); } catch {}
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": form.querySelector(
+                  'input[name="csrf_token"]',
+                ).value,
+              },
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              /* respons bukan JSON — abaikan, pakai fallback di bawah */
+            }
+            window.location.href = data.redirect || "/auth/login";
+          } catch {
+            // Gagal terhubung ke server: tetap arahkan ke login supaya
+            // user tidak macet di halaman dengan sesi yang mungkin sudah
+            // tidak valid.
+            window.location.href = "/auth/login";
+          }
+        });
+      });
+    </script>
+    
+  </body>
+</html>

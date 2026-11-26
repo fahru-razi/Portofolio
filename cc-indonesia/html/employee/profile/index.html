@@ -1,0 +1,2443 @@
+
+<!doctype html>
+<html data-root="../../../" lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="csrf-token" content="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+    <meta name="theme-color" content="#1A4A8C" />
+    <link rel="manifest" href="../../../html/manifest.webmanifest" />
+    <link rel="icon" href="../../../img/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../img/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" href="../../../img/apple-touch-icon.png?v=2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Absensi" />
+    <title>Profil Saya — CC
+Indonesia</title>
+    
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/ibm-plex-sans-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/plus-jakarta-sans-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/fonts.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="../../../css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/theme.css"
+    />
+    <link rel="stylesheet" href="../../../css/push.css"
+    />
+    
+<link
+  rel="stylesheet"
+  href="../../../css/profile.css"
+/>
+
+
+    <style>
+      /* Form logout dibungkus supaya method-nya POST (bukan link GET) —
+         lihat auth.py: /auth/logout adalah POST-only untuk mencegah CSRF
+         logout lewat <img>/<a> pihak ketiga. Reset tampilan <button> agar
+         identik dengan link sidebar/bottom-nav di sekitarnya. */
+      .logout-form {
+        margin: 0;
+        padding: 0;
+        display: contents; /* form tidak mengubah layout flex/grid induk */
+      }
+      /* [FIX] Sebelumnya `all: unset` + `display: inherit`. Karena parent
+         .logout-form adalah `display: contents`, `inherit` menghasilkan
+         `contents` juga (bukan `flex`), sehingga tombol kehilangan seluruh
+         layout bottom-nav. Sekarang hanya reset tampilan bawaan <button>;
+         layout diatur oleh selector konteks masing-masing (main.css). */
+      button.as-link {
+        background: none;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Sidebar desktop: tombol tetap selebar item menu lain. */
+      .sidebar .logout-form button.as-link {
+        display: flex;
+        width: 100%;
+      }
+    </style>
+  <script>(()=>{const R="../../../",f=window.fetch;window.fetch=(u,o={})=>{u=String(u);if((o.method||"GET").toUpperCase()!=="GET")return Promise.resolve(new Response(JSON.stringify({ok:true,demo:true}),{headers:{"Content-Type":"application/json"}}));if(u[0]==="/")u=u.indexOf("/static/")===0?R+u.slice(8):R+"html"+u;return f(u,o)};document.addEventListener("submit",e=>{e.preventDefault();alert("Mode demo: aksi disimulasikan dan tidak disimpan.")},true)})()</script><link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+  <body
+    class="role-employee"
+  >
+    
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-brand">
+        <img
+          class="brand-logo"
+          src="../../../img/Logo-App-wide.jpg"
+          alt=""
+          width="70"
+          height="36"
+          decoding="async"
+        />
+        <span>CC Indonesia</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar">NA</div>
+        <div>
+          <div class="sidebar-user-name">
+            Nanda
+          </div>
+          <div class="sidebar-user-role">Employee</div>
+        </div>
+        <div id="notif-bell-wrap" style="margin-left: auto"></div>
+      </div>
+
+      <nav class="sidebar-nav">
+         
+        <a
+          href="../../../html/employee/dashboard/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Absensi
+        </a>
+        <a
+          href="../../../html/employee/history/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Riwayat
+        </a>
+        <a
+          href="../../../html/employee/leave/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="9" y1="13" x2="15" y2="13" />
+          </svg>
+          Pengajuan izin
+        </a>
+        <a
+          href="../../../html/employee/shift-swap/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M16 3l4 4-4 4" />
+            <line x1="20" y1="7" x2="7" y2="7" />
+            <path d="M8 21l-4-4 4-4" />
+            <line x1="4" y1="17" x2="17" y2="17" />
+          </svg>
+          Tukar Shift
+        </a>
+        <a
+          href="../../../html/employee/profile/index.html"
+          class="active"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Profil Saya
+        </a>
+
+         
+      </nav>
+
+
+      <div class="sidebar-footer">
+        
+        <div class="lang-switcher" aria-label="Pilih bahasa">
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+        <form method="post" action="../../../html/auth/logout" class="logout-form">
+          <input type="hidden" name="csrf_token" value="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+          <button type="submit" class="sidebar-logout as-link">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </aside>
+       
+<div class="mobile-topbar">
+  <div class="mobile-topbar-inner">
+    <div class="mobile-topbar-left">
+      <div class="topbar-avatar">NA</div>
+      <div>
+        <div class="mobile-topbar-title">
+          Nanda
+        </div>
+        
+        <div class="mobile-topbar-sub">CC-0021</div>
+        
+      </div>
+    </div>
+    <div
+      class="lang-switcher lang-switcher--mobile"
+      aria-label="Pilih bahasa"
+    >
+       
+      <a
+        href="../../../html/lang/id"
+        class="lang-btn active"
+        title="Bahasa Indonesia"
+        aria-current="true"
+        >ID</a
+      >
+      
+      <a
+        href="../../../html/lang/en"
+        class="lang-btn"
+        title="English (US)"
+        aria-current="false"
+        >EN</a
+      >
+      
+      <a
+        href="../../../html/lang/zh"
+        class="lang-btn"
+        title="中文"
+        aria-current="false"
+        >ZH</a
+      >
+      
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrap">
+        
+      <main class="page-content" id="main-content">
+        
+
+
+<div class="profile-wrap">
+      
+  <div class="profile-layout">
+    
+    <aside class="profile-sidebar">
+      
+      <div class="profile-hero">
+        <div class="profile-hero-bg"></div>
+        <div class="profile-hero-body">
+          <div class="profile-avatar-ring">
+            <div class="profile-avatar-circle">
+              NA
+            </div>
+          </div>
+          <div class="profile-hero-info">
+            <h1 class="profile-hero-name">Nanda Wijaya</h1>
+            <div class="profile-hero-meta">
+              
+              <span class="profile-dept-badge"
+                >Produksi</span
+              >
+               
+              <span
+                class="profile-shift-badge shift-badge shift-badge--shift_1_produksi"
+                >Shift 1 - Produksi</span
+              >
+              
+            </div>
+            
+            <div class="profile-emp-code">CC-0021</div>
+            
+          </div>
+        </div>
+      </div>
+
+      
+      <section class="profile-section profile-section--shift">
+        <div class="profile-section-header">
+          <div class="profile-section-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </div>
+          <h2 class="profile-section-title">Jadwal Kerja</h2>
+        </div>
+
+        
+        <div
+          class="profile-shift-card shift-info-card shift-info-card--shift_1_produksi"
+        >
+          
+          <div class="psc-shift-row">
+            <span class="psc-shift-name">Shift 1 - Produksi</span>
+          </div>
+          <div class="psc-optime-row">
+            <span class="psc-optime-label"
+              >Jam Kerja Operasional</span
+            >
+            <span class="psc-optime-value">
+              08:00
+              <span class="psc-optime-arrow">→</span>
+              16:00
+            </span>
+          </div>
+
+             
+          <div class="profile-workdays psc-date-chips">
+                 
+            <span class="profile-workday-chip active psc-chip">
+              <span class="psc-chip-day">Sen</span>
+              <span class="psc-chip-date">9</span
+              >
+            </span>
+                
+            <span class="profile-workday-chip active psc-chip">
+              <span class="psc-chip-day">Sel</span>
+              <span class="psc-chip-date">10</span
+              >
+            </span>
+                
+            <span class="profile-workday-chip active psc-chip">
+              <span class="psc-chip-day">Rab</span>
+              <span class="psc-chip-date">11</span
+              >
+            </span>
+                
+            <span class="profile-workday-chip active psc-chip">
+              <span class="psc-chip-day">Kam</span>
+              <span class="psc-chip-date">12</span
+              >
+            </span>
+                
+            <span class="profile-workday-chip active psc-chip">
+              <span class="psc-chip-day">Jum</span>
+              <span class="psc-chip-date">13</span
+              >
+            </span>
+                
+            <span class="profile-workday-chip active psc-chip">
+              <span class="psc-chip-day">Sab</span>
+              <span class="psc-chip-date">14</span
+              >
+            </span>
+                
+            <span class="profile-workday-chip active psc-chip">
+              <span class="psc-chip-day">Min</span>
+              <span class="psc-chip-date">15</span
+              >
+            </span>
+             
+          </div>
+
+          
+          <div class="shift-windows">
+            <div class="shift-window-item shift-window-item--in">
+              <span class="shift-window-label">Buka Check-in</span>
+              <span class="shift-window-value">
+                06:00
+              </span>
+            </div>
+            <div class="shift-window-sep"></div>
+            <div class="shift-window-item shift-window-item--out">
+              <span class="shift-window-label">Cutoff Hadir</span>
+              <span class="shift-window-value">
+                09:00
+              </span>
+            </div>
+          </div>
+
+          
+          <div class="psc-footnote">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="11"
+              height="11"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            Jadwal berlaku untuk minggu ini.
+          </div>
+        </div>
+        
+      </section>
+    </aside>
+     
+    <div class="profile-main">
+      
+      <section class="profile-section profile-section--basic">
+        <div class="profile-section-header">
+          <div class="profile-section-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <h2 class="profile-section-title">Informasi Dasar</h2>
+          <button
+            class="profile-edit-btn profile-update-btn"
+            id="btn-perbarui-profil"
+            aria-label="Perbarui Profil"
+            data-fullname="Nanda Wijaya"
+            data-phone=""
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="13"
+              height="13"
+            >
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Perbarui Profil
+          </button>
+        </div>
+        <div class="profile-fields">
+          <div class="profile-field">
+            <label class="profile-field-label">Nama Lengkap</label>
+            <div class="profile-field-row">
+              <div class="profile-field-value" id="val-fullname">
+                Nanda Wijaya
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-field">
+            <label class="profile-field-label">Email</label>
+            <div class="profile-field-row">
+              <div class="profile-field-value profile-field-value--readonly">
+                karyawan21@demo.example
+              </div>
+              <div class="profile-field-lock">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-field">
+            <label class="profile-field-label">Kode Karyawan</label>
+            <div class="profile-field-row">
+              <div
+                class="profile-field-value profile-field-value--readonly emp-code"
+              >
+                CC-0021
+              </div>
+              <div class="profile-field-lock">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-field">
+            <label class="profile-field-label">Departemen</label>
+            <div class="profile-field-row">
+              <div class="profile-field-value profile-field-value--readonly">
+                   
+                <span
+                  class="dept-dot"
+                  style="background:#4f6ef7"
+                ></span
+                >Produksi 
+              </div>
+              <div class="profile-field-lock">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-field">
+            <label class="profile-field-label">No. Telepon</label>
+            <div class="profile-field-row">
+              <div class="profile-field-value" id="val-phone">
+                <span class="text-faint">—</span>
+              </div>
+              <button
+                class="profile-edit-btn profile-phone-edit-btn"
+                data-field="phone"
+                data-value=""
+                aria-label="Edit No. Telepon"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  width="13"
+                  height="13"
+                >
+                  <path
+                    d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"
+                  />
+                  <path
+                    d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+      <section class="profile-section profile-section--bank">
+        <div class="profile-section-header">
+          <div class="profile-section-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="2" y="5" width="20" height="14" rx="2" />
+              <line x1="2" y1="10" x2="22" y2="10" />
+            </svg>
+          </div>
+          <h2 class="profile-section-title">Informasi Rekening</h2>
+          <button
+            class="profile-edit-btn profile-bank-edit-btn"
+            id="btn-edit-bank"
+            aria-label="Edit rekening bank"
+            data-account=""
+            data-account-name=""
+            data-bank=""
+            data-branch=""
+            data-kcp=""
+            data-type="bank"
+            data-employee-name="Nanda Wijaya"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Edit Rekening
+          </button>
+        </div>
+
+        
+
+        <div class="profile-fields">
+          
+          <div class="profile-field profile-field--bank-card">
+            <div class="pbc-bank-card">
+              <div class="pbc-bank-left">
+                <span class="pbc-bank-name" id="val-bank_name">
+                  <span class="text-faint">—</span>
+                </span>
+                <span class="pbc-account-num emp-code" id="val-account_number">
+                  —
+                </span>
+              </div>
+              <div class="pbc-bank-right">
+                
+              </div>
+            </div>
+          </div>
+
+          
+
+          <div class="profile-field">
+            <label class="profile-field-label">Nama Pemilik</label>
+            <div class="profile-field-row">
+              <div class="profile-field-value" id="val-account_name">
+                <span class="text-faint">—</span>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="profile-field">
+            <label class="profile-field-label">KCP / Cabang</label>
+            <div class="profile-field-row">
+              <div class="profile-field-value" id="val-bank_branch">
+                <span class="text-faint">— Belum diisi</span>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      
+      <section class="profile-section profile-section--pico">
+        <div class="profile-section-header">
+          <div class="profile-section-icon profile-section-icon--pico">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="8" r="3" />
+              <path d="M6 20v-1a6 6 0 0112 0v1" />
+              <path d="M3 10h2M19 10h2M12 3V1" />
+            </svg>
+          </div>
+          <h2 class="profile-section-title">Akun Pico</h2>
+          
+          <button
+            class="profile-edit-btn profile-bank-edit-btn"
+            id="btn-edit-pico"
+            aria-label="Tambah akun Pico"
+            data-username=""
+            data-callname=""
+            data-gender=""
+            data-height=""
+            data-arm=""
+            data-leg=""
+            data-notes=""
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Tambah
+          </button>
+          
+        </div>
+
+        
+        <div class="profile-empty-state">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <circle cx="12" cy="8" r="3" />
+            <path d="M6 20v-1a6 6 0 0112 0v1" />
+          </svg>
+          <p>Belum ada data Akun Pico</p>
+          <small
+            >Lengkapi data akun Pico untuk keperluan produksi.</small
+          >
+        </div>
+        
+      </section>
+
+      
+      <section class="profile-section profile-section--security">
+        <div class="profile-section-header">
+          <div class="profile-section-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+          </div>
+          <h2 class="profile-section-title">Keamanan Akun</h2>
+        </div>
+        <div class="profile-fields">
+          <div class="profile-field">
+            <label class="profile-field-label">Kata Sandi</label>
+            <div class="profile-field-row">
+              <div class="profile-field-value profile-field-value--readonly">
+                <span class="profile-password-dots">••••••••</span>
+                
+              </div>
+              <button
+                class="profile-edit-btn"
+                id="btn-change-password"
+                aria-label="Ganti kata sandi"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"
+                  />
+                  <path
+                    d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+  </div>
+  
+</div>
+ 
+<div
+  class="profile-modal-overlay"
+  id="edit-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+>
+  <div class="profile-modal-box">
+    <div class="profile-modal-header pmod-header">
+      <div class="pmod-header-icon pmod-icon--edit" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="20"
+          height="20"
+        >
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+      </div>
+      <div class="pmod-header-text">
+        <span class="profile-modal-title pmod-title" id="modal-title"
+          >Edit</span
+        >
+        <span class="pmod-subtitle" id="modal-desc"></span>
+      </div>
+      <button
+        class="profile-modal-close pmod-close"
+        id="modal-close"
+        aria-label="Tutup"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          width="15"
+          height="15"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="profile-modal-body pmod-body--simple">
+      <label
+        class="profile-modal-label pmod-field-label"
+        id="modal-input-label"
+        for="modal-input"
+      ></label>
+      <input
+        class="profile-modal-input pmod-input"
+        id="modal-input"
+        type="text"
+        autocomplete="off" maxlength="150"
+      />
+      <span class="profile-modal-error" id="modal-error" role="alert"></span>
+    </div>
+    <div class="profile-modal-footer pmod-footer">
+      <button class="pmod-btn-cancel" id="modal-cancel">
+        Batal
+      </button>
+      <button class="pmod-btn-save" id="modal-save">
+        <span class="profile-spinner" id="modal-spinner"></span>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          width="15"
+          height="15"
+          aria-hidden="true"
+        >
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        Simpan Perubahan
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div
+  class="pwdm-overlay"
+  id="password-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="pwd-modal-title"
+>
+  <div class="pwdm-sheet">
+    
+    <div class="pwdm-handle" aria-hidden="true"></div>
+
+    
+    <div class="pwdm-header">
+      <div class="pwdm-header-icon" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0110 0v4" />
+        </svg>
+      </div>
+      <div class="pwdm-header-text">
+        <span class="pwdm-title" id="pwd-modal-title"
+          >Ganti Kata Sandi</span
+        >
+        <span class="pwdm-subtitle">3 langkah cepat, selesai!</span>
+      </div>
+      <button
+        class="pwdm-close"
+        id="pwd-modal-close"
+        aria-label="Tutup"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          width="16"
+          height="16"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    
+    <div class="pwdm-steps" aria-label="Langkah">
+      <div class="pwdm-step pwdm-step--active" id="step-1-indicator">
+        <div class="pwdm-step-dot"></div>
+        <span class="pwdm-step-label">Verifikasi</span>
+      </div>
+      <div class="pwdm-step-line"></div>
+      <div class="pwdm-step" id="step-2-indicator">
+        <div class="pwdm-step-dot"></div>
+        <span class="pwdm-step-label">Kata Sandi Baru</span>
+      </div>
+      <div class="pwdm-step-line"></div>
+      <div class="pwdm-step" id="step-3-indicator">
+        <div class="pwdm-step-dot"></div>
+        <span class="pwdm-step-label">Konfirmasi</span>
+      </div>
+    </div>
+
+    
+    <div class="pwdm-body">
+      
+      <div class="pwdm-field" id="pwdm-field-current">
+        <label class="pwdm-label" for="pwd-current">
+          <span class="pwdm-label-step">1</span>
+          Kata Sandi Saat Ini
+        </label>
+        <p class="pwdm-hint">Verifikasi dulu, ya.</p>
+        <div class="pwdm-input-wrap">
+          <span class="pwdm-input-icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="16"
+              height="16"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+          </span>
+          <input
+            class="pwdm-input"
+            id="pwd-current"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Kata sandi kamu sekarang" maxlength="256" spellcheck="false" autocapitalize="off"
+          />
+          <button
+            type="button"
+            class="pwdm-eye"
+            data-target="pwd-current"
+            aria-label="Tampilkan/sembunyikan kata sandi"
+          ></button>
+        </div>
+        <span
+          class="pwdm-field-error"
+          id="pwdm-error-current"
+          role="alert"
+        ></span>
+      </div>
+
+      
+      <div class="pwdm-divider" aria-hidden="true">
+        <span>Buat yang baru</span>
+      </div>
+
+      
+      <div class="pwdm-field" id="pwdm-field-new">
+        <label class="pwdm-label" for="pwd-new">
+          <span class="pwdm-label-step">2</span>
+          Kata Sandi Baru
+        </label>
+        <p class="pwdm-hint">
+          Min. 8 karakter, huruf besar, angka & simbol.
+        </p>
+        <div class="pwdm-input-wrap">
+          <span class="pwdm-input-icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="16"
+              height="16"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </span>
+          <input
+            class="pwdm-input"
+            id="pwd-new"
+            type="password"
+            autocomplete="new-password"
+            placeholder="Buat kata sandi baru" maxlength="128" spellcheck="false" autocapitalize="off"
+          />
+          <button
+            type="button"
+            class="pwdm-eye"
+            data-target="pwd-new"
+            aria-label="Tampilkan/sembunyikan kata sandi baru"
+          ></button>
+        </div>
+
+        
+        <div
+          class="pwdm-strength-wrap"
+          id="pwdm-strength-wrap"
+          aria-hidden="true"
+        >
+          <div class="pwdm-strength-bars-row">
+            <div class="pwdm-strength-bars">
+              <div class="pwdm-strength-bar" id="pwdm-bar-1"></div>
+              <div class="pwdm-strength-bar" id="pwdm-bar-2"></div>
+              <div class="pwdm-strength-bar" id="pwdm-bar-3"></div>
+              <div class="pwdm-strength-bar" id="pwdm-bar-4"></div>
+            </div>
+            <span class="pwdm-strength-label" id="pwd-strength"></span>
+          </div>
+        </div>
+
+        
+        <ul class="pwdm-reqs" id="pwdm-reqs" aria-live="polite">
+          <li class="pwdm-req" id="req-length" data-rule="length">
+            <span class="pwdm-req-icon" aria-hidden="true"></span>
+            Minimal 8 karakter
+          </li>
+          <li class="pwdm-req" id="req-upper" data-rule="upper">
+            <span class="pwdm-req-icon" aria-hidden="true"></span>
+            Huruf besar (A–Z)
+          </li>
+          <li class="pwdm-req" id="req-number" data-rule="number">
+            <span class="pwdm-req-icon" aria-hidden="true"></span>
+            Angka (0–9)
+          </li>
+          <li class="pwdm-req" id="req-special" data-rule="special">
+            <span class="pwdm-req-icon" aria-hidden="true"></span>
+            Karakter khusus (!@#$…)
+          </li>
+        </ul>
+
+        <span class="pwdm-field-error" id="pwdm-error-new" role="alert"></span>
+      </div>
+
+      
+      <div class="pwdm-field" id="pwdm-field-confirm">
+        <label class="pwdm-label" for="pwd-confirm">
+          <span class="pwdm-label-step">3</span>
+          Ulangi Kata Sandi Baru
+        </label>
+        <p class="pwdm-hint">Ketik ulang kata sandi barumu.</p>
+        <div class="pwdm-input-wrap">
+          <span class="pwdm-input-icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="16"
+              height="16"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+          </span>
+          <input
+            class="pwdm-input"
+            id="pwd-confirm"
+            type="password"
+            autocomplete="new-password"
+            placeholder="Ketik ulang kata sandi baru" maxlength="128" spellcheck="false" autocapitalize="off"
+          />
+          <button
+            type="button"
+            class="pwdm-eye"
+            data-target="pwd-confirm"
+            aria-label="Tampilkan/sembunyikan konfirmasi"
+          ></button>
+        </div>
+
+        
+        <div class="pwdm-match" id="pwdm-match" aria-live="polite"></div>
+
+        <span
+          class="pwdm-field-error"
+          id="pwdm-error-confirm"
+          role="alert"
+        ></span>
+      </div>
+
+      
+      <span
+        class="pwdm-field-error pwdm-error-general"
+        id="pwd-error"
+        role="alert"
+      ></span>
+    </div>
+
+    
+    <div class="pwdm-footer">
+      <button class="pwdm-btn-save" id="pwd-modal-save">
+        <span class="profile-spinner" id="pwd-spinner"></span>
+        <svg
+          class="pwdm-save-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          width="16"
+          height="16"
+          aria-hidden="true"
+        >
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0110 0v4" />
+        </svg>
+        Perbarui Kata Sandi
+      </button>
+      <button class="pwdm-btn-cancel" id="pwd-modal-cancel">
+        Batal
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div
+  class="profile-modal-overlay profile-modal-overlay--wide"
+  id="bank-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="bank-modal-title"
+>
+  <div class="profile-modal-box profile-modal-box--bank">
+    <div class="profile-modal-header pmod-header">
+      <div class="pmod-header-icon pmod-icon--bank" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="20"
+          height="20"
+        >
+          <rect x="2" y="5" width="20" height="14" rx="3" />
+          <line x1="2" y1="10" x2="22" y2="10" />
+        </svg>
+      </div>
+      <div class="pmod-header-text">
+        <span class="profile-modal-title pmod-title" id="bank-modal-title"
+          >Rekening Bank</span
+        >
+        <span class="pmod-subtitle"
+          >Pastikan data rekening sesuai buku tabungan</span
+        >
+      </div>
+      <button
+        class="profile-modal-close pmod-close"
+        id="bank-modal-close"
+        aria-label="Tutup"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          width="15"
+          height="15"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="profile-modal-body">
+      
+      <div class="profile-bank-field-group">
+        <label class="profile-modal-label" for="bank-select"
+          >Bank / E-Wallet</label
+        >
+        <div class="profile-bank-select-wrap">
+          
+          <button
+            type="button"
+            class="profile-modal-input profile-bank-trigger is-empty"
+            id="bank-select-trigger"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+          >
+            <span class="bank-badge bank-badge--empty" id="bank-trigger-badge"
+              >?</span
+            >
+            <span class="bank-trigger-text" id="bank-trigger-text"
+              >— Pilih Bank —</span
+            >
+            <svg
+              class="bank-trigger-chevron"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="16"
+              height="16"
+              aria-hidden="true"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+
+          
+          <div
+            class="bank-dropdown-panel"
+            id="bank-dropdown-panel"
+            role="listbox"
+            aria-labelledby="bank-select-trigger"
+          ></div>
+
+          
+          
+          <select
+            class="profile-bank-select profile-bank-select--native"
+            id="bank-select"
+            aria-hidden="true"
+            tabindex="-1"
+          >
+            <option value="">— Pilih Bank —</option>
+            <optgroup label="Bank Umum">
+              <option
+                value="BCA"
+                data-digits="10"
+                data-type="bank"
+                data-color="#0066AE"
+                data-initials="BCA"
+                data-logo="Bank Central Asia.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                BCA
+              </option>
+              <option
+                value="BNI"
+                data-digits="10"
+                data-type="bank"
+                data-color="#F36F21"
+                data-initials="BNI"
+                data-logo="Bank Negara Indonesia.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                BNI
+              </option>
+              <option
+                value="BRI"
+                data-digits="15"
+                data-type="bank"
+                data-color="#00529C"
+                data-initials="BRI"
+                data-logo="BRI.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                BRI
+              </option>
+              <option
+                value="Mandiri"
+                data-digits="13"
+                data-type="bank"
+                data-color="#003D79"
+                data-initials="MD"
+                data-logo="mandiri.jpg"
+                data-logo-bg="none"
+                data-logo-pad="none"
+              >
+                Mandiri
+              </option>
+              <option
+                value="BSI"
+                data-digits="10"
+                data-type="bank"
+                data-color="#00A39D"
+                data-initials="BSI"
+                data-logo="Bank Syariah Indonesia.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                BSI — Bank Syariah Indonesia
+              </option>
+              <option
+                value="CIMB Niaga"
+                data-digits="12-13"
+                data-type="bank"
+                data-color="#7E2D40"
+                data-initials="CN"
+                data-logo="CimbNiaga.svg"
+                data-logo-bg="white"
+                data-logo-pad="sm"
+              >
+                CIMB Niaga
+              </option>
+              <option
+                value="Danamon"
+                data-digits="10"
+                data-type="bank"
+                data-color="#FFD200"
+                data-initials="DN"
+                data-logo="Danamon.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                Danamon
+              </option>
+              <option
+                value="Permata"
+                data-digits="10"
+                data-type="bank"
+                data-color="#8DC63F"
+                data-initials="PB"
+                data-logo="Permata Bank.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                Permata Bank
+              </option>
+              <option
+                value="BTN"
+                data-digits="13"
+                data-type="bank"
+                data-color="#0A4595"
+                data-initials="BTN"
+                data-logo="BTN.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                BTN — Bank Tabungan Negara
+              </option>
+              <option
+                value="Maybank"
+                data-digits="12"
+                data-type="bank"
+                data-color="#FFC72C"
+                data-initials="MB"
+                data-logo="Maybank.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                Maybank Indonesia
+              </option>
+              <option
+                value="Panin"
+                data-digits="15"
+                data-type="bank"
+                data-color="#005BAC"
+                data-initials="PN"
+                data-logo="Panin Bank.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                Panin Bank
+              </option>
+              <option
+                value="OCBC"
+                data-digits="12-13"
+                data-type="bank"
+                data-color="#EE2722"
+                data-initials="OC"
+                data-logo="Ocbc.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                OCBC NISP
+              </option>
+              <option
+                value="UOB"
+                data-digits="13"
+                data-type="bank"
+                data-color="#0D2A5C"
+                data-initials="UOB"
+                data-logo="UOB.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                UOB Indonesia
+              </option>
+            </optgroup>
+            <optgroup label="Bank Digital">
+              <option
+                value="SeaBank"
+                data-digits="12"
+                data-type="bank"
+                data-color="#EE4D2D"
+                data-initials="SB"
+                data-logo="SeaBank.svg"
+                data-logo-bg="white"
+                data-logo-pad="sm"
+              >
+                SeaBank
+              </option>
+              <option
+                value="BNC"
+                data-digits="10"
+                data-type="bank"
+                data-color="#00A19A"
+                data-initials="BNC"
+                data-logo="Neo Commerce.png"
+                data-logo-bg="white"
+                data-logo-pad="sm"
+              >
+                BNC — Bank Neo Commerce
+              </option>
+              <option
+                value="Jenius/SMBC"
+                data-digits="10"
+                data-type="bank"
+                data-color="#5A2D82"
+                data-initials="JN"
+                data-logo="Smbc Sndonesia.png"
+                data-logo-bg="white"
+                data-logo-pad="sm"
+              >
+                Jenius / SMBC Indonesia
+              </option>
+              <option
+                value="Allo Bank"
+                data-digits="10"
+                data-type="bank"
+                data-color="#E4002B"
+                data-initials="AB"
+                data-logo="Allo Bank.png"
+                data-logo-bg="white"
+                data-logo-pad="none"
+              >
+                Allo Bank
+              </option>
+              <option
+                value="Jago"
+                data-digits="12"
+                data-type="bank"
+                data-color="#FF6600"
+                data-initials="JG"
+                data-logo="Jago.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                Bank Jago
+              </option>
+              <option
+                value="Blu BCA Digital"
+                data-digits="16"
+                data-type="bank"
+                data-color="#0072CE"
+                data-initials="blu"
+                data-logo="BCA Digital.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                Blu — BCA Digital
+              </option>
+              <option
+                value="Motion Banking"
+                data-digits="10"
+                data-type="bank"
+                data-color="#C8102E"
+                data-initials="MNC"
+                data-logo="Bank MNC Internasional.png"
+                data-logo-bg="white"
+                data-logo-pad="sm"
+              >
+                Motion Banking — MNC Bank
+              </option>
+              <option
+                value="Superbank"
+                data-digits="10"
+                data-type="bank"
+                data-color="#6C2EB9"
+                data-initials="SP"
+                data-logo="Superbank.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                Superbank
+              </option>
+            </optgroup>
+            <optgroup label="E-Wallet">
+              <option
+                value="GoPay"
+                data-digits="ewallet"
+                data-type="ewallet"
+                data-color="#00AED6"
+                data-initials="GP"
+                data-logo="Gopay.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                GoPay
+              </option>
+              <option
+                value="OVO"
+                data-digits="ewallet"
+                data-type="ewallet"
+                data-color="#4C3494"
+                data-initials="OVO"
+                data-logo="Ovo.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                OVO
+              </option>
+              <option
+                value="DANA"
+                data-digits="ewallet"
+                data-type="ewallet"
+                data-color="#118EEA"
+                data-initials="DANA"
+                data-logo="Dana.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                DANA
+              </option>
+              <option
+                value="ShopeePay"
+                data-digits="ewallet"
+                data-type="ewallet"
+                data-color="#EE4D2D"
+                data-initials="SP"
+                data-logo="Shopeepay.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                ShopeePay
+              </option>
+              <option
+                value="LinkAja"
+                data-digits="ewallet"
+                data-type="ewallet"
+                data-color="#E4002B"
+                data-initials="LA"
+                data-logo="LinkAja.svg"
+                data-logo-bg="white"
+                data-logo-pad="md"
+              >
+                LinkAja
+              </option>
+            </optgroup>
+            <optgroup label="Lainnya">
+              <option
+                value="__other__"
+                data-digits="other"
+                data-type="bank"
+                data-color="#8DABBE"
+                data-initials="?"
+              >
+                Bank Lainnya…
+              </option>
+            </optgroup>
+          </select>
+        </div>
+        
+        <input
+          class="profile-modal-input profile-bank-other-input"
+          id="bank-name-custom"
+          type="text"
+          placeholder="Tulis nama bank…"
+          maxlength="100"
+          style="display: none; margin-top: 0.5rem"
+        />
+        <span
+          class="profile-modal-error"
+          id="bank-select-error"
+          role="alert"
+        ></span>
+      </div>
+
+      
+      <div class="profile-bank-field-group">
+        <label class="profile-modal-label" for="bank-account-number">
+          No. Rekening
+          <span class="profile-bank-hint" id="bank-digit-hint"></span>
+        </label>
+        <input
+          class="profile-modal-input"
+          id="bank-account-number"
+          type="text"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="Masukkan nomor rekening"
+          maxlength="25"
+        />
+        <span
+          class="profile-modal-error"
+          id="bank-account-error"
+          role="alert"
+        ></span>
+      </div>
+
+      
+      <div class="profile-bank-field-group">
+        <label class="profile-modal-label" for="bank-account-confirm"
+          >Konfirmasi No. Rekening</label
+        >
+        <input
+          class="profile-modal-input"
+          id="bank-account-confirm"
+          type="text"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="Ulangi nomor rekening"
+          maxlength="25"
+        />
+        <span
+          class="profile-modal-error"
+          id="bank-confirm-error"
+          role="alert"
+        ></span>
+      </div>
+
+      
+      <div class="profile-bank-field-group">
+        <label class="profile-modal-label" for="bank-account-name"
+          >Nama Pemilik Rekening</label
+        >
+        <input
+          class="profile-modal-input"
+          id="bank-account-name"
+          type="text"
+          autocomplete="off"
+          placeholder="Sesuai nama di buku tabungan"
+          maxlength="150"
+        />
+        <span
+          class="profile-modal-error"
+          id="bank-account-name-error"
+          role="alert"
+        ></span>
+        
+        <div
+          class="bank-name-mismatch-warning"
+          id="bank-name-mismatch-warning"
+          role="alert"
+          aria-live="polite"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="15"
+            height="15"
+            aria-hidden="true"
+          >
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span
+            >Nama pemilik rekening berbeda dengan nama Anda. Pastikan
+            rekening ini benar sebelum disimpan.</span
+          >
+        </div>
+      </div>
+
+      
+      <div class="profile-bank-field-group" id="bank-branch-group">
+        <label
+          class="profile-modal-label"
+          for="bank-branch"
+          id="bank-branch-label"
+          >Kota Pembukaan Rekening
+          <span class="profile-bank-optional">(opsional)</span>
+        </label>
+        <input
+          class="profile-modal-input"
+          id="bank-branch"
+          type="text"
+          autocomplete="off"
+          placeholder="Contoh: Jakarta, Surabaya"
+          maxlength="100"
+        />
+        <span
+          class="profile-modal-error"
+          id="bank-branch-error"
+          role="alert"
+        ></span>
+      </div>
+
+      
+      <div class="profile-bank-field-group" id="bank-kcp-group">
+        <label class="profile-modal-label" for="bank-kcp"
+          >KCP
+          <span class="profile-bank-optional">(opsional)</span>
+        </label>
+        <input
+          class="profile-modal-input"
+          id="bank-kcp"
+          type="text"
+          autocomplete="off"
+          placeholder="Contoh: KCP Sudirman, KCP Bekasi"
+          maxlength="100"
+        />
+        <span
+          class="profile-modal-error"
+          id="bank-kcp-error"
+          role="alert"
+        ></span>
+      </div>
+
+      <span
+        class="profile-modal-error"
+        id="bank-general-error"
+        role="alert"
+      ></span>
+    </div>
+    <div class="profile-modal-footer pmod-footer">
+      <button class="pmod-btn-cancel" id="bank-modal-cancel">
+        Batal
+      </button>
+      <button class="pmod-btn-save" id="bank-modal-save" disabled>
+        <span class="profile-spinner" id="bank-spinner"></span>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          width="15"
+          height="15"
+          aria-hidden="true"
+        >
+          <path
+            d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"
+          />
+          <polyline points="17 21 17 13 7 13 7 21" />
+          <polyline points="7 3 7 8 15 8" />
+        </svg>
+        Simpan Rekening
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div
+  class="profile-modal-overlay profile-modal-overlay--wide"
+  id="pico-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="pico-modal-title"
+>
+  <div class="profile-modal-box">
+    <div class="profile-modal-header pmod-header">
+      <div class="pmod-header-icon pmod-icon--pico" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="20"
+          height="20"
+        >
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+        </svg>
+      </div>
+      <div class="pmod-header-text">
+        <span class="profile-modal-title pmod-title" id="pico-modal-title"
+          >Akun Pico</span
+        >
+        <span class="pmod-subtitle"
+          >Untuk keperluan produksi — bisa diisi sendiri atau manajer</span
+        >
+      </div>
+      <button
+        class="profile-modal-close pmod-close"
+        id="pico-modal-close"
+        aria-label="Tutup"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          width="15"
+          height="15"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="profile-modal-body">
+      
+      <div class="profile-bank-field-group">
+        <label class="profile-modal-label" for="pico-username"
+          >Username Pico
+          <span style="color: var(--danger)">*</span></label
+        >
+        <input
+          class="profile-modal-input"
+          id="pico-username"
+          type="text"
+          autocomplete="off"
+          placeholder="Contoh: john_doe_pico"
+          maxlength="100"
+        />
+        <span
+          class="profile-modal-error"
+          id="pico-username-error"
+          role="alert"
+        ></span>
+      </div>
+
+      
+      <div class="profile-bank-field-group">
+        <label class="profile-modal-label" for="pico-callname">
+          Nama Panggilan
+          <span class="profile-bank-optional">(opsional)</span>
+        </label>
+        <input
+          class="profile-modal-input"
+          id="pico-callname"
+          type="text"
+          autocomplete="off"
+          placeholder="Nama yang digunakan saat produksi"
+          maxlength="100"
+        />
+      </div>
+
+      
+      <div class="profile-bank-field-group">
+        <label class="profile-modal-label" for="pico-gender">
+          Jenis Kelamin
+          <span class="profile-bank-optional">(opsional)</span>
+        </label>
+        <select
+          class="profile-modal-input profile-modal-select"
+          id="pico-gender"
+        >
+          <option value="">— Pilih —</option>
+          <option value="male">Laki-laki</option>
+          <option value="female">Perempuan</option>
+          <option value="other">Lainnya</option>
+        </select>
+      </div>
+
+      
+      <div class="pico-body-section">
+        <div class="pico-body-label-row">
+          <span class="pico-body-section-title">Ukuran Tubuh</span>
+          <span class="profile-bank-optional">(opsional)</span>
+        </div>
+        <div class="pico-body-layout">
+          
+          <div class="pico-body-visual" aria-hidden="true">
+            <svg
+              id="pico-body-svg"
+              viewBox="0 0 100 220"
+              xmlns="http://www.w3.org/2000/svg"
+              class="pico-silhouette"
+            >
+              
+              <line
+                id="pico-dim-line-h"
+                class="pico-dim-line"
+                x1="83"
+                y1="8"
+                x2="83"
+                y2="160"
+              />
+              <line class="pico-dim-tick" x1="80" y1="8" x2="86" y2="8" />
+              <line
+                id="pico-dim-tick-h-bot"
+                class="pico-dim-tick"
+                x1="80"
+                y1="160"
+                x2="86"
+                y2="160"
+              />
+              <text
+                id="pico-dim-height"
+                class="pico-dim-text"
+                x="90"
+                y="84"
+                transform="rotate(90,90,84)"
+              >
+                —
+              </text>
+
+              
+              <ellipse id="pico-head" cx="45" cy="16" rx="11" ry="12" />
+
+              
+              <rect id="pico-neck" x="40" y="27" width="10" height="6" rx="2" />
+
+              
+              <rect
+                id="pico-torso"
+                x="28"
+                y="33"
+                width="34"
+                height="48"
+                rx="5"
+              />
+
+              
+              <g id="pico-arm-left">
+                <rect
+                  id="pico-arm-left-rect"
+                  x="18"
+                  y="33"
+                  width="10"
+                  height="36"
+                  rx="4"
+                />
+                
+                <line
+                  id="pico-arm-dim-line"
+                  class="pico-dim-line"
+                  x1="7"
+                  y1="33"
+                  x2="7"
+                  y2="69"
+                />
+                <line
+                  id="pico-arm-dim-tick-top"
+                  class="pico-dim-tick"
+                  x1="4"
+                  y1="33"
+                  x2="10"
+                  y2="33"
+                />
+                <line
+                  id="pico-arm-dim-tick-bot"
+                  class="pico-dim-tick"
+                  x1="4"
+                  y1="69"
+                  x2="10"
+                  y2="69"
+                />
+                <text
+                  id="pico-dim-arm"
+                  class="pico-dim-text"
+                  x="2"
+                  y="51"
+                  transform="rotate(-90,2,51)"
+                >
+                  —
+                </text>
+              </g>
+
+              
+              <rect
+                id="pico-arm-right-rect"
+                x="62"
+                y="33"
+                width="10"
+                height="36"
+                rx="4"
+                class="pico-right-side"
+              />
+
+              
+              <g id="pico-leg-left">
+                <rect
+                  id="pico-leg-left-rect"
+                  x="29"
+                  y="81"
+                  width="14"
+                  height="60"
+                  rx="5"
+                />
+                
+                <line
+                  id="pico-leg-dim-line"
+                  class="pico-dim-line"
+                  x1="7"
+                  y1="81"
+                  x2="7"
+                  y2="141"
+                />
+                <line
+                  id="pico-leg-dim-tick-top"
+                  class="pico-dim-tick"
+                  x1="4"
+                  y1="81"
+                  x2="10"
+                  y2="81"
+                />
+                <line
+                  id="pico-leg-dim-tick-bot"
+                  class="pico-dim-tick"
+                  x1="4"
+                  y1="141"
+                  x2="10"
+                  y2="141"
+                />
+                <text
+                  id="pico-dim-leg"
+                  class="pico-dim-text"
+                  x="2"
+                  y="111"
+                  transform="rotate(-90,2,111)"
+                >
+                  —
+                </text>
+              </g>
+
+              
+              <rect
+                id="pico-leg-right-rect"
+                x="47"
+                y="81"
+                width="14"
+                height="60"
+                rx="5"
+                class="pico-right-side"
+              />
+
+              
+              <ellipse id="pico-foot-left" cx="36" cy="143" rx="9" ry="4" />
+              <ellipse
+                id="pico-foot-right"
+                cx="54"
+                cy="143"
+                rx="9"
+                ry="4"
+                class="pico-right-side"
+              />
+            </svg>
+          </div>
+
+          
+          <div class="pico-body-inputs">
+            <div class="pico-body-input-row" data-measure="height">
+              <div class="pico-body-input-icon pico-body-input-icon--height">
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <line x1="8" y1="1" x2="8" y2="15" />
+                  <polyline points="5,4 8,1 11,4" />
+                  <polyline points="5,12 8,15 11,12" />
+                </svg>
+              </div>
+              <div class="pico-body-input-wrap">
+                <label class="pico-body-input-label" for="pico-height"
+                  >Tinggi Badan</label
+                >
+                <div class="pico-body-input-field-row">
+                  <input
+                    class="profile-modal-input pico-body-input"
+                    id="pico-height"
+                    type="number"
+                    inputmode="decimal"
+                    min="50"
+                    max="250"
+                    step="0.1"
+                    placeholder="170"
+                  />
+                  <span class="pico-body-unit">cm</span>
+                </div>
+                <span
+                  class="profile-modal-error"
+                  id="pico-height-error"
+                  role="alert"
+                ></span>
+              </div>
+            </div>
+
+            <div class="pico-body-input-row" data-measure="arm">
+              <div class="pico-body-input-icon pico-body-input-icon--arm">
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <line x1="3" y1="8" x2="13" y2="8" />
+                  <polyline points="6,5 3,8 6,11" />
+                  <line x1="8" y1="3" x2="8" y2="13" opacity="0.35" />
+                </svg>
+              </div>
+              <div class="pico-body-input-wrap">
+                <label class="pico-body-input-label" for="pico-arm"
+                  >Panjang Lengan</label
+                >
+                <div class="pico-body-input-field-row">
+                  <input
+                    class="profile-modal-input pico-body-input"
+                    id="pico-arm"
+                    type="number"
+                    inputmode="decimal"
+                    min="30"
+                    max="150"
+                    step="0.1"
+                    placeholder="65"
+                  />
+                  <span class="pico-body-unit">cm</span>
+                </div>
+                <span
+                  class="profile-modal-error"
+                  id="pico-arm-error"
+                  role="alert"
+                ></span>
+              </div>
+            </div>
+
+            <div class="pico-body-input-row" data-measure="leg">
+              <div class="pico-body-input-icon pico-body-input-icon--leg">
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <line x1="8" y1="2" x2="8" y2="14" />
+                  <polyline points="5,5 8,2 11,5" />
+                  <line x1="4" y1="9" x2="12" y2="9" opacity="0.35" />
+                </svg>
+              </div>
+              <div class="pico-body-input-wrap">
+                <label class="pico-body-input-label" for="pico-leg"
+                  >Panjang Kaki</label
+                >
+                <div class="pico-body-input-field-row">
+                  <input
+                    class="profile-modal-input pico-body-input"
+                    id="pico-leg"
+                    type="number"
+                    inputmode="decimal"
+                    min="30"
+                    max="150"
+                    step="0.1"
+                    placeholder="80"
+                  />
+                  <span class="pico-body-unit">cm</span>
+                </div>
+                <span
+                  class="profile-modal-error"
+                  id="pico-leg-error"
+                  role="alert"
+                ></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="profile-bank-field-group">
+        <label class="profile-modal-label" for="pico-notes">
+          Catatan
+          <span class="profile-bank-optional">(opsional)</span>
+        </label>
+        <textarea
+          class="profile-modal-input profile-modal-textarea"
+          id="pico-notes"
+          rows="3"
+          maxlength="500"
+          placeholder="Informasi tambahan tentang akun Pico…"
+        ></textarea>
+      </div>
+
+      <span
+        class="profile-modal-error"
+        id="pico-general-error"
+        role="alert"
+      ></span>
+    </div>
+    <div class="profile-modal-footer pmod-footer">
+      <button class="pmod-btn-cancel" id="pico-modal-cancel">
+        Batal
+      </button>
+      <button class="pmod-btn-save" id="pico-modal-save">
+        <span class="profile-spinner" id="pico-spinner"></span>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          width="15"
+          height="15"
+          aria-hidden="true"
+        >
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        Simpan Data Pico
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../../../js/profile.js"></script>
+
+      </main>
+    </div>
+
+     
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+       
+      <a
+        href="../../../html/employee/dashboard/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+          />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Absensi</span>
+      </a>
+      <a
+        href="../../../html/employee/history/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+        <span>Riwayat</span>
+      </a>
+      <a
+        href="../../../html/employee/leave/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Izin</span>
+      </a>
+      <a
+        href="../../../html/employee/shift-swap/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M16 3l4 4-4 4" />
+          <line x1="20" y1="7" x2="7" y2="7" />
+          <path d="M8 21l-4-4 4-4" />
+          <line x1="4" y1="17" x2="17" y2="17" />
+        </svg>
+        <span>Tukar Shift</span>
+      </a>
+      <a
+        href="../../../html/employee/profile/index.html"
+        class="active"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>Profil</span>
+      </a>
+      <form method="post" action="../../../html/auth/logout" class="logout-form">
+        <input type="hidden" name="csrf_token" value="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+        <button type="submit" class="as-link">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </form>
+
+       
+    </nav>
+    
+    
+    <script src="../../../js/core.js"></script>
+    
+    
+    <script src="../../../js/app.js"></script>
+    
+    <script>
+      window.I18N = Object.assign({}, window.I18N, {
+      notifTitle: "Notifikasi",
+      notifMarkAllRead: "Tandai semua dibaca",
+      notifLoading: "Memuat\u2026",
+      notifEmpty: "Tidak ada notifikasi",
+      notifError: "Gagal memuat notifikasi"});
+    </script>
+    <script src="../../../js/notifications.js"></script>
+    <script src="../../../js/push.js"></script>
+    
+    <script>
+      window.TRACKING_CFG = {
+        statusUrl: "/employee/location/status",
+        pingUrl: "/employee/location/ping",
+        intervalSeconds: 600,
+        statusPollSeconds: 60,
+        i18n: {
+          active: "Lokasi dibagikan (GPS)",
+          onDuty: "Lokasi dibagikan",
+          viaOffice: "GPS mati \u00b7 terdeteksi di jaringan kantor",
+          viaIp: "GPS mati \u00b7 perkiraan kasar via IP",
+          gpsOff: "GPS mati \u00b7 lokasi tidak terkirim"
+        }
+      };
+    </script>
+    <script src="../../../js/tracking.js"></script>
+    
+    <script>
+      // Form logout mengirim POST via fetch, lalu redirect manual berdasarkan
+      // JSON {"redirect": "..."} dari server — pola yang sama dengan
+      // login.js. Tanpa ini, submit form native menampilkan JSON mentah
+      // di layar alih-alih membawa user ke halaman login.
+      document.querySelectorAll(".logout-form").forEach(function (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const btn = form.querySelector("button[type=submit]");
+          if (btn) btn.disabled = true;
+          try { if (window.Push) await window.Push.forgetDevice(); } catch {}
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": form.querySelector(
+                  'input[name="csrf_token"]',
+                ).value,
+              },
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              /* respons bukan JSON — abaikan, pakai fallback di bawah */
+            }
+            window.location.href = data.redirect || "/auth/login";
+          } catch {
+            // Gagal terhubung ke server: tetap arahkan ke login supaya
+            // user tidak macet di halaman dengan sesi yang mungkin sudah
+            // tidak valid.
+            window.location.href = "/auth/login";
+          }
+        });
+      });
+    </script>
+    
+  </body>
+</html>

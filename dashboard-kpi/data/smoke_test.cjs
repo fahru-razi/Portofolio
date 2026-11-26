@@ -1,0 +1,16 @@
+const {JSDOM,VirtualConsole}=require('jsdom');
+(async()=>{const errs=[];const vc=new VirtualConsole();vc.on('jsdomError',e=>errs.push(String(e.message).slice(0,110)));
+ const dom=await JSDOM.fromFile('/mnt/user-data/outputs/portfolio/dashboard-kpi/index.html',{runScripts:'dangerously',resources:'usable',pretendToBeVisual:true,virtualConsole:vc});
+ await new Promise(r=>setTimeout(r,1000));const w=dom.window,d=w.document,$=s=>d.querySelector(s);
+ const rows=d.querySelectorAll('#stages .stage:nth-of-type(1) tbody tr');
+ console.log('PIPELINE baris:',rows.length,'| pindah tanggal:',d.querySelectorAll('.chg').length,'| diabaikan:',d.querySelectorAll('tr.skip').length,'| grup:',d.querySelectorAll('#stages .stage:nth-of-type(2) tbody tr').length,'| master:',d.querySelectorAll('#stages .stage:nth-of-type(3) tbody tr').length);
+ console.log('LOG:\n'+$('#log').textContent.split('\n').map(x=>'  '+x.slice(0,150)).join('\n'));
+ console.log('MASTER contoh:',[...d.querySelectorAll('#stages .stage:nth-of-type(3) tbody tr')[0].children].map(x=>x.textContent).join(' | '));
+ const t2=$('#t2');t2.click();console.log('TAB pipeline tampil:',!$('#p2').hidden,'dashboard tersembunyi:',$('#p1').hidden,'| iframe src:',$('.looker').src.slice(0,70),'| kode ber-highlight:',d.querySelectorAll('#code span').length>50);
+ $('#t3').click();console.log('SHEET awal:',[...d.querySelectorAll('#sheetTabs button')].map(b=>b.textContent).join(','),'| baris master:',d.querySelectorAll('#grid tr').length);
+ $('#gen').click();await new Promise(r=>setTimeout(r,700));
+ console.log('DETAIL status:',$('#status').textContent.replace(/\n/g,' / ').slice(0,200));console.log('  tab:',[...d.querySelectorAll('#sheetTabs button')].map(b=>b.textContent).join(','),'| baris produser:',d.querySelectorAll('#grid tr').length,'| kolom tanggal:',d.querySelectorAll('#grid tr:nth-child(3) th[colspan="2"]').length);
+ $('#modes button[data-k=summary]').click();$('#gen').click();await new Promise(r=>setTimeout(r,700));
+ console.log('SUMMARY status:',$('#status').textContent.replace(/\n/g,' / ').slice(0,120),'| tab:',[...d.querySelectorAll('#sheetTabs button')].map(b=>b.textContent).join(','),'| baris:',d.querySelectorAll('#grid tr').length);
+ $('#presets button[data-k=custom]').click();$('#df').value='2025-01-01';$('#dt').value='2025-01-05';$('#gen').click();await new Promise(r=>setTimeout(r,700));console.log('KOSONG:',$('#status').textContent);
+ console.log('GALAT JS:',errs.length?errs.join(' ; '):'tidak ada');process.exit(0);})();

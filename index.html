@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muhamad Fahrurrozi — Data & Software Engineer</title>
+<meta name="description" content="Portofolio Muhamad Fahrurrozi: pipeline data, dashboard, aplikasi web, dan machine learning.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#070b14">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2322d3ee'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' font-weight='700' text-anchor='middle' fill='%23070b14'%3E%3E_%3C/text%3E%3C/svg%3E">
+<script>document.documentElement.className='js'</script>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="avatar.css">
+<script src="script.js" defer></script>
+<script src="avatar.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Lewati ke konten</a>
+<div id="prog" aria-hidden="true"></div>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#top">&gt;_ fahrurrozi</a>
+  <button class="menu" type="button" aria-expanded="false" aria-controls="nav" aria-label="Buka menu"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
+  <nav id="nav" aria-label="Navigasi utama"><ul>
+    <li><a href="#pengalaman">Pengalaman</a></li><li><a href="#proyek">Proyek</a></li>
+    <li><a href="#pelatihan">Pelatihan</a></li><li><a href="#sertifikasi">Sertifikasi</a></li><li><a href="#kontak">Kontak</a></li>
+  </ul></nav>
+</div></header>
+
+<main id="main">
+<div class="first">
+<section class="hero" id="top" aria-labelledby="judul"><div class="wrap">
+  <div>
+    <p class="tag">Data &amp; Software Engineer · Tangerang</p>
+    <h1 id="judul">Muhamad <em>Fahrurrozi</em></h1>
+    <p class="lead">Membangun pipeline data, dashboard, dan aplikasi web yang menggantikan pekerjaan manual di operasional produksi.</p>
+    <dl class="stats">
+      <div><dt>proyek Web Dev</dt><dd data-g="g-web">4</dd></div>
+      <div><dt>proyek Data Analyst</dt><dd data-g="g-analyst">2</dd></div>
+      <div><dt>proyek Data Engineer</dt><dd data-g="g-engineer">2</dd></div>
+      <div><dt>proyek Data Science</dt><dd data-g="g-science">5</dd></div>
+    </dl>
+  </div>
+  <div class="pfa-wrap">
+    <div class="pfa" id="pfa-hero" aria-hidden="true"></div>
+    <p class="pfa-mood" aria-hidden="true"><span class="ok">$</span> mood <b id="pfa-mood">neutral</b><span class="cur"></span></p>
+  </div>
+</div></section>
+
+<div class="mq" aria-hidden="true" data-t="Python,SQL,Hadoop,Spark,Airflow,Kafka,Docker,Snowflake,Flask,PostgreSQL,Looker Studio,Apps Script,Streamlit,Plotly,XGBoost,Git"></div>
+</div>
+
+<section class="sec" id="pengalaman" aria-labelledby="h1"><div class="wrap">
+  <h2 id="h1">Pengalaman kerja</h2>
+  <p class="sub"><strong>Data &amp; Software Engineer</strong> · PT Asia Budaya Center, Tangerang · Februari 2026 – sekarang</p>
+  <ul class="tl">
+    <li class="rv"><strong>VR Data Pipeline.</strong> ELT otomatis (Python, ADB) untuk ribuan video harian dari 75 headset VR, dengan validasi integritas file.</li>
+    <li class="rv"><strong>Dashboard &amp; laporan otomatis.</strong> Dashboard KPI produksi dan QC di Looker Studio, serta laporan otomatis (Apps Script) untuk klien dan eksekutif.</li>
+    <li class="rv"><strong>Aplikasi internal.</strong> CC Indonesia (absensi, shift, KPI), IT Helpdesk, dan Task Quality Control System dengan Flask.</li>
+    <li class="rv"><strong>IT support &amp; infrastruktur.</strong> Jaringan, hardware, dan software kantor dan area produksi, termasuk perangkat VR.</li>
+    <li class="rv"><strong>Analisis kebutuhan bisnis.</strong> Mengubah kebutuhan produksi, QC, SDM, IT support, dan data menjadi aplikasi, pipeline, dan dashboard.</li>
+  </ul>
+</div></section>
+
+<section class="sec" id="proyek" aria-labelledby="h2"><div class="wrap">
+  <h2 id="h2">Proyek</h2>
+  <h3 class="g">Web Dev</h3>
+  <div class="grid" id="g-web">
+    <article class="card rv"><div class="vis" data-v="cc" aria-hidden="true"></div><div class="body"><h4>CC Indonesia: Absensi, Shift &amp; KPI</h4><p class="stack">Flask</p><p>160 endpoint, 3 peran, 3 bahasa untuk 120+ karyawan: absensi GPS lintas kantor, rotasi dan tukar shift, cuti, lembur, KPI, peta live, notifikasi push, audit log.</p><a href="cc-indonesia/index.html">Coba demo (data dummy)</a></div></article>
+    <article class="card rv"><div class="vis" data-v="helpdesk" aria-hidden="true"></div><div class="body"><h4>IT Helpdesk</h4><p class="stack">Flask · PostgreSQL</p><p>Tiket IT dengan alur status, SLA, penugasan tim, inventaris aset, analitik, dan log audit.</p><a href="helpdesk-it/index.html">Coba demo (data dummy)</a></div></article>
+    <article class="card rv"><div class="vis" data-v="qc" aria-hidden="true"></div><div class="body"><h4>Task Quality Control System</h4><p class="stack">Flask · PostgreSQL</p><p>Alur produksi video VR pelatihan robot humanoid: task, kesiapan sample, dan status QC.</p><a href="task-qc/index.html">Coba demo (data dummy)</a></div></article>
+    <article class="card rv"><div class="vis" data-v="sandi" aria-hidden="true"></div><div class="body"><h4>Pecah Sandi</h4><p class="stack">Flask · PostgreSQL</p><p>Aplikasi latihan membaca sandi dengan font kustom, ditambah soal PUPK dan Kombinasi.</p><a href="pecah-sandi/index.html">Coba demo (data dummy)</a></div></article>
+  </div>
+  <h3 class="g">Data Analyst</h3>
+  <div class="grid" id="g-analyst">
+    <article class="card rv"><div class="vis" data-v="shot" data-src="dashboard-kpi/preview.png" aria-hidden="true"></div><div class="body"><h4>Dashboard KPI &amp; laporan otomatis</h4><p class="stack">Looker Studio · Google Sheets · Apps Script · Google Drive</p><p>KPI produksi dan QC, serta laporan otomatis per tanggal dan project untuk klien dan eksekutif.</p><a href="dashboard-kpi/index.html">Coba demo (data dummy)</a></div></article>
+    <article class="card rv"><div class="vis" data-v="shot" data-src="dashboard-ecommerce/preview.png" aria-hidden="true"></div><div class="body"><h4>E-Commerce Dashboard</h4><p class="stack">Streamlit · Pandas · Plotly</p><p>Dashboard interaktif: tren order, RFM, peta pelanggan, dan dampak keterlambatan kirim.</p><a href="dashboard-ecommerce/index.html">Coba demo &amp; lihat logika</a></div></article>
+    <article class="card rv"><div class="vis" data-v="dash" aria-hidden="true"></div><div class="body"><h4>Data Analytics with Hadoop</h4><p class="stack">Hadoop</p><a href="https://github.com/fahru-razi/Data_Analytics_with_Hadoop_Project.git">Kode di GitHub</a></div></article>
+  </div>
+  <h3 class="g">Data Engineer</h3>
+  <div class="grid" id="g-engineer">
+    <article class="card rv"><div class="vis" data-v="vr" aria-hidden="true"></div><div class="body"><h4>Virtual Reality Data Pipeline</h4><p class="stack">Python · ADB · OpenCV</p><p>Pengambilan otomatis video dari perangkat VR melalui Wi-Fi, dan ditransformasikan berdasarkan kebutuhan.</p><a href="vr-data-pipeline/index.html">Lihat alur &amp; logika</a></div></article>
+    <article class="card rv"><div class="vis" data-v="sent" aria-hidden="true"></div><div class="body"><h4>Sentiment Analysis Data Pipeline</h4><p class="stack">Airflow · Finnhub API · MongoDB · PostgreSQL</p><p>Pipeline harian: berita Finnhub, analisis sentimen, lalu tersimpan di PostgreSQL.</p><a href="sentiment-pipeline/index.html">Lihat alur &amp; hasil</a></div></article>
+  </div>
+  <h3 class="g">Data Science</h3>
+  <div class="grid" id="g-science">
+    <article class="card rv"><div class="vis" data-v="diabetes" aria-hidden="true"></div><div class="body"><h4>Deteksi Diabetes Berbasis Website</h4><p class="stack">Random Forest · Flask · PostgreSQL</p><p>Skripsi S1: Skrining risiko diabetes mellitus tipe 2 dari data kesehatan dasar. CRISP-DM yang dirujukkan ke literatur klinis (ADA, WHO, IDF), model Random Forest dengan recall 0,98.</p><a href="deteksi-diabetes/index.html">Coba demo &amp; lihat CRISP-DM</a></div></article>
+    <article class="card rv"><div class="vis" data-v="loan" aria-hidden="true"></div><div class="body"><h4>Loan Prediction Based on Customer Behavior</h4><p class="stack">Logistic Regression · Random Forest · XGBoost</p><p>Proyek akhir kelompok (7 orang): akurasi 89,9% pada data tidak seimbang, dan alasan kenapa recall lebih menentukan.</p><a href="loan-prediction/index.html">Lihat alur &amp; hasil</a> · <a href="https://github.com/fahru-razi/Loan_Prediction_Based_on_Customer-Behavior.git">Kode</a></div></article>
+    <article class="card rv"><div class="vis" data-v="credit" aria-hidden="true"></div><div class="body"><h4>Classifying Credit Loan Data</h4><p class="stack">XGBoost · Random Forest · SMOTE</p><p>Proyek intern ID/X Partners: 466 ribu pinjaman, XGBoost menangkap 76% bad loan (Random Forest 50%), lengkap dengan catatan risiko data leakage.</p><a href="credit-loan-classification/index.html">Lihat alur &amp; hasil</a> · <a href="https://github.com/fahru-razi/Project-Based-Intern-Data-Scientist-ID-X-Partners.git">Kode</a></div></article>
+    <article class="card rv"><div class="vis" data-v="elig" aria-hidden="true"></div><div class="body"><h4>Credit Eligibility Prediction</h4><p class="stack">Logistic Regression · LGBMClassifier</p><p>Proyek intern Home Credit Indonesia: 307 ribu pemohon, seleksi fitur IV/WoE, SMOTE, dan PCA. LightGBM terpilih dengan akurasi 91,2% dan recall 98,9%; kelompok yang ditandai berisiko 2,8× rata-rata.</p><a href="credit-eligibility-prediction/index.html">Lihat alur &amp; hasil</a> · <a href="https://github.com/fahru-razi/Project-Based-Intern-Data-Scientist-at-Home-Credit-Indonesia.git">Kode</a></div></article>
+    <article class="card rv"><div class="vis" data-v="ml" aria-hidden="true"></div><div class="body"><h4>Customer Churn Classification</h4><p class="stack">Decision Tree · Random Forest · XGBoost</p><p>Publikasi jurnal, dipresentasikan di RESBUS, 14 Mei 2024.</p></div></article>
+  </div>
+</div></section>
+
+<section class="sec" id="pelatihan" aria-labelledby="h3"><div class="wrap">
+  <h2 id="h3">Pelatihan &amp; pendidikan</h2>
+  <div class="grid">
+    <article class="card rv body"><p class="big">95,81</p><h4>Data Engineer · Digital Skola</h4><p class="stack">Feb – Jun 2024</p><p>±900 jam: Python, SQL/NoSQL, Hadoop, Spark, Airflow, Kafka, Docker, Snowflake. 8 proyek ETL, batch, dan stream processing.</p></article>
+    <article class="card rv body"><p class="big">85,26</p><h4>Data Science · Rakamin Academy</h4><p class="stack">Agu 2023 – Jan 2024</p><p>Program 5 bulan, predikat Excellent.</p></article>
+    <article class="card rv body"><p class="big">3,78</p><h4>S1 Informatika · Univ. Wanita Internasional</h4><p class="stack">2021 – 2025 · IPK</p><p>Ketua divisi IT serta riset dan teknologi di organisasi mahasiswa.</p></article>
+  </div>
+</div></section>
+
+<section class="sec" id="sertifikasi" aria-labelledby="h4"><div class="wrap">
+  <h2 id="h4">Sertifikasi</h2>
+  <div class="certs">
+    <a class="cert rv" href="https://drive.google.com/file/d/1gQhbxfBnZGILS_j1ybm4j7P90IRrAxGo/view?usp=sharing"><b>Analitik Data Profesional Google</b><small>Coursera</small></a>
+    <a class="cert rv" href="https://drive.google.com/file/d/1__UrIq82OGVhJzTO6YTjsciK3v5-7Tkg/view?usp=sharing"><b>Data Engineer Entry Level</b><small>Digital Skola</small></a>
+    <a class="cert rv" href="https://drive.google.com/file/d/1J-JPwhTDTfNqlyf_MkHbV2i1Az1JIu-h/view?usp=drive_link"><b>Data Science</b><small>Rakamin Academy</small></a>
+    <a class="cert rv" href="https://drive.google.com/file/d/1VkAwcHKIRC_vYSY8EnkOpQ2T73UU35JI/view?usp=sharing"><b>Associate Data Scientist</b><small>BNSP</small></a>
+    <a class="cert rv" href="https://drive.google.com/file/d/1SyeyhOiS1NiX2DkfxfsfeyliqgM1mEc1/view?usp=sharing"><b>Professional IT Support Google</b><small>Coursera</small></a>
+    <a class="cert rv" href="https://drive.google.com/file/d/1HDHqg7fYnuOrudxVt_pQA3y0jjCkcb05/view?usp=sharing"><b>Microsoft Azure Data Fundamentals</b><small>Mereka</small></a>
+  </div>
+</div></section>
+
+<section class="sec" id="kontak" aria-labelledby="h5"><div class="wrap">
+  <h2 id="h5">Kontak</h2>
+  <p class="sub">Terbuka untuk diskusi peluang di bidang data dan software engineering.</p>
+  <p class="cta"><a class="btn" href="mailto:fahruu.ar.razi@gmail.com">fahruu.ar.razi@gmail.com</a> <a class="btn" href="https://www.linkedin.com/in/muhamadfahrurrozi/">LinkedIn</a> <a class="btn" href="https://github.com/fahru-razi">GitHub</a></p>
+</div></section>
+</main>
+<footer><div class="wrap">© 2026 Muhamad Fahrurrozi</div></footer>
+</body>
+</html>

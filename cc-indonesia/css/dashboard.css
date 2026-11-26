@@ -1,0 +1,1267 @@
+/* =============================================================================
+   dashboard.css — Manager Dashboard Styles (redesign)
+   CC Indonesia
+   ─────────────────────────────────────────────────────────────────────────────
+   Struktur:
+     1. Hero header (sapaan + tanggal + jam live)
+     2. Section label
+     3. Stat cards (7 kolom, dengan persentase)
+     4. Kartu ringkasan per shift (progress bar + sel mini)
+     5. Daftar Kehadiran (search, tab status, chip shift, tabel)
+     6. Notifikasi
+     7. Menunggu persetujuan
+
+   Bagian check-in / checkout / GPS manajer sudah dihapus.
+   ============================================================================= */
+
+.dash-body {
+  --dm-ink: #0f172a;
+  --dm-indigo: #4f46e5;
+  --dm-card-radius: 18px;
+  --dm-line: #e8edf3;
+  --dm-soft: #f4f6fa;
+  padding-bottom: 2rem;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   1. HERO
+   ───────────────────────────────────────────────────────────────────────────── */
+.dm-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--dm-line);
+  border-radius: var(--dm-card-radius);
+  box-shadow: var(--shadow-xs);
+  padding: 1rem 1.25rem;
+}
+.dm-hero-greet {
+  margin: 0 0 2px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-muted, #5d7a8c);
+}
+.dm-hero-title {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--dm-ink);
+}
+.dm-hero-time {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  border: 1px solid var(--dm-line);
+  border-radius: 14px;
+  padding: 0.55rem 0.95rem;
+  background: #fff;
+}
+.dm-hero-date {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-right: 0.9rem;
+  border-right: 1px solid var(--dm-line);
+}
+.dm-hero-day {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0e7cb4;
+}
+.dm-hero-datefull {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-muted, #5d7a8c);
+  white-space: nowrap;
+}
+.dm-hero-clock {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.dm-clock {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--dm-ink);
+  font-variant-numeric: tabular-nums;
+}
+.dm-clock-tz {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-faint, #8dabbe);
+}
+
+.dash-body > .dash-notif-panel { margin-top: 0.9rem; margin-bottom: 0; }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   2. SECTION LABEL
+   ───────────────────────────────────────────────────────────────────────────── */
+.mgr-section-label {
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--dm-ink);
+  border-left: 3px solid var(--dm-indigo);
+  padding-left: 8px;
+  margin: 1.5rem 0 0.85rem;
+  line-height: 1.2;
+}
+
+.mgr-stat-note {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  background: var(--brand-xlight, #f4f9fc);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: 0.5rem 0.85rem;
+  margin-top: 0.6rem;
+  line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   3. STAT CARDS — 7 kolom
+   ───────────────────────────────────────────────────────────────────────────── */
+.mgr-stat-row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+.mgr-stat-card {
+  --c: #94a3b8; /* warna angka & persen */
+  --edge: var(--dm-line); /* warna border tipis */
+  background: #fff;
+  border: 1.5px solid var(--edge);
+  border-radius: var(--dm-card-radius);
+  padding: 0.85rem 1rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.mgr-stat-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+.mgr-stat-lbl {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ct, var(--c));
+  line-height: 1.2;
+}
+.mgr-stat-num {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--c);
+}
+.mgr-stat-pct {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: var(--ct, var(--c));
+}
+.mgr-stat-neutral  { --c: #475569; --edge: var(--dm-line); }
+.mgr-stat-neutral .mgr-stat-num { color: var(--dm-ink); }
+.mgr-stat-success  { --c: #059669; --ct: #04825b; --edge: #c9f1e3; }
+.mgr-stat-warn     { --c: #d97706; --ct: #ae5f05; --edge: #fde7b0; }
+.mgr-stat-info     { --c: #0284c7; --ct: #0277b4; --edge: #c7e6f8; }
+.mgr-stat-sick     { --c: #ea580c; --ct: #c44a0a; --edge: #fddcc5; }
+.mgr-stat-danger   { --c: #e11d48; --ct: #db1c46; --edge: #fcd0d9; }
+.mgr-stat-pending  { --c: #64748b; --ct: #5b6a80; --edge: var(--dm-line); }
+
+/* Angka 0 → gelap & tenang; label/persen tetap berwarna */
+.mgr-stat-card[data-zero="true"] .mgr-stat-num { color: var(--dm-ink); }
+
+@media (max-width: 1100px) {
+  .mgr-stat-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 768px) {
+  .mgr-stat-row { gap: 8px; }
+  .mgr-stat-num { font-size: 1.5rem; }
+}
+@media (max-width: 480px) {
+  .mgr-stat-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   4. KARTU RINGKASAN PER SHIFT
+   ───────────────────────────────────────────────────────────────────────────── */
+.mgr-shift-breakdown {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.mgr-shift-card {
+  background: #fff;
+  border: 1px solid var(--dm-line);
+  border-radius: var(--dm-card-radius);
+  box-shadow: var(--shadow-xs);
+  padding: 1rem 1.1rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.mgr-shift-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+.mgr-shift-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.mgr-shift-card-heading { min-width: 0; }
+.mgr-shift-name {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--dm-ink);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.mgr-shift-total {
+  margin: 2px 0 0;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  color: var(--text-faint, #8dabbe);
+}
+
+/* Badge ringkas */
+.mgr-shift-badge {
+  --bd-bg: #f1f5f9;
+  --bd-fg: #475569;
+  --bd-dot: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: var(--bd-bg);
+  color: var(--bd-fg);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.64rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.mgr-shift-badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--bd-dot);
+}
+.mgr-shift-badge--ok   { --bd-bg: #ecfdf5; --bd-fg: #047857; --bd-dot: #10b981; }
+.mgr-shift-badge--bad  { --bd-bg: #fff1f2; --bd-fg: #be123c; --bd-dot: #f43f5e; }
+.mgr-shift-badge--info { --bd-bg: #f0f9ff; --bd-fg: #0369a1; --bd-dot: #0ea5e9; }
+.mgr-shift-badge--idle { --bd-bg: #f1f5f9; --bd-fg: #475569; --bd-dot: #94a3b8; }
+
+/* Progress bar bertumpuk */
+.mgr-shift-bar {
+  display: flex;
+  height: 6px;
+  border-radius: 99px;
+  overflow: hidden;
+  background: #eef2f6;
+}
+.mgr-shift-bar .seg { display: block; height: 100%; }
+.seg--hadir   { background: #10b981; }
+.seg--late    { background: #f59e0b; }
+.seg--izin    { background: #0ea5e9; }
+.seg--absent  { background: #f43f5e; }
+.seg--pending { background: #94a3b8; }
+
+/* Sel mini — jumlah kolom mengikuti jumlah sel (5, atau 6 bila ada Sakit) */
+.mgr-shift-stats {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 6px;
+}
+.mgr-shift-stat {
+  --t: #64748b;
+  --tbg: #f8fafc;
+  --tbd: #eef2f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 0.5rem 0.2rem 0.55rem;
+  border-radius: 12px;
+  background: var(--tbg);
+  border: 1px solid var(--tbd);
+  min-width: 0;
+}
+.mgr-shift-stat-lbl {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--t);
+  white-space: nowrap;
+}
+.mgr-shift-stat-num {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--t);
+  font-variant-numeric: tabular-nums;
+}
+.mgr-shift-stat--hadir   { --t: #04825b; --tbg: #f1fcf8; --tbd: #d5f5e8; }
+.mgr-shift-stat--late    { --t: #ae5f05; --tbg: #fffcf2; --tbd: #fbefc7; }
+.mgr-shift-stat--izin    { --t: #0277b4; --tbg: #f4faff; --tbd: #d9edfb; }
+.mgr-shift-stat--sakit   { --t: #c44a0a; --tbg: #fff8f3; --tbd: #fbe3d1; }
+.mgr-shift-stat--absent  { --t: #db1c46; --tbg: #fff5f7; --tbd: #fbdbe2; }
+.mgr-shift-stat--pending { --t: #5b6a80; --tbg: #f8fafc; --tbd: #e8edf3; }
+
+@media (max-width: 1000px) {
+  .mgr-shift-breakdown { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .mgr-shift-breakdown { grid-template-columns: 1fr; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   5. DAFTAR KEHADIRAN
+   ───────────────────────────────────────────────────────────────────────────── */
+.mgr-table-section { margin-top: 1.75rem; }
+.mgr-table-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.9rem;
+}
+.mgr-table-title {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--dm-ink);
+}
+
+/* Search */
+.mgr-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(300px, 100%);
+  padding: 0.5rem 0.8rem;
+  background: #fff;
+  border: 1px solid var(--dm-line);
+  border-radius: 12px;
+  color: var(--text-faint, #8dabbe);
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.mgr-search:focus-within {
+  border-color: var(--dm-indigo);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+.mgr-search svg { width: 15px; height: 15px; flex-shrink: 0; }
+.mgr-search input[type="search"],
+.mgr-search input[type="search"]:focus {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  box-shadow: none;
+  background: transparent;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  color: var(--dm-ink);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.mgr-search input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
+.mgr-search input::placeholder { color: var(--text-faint, #8dabbe); }
+
+/* Card */
+.mgr-table-card {
+  background: #fff;
+  border: 1px solid var(--dm-line);
+  border-radius: var(--dm-card-radius);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+/* Baris: tab status (kiri) + search (kanan) */
+.mgr-filters-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.mgr-filters-row .mgr-filter-tabs { align-self: auto; }
+.mgr-filters-row .mgr-search { margin-left: auto; width: min(280px, 100%); }
+
+/* Filter area */
+.mgr-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem 0.9rem;
+  border-bottom: 1px solid var(--dm-line);
+}
+.mgr-filter-tabs {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  max-width: 100%;
+  gap: 2px;
+  padding: 4px;
+  background: var(--dm-soft);
+  border: 1px solid var(--dm-line);
+  border-radius: 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.mgr-filter-tabs::-webkit-scrollbar { display: none; }
+.mgr-filter-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.4rem 0.8rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #475569;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.74rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.mgr-filter-tab:hover { color: var(--dm-ink); }
+.mgr-filter-tab.active {
+  background: var(--dm-ink);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Badge hitungan di tab */
+.mgr-count {
+  --cn-bg: #e8edf3;
+  --cn-fg: #475569;
+  --cn-bd: transparent;
+  padding: 0 6px;
+  min-width: 20px;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid var(--cn-bd);
+  background: var(--cn-bg);
+  color: var(--cn-fg);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+.mgr-count--hadir   { --cn-bg: #ecfdf5; --cn-fg: #04805a; --cn-bd: #bdecd7; }
+.mgr-count--late    { --cn-bg: #fffbeb; --cn-fg: #ab5d05; --cn-bd: #f8dc92; }
+.mgr-count--izin    { --cn-bg: #f0f9ff; --cn-fg: #0276b2; --cn-bd: #bfe3f7; }
+.mgr-count--sakit   { --cn-bg: #eef2ff; --cn-fg: #4f46e5; --cn-bd: #cdd3fb; }
+.mgr-count--absent  { --cn-bg: #fff1f2; --cn-fg: #d11a43; --cn-bd: #f9c5cf; }
+.mgr-count--pending { --cn-bg: #eef1f5; --cn-fg: #475569; }
+.mgr-filter-tab.active .mgr-count { background: rgba(255, 255, 255, 0.14); color: #fff; border-color: transparent; }
+
+/* Chip filter shift */
+.mgr-shift-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.mgr-shift-chip {
+  padding: 0.38rem 0.8rem;
+  border: 1px solid var(--dm-line);
+  border-radius: 10px;
+  background: #fff;
+  color: #334155;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.mgr-shift-chip:hover { border-color: #b8c4d3; }
+.mgr-shift-chip.active {
+  background: var(--dm-ink);
+  border-color: var(--dm-ink);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Scroll area */
+.table-wrap {
+  overflow: auto;
+  max-height: calc(100vh - 220px);
+  min-height: 320px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.table-wrap::-webkit-scrollbar { width: 7px; height: 7px; }
+.table-wrap::-webkit-scrollbar-track { background: transparent; }
+.table-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+.table-wrap::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Tabel */
+.mgr-table {
+  width: 100%;
+  min-width: 900px;
+  table-layout: fixed; /* lebar kolom mengikuti <th>, teks panjang dipotong (ellipsis) */
+  border-collapse: collapse;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+}
+.mgr-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #fafbfd;
+  padding: 0.9rem 0.8rem;
+  text-align: left;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--dm-line);
+  vertical-align: middle;
+}
+.mgr-table thead th:first-child { padding-left: 1.25rem; }
+.mgr-table thead th:nth-child(1) { width: 22%; }
+.mgr-table thead th:nth-child(2) { width: 16%; }
+.mgr-table thead th:nth-child(3) { width: 16%; }
+.mgr-table thead th:nth-child(4) { width: 11%; }
+.mgr-table thead th:nth-child(5) { width: 14%; }
+.mgr-table thead th:nth-child(6) { width: 21%; }
+.mgr-table thead th { white-space: normal; overflow-wrap: anywhere; }
+
+.mgr-table tbody tr {
+  border-bottom: 1px solid #f1f4f8;
+  transition: background 0.1s;
+}
+.mgr-table tbody tr:last-child { border-bottom: 0; }
+.mgr-table tbody tr:hover { background: #f8fafc; }
+.mgr-table tbody tr.row--late   { background: #fffcf1; }
+.mgr-table tbody tr.row--absent { background: #fff9fa; }
+.mgr-table tbody tr.row--late:hover   { background: #fff8de; }
+.mgr-table tbody tr.row--absent:hover { background: #fff1f3; }
+.mgr-table tbody tr[hidden] { display: none; }
+
+.mgr-table td {
+  padding: 0.7rem 0.8rem;
+  vertical-align: middle;
+  color: #334155;
+}
+.mgr-table td:first-child { padding-left: 1.25rem; }
+.mgr-table td { overflow: hidden; }
+.shift-chip { max-width: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
+
+/* Karyawan */
+.mgr-employee-cell { display: flex; align-items: center; gap: 0.7rem; }
+.mgr-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #f1f5f9;
+  border: 1px solid #e8edf3;
+  color: #475569;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+}
+.row--late   .mgr-avatar { background: #fffbeb; border-color: #fde68a; color: #b45309; }
+.row--absent .mgr-avatar { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
+.mgr-avatar-sm { width: 28px; height: 28px; font-size: 0.6rem; border-radius: 8px; }
+.mgr-employee-cell { min-width: 0; }
+.mgr-emp-text { min-width: 0; flex: 1 1 auto; }
+.mgr-emp-name {
+  display: block;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--dm-ink);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mgr-emp-dept {
+  display: block;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.64rem;
+  color: #656f7e;
+}
+
+/* Shift & jadwal */
+.shift-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.shift-sched {
+  display: block;
+  margin-top: 4px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.6rem;
+  color: #656f7e;
+  white-space: nowrap;
+}
+
+/* Presensi */
+.presence-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border: 1px solid #e8edf3;
+  border-radius: 8px;
+  background: #f8fafc;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--dm-ink);
+  white-space: nowrap;
+}
+.presence-box svg { width: 11px; height: 11px; color: #656f7e; }
+.row--late .presence-box { background: #fffbeb; border-color: #fde68a; }
+.row--late .presence-box svg { color: #f59e0b; }
+.presence-empty {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.74rem;
+  color: #656f7e;
+}
+.presence-dot { width: 6px; height: 6px; border-radius: 50%; background: #cbd5e1; }
+.row--absent .presence-empty { color: #e11d48; }
+.row--absent .presence-dot { background: #f43f5e; }
+
+/* Status pill */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  border: 1px solid transparent;
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.status-pill i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.pill-present { background: #ecfdf5; color: #047857; border-color: #bdecd7; }
+.pill-late    { background: #fffbeb; color: #b45309; border-color: #fcd98a; }
+.pill-absent  { background: #fff1f2; color: #be123c; border-color: #fbc9d3; }
+.pill-izin    { background: #f0f9ff; color: #0369a1; border-color: #bfe3f7; }
+.pill-sick    { background: #eef2ff; color: #4338ca; border-color: #cdd3fb; }
+.pill-off     { background: #f1f5f9; color: #475569; }
+.pill-pending { background: #f1f5f9; color: #475569; }
+.pill-pending i { background: #94a3b8; }
+
+/* Lokasi */
+.loc-cell {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: #334155;
+  line-height: 1.35;
+}
+.loc-cell { max-width: 100%; align-items: center; white-space: nowrap; }
+.loc-text { overflow: hidden; text-overflow: ellipsis; }
+.loc-dist { color: #656f7e; font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; }
+.loc-cell svg { width: 13px; height: 13px; flex-shrink: 0; color: #059669; }
+.loc-cell--late svg { color: #d97706; }
+.cell-dash { color: #cbd5e1; }
+
+/* Keterangan */
+.note-chip,
+.note-plain {
+  display: inline-block;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.note-chip {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.66rem;
+  line-height: 1.35;
+}
+.note-chip--warn { background: #fffbeb; color: #92400e; border: 1px solid #fcd98a; }
+.note-plain { font-size: 0.66rem; color: #656f7e; line-height: 1.35; }
+
+/* Empty & footer */
+.mgr-empty {
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 0.82rem;
+  padding: 2.5rem 1rem !important;
+}
+.table-row-counter {
+  padding: 0.55rem 1.25rem;
+  border-top: 1px solid var(--dm-line);
+  background: #fafbfd;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  color: #656f7e;
+}
+.table-row-counter strong {
+  font-family: "IBM Plex Mono", monospace;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .dm-hero-time { width: 100%; justify-content: space-between; }
+  .mgr-search { width: 100%; }
+  .mgr-table-topbar { align-items: stretch; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   6. NOTIFICATION PANEL (tidak berubah)
+   ───────────────────────────────────────────────────────────────────────────── */
+.dash-notif-panel {
+  background: var(--warning-bg, #fef3c7);
+  border: 1px solid #f0e0b0;
+  border-left: 3px solid var(--warning, #c47a00);
+  border-radius: var(--radius, 10px);
+  overflow: hidden;
+  margin-bottom: 0;
+}
+.dash-notif-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #f0e0b0;
+  gap: 0.5rem;
+}
+.dash-notif-title-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.dash-notif-title-row svg {
+  color: var(--warning);
+  flex-shrink: 0;
+}
+.dash-notif-badge {
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dash-notif-read-all-btn {
+  background: none;
+  border: 1px solid rgba(176, 114, 0, 0.3);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.73rem;
+  color: var(--warning);
+  padding: 3px 9px;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+.dash-notif-read-all-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--text-primary);
+}
+.dash-notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.dash-notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid rgba(240, 224, 176, 0.5);
+  transition: background 0.1s;
+}
+.dash-notif-item:last-child {
+  border-bottom: none;
+}
+.dash-notif-item:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+.dash-notif-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #fde68a;
+  color: var(--warning);
+}
+.dash-notif-icon svg {
+  width: 14px;
+  height: 14px;
+}
+.dash-notif-icon.dash-notif-icon--leave_review {
+  background: var(--brand-light);
+  color: var(--brand);
+}
+.dash-notif-content {
+  flex: 1;
+  min-width: 0;
+}
+.dash-notif-item-title {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-notif-item-body {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0 0 3px;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.dash-notif-item-time {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  margin: 0;
+}
+.dash-notif-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px;
+  color: var(--text-faint);
+  border-radius: 4px;
+  transition:
+    background 0.1s,
+    color 0.1s;
+  flex-shrink: 0;
+}
+.dash-notif-close:hover {
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--text-primary);
+}
+.dash-notif-close svg {
+  width: 13px;
+  height: 13px;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .dash-notif-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dash-notif-item-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   7. PENDING LEAVES (tidak berubah)
+   ───────────────────────────────────────────────────────────────────────────── */
+.mgr-pending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.mgr-pending-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.12s;
+}
+.mgr-pending-item:hover {
+  box-shadow: var(--shadow);
+}
+.mgr-pending-info {
+  flex: 1;
+  min-width: 0;
+}
+.mgr-pending-name {
+  display: block;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 600;
+  font-size: 0.83rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mgr-pending-detail {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  margin-top: 1px;
+}
+.mgr-pending-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+.btn-approve {
+  padding: 0.3rem 0.75rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--success-bg);
+  color: var(--success);
+  border: 1px solid #a7d7bb;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.btn-approve:hover {
+  background: #c6edd8;
+}
+.btn-reject {
+  padding: 0.3rem 0.75rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.btn-reject:hover {
+  background: #fad3cf;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   8. SHIFT INFO CARD / CHART CARD / MISC
+   Dipertahankan apa adanya karena kemungkinan dipakai halaman lain
+   (dashboard karyawan). Tidak dipakai oleh dashboard manajer.
+   ───────────────────────────────────────────────────────────────────────────── */
+.shift-info-card {
+  background: var(--bg, #f7f8fa);
+  border-left: 3px solid var(--shift-color, var(--brand));
+  padding: 0.6rem 0.875rem;
+  border-radius: var(--radius-xs);
+  margin-bottom: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.shift-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.shift-info-card .shift-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.shift-time-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--shift-color, var(--brand));
+  background: rgba(27, 79, 114, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.shift-windows {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.shift-window-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+.shift-window-icon {
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+.shift-window-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  color: var(--text-faint);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+.shift-window-value {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.shift-window-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+  flex-shrink: 0;
+  margin: 0 4px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   14. CHART CARD
+   ───────────────────────────────────────────────────────────────────────────── */
+.mgr-chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-xs);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.mgr-chart-empty {
+  text-align: center;
+  padding: 1rem 0 0.5rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  margin: 0;
+}
+.mgr-chart-summary {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+.mgr-chart-sum-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mgr-chart-sum-num {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.mgr-chart-sum-lbl {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+.mgr-chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 220px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   15. MISC
+   ───────────────────────────────────────────────────────────────────────────── */
+tr[data-source="correction"] {
+  background-color: rgba(212, 134, 10, 0.04) !important;
+}
+.badge.bg-secondary {
+  opacity: 0.8;
+  font-size: 0.65em;
+}
+
+/* eof — dashboard.css */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   9. ANIMASI KLIK & TRANSISI
+   ─────────────────────────────────────────────────────────────────────────────
+   • Semua tombol: efek tekan (scale) + ripple dari titik klik
+   • Tab/chip aktif: "pop" singkat saat dipilih
+   • Baris tabel yang muncul kembali setelah filter: fade + geser tipis
+   • Dimatikan otomatis bila pengguna memilih "reduce motion"
+   ───────────────────────────────────────────────────────────────────────────── */
+.mgr-filter-tab,
+.mgr-shift-chip,
+.btn-approve,
+.btn-reject,
+.dash-notif-read-all-btn,
+.dash-notif-close {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.12s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.mgr-filter-tab:active,
+.mgr-shift-chip:active,
+.btn-approve:active,
+.btn-reject:active,
+.dash-notif-read-all-btn:active,
+.dash-notif-close:active {
+  transform: scale(0.94);
+}
+.mgr-filter-tab:focus-visible,
+.mgr-shift-chip:focus-visible,
+.btn-approve:focus-visible,
+.btn-reject:focus-visible {
+  outline: 2px solid var(--dm-indigo);
+  outline-offset: 2px;
+}
+
+/* Ripple (elemen dibuat oleh dashboard.js) */
+.dm-ripple {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: currentColor;
+  opacity: 0.22;
+  transform: scale(0);
+  animation: dm-ripple 0.55s ease-out forwards;
+}
+@keyframes dm-ripple {
+  to { transform: scale(1); opacity: 0; }
+}
+
+/* Pop pada tab/chip yang baru aktif */
+.mgr-filter-tab.active,
+.mgr-shift-chip.active {
+  animation: dm-pop 0.28s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+@keyframes dm-pop {
+  0%   { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* Baris yang muncul setelah filter/pencarian */
+.mgr-table tbody tr.row-enter {
+  animation: dm-row-in 0.28s ease both;
+}
+@keyframes dm-row-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Angka "Menampilkan X" berdenyut saat berubah */
+#table-visible-count.bump { animation: dm-bump 0.3s ease; display: inline-block; }
+@keyframes dm-bump {
+  40% { transform: scale(1.35); color: var(--dm-indigo); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-ripple,
+  .mgr-filter-tab.active,
+  .mgr-shift-chip.active,
+  .mgr-table tbody tr.row-enter,
+  #table-visible-count.bump { animation: none !important; }
+  .mgr-filter-tab:active,
+  .mgr-shift-chip:active,
+  .btn-approve:active,
+  .btn-reject:active { transform: none; }
+}

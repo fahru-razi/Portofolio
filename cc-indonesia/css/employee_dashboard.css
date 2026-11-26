@@ -1,0 +1,1139 @@
+/* =============================================================================
+   employee-dashboard.css — CC Indonesia
+   Style KHUSUS untuk templates/employee/dashboard.html.
+
+   Kenapa file ini ada sendiri (dipisah dari dashboard.css milik manager):
+   ─────────────────────────────────────────────────────────────────────────
+   dashboard.css (di-load lewat manager/dashboard.html) adalah milik
+   MANAGER. Sebagian class lama employee dashboard (.checkin-card,
+   .btn-checkin-in/out/done/missed/out-early, .checkin-note, .checkin-icon-*,
+   .late-badge) ternyata DIPAKAI BERSAMA oleh widget check-in personal di
+   manager/dashboard.html (lihat dashboard.js: updateCheckinButton() /
+   updateCheckoutButton() memanipulasi class-class itu persis dengan nama
+   yang sama) — jadi class-class tsb SENGAJA TIDAK disentuh/dipakai lagi
+   di sini, supaya redesign dashboard employee tidak ikut mengubah
+   tampilan check-in manager.
+
+   Semua class BARU di file ini pakai prefix "ed-" (Employee Dashboard)
+   yang tidak dipakai di main.css / theme.css / dashboard.css manapun,
+   sehingga 100% aman — tidak akan pernah bentrok dengan style manager.
+
+   Pengecualian (WAJIB dipertahankan apa adanya karena dipakai gps.js):
+     - #btn-main, #checkin-note, #gps-accuracy   (dipilih via getElementById)
+     - #gps-status + class "gps-status"          (di-set ulang oleh gps.js:
+       statusEl.className = "gps-status gps-" + type)
+     - .gps-status-text                          (dipilih via querySelector)
+   #gps-status TETAP ADA di DOM (gps.js menulis ke sana tiap evaluatePosition()
+   dan tidak null-safe terhadap elemen yang hilang) — tapi disembunyikan
+   secara visual dari ed-location-bar (lihat bagian "GPS status" di bawah),
+   karena pesannya duplikat dengan #ed-location-text / #checkin-note.
+   Class "gps-status"/"gps-detecting"/"gps-ok"/"gps-outside"/"gps-error"
+   TIDAK dipakai oleh manager (manager pakai "mgr-gps-status" sebagai base).
+
+   Warna dasar diambil dari variabel theme.css (--brand, --success, --warning,
+   --danger, --text-*, --border) — tidak ada warna baru di luar token yang
+   sudah ada.
+
+   BENTUK (2026 refresh, revisi kedua): permintaan awal "modern 2026" sempat
+   diterjemahkan jadi radius besar (18px) + shadow melayang + panel berwarna
+   (hero hijau muda). Setelah direview, arah yang diinginkan justru
+   sebaliknya: flat, garis tipis, radius kecil-sedang, warna dipakai sangat
+   hemat — mirip Snowsight (Snowflake). Revisi ini:
+     - radius diperkecil (8-10px, bukan 18px)
+     - shadow dihapus/nyaris tidak ada; border 1px yang jadi pemisah utama
+     - hero status TIDAK lagi diberi background warna solid — hanya garis
+       aksen tipis di kiri (border-left) + badge kecil, latar tetap netral
+     - --ed-* tokens dipertahankan (supaya tidak menyentuh --radius/--shadow
+       global di theme.css yang dipakai halaman manager) tapi nilainya
+       diperbarui ke arah yang lebih flat.
+   ============================================================================= */
+
+/* ── Token bentuk lokal (scoped ke employee dashboard) ───────────────────── */
+.dash-body {
+  --ed-radius-lg: 10px; /* kartu utama */
+  --ed-radius-md: 8px; /* kotak di dalam kartu, tombol */
+  --ed-radius-sm: 6px; /* elemen kecil, badge persegi */
+  --ed-shadow-card: none;
+  --ed-shadow-btn: none;
+
+  /* Tint sangat lembut untuk latar status hero — jauh lebih pucat dari
+     --success-bg dkk (yang dipakai badge/chip), sesuai referensi desain. */
+  --ed-tint-success: #f7fefb;
+  --ed-tint-violet: #faf8ff;
+  --ed-tint-danger: #fff8f7;
+  --ed-tint-brand: #f6fafc;
+  --ed-tint-amber: #fefbf2; /* [FIX] tint baru — dipakai untuk latar baris
+    Check-in Resmi (lihat .ed-shift-row--in), belum ada sebelumnya karena
+    baris Check-in/Check-out selama ini cuma pakai --bg netral, padahal
+    desain referensi memberi tint amber/mint yang senada dengan ikonnya. */
+}
+/* [FIX] padding-bottom 2rem/5rem yang dulu ada di sini DIHAPUS — ini
+   duplikat dari clearance bottom-nav yang sudah dihitung di .page-content
+   (main.css). Dua clearance ini menumpuk (2rem/5rem di sini + ~4.15rem di
+   .page-content) sehingga di mobile total jadi ~146px padahal .bottom-nav
+   cuma ~53px — itulah ruang kosong besar yang masih bisa di-scroll di
+   bawah kartu Rekapitulasi. .page-content sudah cukup sebagai satu-satunya
+   sumber kebenaran untuk clearance ini. */
+
+/* ── Header pill: hari/tanggal + jam, menggantikan page-header-right lama ──
+   Radius ditarik jauh dari bentuk kapsul (999px) — sekarang kotak dengan
+   sudut sedang, konsisten dengan .ed-card di bawahnya. */
+.ed-header-pill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--ed-radius-md);
+  padding: 9px 18px;
+  flex-shrink: 0;
+}
+.ed-header-date {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+  white-space: nowrap;
+}
+.ed-header-day {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--brand);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+.ed-header-date-full {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.ed-header-divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.ed-clock {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-shrink: 0;
+}
+#ed-clock-time {
+  font-family: "IBM Plex Mono", "Menlo", monospace;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.ed-clock-tz {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  position: relative;
+  top: -7px;
+}
+
+@media (max-width: 480px) {
+  /* [FIX] Redesain pill mobile: sebelumnya horizontal (tanggal | jam
+     dipisah divider vertikal) — lebar ini (~210-260px) menyita hampir
+     seluruh baris header di layar sempit, memaksa nama pengguna terpotong
+     atau patah di tengah kata. Sesuai desain target: pill mobile jadi kotak
+     gelap ringkas dengan SEMUA baris ditumpuk vertikal (hari, tanggal, jam),
+     rata kanan — jauh lebih sempit sehingga nama (sependek "Budi" atau
+     sepanjang "Muhamad Fahrurrozi") tetap punya cukup ruang di sampingnya
+     tanpa wrap yang jelek. */
+  .ed-header-pill {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px; /* [FIX] sebelumnya 0 — di referensi ada jarak vertikal kecil
+      tapi jelas terlihat antara SABTU / tanggal / jam, bukan menempel. */
+    background: var(--sidebar-bg, #0f2537);
+    border-color: var(--sidebar-bg, #0f2537);
+    padding: 9px 12px; /* [FIX] direvisi dari 7px 12px→11px 15px→9px 12px:
+      versi 11/15 terlalu lebar (rasio lebar pill jadi ~36% dari layar,
+      referensi ~31%) sehingga nama "Muhamad Fahrurrozi" balik terpotong
+      jadi 2 baris. Kompromi: padding vertikal sedikit ditambah (napas
+      antar baris via gap, bukan padding horizontal besar), padding
+      horizontal dikembalikan dekat nilai awal supaya pill tetap ramping. */
+    border-radius: 12px; /* [FIX] sebelumnya var(--ed-radius-sm)=6px — sudut
+      di referensi jelas lebih membulat. */
+  }
+  .ed-header-date {
+    align-items: flex-end;
+    text-align: right;
+    gap: 2px; /* [FIX] sebelumnya 0 — jarak antara "SABTU" dan tanggal penuh
+      terlalu rapat, referensi punya sedikit napas di sini. */
+  }
+  .ed-header-day {
+    color: #ffffff;
+    opacity: 0.65;
+    font-size: 9.5px;
+  }
+  .ed-header-date-full {
+    color: #ffffff;
+    font-size: 11px; /* [FIX] 12px sedikit terlalu lebar untuk tanggal penuh
+      "19 September 2026" — dikecilkan tipis supaya proporsi lebar pill
+      lebih dekat ke referensi tanpa mengorbankan keterbacaan. */
+    font-weight: 500;
+  }
+  .ed-header-divider {
+    display: none; /* tidak dipakai lagi pada layout stack mobile */
+  }
+  .ed-clock {
+    gap: 5px; /* [FIX] sebelumnya 3px — "WIB" terlalu menempel ke digit jam */
+    align-items: baseline;
+  }
+  #ed-clock-time {
+    color: #ffffff;
+    font-size: 1.05rem;
+  }
+  .ed-clock-tz {
+    color: rgba(255, 255, 255, 0.6);
+    position: static; /* [FIX] sebelumnya mewarisi position:relative;top:-7px
+      dari aturan desktop (.ed-clock-tz) — itu hack alignment khusus layout
+      horizontal lama (WIB sejajar baseline di sebelah jam dengan divider).
+      Di layout stack baru ini, offset itu malah menarik "WIB" naik dan
+      bertabrakan/menempel ke digit jam. Dikembalikan ke posisi normal. */
+    top: auto;
+  }
+}
+@media (max-width: 340px) {
+  /* [FIX] layar sangat sempit: kecilkan lagi pill (tetap format stack
+     vertikal dari breakpoint 480px) supaya makin ringkas. */
+  .ed-header-pill {
+    padding: 6px 10px;
+  }
+  .ed-header-day {
+    font-size: 8.5px;
+  }
+  .ed-header-date-full {
+    font-size: 10px;
+  }
+  #ed-clock-time {
+    font-size: 0.85rem;
+  }
+}
+
+/* ── Bar lokasi presensi ───────────────────────────────────────────────────
+   Kiri: teks lokasi — default nama kantor (server-rendered), digantikan
+   oleh gps.js dengan jarak-dari-kantor begitu GPS resolve (lihat
+   #ed-location-text, ditulis dari evaluatePosition() di gps.js).
+   Kanan: HANYA akurasi GPS (permintaan eksplisit) — pill status warna
+   (#gps-status) tetap ada di DOM untuk gps.js tapi disembunyikan visual
+   (.ed-location-right .gps-status { display:none }) karena pesannya
+   duplikat dengan teks kiri / #checkin-note. */
+.ed-location-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--ed-radius-md);
+  padding: 11px 16px;
+  margin-bottom: var(--gap, 1rem);
+}
+.ed-location-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.ed-pin-icon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.ed-location-text {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ed-location-text strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.ed-location-verified {
+  color: var(--text-faint);
+  font-weight: 400;
+}
+.ed-location-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.ed-gps-radius {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.ed-gps-radius #gps-accuracy {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-left: 4px;
+}
+
+/* #gps-status tetap dirender gps.js tapi disembunyikan dari bar lokasi —
+   lihat komentar di atas & instruksi permission blok. Dipertahankan di DOM
+   (bukan template) supaya gps.js tidak error saat querySelector/className. */
+.ed-location-right .gps-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Kartu generik (dipakai untuk Catatan Presensi / Jadwal Shift / Rekap) ── */
+.ed-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--ed-radius-lg);
+  padding: clamp(1rem, 2.5vw, 1.25rem);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.ed-card-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 10px; /* [FIX] dipersempit dari 14px, khususnya supaya jarak ke
+    ed-shift-title di kolom kanan tidak terlalu lebar. */
+}
+.ed-recap-period {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-faint);
+  margin-left: 4px;
+}
+
+/* ── Status hero: jangkar visual kolom kiri ───────────────────────────────
+   Sesuai referensi: TANPA garis aksen di kiri — latar diberi warna lembut
+   (tint) sesuai status, bukan netral. Nama class tetap sama, aturan lama
+   (border-left) dihapus supaya tidak ada garis yang nongol.
+   [FIX] Struktur diubah dari flex-row datar jadi flex-column: dulu progress
+   bar (.ed-progress) hidup TERPISAH di luar card ini, mengambang polos di
+   atas background putih .ed-card tanpa border/tint — terasa seperti elemen
+   nyasar, tidak nyambung dengan status di atasnya. Sekarang .ed-progress
+   dipindah ke DALAM .ed-status-hero sebagai baris kedua, jadi ikut mewarisi
+   background tint + border card status (hijau saat aktif, ungu saat
+   selesai) — progress terasa jadi kelanjutan cerita status, bukan tempelan. */
+.ed-status-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-radius: var(--ed-radius-md);
+  padding: 18px 16px;
+  margin-bottom: 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+.ed-status-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ed-status-hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.ed-status-hero-date {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--text-primary);
+}
+.ed-status-hero-caption {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.ed-status-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: var(--ed-radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ed-status-hero-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+/* Tint latar per status — mengikuti referensi (mint sangat lembut saat aktif, dst) */
+.ed-status-hero--idle {
+  background: var(--bg);
+  border-color: var(--border);
+}
+.ed-status-hero--active {
+  background: var(--ed-tint-success);
+  border-color: #e3f7ee;
+}
+.ed-status-hero--done {
+  background: var(--ed-tint-violet);
+  border-color: #ece5fc;
+}
+.ed-status-hero--absent {
+  background: var(--ed-tint-danger);
+  border-color: #fbe3e0;
+}
+.ed-status-hero--leave {
+  background: var(--ed-tint-brand);
+  border-color: #e3edf3;
+}
+.ed-status-hero-badge.ed-pill--idle {
+  background: var(--border-light);
+  color: var(--text-muted);
+}
+.ed-status-hero-badge.ed-pill--active {
+  background: #ffffff;
+  color: var(--success);
+}
+.ed-status-hero-badge.ed-pill--done {
+  background: #ffffff;
+  color: #6d28d9;
+}
+.ed-status-hero-badge.ed-pill--absent {
+  background: #ffffff;
+  color: var(--danger);
+}
+.ed-status-hero-badge.ed-pill--leave {
+  background: #ffffff;
+  color: var(--brand);
+}
+
+/* ── Progres jam kerja hari ini ───────────────────────────────────────────
+   Bar tipis di bawah status hero, mengikuti bahasa visual yang sama:
+   flat, garis tipis, warna hemat. Terisi hijau (--success) selama masih
+   aktif bekerja; berubah ungu (selaras --s-status-hero--done) begitu
+   sudah check-out, supaya konsisten dengan badge "Selesai". */
+.ed-progress {
+  padding-top: 14px;
+  border-top: 1px solid rgba(15, 23, 31, 0.06); /* [FIX] garis pemisah tipis
+    di dalam card status — menandai progress sebagai sub-bagian dari status
+    di atasnya (bukan elemen berdiri sendiri), sekaligus tetap memberi jeda
+    visual antara baris tanggal/badge dan baris progress. */
+}
+.ed-progress-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.ed-progress-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.ed-progress-value {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ed-progress-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(15, 23, 31, 0.08); /* [FIX] sebelumnya var(--border-light)
+    (abu-abu solid) — terlihat "asing" di atas latar tint berwarna (hijau/
+    ungu) card status. Diganti jadi hitam tipis-transparan supaya menyatu
+    dengan tint apa pun di baliknya, bukan menambah warna baru. */
+  overflow: hidden;
+}
+.ed-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--success); /* status aktif → hijau, senada tint hero aktif */
+  transition: width 0.3s ease;
+}
+.ed-progress-fill--done {
+  background: #6d28d9; /* status selesai → ungu, senada tint hero selesai */
+}
+
+/* Legacy — dipertahankan supaya class lama tetap valid di tempat lain */
+.ed-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--ed-radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.ed-pill--idle {
+  background: var(--bg);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+.ed-pill--active {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.ed-pill--done {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+.ed-pill--absent {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.ed-pill--leave {
+  background: var(--brand-light);
+  color: var(--brand);
+}
+
+/* ── Grid 3 kotak: Jam Masuk / Jam Keluar / Total Jam Kerja ──────────────── */
+.ed-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.ed-stat-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--ed-radius-sm);
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+  min-width: 0;
+}
+.ed-stat-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+.ed-stat-value {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: clamp(1.05rem, 3vw, 1.2rem);
+  font-weight: 700;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+.ed-stat-value.ed-stat-value--set {
+  color: var(--text-primary);
+}
+.ed-late-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  background: var(--warning-bg);
+  color: var(--warning);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-left: 2px;
+}
+.ed-stat-caption {
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+/* Caption "Terlambat X menit" tampil oranye/warning */
+.ed-stat-caption--late {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+/* ── Judul shift (kolom kanan) ────────────────────────────────────────────── */
+.ed-shift-title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--text-primary);
+  margin: 0 0 10px; /* [FIX] dipersempit dari 14px — jaraknya ke ed-card-label
+    di atasnya kelihatan terlalu renggang dibanding label lain di dashboard. */
+}
+.ed-shift-title-empty {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin: 0 0 10px;
+}
+
+/* ── Baris Check-in Resmi / Check-out Resmi ──────────────────────────────── 
+   Ikon di-center secara vertikal terhadap seluruh blok teks (title + waktu +
+   caption + tag), bukan nempel ke atas — sesuai referensi. */
+.ed-shift-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.ed-shift-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px; /* [FIX] dipersempit dari 12px vertikal — baris terasa
+    lebih rapat, selaras dengan gap body yang juga dipersempit. */
+  border-radius: var(--ed-radius-md);
+}
+/* [FIX] sebelumnya SEMUA baris (Check-in maupun Check-out) pakai
+   background: var(--bg) yang sama — flat, tidak ada bedanya. Desain
+   referensi memberi tint warna berbeda per baris (amber lembut untuk
+   Check-in, mint lembut untuk Check-out), senada dengan warna ikonnya
+   masing-masing (.ed-shift-row-icon--in / --out). Ditambahkan sebagai
+   modifier baru, dipasang di markup dashboard.html. */
+.ed-shift-row--in {
+  background: var(--ed-tint-amber);
+}
+.ed-shift-row--out {
+  background: var(--ed-tint-success);
+}
+.ed-shift-row-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--ed-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ed-shift-row-icon--in {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+.ed-shift-row-icon--out {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.ed-shift-row-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* [FIX] dipersempit dari 4px — jarak antara judul (Check-in/
+    Check-out Resmi) dengan caption di bawahnya (Toleransi sampai.../
+    Kalau jam kerja udah cukup) kelihatan terlalu renggang. */
+}
+.ed-shift-row-top,
+.ed-shift-row-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ed-shift-row-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.ed-shift-row-time {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ed-shift-row-caption {
+  font-size: 10.5px;
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ed-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--ed-radius-sm, 4px);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ed-tag--ok {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.ed-tag--warn {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.ed-tag--danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.ed-tag--muted {
+  background: var(--border-light);
+  color: var(--text-faint);
+}
+.ed-tag--info {
+  background: var(--brand-light);
+  color: var(--brand);
+}
+.ed-tag--done {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+/* ── Tombol CTA check-in/out utama ────────────────────────────────────────── */
+.ed-cta-btn {
+  width: 100%;
+  border: none;
+  border-radius: var(--ed-radius-md);
+  padding: 13px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  /* [ANIM] Selaras dengan var(--transition-press) di main.css untuk kurva
+     easing yang sama di seluruh app — transform-only, tidak ada reflow. */
+  transition:
+    opacity var(--transition, 0.16s ease),
+    transform var(--transition-press, 0.1s ease),
+    box-shadow var(--transition, 0.16s ease);
+}
+.ed-cta-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.ed-cta-btn:disabled {
+  cursor: not-allowed;
+}
+.ed-cta-btn--primary {
+  background: var(--brand);
+  color: #fff;
+}
+.ed-cta-btn--primary:disabled {
+  opacity: 0.5;
+}
+.ed-cta-btn--success {
+  background: var(--success);
+  color: #fff;
+}
+.ed-cta-btn--success:disabled {
+  opacity: 0.5;
+}
+.ed-cta-btn--muted {
+  background: var(--border-light);
+  color: var(--text-faint);
+}
+.ed-cta-btn--warn-soft {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.ed-cta-btn--danger-soft {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.ed-cta-caption {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-faint);
+  min-height: 15px;
+  line-height: 1.4;
+}
+
+/* ── Kartu Rekapitulasi Kehadiran (lebar penuh, di bawah grid) ───────────── */
+.ed-recap-card {
+  margin-top: 16px;
+}
+.ed-recap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.ed-recap-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.ed-recap-link:hover {
+  text-decoration: underline;
+}
+.ed-recap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* ── Kartu individual (Hadir / Terlambat / Alpa) ──────────────────────────
+   Tiap kartu: ikon + judul/subjudul + badge di baris atas, lalu angka besar
+   + satuan + caption, lalu progress bar tipis di bawah. Warna tint per
+   status: hijau (present), amber (late), biru (absent) — memakai token
+   yang sudah ada (--ed-tint-success dkk untuk latar, --success/--warning/
+   --brand untuk aksen) supaya tetap konsisten dengan palet lain di file ini. */
+.ed-recap-stat {
+  border: 1px solid var(--border);
+  border-radius: var(--ed-radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.ed-recap-stat--present {
+  background: var(--ed-tint-success);
+  border-color: #e3f7ee;
+}
+.ed-recap-stat--late {
+  background: #fffaf0;
+  border-color: #fbecc8;
+}
+.ed-recap-stat--absent {
+  /* [FIX] sebelumnya pakai tint biru (--ed-tint-brand) — Alpa/Tanpa
+     Keterangan secara semantik adalah status negatif, jadi diganti ke
+     tint merah pastel (--ed-tint-danger, sudah dipakai di ed-status-hero--
+     absent) supaya konsisten dengan warna "danger" di tempat lain. */
+  background: var(--ed-tint-danger);
+  border-color: #fbe3e0;
+}
+
+/* Baris atas: ikon + judul/subjudul + badge */
+.ed-recap-stat-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.ed-recap-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+.ed-recap-icon--present {
+  color: var(--success);
+}
+.ed-recap-icon--late {
+  color: var(--warning-mid);
+}
+.ed-recap-icon--absent {
+  color: var(--danger); /* [FIX] ikut diganti dari --brand (biru) ke --danger
+    (merah) supaya senada dengan tint kartu Alpa yang baru. */
+}
+.ed-recap-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+.ed-recap-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.ed-recap-subtitle {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ed-recap-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ed-recap-badge--present {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.ed-recap-badge--late {
+  background: var(--warning-bg);
+  color: var(--warning-mid);
+}
+.ed-recap-badge--absent {
+  background: var(--danger-bg); /* [FIX] biru → merah, selaras tint kartu */
+  color: var(--danger);
+}
+
+/* Baris angka besar + satuan + caption */
+.ed-recap-value-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  row-gap: 2px;
+}
+.ed-recap-num {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: clamp(1.4rem, 4vw, 1.6rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.ed-recap-num--warn {
+  color: var(--warning-mid);
+}
+.ed-recap-num--danger {
+  color: var(--danger); /* [FIX] biru → merah, dipakai untuk angka Alpa */
+}
+.ed-recap-unit {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.ed-recap-caption {
+  font-size: 10.5px;
+  color: var(--text-faint);
+}
+
+/* Progress bar tipis di bagian bawah tiap kartu */
+.ed-recap-bar {
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+}
+.ed-recap-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+.ed-recap-bar-fill--present {
+  background: var(--success);
+}
+.ed-recap-bar-fill--late {
+  background: var(--warning-mid);
+}
+.ed-recap-bar-fill--absent {
+  background: var(--danger); /* [FIX] biru → merah, progress bar kartu Alpa */
+}
+
+/* ── Modal konfirmasi check-out ────────────────────────────────────────────
+   Kartu konfirmasi bergaya "centered", bukan modal form biasa: ikon besar
+   di tengah atas, judul + deskripsi center, tombol pilihan di bawah.
+   Tetap pakai .modal-overlay/.modal-box dari main.css (tidak diubah). */
+.ed-confirm-box {
+  position: relative;
+  overflow: visible;
+}
+.ed-confirm-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
+.ed-confirm-box .modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 2rem 1.6rem 0.4rem;
+}
+.ed-confirm-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--success-bg);
+  color: var(--success);
+  flex-shrink: 0;
+  margin-bottom: 6px;
+}
+.ed-confirm-title {
+  font-size: 1.15rem;
+}
+.ed-confirm-desc.modal-desc {
+  max-width: 320px;
+  color: var(--text-muted);
+}
+.ed-confirm-footer {
+  justify-content: stretch;
+  gap: 8px;
+  border-top: none;
+  padding: 1.1rem 1.35rem 1.35rem;
+}
+.ed-confirm-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: var(--ed-radius-md);
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    opacity 0.15s,
+    background 0.15s,
+    transform 0.1s;
+}
+.ed-confirm-btn:active {
+  transform: scale(0.98);
+}
+.ed-confirm-btn--stay {
+  background: var(--bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.ed-confirm-btn--stay:hover {
+  background: var(--border-light);
+}
+.ed-confirm-btn--go {
+  background: var(--success);
+  color: #fff;
+}
+.ed-confirm-btn--go:hover {
+  opacity: 0.9;
+}
+
+/* ── Responsif mobile ─────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .ed-location-bar {
+    /* [FIX] sebelumnya flex-direction:column — lokasi & GPS radius pecah ke
+       baris terpisah di mobile (lihat gambar sebelum). Target desain tetap
+       satu baris ringkas: teks lokasi menyusut/terpotong (ellipsis, sudah
+       ada di .ed-location-text) sementara GPS Radius di kanan tetap utuh. */
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .ed-location-left {
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+  .ed-location-text {
+    display: block;
+  }
+  .ed-location-right {
+    width: auto;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
+  .ed-status-hero {
+    padding: 12px 14px;
+    margin-bottom: 12px; /* [FIX] dipersempit dari 16px, ritme mobile lebih rapat */
+    gap: 10px; /* [FIX] jarak internal (baris atas ke progress) ikut dirapatkan di mobile */
+  }
+  .ed-progress {
+    padding-top: 10px; /* [FIX] dipersempit dari 14px, senada gap di atas */
+  }
+  .ed-stat-grid {
+    margin-bottom: 14px; /* [FIX] dipersempit dari 18px */
+  }
+  .ed-shift-rows {
+    margin-bottom: 12px; /* [FIX] dipersempit dari 16px */
+  }
+  .ed-recap-grid {
+    grid-template-columns: 1fr;
+  }
+  .ed-recap-card {
+    margin-top: 12px; /* [FIX] dipersempit dari 16px */
+  }
+  /* [FIX] dash-grid pakai gap desktop (var(--gap)) di semua breakpoint;
+     di mobile (1 kolom) ini membuat jarak antar-kartu terasa lebih longgar
+     dari jarak internal kartu itu sendiri — disamakan ke 12px. */
+  .dash-grid {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ed-card {
+    padding: 1rem;
+  }
+  .ed-stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .ed-stat-box {
+    padding: 10px 4px;
+  }
+  .ed-stat-value {
+    font-size: 1rem;
+  }
+  .ed-status-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .ed-status-hero-badge {
+    align-self: flex-start;
+  }
+  .ed-shift-row-top,
+  .ed-shift-row-bottom {
+    flex-wrap: wrap;
+  }
+  .ed-confirm-footer {
+    flex-direction: column-reverse;
+  }
+}
+
+@media (max-width: 360px) {
+  .ed-stat-label {
+    font-size: 8.5px;
+  }
+  .ed-stat-value {
+    font-size: 0.9rem;
+  }
+}
+
+/* eof — employee-dashboard.css */

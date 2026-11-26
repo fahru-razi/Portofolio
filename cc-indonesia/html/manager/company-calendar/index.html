@@ -1,0 +1,1608 @@
+
+<!doctype html>
+<html data-root="../../../" lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="csrf-token" content="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+    <meta name="theme-color" content="#1A4A8C" />
+    <link rel="manifest" href="../../../html/manifest.webmanifest" />
+    <link rel="icon" href="../../../img/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../img/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" href="../../../img/apple-touch-icon.png?v=2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Absensi" />
+    <title>Kalender Perusahaan — Absensi</title>
+    
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/ibm-plex-sans-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/plus-jakarta-sans-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/fonts.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="../../../css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/theme.css"
+    />
+    <link rel="stylesheet" href="../../../css/push.css"
+    />
+    
+<link rel="stylesheet" href="../../../css/company_calendar.css">
+
+    <style>
+      /* Form logout dibungkus supaya method-nya POST (bukan link GET) —
+         lihat auth.py: /auth/logout adalah POST-only untuk mencegah CSRF
+         logout lewat <img>/<a> pihak ketiga. Reset tampilan <button> agar
+         identik dengan link sidebar/bottom-nav di sekitarnya. */
+      .logout-form {
+        margin: 0;
+        padding: 0;
+        display: contents; /* form tidak mengubah layout flex/grid induk */
+      }
+      /* [FIX] Sebelumnya `all: unset` + `display: inherit`. Karena parent
+         .logout-form adalah `display: contents`, `inherit` menghasilkan
+         `contents` juga (bukan `flex`), sehingga tombol kehilangan seluruh
+         layout bottom-nav. Sekarang hanya reset tampilan bawaan <button>;
+         layout diatur oleh selector konteks masing-masing (main.css). */
+      button.as-link {
+        background: none;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Sidebar desktop: tombol tetap selebar item menu lain. */
+      .sidebar .logout-form button.as-link {
+        display: flex;
+        width: 100%;
+      }
+    </style>
+  <script>(()=>{const R="../../../",f=window.fetch;window.fetch=(u,o={})=>{u=String(u);if((o.method||"GET").toUpperCase()!=="GET")return Promise.resolve(new Response(JSON.stringify({ok:true,demo:true}),{headers:{"Content-Type":"application/json"}}));if(u[0]==="/")u=u.indexOf("/static/")===0?R+u.slice(8):R+"html"+u;return f(u,o)};document.addEventListener("submit",e=>{e.preventDefault();alert("Mode demo: aksi disimulasikan dan tidak disimpan.")},true)})()</script><link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+  <body
+    class="role-manager"
+  >
+    
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-brand">
+        <img
+          class="brand-logo"
+          src="../../../img/Logo-App-wide.jpg"
+          alt=""
+          width="70"
+          height="36"
+          decoding="async"
+        />
+        <span>CC Indonesia</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar">RI</div>
+        <div>
+          <div class="sidebar-user-name">
+            Rina
+          </div>
+          <div class="sidebar-user-role">Manager</div>
+        </div>
+        <div id="notif-bell-wrap" style="margin-left: auto"></div>
+      </div>
+
+      <nav class="sidebar-nav">
+         
+        <a
+          href="../../../html/manager/dashboard/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          Dashboard
+        </a>
+        <a
+          href="../../../html/manager/employees/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          Karyawan
+        </a>
+
+        
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="14" x2="12" y2="14" />
+            <line x1="8" y1="18" x2="16" y2="18" />
+          </svg>
+          <span>Jadwal</span>
+        </a>
+        <a
+          href="../../../html/manager/leaves/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          Pengajuan izin
+        </a>
+        <a
+          href="../../../html/manager/shifts/master/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          Konfigurasi Shift
+        </a>
+        <a
+          href="../../../html/manager/company-calendar/index.html"
+          class="active"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="15" x2="16" y2="15" />
+          </svg>
+          Kalender
+        </a>
+        <a
+          href="../../../html/manager/corrections/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Koreksi
+        </a>
+        <a
+          href="../../../html/manager/reports/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          Laporan
+        </a>
+        <a
+          href="../../../html/manager/production/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+            <circle cx="7.5" cy="11" r="2" />
+            <circle cx="16.5" cy="11" r="2" />
+          </svg>
+          Produksi
+        </a>
+        <a
+          href="../../../html/manager/offices/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Kantor
+        </a>
+        
+        <a
+          href="../../../html/manager/equipment/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+          Perlengkapan
+        </a>
+        
+        <a
+          href="../../../html/manager/departments/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+            <line x1="12" y1="12" x2="12" y2="16" />
+            <line x1="10" y1="14" x2="14" y2="14" />
+          </svg>
+          Departemen
+        </a>
+
+         
+      </nav>
+
+
+      <div class="sidebar-footer">
+        
+        <div class="lang-switcher" aria-label="Pilih bahasa">
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+        <form method="post" action="../../../html/auth/logout" class="logout-form">
+          <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+          <button type="submit" class="sidebar-logout as-link">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </aside>
+        
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-inner">
+        <span class="mobile-topbar-title">CC Indonesia</span>
+        <div
+          class="lang-switcher lang-switcher--mobile"
+          aria-label="Pilih bahasa"
+        >
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+      </div>
+    </div>
+     
+
+    <div class="main-wrap">
+        
+      <main class="page-content" id="main-content">
+        
+<div class="page-header page-header--std">
+  <div class="page-header-inner">
+    <div class="page-header-left">
+      <p class="page-header-sub">Manajemen</p>
+      <h1 class="page-header-name">Kalender Perusahaan</h1>
+      <p class="page-header-desc">Hari libur nasional, cuti bersama, libur mingguan, libur perusahaan & libur efisiensi</p>
+    </div>
+    <div class="page-header-actions">
+      <button
+        class="btn btn-outline"
+        id="btnLiburKaryawan"
+        aria-haspopup="dialog"
+        title="Lihat & tetapkan libur untuk karyawan tertentu"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+        Libur Karyawan
+        <span class="kal-btn-badge" id="lkCountBadge" hidden>0</span>
+      </button>
+      <button
+        class="btn btn-primary"
+        id="btnTambahLibur"
+        aria-haspopup="dialog"
+        title="Tambah hari libur perusahaan"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Tambah Libur
+      </button>
+    </div>
+  </div>
+  <div class="page-header-meta kal-legend-scope">
+    <span class="kal-legend-label">Keterangan</span>
+    <div class="kal-legend">
+      <span class="kal-legend-item"><span class="kal-legend-dot dot-nasional"></span>Libur Nasional</span>
+      <span class="kal-legend-item"><span class="kal-legend-dot dot-bersama"></span>Cuti Bersama</span>
+      <span class="kal-legend-item"><span class="kal-legend-dot dot-mingguan"></span>Libur Mingguan</span>
+      <span class="kal-legend-item"><span class="kal-legend-dot dot-perusahaan"></span>Libur Perusahaan</span>
+      <span class="kal-legend-item"><span class="kal-legend-dot dot-efisiensi"></span>Libur Efisiensi</span>
+    </div>
+  </div>
+</div>
+
+<div class="page kal-page">
+  <!-- ── Info banner ─────────────────────────────────────────── -->
+  <div class="info-banner info-banner--warning">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      width="15"
+      height="15"
+      style="flex-shrink: 0"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+    <span>
+      Hari libur perusahaan yang ditambahkan akan otomatis menandai
+      absensi karyawan terdampak sebagai
+      <strong>Libur</strong>. Edit & hapus hanya dapat
+      dilakukan paling lambat pada hari yang bersangkutan.
+    </span>
+  </div>
+
+  <!-- ── Body: kalender + panel upcoming ─────────────────────── -->
+  <div class="kal-body">
+    <!-- Kalender -->
+    <div class="kal-card">
+      <!-- Nav bar -->
+      <div class="kal-nav">
+        <button
+          class="kal-nav-btn"
+          id="btnPrevMonth"
+          aria-label="Bulan sebelumnya"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            width="16"
+            height="16"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <div class="kal-nav-center">
+          <select class="kal-nav-month-select" id="kalMonthSelect" aria-label="Bulan">
+            <option value="0">Januari</option>
+            <option value="1">Februari</option>
+            <option value="2">Maret</option>
+            <option value="3">April</option>
+            <option value="4">Mei</option>
+            <option value="5">Juni</option>
+            <option value="6">Juli</option>
+            <option value="7">Agustus</option>
+            <option value="8">September</option>
+            <option value="9">Oktober</option>
+            <option value="10">November</option>
+            <option value="11">Desember</option>
+          </select>
+          <select class="kal-nav-year-select" id="kalYearSelect" aria-label="Tahun">
+            
+            <option value="2025" >2025</option>
+            
+            <option value="2026" selected>2026</option>
+            
+            <option value="2027" >2027</option>
+            
+            <option value="2028" >2028</option>
+            
+          </select>
+        </div>
+        <button
+          class="kal-nav-btn"
+          id="btnNextMonth"
+          aria-label="Bulan berikutnya"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            width="16"
+            height="16"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Day-of-week header -->
+      <div class="kal-grid-head">
+        <span>Min</span>
+        <span>Sen</span>
+        <span>Sel</span>
+        <span>Rab</span>
+        <span>Kam</span>
+        <span>Jum</span>
+        <span>Sab</span>
+      </div>
+
+      <!-- Day grid (rendered by JS) -->
+      <div class="kal-grid" id="kalGrid"></div>
+    </div>
+
+    <!-- Upcoming panel -->
+    <div class="kal-upcoming">
+      <div class="kal-upcoming-header">📅 Libur Mendatang</div>
+      <div class="kal-upcoming-list" id="upcomingList"></div>
+    </div>
+  </div>
+</div>
+<!-- /kal-page -->
+
+<!-- ── Popover (hover detail) ─────────────────────────────── -->
+<div
+  class="kal-popover"
+  id="kalPopover"
+  role="tooltip"
+  aria-hidden="true"
+></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL: Tambah Libur
+     ══════════════════════════════════════════════════════════ -->
+<div
+  class="modal-overlay"
+  id="modalTambah"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalTambahTitle"
+  aria-hidden="true"
+>
+  <div class="modal modal--wide">
+    <div class="modal-header">
+      <div class="modal-heading">
+        <h2 class="modal-title" id="modalTambahTitle">
+          Tambah Hari Libur
+        </h2>
+        <p class="modal-subtitle">
+          Atur jadwal libur baru untuk perusahaan atau kantor tertentu.
+        </p>
+      </div>
+      <button
+        class="modal-close"
+        id="btnCloseTambah"
+        aria-label="Tutup"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          width="16"
+          height="16"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body modal-body--split">
+      <!-- ── Kolom kiri: Detail Libur ────────────────────────── -->
+      <div class="modal-col modal-col--main">
+        <div class="modal-section">
+          <div class="modal-section-eyebrow">Detail Libur</div>
+
+          <!-- Tipe libur -->
+          <div class="form-group">
+            <label
+              >Jenis Hari Libur <span class="required">*</span></label
+            >
+            <div class="dayoff-type-grid">
+              <label class="dayoff-type-opt">
+                <input type="radio" name="dayoff_type" value="perusahaan" checked />
+                <div>
+                  <div class="dayoff-type-label">
+                    <span class="dayoff-type-dot dot-perusahaan"></span>Libur Perusahaan
+                  </div>
+                  <div class="dayoff-type-sub">
+                    Khusus perusahaan ini
+                  </div>
+                </div>
+              </label>
+              <label class="dayoff-type-opt">
+                <input type="radio" name="dayoff_type" value="nasional" />
+                <div>
+                  <div class="dayoff-type-label">
+                    <span class="dayoff-type-dot dot-nasional"></span>Libur Nasional
+                  </div>
+                  <div class="dayoff-type-sub">Hari libur negara</div>
+                </div>
+              </label>
+              <label class="dayoff-type-opt">
+                <input type="radio" name="dayoff_type" value="bersama" />
+                <div>
+                  <div class="dayoff-type-label">
+                    <span class="dayoff-type-dot dot-bersama"></span>Cuti Bersama
+                  </div>
+                  <div class="dayoff-type-sub">
+                    Ditetapkan pemerintah
+                  </div>
+                </div>
+              </label>
+              <label class="dayoff-type-opt">
+                <input type="radio" name="dayoff_type" value="mingguan" />
+                <div>
+                  <div class="dayoff-type-label">
+                    <span class="dayoff-type-dot dot-mingguan"></span>Libur Mingguan
+                  </div>
+                  <div class="dayoff-type-sub">Sabtu, Minggu, dll</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Nama -->
+          <div class="form-group">
+            <label for="addName"
+              >Nama / Keterangan <span class="required">*</span></label
+            >
+            <input
+              type="text"
+              id="addName"
+              placeholder="cth: Hari Kemerdekaan, Idul Fitri, dsb"
+            />
+            <p class="field-error" id="addNameErr" hidden>
+              Nama wajib diisi.
+            </p>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-eyebrow">Waktu</div>
+
+          <!-- Tanggal multi-select -->
+          <div class="form-group">
+            <label>Tanggal <span class="required">*</span></label>
+            <div class="dayoff-date-row">
+              <input type="date" id="addDateInput" />
+              <button class="btn btn-ghost btn-sm" id="btnAddDate" type="button">
+                + Tambah
+              </button>
+            </div>
+            <p class="field-error" id="addDateErr" hidden>
+              Pilih minimal satu tanggal.
+            </p>
+          </div>
+
+          <div class="dayoff-selected-panel">
+            <div class="dayoff-selected-head">
+              <span class="dayoff-selected-count"
+                >Terpilih (<span id="addDateCount">0</span>)</span
+              >
+              <button
+                type="button"
+                class="dayoff-clear-all"
+                id="btnClearDates"
+                hidden
+              >
+                Hapus Semua
+              </button>
+            </div>
+            <div class="dayoff-tags" id="addDateTags"></div>
+            <p class="dayoff-selected-empty" id="addDateEmpty">
+              Belum ada tanggal dipilih.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Kolom kanan: Cakupan & Catatan ──────────────────── -->
+      <div class="modal-col modal-col--side">
+        <div class="modal-section">
+          <div class="modal-section-eyebrow">Cakupan</div>
+
+          <!-- Berlaku untuk -->
+          <div class="form-group">
+            <label>Berlaku untuk</label>
+            <div class="dayoff-scope-row dayoff-scope-row--stack">
+              <label class="dayoff-scope-option">
+                <input type="radio" name="add_scope" value="all" checked />
+                <span>Semua Karyawan</span>
+              </label>
+              <label class="dayoff-scope-option">
+                <input type="radio" name="add_scope" value="office" />
+                <span>Kantor Tertentu</span>
+              </label>
+            </div>
+            <div id="addOfficeWrap" hidden style="margin-top: 6px">
+              <select id="addOffice">
+                <option value="">— Pilih kantor —</option>
+                
+                <option value="2b3ff017-5a09-4843-8bf3-7b39edaaeb7d">Kantor Cabang</option>
+                
+                <option value="c86cd686-29cc-4a9a-a3b5-2241e37b9349">Kantor Pusat</option>
+                
+              </select>
+              <p class="field-error" id="addOfficeErr" hidden>
+                Pilih kantor terlebih dahulu.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-eyebrow">Tambahan</div>
+
+          <!-- Catatan -->
+          <div class="form-group">
+            <label for="addNote"
+              >Catatan
+              <span class="label-hint">(opsional)</span></label
+            >
+            <textarea
+              id="addNote"
+              rows="4"
+              placeholder="Tambahkan catatan tambahan untuk hari libur ini..."
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="btnCancelTambah">
+        Batal
+      </button>
+      <button class="btn btn-primary" id="btnSubmitTambah">
+        <span id="tambahText">Simpan Libur</span>
+        <span id="tambahSpinner" class="spinner" hidden></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL: Libur Karyawan (efisiensi produksi)
+     ══════════════════════════════════════════════════════════ -->
+<div
+  class="modal-overlay"
+  id="modalLiburKaryawan"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalLiburKaryawanTitle"
+  aria-hidden="true"
+>
+  <div class="modal modal--xl">
+    <div class="modal-header">
+      <div class="modal-heading">
+        <h2 class="modal-title" id="modalLiburKaryawanTitle">
+          Libur Karyawan
+        </h2>
+        <p class="modal-subtitle">
+          Tetapkan hari libur untuk karyawan tertentu (mis. efisiensi produksi).
+        </p>
+      </div>
+      <button
+        class="modal-close"
+        id="btnCloseLiburKaryawan"
+        aria-label="Tutup"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          width="16"
+          height="16"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="lk-steps" id="lkSteps">
+      <div class="lk-step is-active" data-step="1">
+        <span class="lk-step-badge">1</span>
+        <span class="lk-step-label">Pilih Karyawan</span>
+      </div>
+      <span class="lk-step-line"></span>
+      <div class="lk-step" data-step="2">
+        <span class="lk-step-badge">2</span>
+        <span class="lk-step-label">Detail Libur</span>
+      </div>
+    </div>
+
+    <div class="modal-body lk-body">
+      <!-- ── Kolom 1: Pencarian & daftar karyawan ────────────── -->
+      <div class="lk-col lk-col-employees" data-lk-step="1">
+        <div class="lk-search-row">
+          <input
+            type="text"
+            id="lkSearchInput"
+            placeholder="Cari nama atau departemen..."
+          />
+        </div>
+        <select id="lkDeptFilter">
+          <option value="">Semua Departemen</option>
+          
+          <option value="cf3cc3e7-c0ed-4856-ba29-62537c6b0a52">IT</option>
+          
+          <option value="f568be2b-6c4b-4069-aea4-3d9b6688738d">Inventaris</option>
+          
+          <option value="ddf95d0f-9dff-433a-a49b-23c0e60498fc">Manajemen</option>
+          
+          <option value="3ca1ce58-f0c6-4206-9213-b2aaff684f2e">Produksi</option>
+          
+          <option value="b75f6aa0-d588-4d2c-a881-b10a3d1364ac">Quality Control</option>
+          
+          <option value="daeb17b8-50f7-40da-b99e-fcd49dd8de49">Staff</option>
+          
+          <option value="8d7f7ff9-aa7e-4221-addf-54a1455b920f">Supervisor</option>
+          
+        </select>
+
+        <div class="lk-list-head">
+          <label class="lk-checkbox-row lk-select-all">
+            <input type="checkbox" id="lkSelectAll" />
+            <span class="lk-list-head-label">Karyawan</span>
+          </label>
+          <span class="lk-selected-badge" id="lkSelectedBadge">Terpilih 0 dari 0</span>
+        </div>
+
+        <div class="lk-employee-list" id="lkEmployeeList">
+          <p class="lk-list-loading" id="lkListLoading">Memuat karyawan...</p>
+        </div>
+      </div>
+
+      <!-- ── Kolom 2: Panel Terpilih ──────────────────────────── -->
+      <div class="lk-col lk-col-selected" data-lk-step="1">
+        <div class="dayoff-selected-head">
+          <span class="dayoff-selected-count"
+            >Terpilih (<span id="lkSelectedCount">0</span>)</span
+          >
+          <button type="button" class="dayoff-clear-all" id="lkClearAll" hidden>
+            Hapus Semua
+          </button>
+        </div>
+        <div class="dayoff-tags lk-selected-tags" id="lkSelectedTags"></div>
+        <p class="dayoff-selected-empty" id="lkSelectedEmpty">
+          Belum ada karyawan dipilih.
+        </p>
+      </div>
+
+      <!-- ── Kolom 3: Detail Libur ────────────────────────────── -->
+      <div class="lk-col lk-col-detail" data-lk-step="2">
+        <div class="modal-section">
+          <div class="modal-section-eyebrow">Detail Libur</div>
+
+          <div class="form-group">
+            <label>Jenis Hari Libur</label>
+            <div class="lk-type-static">
+              <span class="dayoff-type-dot dot-efisiensi"></span>
+              Libur Efisiensi
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="lkName"
+              >Nama / Keterangan
+              <span class="label-hint">(opsional)</span></label
+            >
+            <input
+              type="text"
+              id="lkName"
+              placeholder="cth: Efisiensi Produksi Q3"
+            />
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-eyebrow">Waktu</div>
+          <div class="lk-date-row">
+            <div class="form-group">
+              <label for="lkStartDate"
+                >Tanggal Mulai <span class="required">*</span></label
+              >
+              <input type="date" id="lkStartDate" />
+            </div>
+            <div class="form-group">
+              <label for="lkEndDate"
+                >Tanggal Selesai <span class="required">*</span></label
+              >
+              <input type="date" id="lkEndDate" />
+            </div>
+          </div>
+          <p class="field-error" id="lkDateErr" hidden>
+            Tanggal selesai harus setelah tanggal mulai.
+          </p>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-eyebrow">Tambahan</div>
+          <div class="form-group">
+            <label for="lkNote"
+              >Catatan
+              <span class="label-hint">(opsional)</span></label
+            >
+            <textarea
+              id="lkNote"
+              rows="4"
+              placeholder="Tambahkan catatan tambahan untuk hari libur ini..."
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer lk-footer">
+      <!-- Desktop footer -->
+      <div class="lk-footer-desktop">
+        <button class="btn btn-ghost" id="btnCancelLiburKaryawan">
+          Batal
+        </button>
+        <button class="btn btn-primary" id="btnSubmitLiburKaryawan">
+          <span id="lkSubmitText">Simpan Libur</span>
+          <span id="lkSubmitSpinner" class="spinner" hidden></span>
+        </button>
+      </div>
+      <!-- Mobile footer (step nav) -->
+      <div class="lk-footer-mobile">
+        <button class="btn btn-ghost" id="btnLkStepBack" hidden>
+          Kembali
+        </button>
+        <button class="btn btn-primary" id="btnLkStepNext">
+          Lanjut
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL: Detail Libur Karyawan (daftar karyawan yang diliburkan)
+     ══════════════════════════════════════════════════════════ -->
+<div
+  class="modal-overlay"
+  id="modalLiburKaryawanDetail"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="lkDetailTitle"
+  aria-hidden="true"
+>
+  <div class="modal modal--wide">
+    <div class="modal-header">
+      <div class="modal-heading">
+        <h2 class="modal-title" id="lkDetailTitle">Libur Karyawan</h2>
+        <p class="modal-subtitle" id="lkDetailDate"></p>
+      </div>
+      <button
+        class="modal-close"
+        id="btnCloseLiburKaryawanDetail"
+        aria-label="Tutup"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          width="16"
+          height="16"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body modal-body--split modal-body--detail">
+      <!-- Kiri: siapa saja yang off + pilih karyawan -->
+      <div class="modal-col modal-col--main">
+        <div class="lk-detail-head">
+          <div class="lk-detail-count" id="lkDetailCount"></div>
+          <label class="lk-detail-selectall" id="lkDetailSelectAllRow" hidden>
+            <input type="checkbox" id="lkDetailSelectAll" />
+            <span>Pilih semua <span id="lkDetailSelCount"></span></span>
+          </label>
+        </div>
+        <p class="lk-list-empty" id="lkDetailLoading">Memuat detail karyawan...</p>
+        <div class="lk-employee-list lk-detail-list" id="lkDetailList"></div>
+      </div>
+
+      <!-- Kanan: tanggal & konfirmasi tindakan -->
+      <div class="modal-col modal-col--side">
+        <div class="modal-section-eyebrow">Atur Libur</div>
+        <p class="lk-detail-note" id="lkDetailNote" hidden></p>
+        <p class="lk-detail-lock" id="lkDetailLock" hidden>
+          Tanggal ini sudah lewat — terkunci dan tidak dapat diubah.
+        </p>
+        <div class="lk-detail-actions" id="lkDetailActions" hidden>
+        <p class="lk-detail-hint">Pilih karyawan di sebelah kiri, lalu tentukan tindakannya.</p>
+        <div class="form-group">
+          <label for="lkReleaseScope">Panggil kembali bekerja</label>
+          <div class="lk-action-row">
+            <select id="lkReleaseScope">
+              <option value="onwards">Mulai tanggal ini seterusnya</option>
+              <option value="single">Hanya tanggal ini</option>
+            </select>
+            <button class="btn btn-primary btn-sm" id="btnLkRelease" type="button" disabled>
+              Terapkan
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="lkExtendUntil">Perpanjang libur sampai</label>
+          <div class="lk-action-row">
+            <input type="date" id="lkExtendUntil" />
+            <button class="btn btn-ghost btn-sm" id="btnLkExtend" type="button" disabled>
+              Perpanjang
+            </button>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL: Edit Libur
+     ══════════════════════════════════════════════════════════ -->
+<div
+  class="modal-overlay"
+  id="modalEdit"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalEditTitle"
+  aria-hidden="true"
+>
+  <div class="modal modal--sm">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalEditTitle">
+        Edit Hari Libur
+      </h2>
+      <button
+        class="modal-close"
+        id="btnCloseEdit"
+        aria-label="Tutup"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          width="16"
+          height="16"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="editName"
+          >Nama / Keterangan <span class="required">*</span></label
+        >
+        <input type="text" id="editName" />
+        <p class="field-error" id="editNameErr" hidden>
+          Nama wajib diisi.
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="editNote"
+          >Catatan
+          <span class="label-hint">(opsional)</span></label
+        >
+        <textarea id="editNote" rows="2"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="btnCancelEdit">Batal</button>
+      <button class="btn btn-primary" id="btnSubmitEdit">
+        <span id="editText">Simpan</span>
+        <span id="editSpinner" class="spinner" hidden></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL: Hapus Konfirmasi
+     ══════════════════════════════════════════════════════════ -->
+<div
+  class="modal-overlay"
+  id="modalHapus"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalHapusTitle"
+  aria-hidden="true"
+>
+  <div class="modal modal--sm">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalHapusTitle">
+        Hapus Hari Libur
+      </h2>
+      <button
+        class="modal-close"
+        id="btnCloseHapus"
+        aria-label="Tutup"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          width="16"
+          height="16"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>
+        Hapus <strong id="hapusName"></strong> pada
+        <strong id="hapusDate"></strong>?
+      </p>
+      <div class="info-banner info-banner--warning" style="margin-top: 8px">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          width="13"
+          height="13"
+          style="flex-shrink: 0"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span
+          >Status absensi karyawan pada tanggal ini akan dikembalikan ke
+          Tidak Hadir.</span
+        >
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="btnCancelHapus">
+        Batal
+      </button>
+      <button class="btn btn-danger" id="btnSubmitHapus">
+        <span id="hapusText">Ya, Hapus</span>
+        <span id="hapusSpinner" class="spinner" hidden></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- I18N + data untuk JS -->
+<script>
+  var KAL_I18N = {
+    months: [
+      "Januari","Februari","Maret",
+      "April","Mei","Juni",
+      "Juli","Agustus","September",
+      "Oktober","November","Desember"
+    ],
+    days: [
+      "Min","Sen","Sel",
+      "Rab","Kam","Jum","Sab"
+    ],
+    today:        "Hari ini",
+    noUpcoming:   "Tidak ada libur mendatang dalam 60 hari ke depan.",
+    noUpcomingMonth: "Tidak ada libur pada bulan ini.",
+    expiredMsg:   "Tidak dapat diedit/dihapus — tanggal sudah lewat.",
+    closeLabel:   "Tutup",
+    editLabel:    "Edit",
+    deleteLabel:  "Hapus",
+    viewDetailLabel: "Lihat Detail",
+    lkDetailLoadFail: "Gagal memuat detail karyawan.",
+    typeLabels: {
+      nasional:   "Libur Nasional",
+      bersama:    "Cuti Bersama",
+      mingguan:   "Libur Mingguan",
+      perusahaan: "Libur Perusahaan",
+      efisiensi:  "Libur Efisiensi"
+    },
+    scopeAll:       "Semua Karyawan",
+    scopeOffice:    "Per Kantor",
+    toastAdded:     "Libur ditambahkan.",
+    toastUpdated:   "Libur diperbarui.",
+    toastDeleted:   "Libur dihapus.",
+    toastError:     "Terjadi kesalahan.",
+    toastConnFail:  "Gagal terhubung.",
+    toastUpdateFail:"Gagal memperbarui.",
+    toastDeleteFail:"Gagal menghapus.",
+    toastDateDup:   "Tanggal sudah ditambahkan.",
+
+    lkSearchPlaceholder:  "Cari nama atau departemen...",
+    lkNoResults:          "Tidak ada karyawan yang cocok.",
+    lkLoadFail:           "Gagal memuat daftar karyawan.",
+    lkSelectedOf:         "Terpilih %(n)s dari %(total)s",
+    lkNoneSelected:       "Belum ada karyawan dipilih.",
+    lkPickAtLeastOne:     "Pilih minimal satu karyawan.",
+    lkDateRangeInvalid:   "Tanggal selesai harus setelah tanggal mulai.",
+    lkDateRequired:       "Tanggal mulai dan selesai wajib diisi.",
+    lkSubmitSuccess:      "Libur efisiensi berhasil disimpan.",
+    lkSubmitFail:         "Gagal menyimpan libur efisiensi.",
+    lkStepNext:           "Lanjut",
+    lkStepBack:           "Kembali",
+    lkStepSave:           "Simpan Libur"
+  };
+
+  // Semua dayoff dari server — dipakai JS untuk render kalender
+  var KAL_DAYOFFS = [];
+
+  // Today string: YYYY-MM-DD (WIB)
+  var KAL_TODAY = "2026-11-13";
+</script>
+<meta name="csrf-token" content="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+<script src="../../../js/company_calendar.js"></script>
+
+      </main>
+    </div>
+
+     
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+       
+      <a
+        href="../../../html/manager/dashboard/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a
+        href="../../../html/manager/employees/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+        </svg>
+        <span>Karyawan</span>
+      </a>
+      <a
+        href="../../../html/manager/shift-schedule/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="14" x2="12" y2="14" />
+          <line x1="8" y1="18" x2="16" y2="18" />
+        </svg>
+        <span>Jadwal</span>
+      </a>
+      <a
+        href="../../../html/manager/leaves/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Izin</span>
+      </a>
+      <a
+        href="../../../html/manager/company-calendar/index.html"
+        class="active"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="15" x2="16" y2="15" />
+        </svg>
+        <span>Kalender</span>
+      </a>
+      <a
+        href="../../../html/manager/reports/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        <span>Laporan</span>
+      </a>
+      <a
+        href="../../../html/manager/production/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+          <circle cx="7.5" cy="11" r="2" />
+          <circle cx="16.5" cy="11" r="2" />
+        </svg>
+        <span>Produksi</span>
+      </a>
+      <a
+        href="../../../html/manager/corrections/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+        <span>Koreksi</span>
+      </a>
+      <a
+        href="../../../html/manager/offices/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+          />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Kantor</span>
+      </a>
+      
+      <a
+        href="../../../html/manager/equipment/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <line x1="8" y1="21" x2="16" y2="21" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+        <span>Alat</span>
+      </a>
+      
+      <a
+        href="../../../html/manager/departments/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+          <line x1="12" y1="12" x2="12" y2="16" />
+          <line x1="10" y1="14" x2="14" y2="14" />
+        </svg>
+        <span>Departemen</span>
+      </a>
+      <a
+        href="../../../html/manager/shifts/master/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span>Konfigurasi Shift</span>
+      </a>
+      <form method="post" action="../../../html/auth/logout" class="logout-form">
+        <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+        <button type="submit" class="as-link">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </form>
+
+       
+    </nav>
+    
+    
+    <script src="../../../js/core.js"></script>
+    
+    
+    <script src="../../../js/app.js"></script>
+    
+    <script>
+      window.I18N = Object.assign({}, window.I18N, {
+      notifTitle: "Notifikasi",
+      notifMarkAllRead: "Tandai semua dibaca",
+      notifLoading: "Memuat\u2026",
+      notifEmpty: "Tidak ada notifikasi",
+      notifError: "Gagal memuat notifikasi"});
+    </script>
+    <script src="../../../js/notifications.js"></script>
+    <script src="../../../js/push.js"></script>
+    
+    <script>
+      // Form logout mengirim POST via fetch, lalu redirect manual berdasarkan
+      // JSON {"redirect": "..."} dari server — pola yang sama dengan
+      // login.js. Tanpa ini, submit form native menampilkan JSON mentah
+      // di layar alih-alih membawa user ke halaman login.
+      document.querySelectorAll(".logout-form").forEach(function (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const btn = form.querySelector("button[type=submit]");
+          if (btn) btn.disabled = true;
+          try { if (window.Push) await window.Push.forgetDevice(); } catch {}
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": form.querySelector(
+                  'input[name="csrf_token"]',
+                ).value,
+              },
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              /* respons bukan JSON — abaikan, pakai fallback di bawah */
+            }
+            window.location.href = data.redirect || "/auth/login";
+          } catch {
+            // Gagal terhubung ke server: tetap arahkan ke login supaya
+            // user tidak macet di halaman dengan sesi yang mungkin sudah
+            // tidak valid.
+            window.location.href = "/auth/login";
+          }
+        });
+      });
+    </script>
+    
+  </body>
+</html>

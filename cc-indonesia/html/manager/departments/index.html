@@ -1,0 +1,2953 @@
+
+<!doctype html>
+<html data-root="../../../" lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="csrf-token" content="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+    <meta name="theme-color" content="#1A4A8C" />
+    <link rel="manifest" href="../../../html/manifest.webmanifest" />
+    <link rel="icon" href="../../../img/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../img/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" href="../../../img/apple-touch-icon.png?v=2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Absensi" />
+    <title>Departemen — Dashboard Manajer</title>
+    
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/ibm-plex-sans-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/plus-jakarta-sans-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/fonts.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="../../../css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/theme.css"
+    />
+    <link rel="stylesheet" href="../../../css/push.css"
+    />
+    
+<link
+  rel="stylesheet"
+  href="../../../css/departments.css"
+/>
+
+    <style>
+      /* Form logout dibungkus supaya method-nya POST (bukan link GET) —
+         lihat auth.py: /auth/logout adalah POST-only untuk mencegah CSRF
+         logout lewat <img>/<a> pihak ketiga. Reset tampilan <button> agar
+         identik dengan link sidebar/bottom-nav di sekitarnya. */
+      .logout-form {
+        margin: 0;
+        padding: 0;
+        display: contents; /* form tidak mengubah layout flex/grid induk */
+      }
+      /* [FIX] Sebelumnya `all: unset` + `display: inherit`. Karena parent
+         .logout-form adalah `display: contents`, `inherit` menghasilkan
+         `contents` juga (bukan `flex`), sehingga tombol kehilangan seluruh
+         layout bottom-nav. Sekarang hanya reset tampilan bawaan <button>;
+         layout diatur oleh selector konteks masing-masing (main.css). */
+      button.as-link {
+        background: none;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Sidebar desktop: tombol tetap selebar item menu lain. */
+      .sidebar .logout-form button.as-link {
+        display: flex;
+        width: 100%;
+      }
+    </style>
+  <script>(()=>{const R="../../../",f=window.fetch;window.fetch=(u,o={})=>{u=String(u);if((o.method||"GET").toUpperCase()!=="GET")return Promise.resolve(new Response(JSON.stringify({ok:true,demo:true}),{headers:{"Content-Type":"application/json"}}));if(u[0]==="/")u=u.indexOf("/static/")===0?R+u.slice(8):R+"html"+u;return f(u,o)};document.addEventListener("submit",e=>{e.preventDefault();alert("Mode demo: aksi disimulasikan dan tidak disimpan.")},true)})()</script><link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+  <body
+    class="role-manager"
+  >
+    
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-brand">
+        <img
+          class="brand-logo"
+          src="../../../img/Logo-App-wide.jpg"
+          alt=""
+          width="70"
+          height="36"
+          decoding="async"
+        />
+        <span>CC Indonesia</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar">RI</div>
+        <div>
+          <div class="sidebar-user-name">
+            Rina
+          </div>
+          <div class="sidebar-user-role">Manager</div>
+        </div>
+        <div id="notif-bell-wrap" style="margin-left: auto"></div>
+      </div>
+
+      <nav class="sidebar-nav">
+         
+        <a
+          href="../../../html/manager/dashboard/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          Dashboard
+        </a>
+        <a
+          href="../../../html/manager/employees/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          Karyawan
+        </a>
+
+        
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="14" x2="12" y2="14" />
+            <line x1="8" y1="18" x2="16" y2="18" />
+          </svg>
+          <span>Jadwal</span>
+        </a>
+        <a
+          href="../../../html/manager/leaves/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          Pengajuan izin
+        </a>
+        <a
+          href="../../../html/manager/shifts/master/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          Konfigurasi Shift
+        </a>
+        <a
+          href="../../../html/manager/company-calendar/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="15" x2="16" y2="15" />
+          </svg>
+          Kalender
+        </a>
+        <a
+          href="../../../html/manager/corrections/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Koreksi
+        </a>
+        <a
+          href="../../../html/manager/reports/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          Laporan
+        </a>
+        <a
+          href="../../../html/manager/production/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+            <circle cx="7.5" cy="11" r="2" />
+            <circle cx="16.5" cy="11" r="2" />
+          </svg>
+          Produksi
+        </a>
+        <a
+          href="../../../html/manager/offices/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Kantor
+        </a>
+        
+        <a
+          href="../../../html/manager/equipment/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+          Perlengkapan
+        </a>
+        
+        <a
+          href="../../../html/manager/departments/index.html"
+          class="active"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+            <line x1="12" y1="12" x2="12" y2="16" />
+            <line x1="10" y1="14" x2="14" y2="14" />
+          </svg>
+          Departemen
+        </a>
+
+         
+      </nav>
+
+
+      <div class="sidebar-footer">
+        
+        <div class="lang-switcher" aria-label="Pilih bahasa">
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+        <form method="post" action="../../../html/auth/logout" class="logout-form">
+          <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+          <button type="submit" class="sidebar-logout as-link">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </aside>
+        
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-inner">
+        <span class="mobile-topbar-title">CC Indonesia</span>
+        <div
+          class="lang-switcher lang-switcher--mobile"
+          aria-label="Pilih bahasa"
+        >
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+      </div>
+    </div>
+     
+
+    <div class="main-wrap">
+        
+      <main class="page-content" id="main-content">
+         
+<div class="page-header page-header--std">
+  <div class="page-header-inner">
+    <div class="page-header-left">
+      <p class="page-header-sub">Manajemen</p>
+      <h1 class="page-header-name">Departemen</h1>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Tambah Departemen
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+  
+  <div class="dept-stat-row">
+    <div class="dept-stat-card">
+      <div class="dept-stat-num" style="color: var(--brand)">
+        7
+      </div>
+      <div class="dept-stat-label">Total Departemen</div>
+    </div>
+    <div class="dept-stat-card">
+      <div class="dept-stat-num" style="color: var(--success)">
+        0
+      </div>
+      <div class="dept-stat-label">Rotasi Aktif</div>
+    </div>
+    <div class="dept-stat-card">
+      <div class="dept-stat-num" style="color: var(--warning-mid)">
+        62
+      </div>
+      <div class="dept-stat-label">Total Karyawan</div>
+    </div>
+    <div class="dept-stat-card">
+      <div class="dept-stat-num" style="color: var(--text-faint)">
+        0
+      </div>
+      <div class="dept-stat-label">Belum di-assign</div>
+    </div>
+  </div>
+
+  
+  <div class="dept-toolbar">
+    <div class="dept-info-banner">
+      <svg
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+      Departemen dengan
+      <strong>Rotasi Aktif</strong>
+      dirotasi otomatis setiap Senin 00:01 WIB. 
+    </div>
+  </div>
+
+  
+  
+  <div class="dept-search-row">
+    <div class="dept-search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input
+        type="text"
+        id="dept-search"
+        class="dept-search-input"
+        placeholder="Cari nama departemen..."
+        aria-label="Cari departemen"
+        oninput="filterDeptCards()"
+        autocomplete="off"
+      />
+    </div>
+    <div class="dept-filter-chips" role="group" aria-label="Filter status rotasi">
+      <button type="button" class="dept-filter-chip active" data-dept-filter="all" onclick="setDeptFilter('all', this)">
+        Semua <span class="chip-count">7</span>
+      </button>
+      <button type="button" class="dept-filter-chip" data-dept-filter="rotating" onclick="setDeptFilter('rotating', this)">
+        Rotasi aktif <span class="chip-count">0</span>
+      </button>
+      <button type="button" class="dept-filter-chip" data-dept-filter="static" onclick="setDeptFilter('static', this)">
+        Tanpa rotasi <span class="chip-count">7</span>
+      </button>
+    </div>
+  </div>
+  
+
+       
+  <div class="dept-grid" id="dept-grid">
+    
+    <article
+      class="dept-card"
+      data-dept-id="cf3cc3e7-c0ed-4856-ba29-62537c6b0a52"
+      data-dept-name="it"
+      data-dept-rotating="false"
+      style="--dept-c: #06b6d4"
+    >
+      
+      <div class="dept-card-top">
+        <div class="dept-avatar">IT</div>
+        <div class="dept-titleblock">
+          <h3 class="dept-name">IT</h3>
+        </div>
+        
+        <span class="dept-status dept-status-static"
+          >Tanpa rotasi</span
+        >
+        
+      </div>
+
+      
+      <div class="dept-meta">
+        <div class="dept-meta-count">
+          <span class="dept-meta-count-icon">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </span>
+          <span class="dept-meta-count-number">0</span>
+          <span class="dept-meta-count-label">karyawan</span>
+        </div>
+        
+      </div>
+
+      <div class="dept-card-divider"></div>
+
+      
+      <div class="dept-card-shiftinfo">
+        <div class="dept-field">
+          <span class="dept-field-label">Shift Default</span>
+          <div class="dept-shift-row">
+            <span class="shift-name"
+              >—</span
+            >
+            <span class="tag-default">Default</span>
+          </div>
+        </div>
+
+        <div class="dept-field">
+          <span class="dept-field-label">Kuota Tukar Shift Bulanan</span>
+          
+          <span class="swap-quota-badge">Unlimited</span>
+          
+        </div>
+
+        
+      </div>
+
+       
+      <div class="dept-card-actions">
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class="dept-act dept-act-ghost"
+          title="Lihat jadwal shift"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Jadwal
+        </a>
+        <button
+          class="dept-act dept-act-ghost btn-dept-edit"
+          title="Edit departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="dept-act dept-act-primary btn-dept-members"
+          title="Kelola anggota"
+          data-dept-id="cf3cc3e7-c0ed-4856-ba29-62537c6b0a52"
+          data-dept-name="IT"
+          data-dept-color="#06b6d4"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Anggota
+        </button>
+        <button
+          class="dept-act-icon btn-dept-delete"
+          title="Hapus departemen"
+          aria-label="Hapus departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6M9 6V4h6v2" />
+          </svg>
+        </button>
+      </div>
+    </article>
+     
+    <article
+      class="dept-card"
+      data-dept-id="f568be2b-6c4b-4069-aea4-3d9b6688738d"
+      data-dept-name="inventaris"
+      data-dept-rotating="false"
+      style="--dept-c: #f59e0b"
+    >
+      
+      <div class="dept-card-top">
+        <div class="dept-avatar">IN</div>
+        <div class="dept-titleblock">
+          <h3 class="dept-name">Inventaris</h3>
+        </div>
+        
+        <span class="dept-status dept-status-static"
+          >Tanpa rotasi</span
+        >
+        
+      </div>
+
+      
+      <div class="dept-meta">
+        <div class="dept-meta-count">
+          <span class="dept-meta-count-icon">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </span>
+          <span class="dept-meta-count-number">0</span>
+          <span class="dept-meta-count-label">karyawan</span>
+        </div>
+        
+      </div>
+
+      <div class="dept-card-divider"></div>
+
+      
+      <div class="dept-card-shiftinfo">
+        <div class="dept-field">
+          <span class="dept-field-label">Shift Default</span>
+          <div class="dept-shift-row">
+            <span class="shift-name"
+              >—</span
+            >
+            <span class="tag-default">Default</span>
+          </div>
+        </div>
+
+        <div class="dept-field">
+          <span class="dept-field-label">Kuota Tukar Shift Bulanan</span>
+          
+          <span class="swap-quota-badge">Unlimited</span>
+          
+        </div>
+
+        
+      </div>
+
+       
+      <div class="dept-card-actions">
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class="dept-act dept-act-ghost"
+          title="Lihat jadwal shift"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Jadwal
+        </a>
+        <button
+          class="dept-act dept-act-ghost btn-dept-edit"
+          title="Edit departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="dept-act dept-act-primary btn-dept-members"
+          title="Kelola anggota"
+          data-dept-id="f568be2b-6c4b-4069-aea4-3d9b6688738d"
+          data-dept-name="Inventaris"
+          data-dept-color="#f59e0b"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Anggota
+        </button>
+        <button
+          class="dept-act-icon btn-dept-delete"
+          title="Hapus departemen"
+          aria-label="Hapus departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6M9 6V4h6v2" />
+          </svg>
+        </button>
+      </div>
+    </article>
+     
+    <article
+      class="dept-card"
+      data-dept-id="ddf95d0f-9dff-433a-a49b-23c0e60498fc"
+      data-dept-name="manajemen"
+      data-dept-rotating="false"
+      style="--dept-c: #8b5cf6"
+    >
+      
+      <div class="dept-card-top">
+        <div class="dept-avatar">MA</div>
+        <div class="dept-titleblock">
+          <h3 class="dept-name">Manajemen</h3>
+        </div>
+        
+        <span class="dept-status dept-status-static"
+          >Tanpa rotasi</span
+        >
+        
+      </div>
+
+      
+      <div class="dept-meta">
+        <div class="dept-meta-count">
+          <span class="dept-meta-count-icon">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </span>
+          <span class="dept-meta-count-number">6</span>
+          <span class="dept-meta-count-label">karyawan</span>
+        </div>
+        
+      </div>
+
+      <div class="dept-card-divider"></div>
+
+      
+      <div class="dept-card-shiftinfo">
+        <div class="dept-field">
+          <span class="dept-field-label">Shift Default</span>
+          <div class="dept-shift-row">
+            <span class="shift-name"
+              >—</span
+            >
+            <span class="tag-default">Default</span>
+          </div>
+        </div>
+
+        <div class="dept-field">
+          <span class="dept-field-label">Kuota Tukar Shift Bulanan</span>
+          
+          <span class="swap-quota-badge">Unlimited</span>
+          
+        </div>
+
+        
+      </div>
+
+       
+      <div class="dept-card-actions">
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class="dept-act dept-act-ghost"
+          title="Lihat jadwal shift"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Jadwal
+        </a>
+        <button
+          class="dept-act dept-act-ghost btn-dept-edit"
+          title="Edit departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="dept-act dept-act-primary btn-dept-members"
+          title="Kelola anggota"
+          data-dept-id="ddf95d0f-9dff-433a-a49b-23c0e60498fc"
+          data-dept-name="Manajemen"
+          data-dept-color="#8b5cf6"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Anggota
+        </button>
+        <button
+          class="dept-act-icon btn-dept-delete"
+          title="Hapus departemen"
+          aria-label="Hapus departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6M9 6V4h6v2" />
+          </svg>
+        </button>
+      </div>
+    </article>
+     
+    <article
+      class="dept-card"
+      data-dept-id="3ca1ce58-f0c6-4206-9213-b2aaff684f2e"
+      data-dept-name="produksi"
+      data-dept-rotating="false"
+      style="--dept-c: #4f6ef7"
+    >
+      
+      <div class="dept-card-top">
+        <div class="dept-avatar">PR</div>
+        <div class="dept-titleblock">
+          <h3 class="dept-name">Produksi</h3>
+        </div>
+        
+        <span class="dept-status dept-status-static"
+          >Tanpa rotasi</span
+        >
+        
+      </div>
+
+      
+      <div class="dept-meta">
+        <div class="dept-meta-count">
+          <span class="dept-meta-count-icon">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </span>
+          <span class="dept-meta-count-number">49</span>
+          <span class="dept-meta-count-label">karyawan</span>
+        </div>
+        
+      </div>
+
+      <div class="dept-card-divider"></div>
+
+      
+      <div class="dept-card-shiftinfo">
+        <div class="dept-field">
+          <span class="dept-field-label">Shift Default</span>
+          <div class="dept-shift-row">
+            <span class="shift-name"
+              >—</span
+            >
+            <span class="tag-default">Default</span>
+          </div>
+        </div>
+
+        <div class="dept-field">
+          <span class="dept-field-label">Kuota Tukar Shift Bulanan</span>
+          
+          <span class="swap-quota-badge">Unlimited</span>
+          
+        </div>
+
+        
+      </div>
+
+       
+      <div class="dept-card-actions">
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class="dept-act dept-act-ghost"
+          title="Lihat jadwal shift"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Jadwal
+        </a>
+        <button
+          class="dept-act dept-act-ghost btn-dept-edit"
+          title="Edit departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="dept-act dept-act-primary btn-dept-members"
+          title="Kelola anggota"
+          data-dept-id="3ca1ce58-f0c6-4206-9213-b2aaff684f2e"
+          data-dept-name="Produksi"
+          data-dept-color="#4f6ef7"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Anggota
+        </button>
+        <button
+          class="dept-act-icon btn-dept-delete"
+          title="Hapus departemen"
+          aria-label="Hapus departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6M9 6V4h6v2" />
+          </svg>
+        </button>
+      </div>
+    </article>
+     
+    <article
+      class="dept-card"
+      data-dept-id="b75f6aa0-d588-4d2c-a881-b10a3d1364ac"
+      data-dept-name="quality control"
+      data-dept-rotating="false"
+      style="--dept-c: #ef4444"
+    >
+      
+      <div class="dept-card-top">
+        <div class="dept-avatar">QU</div>
+        <div class="dept-titleblock">
+          <h3 class="dept-name">Quality Control</h3>
+        </div>
+        
+        <span class="dept-status dept-status-static"
+          >Tanpa rotasi</span
+        >
+        
+      </div>
+
+      
+      <div class="dept-meta">
+        <div class="dept-meta-count">
+          <span class="dept-meta-count-icon">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </span>
+          <span class="dept-meta-count-number">0</span>
+          <span class="dept-meta-count-label">karyawan</span>
+        </div>
+        
+      </div>
+
+      <div class="dept-card-divider"></div>
+
+      
+      <div class="dept-card-shiftinfo">
+        <div class="dept-field">
+          <span class="dept-field-label">Shift Default</span>
+          <div class="dept-shift-row">
+            <span class="shift-name"
+              >—</span
+            >
+            <span class="tag-default">Default</span>
+          </div>
+        </div>
+
+        <div class="dept-field">
+          <span class="dept-field-label">Kuota Tukar Shift Bulanan</span>
+          
+          <span class="swap-quota-badge">Unlimited</span>
+          
+        </div>
+
+        
+      </div>
+
+       
+      <div class="dept-card-actions">
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class="dept-act dept-act-ghost"
+          title="Lihat jadwal shift"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Jadwal
+        </a>
+        <button
+          class="dept-act dept-act-ghost btn-dept-edit"
+          title="Edit departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="dept-act dept-act-primary btn-dept-members"
+          title="Kelola anggota"
+          data-dept-id="b75f6aa0-d588-4d2c-a881-b10a3d1364ac"
+          data-dept-name="Quality Control"
+          data-dept-color="#ef4444"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Anggota
+        </button>
+        <button
+          class="dept-act-icon btn-dept-delete"
+          title="Hapus departemen"
+          aria-label="Hapus departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6M9 6V4h6v2" />
+          </svg>
+        </button>
+      </div>
+    </article>
+     
+    <article
+      class="dept-card"
+      data-dept-id="daeb17b8-50f7-40da-b99e-fcd49dd8de49"
+      data-dept-name="staff"
+      data-dept-rotating="false"
+      style="--dept-c: #64748b"
+    >
+      
+      <div class="dept-card-top">
+        <div class="dept-avatar">ST</div>
+        <div class="dept-titleblock">
+          <h3 class="dept-name">Staff</h3>
+        </div>
+        
+        <span class="dept-status dept-status-static"
+          >Tanpa rotasi</span
+        >
+        
+      </div>
+
+      
+      <div class="dept-meta">
+        <div class="dept-meta-count">
+          <span class="dept-meta-count-icon">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </span>
+          <span class="dept-meta-count-number">3</span>
+          <span class="dept-meta-count-label">karyawan</span>
+        </div>
+        
+      </div>
+
+      <div class="dept-card-divider"></div>
+
+      
+      <div class="dept-card-shiftinfo">
+        <div class="dept-field">
+          <span class="dept-field-label">Shift Default</span>
+          <div class="dept-shift-row">
+            <span class="shift-name"
+              >—</span
+            >
+            <span class="tag-default">Default</span>
+          </div>
+        </div>
+
+        <div class="dept-field">
+          <span class="dept-field-label">Kuota Tukar Shift Bulanan</span>
+          
+          <span class="swap-quota-badge">Unlimited</span>
+          
+        </div>
+
+        
+      </div>
+
+       
+      <div class="dept-card-actions">
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class="dept-act dept-act-ghost"
+          title="Lihat jadwal shift"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Jadwal
+        </a>
+        <button
+          class="dept-act dept-act-ghost btn-dept-edit"
+          title="Edit departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="dept-act dept-act-primary btn-dept-members"
+          title="Kelola anggota"
+          data-dept-id="daeb17b8-50f7-40da-b99e-fcd49dd8de49"
+          data-dept-name="Staff"
+          data-dept-color="#64748b"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Anggota
+        </button>
+        <button
+          class="dept-act-icon btn-dept-delete"
+          title="Hapus departemen"
+          aria-label="Hapus departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6M9 6V4h6v2" />
+          </svg>
+        </button>
+      </div>
+    </article>
+     
+    <article
+      class="dept-card"
+      data-dept-id="8d7f7ff9-aa7e-4221-addf-54a1455b920f"
+      data-dept-name="supervisor"
+      data-dept-rotating="false"
+      style="--dept-c: #22c55e"
+    >
+      
+      <div class="dept-card-top">
+        <div class="dept-avatar">SU</div>
+        <div class="dept-titleblock">
+          <h3 class="dept-name">Supervisor</h3>
+        </div>
+        
+        <span class="dept-status dept-status-static"
+          >Tanpa rotasi</span
+        >
+        
+      </div>
+
+      
+      <div class="dept-meta">
+        <div class="dept-meta-count">
+          <span class="dept-meta-count-icon">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </span>
+          <span class="dept-meta-count-number">5</span>
+          <span class="dept-meta-count-label">karyawan</span>
+        </div>
+        
+      </div>
+
+      <div class="dept-card-divider"></div>
+
+      
+      <div class="dept-card-shiftinfo">
+        <div class="dept-field">
+          <span class="dept-field-label">Shift Default</span>
+          <div class="dept-shift-row">
+            <span class="shift-name"
+              >—</span
+            >
+            <span class="tag-default">Default</span>
+          </div>
+        </div>
+
+        <div class="dept-field">
+          <span class="dept-field-label">Kuota Tukar Shift Bulanan</span>
+          
+          <span class="swap-quota-badge">Unlimited</span>
+          
+        </div>
+
+        
+      </div>
+
+       
+      <div class="dept-card-actions">
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class="dept-act dept-act-ghost"
+          title="Lihat jadwal shift"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Jadwal
+        </a>
+        <button
+          class="dept-act dept-act-ghost btn-dept-edit"
+          title="Edit departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Edit
+        </button>
+        <button
+          class="dept-act dept-act-primary btn-dept-members"
+          title="Kelola anggota"
+          data-dept-id="8d7f7ff9-aa7e-4221-addf-54a1455b920f"
+          data-dept-name="Supervisor"
+          data-dept-color="#22c55e"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Anggota
+        </button>
+        <button
+          class="dept-act-icon btn-dept-delete"
+          title="Hapus departemen"
+          aria-label="Hapus departemen"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6M9 6V4h6v2" />
+          </svg>
+        </button>
+      </div>
+    </article>
+     
+  </div>
+  
+
+  
+  <div class="dept-search-empty" id="dept-search-empty">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+    <p class="dept-search-empty-title">Tidak ada departemen yang cocok.</p>
+    <p class="dept-search-empty-sub">
+      Coba kata kunci lain atau
+      <button type="button" onclick="resetDeptFilter()">reset pencarian</button>.
+    </p>
+  </div>
+
+  
+</div>
+ 
+<div
+  class="modal-overlay"
+  id="modal-dept"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-dept-title"
+>
+  <div class="modal-box modal-dept-box">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-dept-title">
+        Tambah Departemen
+      </h2>
+      <button
+        class="modal-close"
+        onclick="closeDeptModal()"
+        aria-label="Tutup"
+      >
+        &times;
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <input type="hidden" id="dept-id" value="" />
+
+      <p class="form-section-label">Informasi Dasar</p>
+
+      
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label"
+            >Nama Departemen <span class="req">*</span></label
+          >
+          <input
+            type="text"
+            id="dept-name"
+            class="form-input"
+            placeholder="cth. Produksi, QC, Security..."
+            autocomplete="off"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Deskripsi</label>
+          <input
+            type="text"
+            id="dept-desc"
+            class="form-input"
+            placeholder="Opsional"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+
+      
+      <div class="form-group">
+        <label class="form-label">Warna Badge</label>
+        <div class="color-picker-row" id="color-picker">
+          
+          <button
+            type="button"
+            class="color-swatch"
+            data-color="#4f6ef7"
+            style="background:#4f6ef7"
+            onclick="selectColor('#4f6ef7')"
+            aria-label="#4f6ef7"
+          ></button>
+          
+          <button
+            type="button"
+            class="color-swatch"
+            data-color="#22c069"
+            style="background:#22c069"
+            onclick="selectColor('#22c069')"
+            aria-label="#22c069"
+          ></button>
+          
+          <button
+            type="button"
+            class="color-swatch"
+            data-color="#f59e0b"
+            style="background:#f59e0b"
+            onclick="selectColor('#f59e0b')"
+            aria-label="#f59e0b"
+          ></button>
+          
+          <button
+            type="button"
+            class="color-swatch"
+            data-color="#ef4444"
+            style="background:#ef4444"
+            onclick="selectColor('#ef4444')"
+            aria-label="#ef4444"
+          ></button>
+          
+          <button
+            type="button"
+            class="color-swatch"
+            data-color="#8b5cf6"
+            style="background:#8b5cf6"
+            onclick="selectColor('#8b5cf6')"
+            aria-label="#8b5cf6"
+          ></button>
+          
+          <button
+            type="button"
+            class="color-swatch"
+            data-color="#0ea5e9"
+            style="background:#0ea5e9"
+            onclick="selectColor('#0ea5e9')"
+            aria-label="#0ea5e9"
+          ></button>
+          
+          <button
+            type="button"
+            class="color-swatch"
+            data-color="#ec4899"
+            style="background:#ec4899"
+            onclick="selectColor('#ec4899')"
+            aria-label="#ec4899"
+          ></button>
+          
+          <button
+            type="button"
+            class="color-swatch"
+            data-color="#14b8a6"
+            style="background:#14b8a6"
+            onclick="selectColor('#14b8a6')"
+            aria-label="#14b8a6"
+          ></button>
+          
+          <button
+            type="button"
+            class="color-swatch"
+            data-color="#64748b"
+            style="background:#64748b"
+            onclick="selectColor('#64748b')"
+            aria-label="#64748b"
+          ></button>
+          
+          <button
+            type="button"
+            class="color-swatch"
+            data-color="#d97706"
+            style="background:#d97706"
+            onclick="selectColor('#d97706')"
+            aria-label="#d97706"
+          ></button>
+          
+        </div>
+        <input type="hidden" id="dept-color" value="#4f6ef7" />
+      </div>
+
+      <p class="form-section-label">Konfigurasi Shift</p>
+
+      
+      <div class="form-group">
+        <label class="form-label"
+          >Shift Default <span class="req">*</span></label
+        >
+        <select id="dept-default-shift" class="form-input">
+          <option value="">— Pilih shift bawaan —</option>
+          
+          <option value="management">Kantor</option>
+          
+          <option value="lembur">Lembur</option>
+          
+          <option value="shift_1_inventaris">Shift 1 - Inventaris</option>
+          
+          <option value="shift_1_it">Shift 1 - IT</option>
+          
+          <option value="shift_1_produksi">Shift 1 - Produksi</option>
+          
+          <option value="shift_1_quality_control">Shift 1 - Quality Control</option>
+          
+          <option value="shift_1_supervisor">Shift 1 - Supervisor</option>
+          
+          <option value="shift_2_inventaris">Shift 2 - Inventaris</option>
+          
+          <option value="shift_2_it">Shift 2 - IT</option>
+          
+          <option value="shift_2_produksi">Shift 2 - Produksi</option>
+          
+          <option value="shift_2_quality_control">Shift 2 - Quality Control</option>
+          
+          <option value="shift_2_supervisor">Shift 2 - Supervisor</option>
+          
+          <option value="shift_3_inventaris">Shift 3 - Inventaris</option>
+          
+          <option value="shift_3_produksi">Shift 3 - Produksi</option>
+          
+          <option value="shift_3_produksi_eksternal">Shift 3 - Produksi Eksternal</option>
+          
+          <option value="shift_3_quality_control">Shift 3 - Quality Control</option>
+          
+          <option value="shift_3_supervisor_eksternal">Shift 3 - Supervisor Eksternal</option>
+          
+          <option value="shift_3_supervisor_internal">Shift 3 - Supervisor Internal</option>
+          
+          <option value="staff">Staff</option>
+          
+        </select>
+        <p class="form-hint">
+          Shift yang otomatis dipakai saat karyawan ditambahkan ke
+          departemen ini.
+        </p>
+      </div>
+
+      
+      <div class="form-group allowed-shifts-group">
+        <label class="form-label">Shift yang Diizinkan</label>
+        <div class="allowed-shifts-grid" id="allowed-shifts-grid">
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="management"
+              data-label="Kantor"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Kantor</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="lembur"
+              data-label="Lembur"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Lembur</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_1_inventaris"
+              data-label="Shift 1 - Inventaris"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 1 - Inventaris</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_1_it"
+              data-label="Shift 1 - IT"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 1 - IT</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_1_produksi"
+              data-label="Shift 1 - Produksi"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 1 - Produksi</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_1_quality_control"
+              data-label="Shift 1 - Quality Control"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 1 - Quality Control</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_1_supervisor"
+              data-label="Shift 1 - Supervisor"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 1 - Supervisor</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_2_inventaris"
+              data-label="Shift 2 - Inventaris"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 2 - Inventaris</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_2_it"
+              data-label="Shift 2 - IT"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 2 - IT</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_2_produksi"
+              data-label="Shift 2 - Produksi"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 2 - Produksi</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_2_quality_control"
+              data-label="Shift 2 - Quality Control"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 2 - Quality Control</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_2_supervisor"
+              data-label="Shift 2 - Supervisor"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 2 - Supervisor</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_3_inventaris"
+              data-label="Shift 3 - Inventaris"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 3 - Inventaris</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_3_produksi"
+              data-label="Shift 3 - Produksi"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 3 - Produksi</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_3_produksi_eksternal"
+              data-label="Shift 3 - Produksi Eksternal"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 3 - Produksi Eksternal</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_3_quality_control"
+              data-label="Shift 3 - Quality Control"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 3 - Quality Control</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_3_supervisor_eksternal"
+              data-label="Shift 3 - Supervisor Eksternal"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 3 - Supervisor Eksternal</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="shift_3_supervisor_internal"
+              data-label="Shift 3 - Supervisor Internal"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Shift 3 - Supervisor Internal</span>
+          </label>
+          
+          <label class="allowed-shift-item">
+            <input
+              type="checkbox"
+              class="allowed-shift-cb"
+              value="staff"
+              data-label="Staff"
+              onchange="onAllowedShiftChange(this)"
+            />
+            <span class="allowed-shift-label">Staff</span>
+          </label>
+          
+        </div>
+        <p class="form-hint">
+          Centang shift yang boleh dipakai di departemen ini. Kosongkan =
+          semua shift diizinkan.
+        </p>
+      </div>
+
+      <p class="form-section-label">Rotasi Otomatis</p>
+
+      
+      <div class="rotation-section">
+        <div
+          class="rotation-toggle-row"
+          id="rotation-toggle-row"
+          onclick="toggleRotation()"
+        >
+          <div class="rotation-toggle-left">
+            <div class="toggle-track" id="toggle-track">
+              <div class="toggle-thumb"></div>
+            </div>
+            <div class="rotation-toggle-text">
+              <span class="rotation-toggle-label" id="rotation-toggle-label"
+                >Rotasi Shift Nonaktif</span
+              >
+              <span class="rotation-toggle-sub" id="rotation-toggle-sub"
+                >Klik untuk mengaktifkan rotasi otomatis</span
+              >
+            </div>
+          </div>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            class="rotation-toggle-icon"
+          >
+            <path d="M16 3l4 4-4 4" />
+            <line x1="20" y1="7" x2="7" y2="7" />
+            <path d="M8 21l-4-4 4-4" />
+            <line x1="4" y1="17" x2="17" y2="17" />
+          </svg>
+        </div>
+
+        
+        <div id="rotation-pair-section" class="rotation-pair-section" hidden>
+          <label class="form-label" style="margin-bottom: 6px; display: block">
+            Urutan Rotasi
+            <span class="form-label-hint"
+              >(siklus berulang tiap minggu)</span
+            >
+          </label>
+
+          
+          <div class="rot-add-row">
+            <select id="rot-seq-picker" class="form-input rot-seq-picker">
+              <option value="">
+                — Pilih shift untuk ditambahkan —
+              </option>
+              
+              <option value="management" data-label="Kantor">
+                Kantor
+              </option>
+              
+              <option value="lembur" data-label="Lembur">
+                Lembur
+              </option>
+              
+              <option value="shift_1_inventaris" data-label="Shift 1 - Inventaris">
+                Shift 1 - Inventaris
+              </option>
+              
+              <option value="shift_1_it" data-label="Shift 1 - IT">
+                Shift 1 - IT
+              </option>
+              
+              <option value="shift_1_produksi" data-label="Shift 1 - Produksi">
+                Shift 1 - Produksi
+              </option>
+              
+              <option value="shift_1_quality_control" data-label="Shift 1 - Quality Control">
+                Shift 1 - Quality Control
+              </option>
+              
+              <option value="shift_1_supervisor" data-label="Shift 1 - Supervisor">
+                Shift 1 - Supervisor
+              </option>
+              
+              <option value="shift_2_inventaris" data-label="Shift 2 - Inventaris">
+                Shift 2 - Inventaris
+              </option>
+              
+              <option value="shift_2_it" data-label="Shift 2 - IT">
+                Shift 2 - IT
+              </option>
+              
+              <option value="shift_2_produksi" data-label="Shift 2 - Produksi">
+                Shift 2 - Produksi
+              </option>
+              
+              <option value="shift_2_quality_control" data-label="Shift 2 - Quality Control">
+                Shift 2 - Quality Control
+              </option>
+              
+              <option value="shift_2_supervisor" data-label="Shift 2 - Supervisor">
+                Shift 2 - Supervisor
+              </option>
+              
+              <option value="shift_3_inventaris" data-label="Shift 3 - Inventaris">
+                Shift 3 - Inventaris
+              </option>
+              
+              <option value="shift_3_produksi" data-label="Shift 3 - Produksi">
+                Shift 3 - Produksi
+              </option>
+              
+              <option value="shift_3_produksi_eksternal" data-label="Shift 3 - Produksi Eksternal">
+                Shift 3 - Produksi Eksternal
+              </option>
+              
+              <option value="shift_3_quality_control" data-label="Shift 3 - Quality Control">
+                Shift 3 - Quality Control
+              </option>
+              
+              <option value="shift_3_supervisor_eksternal" data-label="Shift 3 - Supervisor Eksternal">
+                Shift 3 - Supervisor Eksternal
+              </option>
+              
+              <option value="shift_3_supervisor_internal" data-label="Shift 3 - Supervisor Internal">
+                Shift 3 - Supervisor Internal
+              </option>
+              
+              <option value="staff" data-label="Staff">
+                Staff
+              </option>
+              
+            </select>
+            <button
+              type="button"
+              class="btn-rot-add-shift"
+              onclick="rotSeqAddFromPicker()"
+              title="Tambah ke urutan"
+            >
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Tambah
+            </button>
+          </div>
+
+          
+          <div id="rotation-sequence-list" class="rotation-sequence-list"></div>
+
+          
+          <div
+            id="rotation-chain-preview"
+            class="rotation-chain-preview hidden"
+          ></div>
+
+          <p class="rotation-pair-note">
+            <svg
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            Setiap Senin 00:01 WIB, karyawan pindah ke shift berikutnya
+            dalam urutan ini (siklus berulang).
+          </p>
+        </div>
+      </div>
+
+      <p class="form-section-label">Pengaturan Lanjutan</p>
+
+      
+      <div class="form-group swap-quota-group">
+        <label class="form-label">Kuota Tukar Shift Bulanan</label>
+        <div class="swap-quota-mode-row">
+          <label class="swap-quota-mode-item">
+            <input
+              type="radio"
+              name="swap-quota-mode"
+              id="swap-quota-mode-unlimited"
+              value="unlimited"
+              onchange="onSwapQuotaModeChange()"
+              checked
+            />
+            <span>Unlimited</span>
+          </label>
+          <label class="swap-quota-mode-item">
+            <input
+              type="radio"
+              name="swap-quota-mode"
+              id="swap-quota-mode-limited"
+              value="limited"
+              onchange="onSwapQuotaModeChange()"
+            />
+            <span>Angka spesifik</span>
+          </label>
+        </div>
+        <div
+          id="swap-quota-number-wrap"
+          class="swap-quota-number-wrap"
+          hidden
+        >
+          <input
+            type="number"
+            id="dept-swap-quota"
+            class="form-input"
+            min="0"
+            step="1"
+            placeholder="Contoh: 2"
+            oninput="onSwapQuotaNumberInput()"
+            disabled
+          />
+          <span class="swap-quota-number-suffix"
+            >kali / bulan / karyawan</span
+          >
+        </div>
+        <p class="form-hint">
+          Jatah maksimal pengajuan tukar shift yang boleh dibuat
+          seorang karyawan (sebagai pengaju) dalam satu bulan kalender.
+          Pengajuan yang masih menunggu (pending) ikut dihitung sebagai
+          jatah terpakai, agar tidak ada yang bisa melewati batas dengan
+          menumpuk pengajuan.
+        </p>
+      </div>
+
+      
+      <div id="dept-legacy-warn" class="dept-legacy-warn" hidden>
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style="flex-shrink: 0; margin-top: 1px"
+        >
+          <path
+            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+          />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+        <div>
+          Konfigurasi rotasi menggunakan format lama (<code
+            class="legacy-warn-slugs"
+          ></code
+          >) yang sudah tidak berlaku. Pilih ulang shift di bawah dan
+          simpan untuk memperbarui.
+        </div>
+      </div>
+
+      <p id="dept-error" class="form-error" hidden></p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeDeptModal()">
+        Batal
+      </button>
+      <button
+        class="btn-modal-submit"
+        id="btn-dept-submit"
+        onclick="submitDept()"
+      >
+        <span class="btn-label" id="btn-dept-label">Simpan</span>
+        <span class="btn-spinner" hidden>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            class="spin"
+          >
+            <path
+              d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+  <div
+    class="modal-overlay"
+    id="modal-members"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-members-title"
+  >
+    <div class="modal-box modal-members-box">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.65rem">
+          <div class="dept-avatar-sm" id="members-dept-avatar">PR</div>
+          <div>
+            <h2 class="modal-title" id="modal-members-title">
+              Anggota Departemen
+            </h2>
+            <p class="members-dept-sub" id="members-dept-name-sub">—</p>
+          </div>
+        </div>
+        <button
+          class="modal-close"
+          onclick="closeMembersModal()"
+          aria-label="Tutup"
+        >
+          &times;
+        </button>
+      </div>
+
+      
+      <div class="members-modal-toolbar">
+        <div class="members-search-wrap">
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="text"
+            id="members-search"
+            class="members-search-input"
+            placeholder="Cari nama atau kode..."
+            oninput="filterMembers(this.value)"
+            autocomplete="off"
+          />
+        </div>
+        <div class="members-filter-tabs">
+          <button
+            class="members-filter-tab active"
+            onclick="setMembersFilter('all', this)"
+          >
+            Semua
+          </button>
+          <button
+            class="members-filter-tab"
+            onclick="setMembersFilter('unassigned', this)"
+          >
+            Belum di-assign
+          </button>
+          <button
+            class="members-filter-tab"
+            onclick="setMembersFilter('this_dept', this)"
+          >
+            Sudah di dept ini
+          </button>
+        </div>
+      </div>
+
+      
+      <div class="members-bulk-bar">
+        <label class="members-select-all-wrap">
+          <input
+            type="checkbox"
+            id="cb-select-all"
+            onchange="toggleSelectAll(this.checked)"
+          />
+          <span id="members-selected-count" class="members-selected-count"
+            >0 dipilih</span
+          >
+        </label>
+        <div class="members-bulk-actions">
+          <button
+            class="btn-bulk-assign"
+            onclick="bulkAssignToDept()"
+            id="btn-bulk-assign"
+            disabled
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Assign ke Dept ini
+          </button>
+          <button
+            class="btn-bulk-remove"
+            onclick="bulkRemoveFromDept()"
+            id="btn-bulk-remove"
+            disabled
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            Lepas dari Dept
+          </button>
+        </div>
+      </div>
+
+      
+      <div class="modal-body members-list-wrap" id="members-list-wrap">
+        <div class="members-loading" id="members-loading">
+          <div class="skel-line"></div>
+          <div class="skel-line"></div>
+          <div class="skel-line"></div>
+          <div class="skel-line"></div>
+        </div>
+        <div id="members-list" hidden></div>
+        <div id="members-empty" class="members-empty" hidden>
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          <p>Tidak ada karyawan ditemukan.</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div
+          style="font-size: 0.75rem; color: var(--text-faint)"
+          id="members-footer-info"
+        >
+          —
+        </div>
+        <button class="btn-modal-cancel" onclick="closeMembersModal()">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div
+    class="modal-overlay"
+    id="modal-dept-delete"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-ddel-title"
+  >
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h2 class="modal-title modal-title-danger" id="modal-ddel-title">
+          Hapus Departemen
+        </h2>
+        <button
+          class="modal-close"
+          onclick="closeModal('modal-dept-delete')"
+          aria-label="Tutup"
+        >
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="ddel-id" />
+        <p class="modal-desc" id="ddel-desc"></p>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn-modal-cancel"
+          onclick="closeModal('modal-dept-delete')"
+        >
+          Batal
+        </button>
+        <button
+          class="btn-modal-submit btn-submit-danger"
+          id="btn-ddel-submit"
+          onclick="submitDeleteDept()"
+        >
+          <span class="btn-label">Hapus</span>
+          <span class="btn-spinner" hidden>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              class="spin"
+            >
+              <path
+                d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  
+      </main>
+    </div>
+
+     
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+       
+      <a
+        href="../../../html/manager/dashboard/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a
+        href="../../../html/manager/employees/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+        </svg>
+        <span>Karyawan</span>
+      </a>
+      <a
+        href="../../../html/manager/shift-schedule/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="14" x2="12" y2="14" />
+          <line x1="8" y1="18" x2="16" y2="18" />
+        </svg>
+        <span>Jadwal</span>
+      </a>
+      <a
+        href="../../../html/manager/leaves/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Izin</span>
+      </a>
+      <a
+        href="../../../html/manager/company-calendar/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="15" x2="16" y2="15" />
+        </svg>
+        <span>Kalender</span>
+      </a>
+      <a
+        href="../../../html/manager/reports/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        <span>Laporan</span>
+      </a>
+      <a
+        href="../../../html/manager/production/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+          <circle cx="7.5" cy="11" r="2" />
+          <circle cx="16.5" cy="11" r="2" />
+        </svg>
+        <span>Produksi</span>
+      </a>
+      <a
+        href="../../../html/manager/corrections/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+        <span>Koreksi</span>
+      </a>
+      <a
+        href="../../../html/manager/offices/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+          />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Kantor</span>
+      </a>
+      
+      <a
+        href="../../../html/manager/equipment/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <line x1="8" y1="21" x2="16" y2="21" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+        <span>Alat</span>
+      </a>
+      
+      <a
+        href="../../../html/manager/departments/index.html"
+        class="active"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+          <line x1="12" y1="12" x2="12" y2="16" />
+          <line x1="10" y1="14" x2="14" y2="14" />
+        </svg>
+        <span>Departemen</span>
+      </a>
+      <a
+        href="../../../html/manager/shifts/master/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span>Konfigurasi Shift</span>
+      </a>
+      <form method="post" action="../../../html/auth/logout" class="logout-form">
+        <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+        <button type="submit" class="as-link">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </form>
+
+       
+    </nav>
+    
+    
+    <script src="../../../js/core.js"></script>
+    
+    
+  <script>
+    window.__DEPT_DATA__   = [{"allowed_shift_types": null, "color": "#06b6d4", "default_shift_type": null, "description": null, "employee_count": 0, "id": "cf3cc3e7-c0ed-4856-ba29-62537c6b0a52", "name": "IT", "rotation_enabled": false, "rotation_sequence": null, "swap_quota_label": "Unlimited", "swap_quota_monthly": null}, {"allowed_shift_types": null, "color": "#f59e0b", "default_shift_type": null, "description": null, "employee_count": 0, "id": "f568be2b-6c4b-4069-aea4-3d9b6688738d", "name": "Inventaris", "rotation_enabled": false, "rotation_sequence": null, "swap_quota_label": "Unlimited", "swap_quota_monthly": null}, {"allowed_shift_types": null, "color": "#8b5cf6", "default_shift_type": null, "description": null, "employee_count": 6, "id": "ddf95d0f-9dff-433a-a49b-23c0e60498fc", "name": "Manajemen", "rotation_enabled": false, "rotation_sequence": null, "swap_quota_label": "Unlimited", "swap_quota_monthly": null}, {"allowed_shift_types": null, "color": "#4f6ef7", "default_shift_type": null, "description": null, "employee_count": 49, "id": "3ca1ce58-f0c6-4206-9213-b2aaff684f2e", "name": "Produksi", "rotation_enabled": false, "rotation_sequence": null, "swap_quota_label": "Unlimited", "swap_quota_monthly": null}, {"allowed_shift_types": null, "color": "#ef4444", "default_shift_type": null, "description": null, "employee_count": 0, "id": "b75f6aa0-d588-4d2c-a881-b10a3d1364ac", "name": "Quality Control", "rotation_enabled": false, "rotation_sequence": null, "swap_quota_label": "Unlimited", "swap_quota_monthly": null}, {"allowed_shift_types": null, "color": "#64748b", "default_shift_type": null, "description": null, "employee_count": 3, "id": "daeb17b8-50f7-40da-b99e-fcd49dd8de49", "name": "Staff", "rotation_enabled": false, "rotation_sequence": null, "swap_quota_label": "Unlimited", "swap_quota_monthly": null}, {"allowed_shift_types": null, "color": "#22c55e", "default_shift_type": null, "description": null, "employee_count": 5, "id": "8d7f7ff9-aa7e-4221-addf-54a1455b920f", "name": "Supervisor", "rotation_enabled": false, "rotation_sequence": null, "swap_quota_label": "Unlimited", "swap_quota_monthly": null}];
+    window.DEPT_CONFIG = {
+      csrf: "IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk",
+      urls: {
+        list:         "/manager/departments/api",
+        create:       "/manager/departments/api",
+        update:       "/manager/departments/api/",
+        delete:       "/manager/departments/api/",
+        members:      "/manager/departments/api/",   
+        allEmployees: "/manager/departments/employees",
+      },
+      i18n: {
+        addTitle:          "Tambah Departemen",
+        editTitle:         "Edit Departemen",
+        saveBtn:           "Simpan",
+        errNameEmpty:      "Nama departemen tidak boleh kosong.",
+        errShiftEmpty:     "Pilih shift default terlebih dahulu.",
+        errRotMin2:        "Urutan rotasi minimal 2 shift.",
+        errRotDuplicate:   "Urutan rotasi tidak boleh memiliki shift duplikat.",
+        errRotNotAllowed:  "Urutan rotasi harus berasal dari Shift yang Diizinkan.",
+        errDefaultNotAllowed: "Shift Default harus termasuk dalam Shift yang Diizinkan.",
+        errSwapQuotaInvalid: "Kuota tukar shift harus berupa angka 0 atau lebih.",
+        errConn:           "Koneksi bermasalah. Coba lagi.",
+        errSave:           "Gagal menyimpan departemen.",
+        savedOk:           "Departemen berhasil disimpan.",
+        deletedOk:         "Departemen berhasil dihapus.",
+        assignedOk:        "Karyawan berhasil di-assign.",
+        removedOk:         "Karyawan berhasil dilepas dari departemen.",
+        nSelected:         "{n} dipilih",
+        deleteHasEmp:      "Departemen ini memiliki {n} karyawan. Pindahkan karyawan terlebih dahulu sebelum menghapus.",
+        deleteConfirm:     "Hapus departemen <strong>{name}</strong>? Tindakan ini tidak dapat dibatalkan.",
+        rotActiveLabel:    "Rotasi Shift Aktif",
+        rotActiveSub:      "Karyawan dirotasi otomatis setiap Senin 00:01 WIB",
+        rotOffLabel:       "Rotasi Shift Nonaktif",
+        rotOffSub:         "Klik untuk mengaktifkan rotasi otomatis",
+        rotSeqRemoveWarn:  "Shift ini ada dalam urutan rotasi dan akan dihapus dari urutan.",
+        rotPreviewSuffix:  "(kembali ke awal)",
+        rotAddPlaceholder: "— Pilih shift untuk ditambahkan —",
+        rotSeqEmpty:       "Belum ada shift dalam urutan. Tambahkan minimal 2 shift.",
+        rotSeqMoveUp:      "Naik",
+        rotSeqMoveDown:    "Turun",
+        rotSeqRemoveBtn:   "Hapus",
+        memberIdLabel:     "ID",
+        memberInThisDept:  "Dept ini",
+        memberOtherDept:   "Dept lain",
+        memberUnassigned:  "Belum di-assign",
+        membersFooterInfo: "{n} karyawan · gunakan checkbox untuk memilih",
+        membersFooterEmpty: "0 karyawan",
+        assignBtnLabel:    "Assign ke Dept ini",
+        savingLabel:       "Menyimpan...",
+      },
+    };
+  </script>
+  <script src="../../../js/departments.js"></script>
+  
+    <script src="../../../js/app.js"></script>
+    
+    <script>
+      window.I18N = Object.assign({}, window.I18N, {
+      notifTitle: "Notifikasi",
+      notifMarkAllRead: "Tandai semua dibaca",
+      notifLoading: "Memuat\u2026",
+      notifEmpty: "Tidak ada notifikasi",
+      notifError: "Gagal memuat notifikasi"});
+    </script>
+    <script src="../../../js/notifications.js"></script>
+    <script src="../../../js/push.js"></script>
+    
+    <script>
+      // Form logout mengirim POST via fetch, lalu redirect manual berdasarkan
+      // JSON {"redirect": "..."} dari server — pola yang sama dengan
+      // login.js. Tanpa ini, submit form native menampilkan JSON mentah
+      // di layar alih-alih membawa user ke halaman login.
+      document.querySelectorAll(".logout-form").forEach(function (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const btn = form.querySelector("button[type=submit]");
+          if (btn) btn.disabled = true;
+          try { if (window.Push) await window.Push.forgetDevice(); } catch {}
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": form.querySelector(
+                  'input[name="csrf_token"]',
+                ).value,
+              },
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              /* respons bukan JSON — abaikan, pakai fallback di bawah */
+            }
+            window.location.href = data.redirect || "/auth/login";
+          } catch {
+            // Gagal terhubung ke server: tetap arahkan ke login supaya
+            // user tidak macet di halaman dengan sesi yang mungkin sudah
+            // tidak valid.
+            window.location.href = "/auth/login";
+          }
+        });
+      });
+    </script>
+    
+  </body>
+</html>

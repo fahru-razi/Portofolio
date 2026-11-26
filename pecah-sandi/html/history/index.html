@@ -1,0 +1,231 @@
+<!doctype html>
+<html data-demo-page="history" data-demo-kind="" lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Riwayat · Pecah Sandi</title>
+  <meta name="description" content="Riwayat nilai latihan Sandi, PUPK, dan Kombinasi, lengkap dengan grafik dan tinjauan jawaban tiap latihan.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#5a3922">
+  <meta name="csrf-token" content="">
+  <link rel="canonical" href="">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Pecah Sandi">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="Riwayat · Pecah Sandi">
+  <meta property="og:description" content="Riwayat nilai latihan Sandi, PUPK, dan Kombinasi, lengkap dengan grafik dan tinjauan jawaban tiap latihan.">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="/static/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Pecah Sandi: simbol sandi Kotak III yang dibaca menjadi huruf">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../img/apple-touch-icon.png">
+  <link rel="preload" href="../../fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../fonts/kotak-iii-pasenda.otf" as="font" type="font/otf" crossorigin>
+  <style nonce="">
+    @font-face{font-family:"Archivo";src:url("../../fonts/archivo-var.woff2") format("woff2-variations");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+    @font-face{font-family:"Sandi Kotak III";src:url("../../fonts/kotak-iii-pasenda.otf") format("opentype");font-display:block}
+    .c-kotak{--cf:"Sandi Kotak III";--fs:1.75rem;--cw:2.9rem;--dx:0.187;--dy:0.115;--qfs:1.7rem;--qh:1.0;--qdy:0.115;--qlsb:0.0;--qrsb:0.311;--qpad:0.3;--qwgap:0.9}
+    @font-face{font-family:"Sandi Analog Alhaz";src:url("../../fonts/analog-alhaz.otf") format("opentype");font-display:block}
+    .c-analog{--cf:"Sandi Analog Alhaz";--fs:2.1rem;--cw:2.6rem;--dx:0.02;--dy:0.2175;--qfs:2.8rem;--qh:1.0;--qdy:0.0635;--qlsb:0.054;--qrsb:0.162;--qpad:0.2;--qwgap:0.8}
+    @font-face{font-family:"Sandi Jam AZ";src:url("../../fonts/sandi-jam-az.otf") format("opentype");font-display:block}
+    .c-jam{--cf:"Sandi Jam AZ";--fs:1.25rem;--cw:4.6rem;--dx:0.161;--dy:0.0;--qfs:1.2rem;--qh:1.0;--qdy:0.0;--qlsb:0.0;--qrsb:0.323;--qpad:0.2;--qwgap:0.8}
+    @font-face{font-family:"Sandi Kimia AZ";src:url("../../fonts/sandi-kimia-az.otf") format("opentype");font-display:block}
+    .c-kimia{--cf:"Sandi Kimia AZ";--fs:1.5rem;--cw:3.6rem;--dx:0.023;--dy:0.0255;--qfs:1.6rem;--qh:0.95;--qdy:0.0255;--qlsb:0.091;--qrsb:0.136;--qpad:0.25;--qwgap:0.8}
+    @font-face{font-family:"Sandi Matematika AZ";src:url("../../fonts/sandi-matematika-az.otf") format("opentype");font-display:block}
+    .c-matematika{--cf:"Sandi Matematika AZ";--fs:1.75rem;--cw:3.0rem;--dx:-0.041;--dy:0.024;--qfs:1.7rem;--qh:0.95;--qdy:0.024;--qlsb:0.191;--qrsb:0.108;--qpad:0.28;--qwgap:0.8}
+    
+  </style>
+  <link rel="stylesheet" href="../../css/app.css">
+<script src="../../js/demo_data.js" defer></script><script src="../../js/demo_api.js" defer></script><link rel="stylesheet" href="../../../avatar.css"><script src="../../../avatar.js" defer></script></head><body class="page-history">
+<a class="skip-link" href="#main">Lewati ke konten</a>
+
+  <header class="appbar">
+    <a class="brand" href="../../html/home/index.html" aria-label="Pecah Sandi, beranda">
+      <span class="brand-glyph c-kotak glyph-run" aria-hidden="true" data-glyphs="SANDI"></span>
+      <span class="brand-name">Pecah Sandi</span>
+    </a>
+    <nav class="topnav" aria-label="Menu utama">
+      <a href="../../html/play/index.html" >Sandi</a>
+      <a href="../../html/pupk/index.html" >PUPK</a>
+      <a href="../../html/kombinasi/index.html" >Kombinasi</a>
+      <a href="../../html/history/index.html" >Riwayat</a>
+      
+    </nav>
+    <form class="whoami" method="post" action="/keluar">
+      <input type="hidden" name="csrf_token" value="">
+      <span class="whoami-name">Peserta Demo</span>
+      <button class="icon-btn" type="submit" aria-label="Keluar"><svg class="icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 4h4.5a1.5 1.5 0 0 1 1.5 1.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M4 12h10M7.5 8.5L4 12l3.5 3.5"/></svg><span class="sr-only">Keluar</span></button>
+    </form>
+  </header>
+
+
+<main class="page " id="main">
+  
+    
+  
+  
+<header class="page-head">
+  <h1>Riwayat nilai</h1>
+  <p class="lede">Semua latihan yang sudah kamu kerjakan, dari yang terbaru.</p>
+</header>
+
+
+  <dl class="stats">
+    <div class="stat"><dt>Latihan selesai</dt><dd>7</dd></div>
+    <div class="stat"><dt>Nilai rata-rata</dt><dd>54,5</dd></div>
+    <div class="stat"><dt>Nilai terbaik</dt><dd>90,5</dd></div>
+    <div class="stat"><dt>Huruf benar</dt><dd>78<small>%</small></dd>
+      <dd style="font-size:.8rem;font-weight:500;font-stretch:100%;color:var(--ink-3)">231 benar, 67 salah</dd></div>
+  </dl>
+
+  
+  <section class="section" aria-labelledby="trend-title">
+    <div class="section-head"><h2 id="trend-title">Nilai tiap latihan</h2><span class="muted">7 latihan terakhir</span></div>
+    <div class="chart" id="trend-chart" tabindex="0" role="img" aria-label="Grafik garis nilai per latihan"></div>
+    <details class="table-view"><summary>Lihat sebagai tabel</summary>
+      <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Tanggal</th><th>Sandi</th><th class="r">Nilai</th></tr></thead><tbody>
+      <tr><td>15 November 2026, 04.05</td><td>Jam</td><td class="r">90,5</td></tr><tr><td>13 November 2026, 08.33</td><td>Kotak III</td><td class="r">40</td></tr><tr><td>11 November 2026, 00.27</td><td>Matematika</td><td class="r">0</td></tr><tr><td>10 November 2026, 01.47</td><td>Kimia</td><td class="r">82</td></tr><tr><td>8 November 2026, 03.10</td><td>Jam</td><td class="r">33,3</td></tr><tr><td>6 November 2026, 03.03</td><td>Analog</td><td class="r">65,9</td></tr><tr><td>4 November 2026, 01.46</td><td>Kotak III</td><td class="r">70</td></tr>
+      </tbody></table></div>
+    </details>
+  </section>
+  
+
+  <section class="section" aria-labelledby="list-title">
+    <div class="section-head"><h2 id="list-title">Semua latihan</h2><span class="muted">8 percobaan</span></div>
+    <ul class="alist">
+      
+      
+      <li><a href="../../html/attempt/8/index.html">
+        <span class="al-date">15 November 2026, 04.05</span>
+        <span class="al-title">Sandi Jam, dari PUPK</span>
+        <span class="al-sub"><span class="when">15 November 2026, 04.05 · </span>
+          38 dari 42 huruf benar · 2:15 dari 5:00
+          
+          · dinilai per huruf</span>
+        <span class="al-score">90,5</span>
+      </a></li>
+      
+      
+      <li><a href="../../html/attempt/7/index.html">
+        <span class="al-date">14 November 2026, 00.11</span>
+        <span class="al-title">Sandi Analog, huruf acak</span>
+        <span class="al-sub"><span class="when">14 November 2026, 00.11 · </span>
+          Waktu habis sebelum dikirim
+          · dinilai per huruf</span>
+        <span class="al-score is-miss">0</span>
+      </a></li>
+      
+      
+      <li><a href="../../html/attempt/6/index.html">
+        <span class="al-date">13 November 2026, 08.33</span>
+        <span class="al-title">Sandi Kotak III, bank soal</span>
+        <span class="al-sub"><span class="when">13 November 2026, 08.33 · </span>
+          26 dari 30 huruf benar · 1:44 dari 3:00
+          
+          · dinilai utuh</span>
+        <span class="al-score">40</span>
+      </a></li>
+      
+      
+      <li><a href="../../html/attempt/5/index.html">
+        <span class="al-date">11 November 2026, 00.27</span>
+        <span class="al-title">Sandi Matematika, dari PUPK</span>
+        <span class="al-sub"><span class="when">11 November 2026, 00.27 · </span>
+          33 dari 51 huruf benar · 3:14 dari 5:00
+          
+          · dinilai utuh</span>
+        <span class="al-score">0</span>
+      </a></li>
+      
+      
+      <li><a href="../../html/attempt/4/index.html">
+        <span class="al-date">10 November 2026, 01.47</span>
+        <span class="al-title">Sandi Kimia, huruf acak</span>
+        <span class="al-sub"><span class="when">10 November 2026, 01.47 · </span>
+          41 dari 50 huruf benar · 2:37 dari 4:00
+          
+          · dinilai per huruf</span>
+        <span class="al-score">82</span>
+      </a></li>
+      
+      
+      <li><a href="../../html/attempt/3/index.html">
+        <span class="al-date">8 November 2026, 03.10</span>
+        <span class="al-title">Sandi Jam, bank soal</span>
+        <span class="al-sub"><span class="when">8 November 2026, 03.10 · </span>
+          36 dari 41 huruf benar · 2:19 dari 5:00
+          
+          · dinilai per kata</span>
+        <span class="al-score">33,3</span>
+      </a></li>
+      
+      
+      <li><a href="../../html/attempt/2/index.html">
+        <span class="al-date">6 November 2026, 03.03</span>
+        <span class="al-title">Sandi Analog, bank soal</span>
+        <span class="al-sub"><span class="when">6 November 2026, 03.03 · </span>
+          29 dari 44 huruf benar · 3:04 dari 4:00
+          
+          · dinilai per huruf</span>
+        <span class="al-score">65,9</span>
+      </a></li>
+      
+      
+      <li><a href="../../html/attempt/1/index.html">
+        <span class="al-date">4 November 2026, 01.46</span>
+        <span class="al-title">Sandi Kotak III, huruf acak</span>
+        <span class="al-sub"><span class="when">4 November 2026, 01.46 · </span>
+          28 dari 40 huruf benar · 1:57 dari 5:00
+          
+          · dinilai per huruf</span>
+        <span class="al-score">70</span>
+      </a></li>
+      
+    </ul>
+  </section>
+
+
+
+
+</main>
+
+
+  <nav class="tabbar" aria-label="Menu utama">
+    <a href="../../html/play/index.html" ><svg class="icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M10 8.5v7l5.5-3.5z"/></svg><span>Sandi</span></a>
+    <a href="../../html/pupk/index.html" ><svg class="icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 4.5h10a3 3 0 0 1 3 3V20H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10"/></svg><span>PUPK</span></a>
+    <a href="../../html/kombinasi/index.html" ><svg class="icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="9" width="11.5" height="11.5" rx="2.5"/><path d="M9 9V6.5A2.5 2.5 0 0 1 11.5 4h6A2.5 2.5 0 0 1 20 6.5v6a2.5 2.5 0 0 1-2.5 2.5H15"/></svg><span>Kombinasi</span></a>
+    <a href="../../html/history/index.html" ><svg class="icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Riwayat</span></a>
+    
+  </nav>
+
+
+<script nonce="">
+  window.SANDI = {
+    csrf: "",
+    ciphers: [{"credit": "Pasenda", "cw": 2.9, "dx": 0.187, "dy": 0.115, "family": "Sandi Kotak III", "font": "kotak-iii-pasenda.otf", "fs": 1.75, "hint": "Garis siku, kotak, dan titik", "key": "kotak", "letter_sep": "", "name": "Kotak III", "q": {"dy": 0.115, "fs": 1.7, "h": 1.0, "lsb": 0.0, "pad": 0.3, "rsb": 0.311, "wgap": 0.9}, "sample": "ABC", "word_sep": ""}, {"credit": "Alhaz", "cw": 2.6, "dx": 0.02, "dy": 0.2175, "family": "Sandi Analog Alhaz", "font": "analog-alhaz.otf", "fs": 2.1, "hint": "Lambang bulat bergaya jam analog", "key": "analog", "letter_sep": "", "name": "Analog", "q": {"dy": 0.0635, "fs": 2.8, "h": 1.0, "lsb": 0.054, "pad": 0.2, "rsb": 0.162, "wgap": 0.8}, "sample": "ABC", "word_sep": ""}, {"credit": "", "cw": 4.6, "dx": 0.161, "dy": 0.0, "family": "Sandi Jam AZ", "font": "sandi-jam-az.otf", "fs": 1.25, "hint": "Huruf menjadi penunjuk waktu, A = 07.00", "key": "jam", "letter_sep": "", "name": "Jam", "q": {"dy": 0.0, "fs": 1.2, "h": 1.0, "lsb": 0.0, "pad": 0.2, "rsb": 0.323, "wgap": 0.8}, "sample": "AB", "word_sep": "+"}, {"credit": "", "cw": 3.6, "dx": 0.023, "dy": 0.0255, "family": "Sandi Kimia AZ", "font": "sandi-kimia-az.otf", "fs": 1.5, "hint": "Huruf menjadi rumus kimia, A = OH", "key": "kimia", "letter_sep": "+", "name": "Kimia", "q": {"dy": 0.0255, "fs": 1.6, "h": 0.95, "lsb": 0.091, "pad": 0.25, "rsb": 0.136, "wgap": 0.8}, "sample": "AB", "word_sep": ""}, {"credit": "", "cw": 3.0, "dx": -0.041, "dy": 0.024, "family": "Sandi Matematika AZ", "font": "sandi-matematika-az.otf", "fs": 1.75, "hint": "Huruf menjadi angka dan pecahan, A = 1", "key": "matematika", "letter_sep": "", "name": "Matematika", "q": {"dy": 0.024, "fs": 1.7, "h": 0.95, "lsb": 0.191, "pad": 0.28, "rsb": 0.108, "wgap": 0.8}, "sample": "ABC", "word_sep": "+"}]
+  };
+</script>
+<script src="../../js/common.js" defer></script>
+
+
+<script id="trend-data" type="application/json">[{"cipher": "kotak", "id": 1, "score": 70.0, "t": 1793731576.1817088}, {"cipher": "analog", "id": 2, "score": 65.9, "t": 1793909014.1817088}, {"cipher": "jam", "id": 3, "score": 33.3, "t": 1794082256.1817088}, {"cipher": "kimia", "id": 4, "score": 82.0, "t": 1794250065.1817088}, {"cipher": "matematika", "id": 5, "score": 0.0, "t": 1794331631.1817088}, {"cipher": "kotak", "id": 6, "score": 40.0, "t": 1794533637.1817088}, {"cipher": "jam", "id": 8, "score": 90.5, "t": 1794690351.1817088}]</script>
+<script src="../../js/charts.js" defer></script>
+<script nonce="">
+  document.addEventListener('DOMContentLoaded', function () {
+    var data = JSON.parse(document.getElementById('trend-data').textContent);
+    var names = {}; SANDI.ciphers.forEach(function (c) { names[c.key] = c.name; });
+    var months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    function fmt(ts) { var d = new Date(ts * 1000); return d.getDate() + ' ' + months[d.getMonth()]; }
+    Charts.line(document.getElementById('trend-chart'), {
+      points: data.map(function (p, i) { return { x: i, label: fmt(p.t), sub: 'Sandi ' + names[p.cipher], y: p.score }; }),
+      yMax: 100, yLabel: 'Nilai', unit: '', ticks: [0, 50, 100], xTicks: 'edges'
+    });
+  });
+</script>
+
+
+</body>
+</html>

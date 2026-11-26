@@ -1,0 +1,1034 @@
+
+<!doctype html>
+<html data-root="../../../" lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="csrf-token" content="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+    <meta name="theme-color" content="#1A4A8C" />
+    <link rel="manifest" href="../../../html/manifest.webmanifest" />
+    <link rel="icon" href="../../../img/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../img/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" href="../../../img/apple-touch-icon.png?v=2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Absensi" />
+    <title>Kantor · Absensi</title>
+    
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/ibm-plex-sans-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/plus-jakarta-sans-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/fonts.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="../../../css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/theme.css"
+    />
+    <link rel="stylesheet" href="../../../css/push.css"
+    />
+    
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="../../../css/offices.css" />
+
+    <style>
+      /* Form logout dibungkus supaya method-nya POST (bukan link GET) —
+         lihat auth.py: /auth/logout adalah POST-only untuk mencegah CSRF
+         logout lewat <img>/<a> pihak ketiga. Reset tampilan <button> agar
+         identik dengan link sidebar/bottom-nav di sekitarnya. */
+      .logout-form {
+        margin: 0;
+        padding: 0;
+        display: contents; /* form tidak mengubah layout flex/grid induk */
+      }
+      /* [FIX] Sebelumnya `all: unset` + `display: inherit`. Karena parent
+         .logout-form adalah `display: contents`, `inherit` menghasilkan
+         `contents` juga (bukan `flex`), sehingga tombol kehilangan seluruh
+         layout bottom-nav. Sekarang hanya reset tampilan bawaan <button>;
+         layout diatur oleh selector konteks masing-masing (main.css). */
+      button.as-link {
+        background: none;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Sidebar desktop: tombol tetap selebar item menu lain. */
+      .sidebar .logout-form button.as-link {
+        display: flex;
+        width: 100%;
+      }
+    </style>
+  <script>(()=>{const R="../../../",f=window.fetch;window.fetch=(u,o={})=>{u=String(u);if((o.method||"GET").toUpperCase()!=="GET")return Promise.resolve(new Response(JSON.stringify({ok:true,demo:true}),{headers:{"Content-Type":"application/json"}}));if(u[0]==="/")u=u.indexOf("/static/")===0?R+u.slice(8):R+"html"+u;return f(u,o)};document.addEventListener("submit",e=>{e.preventDefault();alert("Mode demo: aksi disimulasikan dan tidak disimpan.")},true)})()</script><link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+  <body
+    class="role-manager"
+  >
+    
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-brand">
+        <img
+          class="brand-logo"
+          src="../../../img/Logo-App-wide.jpg"
+          alt=""
+          width="70"
+          height="36"
+          decoding="async"
+        />
+        <span>CC Indonesia</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar">RI</div>
+        <div>
+          <div class="sidebar-user-name">
+            Rina
+          </div>
+          <div class="sidebar-user-role">Manager</div>
+        </div>
+        <div id="notif-bell-wrap" style="margin-left: auto"></div>
+      </div>
+
+      <nav class="sidebar-nav">
+         
+        <a
+          href="../../../html/manager/dashboard/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          Dashboard
+        </a>
+        <a
+          href="../../../html/manager/employees/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          Karyawan
+        </a>
+
+        
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="14" x2="12" y2="14" />
+            <line x1="8" y1="18" x2="16" y2="18" />
+          </svg>
+          <span>Jadwal</span>
+        </a>
+        <a
+          href="../../../html/manager/leaves/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          Pengajuan izin
+        </a>
+        <a
+          href="../../../html/manager/shifts/master/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          Konfigurasi Shift
+        </a>
+        <a
+          href="../../../html/manager/company-calendar/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="15" x2="16" y2="15" />
+          </svg>
+          Kalender
+        </a>
+        <a
+          href="../../../html/manager/corrections/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Koreksi
+        </a>
+        <a
+          href="../../../html/manager/reports/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          Laporan
+        </a>
+        <a
+          href="../../../html/manager/production/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+            <circle cx="7.5" cy="11" r="2" />
+            <circle cx="16.5" cy="11" r="2" />
+          </svg>
+          Produksi
+        </a>
+        <a
+          href="../../../html/manager/offices/index.html"
+          class="active"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Kantor
+        </a>
+        
+        <a
+          href="../../../html/manager/equipment/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+          Perlengkapan
+        </a>
+        
+        <a
+          href="../../../html/manager/departments/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+            <line x1="12" y1="12" x2="12" y2="16" />
+            <line x1="10" y1="14" x2="14" y2="14" />
+          </svg>
+          Departemen
+        </a>
+
+         
+      </nav>
+
+
+      <div class="sidebar-footer">
+        
+        <div class="lang-switcher" aria-label="Pilih bahasa">
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+        <form method="post" action="../../../html/auth/logout" class="logout-form">
+          <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+          <button type="submit" class="sidebar-logout as-link">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </aside>
+        
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-inner">
+        <span class="mobile-topbar-title">CC Indonesia</span>
+        <div
+          class="lang-switcher lang-switcher--mobile"
+          aria-label="Pilih bahasa"
+        >
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+      </div>
+    </div>
+     
+
+    <div class="main-wrap">
+        
+      <main class="page-content" id="main-content">
+        
+
+<div class="page-header page-header--std">
+  <div class="page-header-inner">
+    <div class="page-header-left">
+      <p class="page-header-sub">Manajemen</p>
+      <h1 class="page-header-name">Kantor</h1>
+      <p class="page-header-desc">Terdaftar 2 / 2 aktif</p>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="ofc-grid" id="ofc-grid">
+    
+    <div
+      class="ofc-card"
+      data-id="c86cd686-29cc-4a9a-a3b5-2241e37b9349"
+      data-name="Kantor Pusat"
+      data-address="Jl. Contoh No. 1, Jakarta"
+      data-lat="-6.2088"
+      data-lng="106.8456"
+      data-radius="150"
+      data-wstart="08:00"
+      data-wend="17:00"
+      data-tol="15"
+      data-active="true"
+    >
+      <!-- ── Peta OSM: titik GPS + lingkaran radius ── -->
+      <div class="ofc-card-map">
+        <div class="ofc-map" role="img" aria-label="Peta lokasi Kantor Pusat"></div>
+        <div class="ofc-map-tags">
+          
+          <span class="ofc-tag">150m GEOFENCE</span>
+        </div>
+        
+        <span class="ofc-status on"><i></i>Aktif</span>
+        
+      </div>
+
+      <div class="ofc-card-body">
+        <div class="ofc-card-header">
+          <div class="ofc-card-title-wrap">
+            <div class="ofc-card-name">Kantor Pusat</div>
+            
+            <div class="ofc-card-address" title="Jl. Contoh No. 1, Jakarta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /><circle cx="12" cy="9" r="2.5" /></svg>
+              <span>Jl. Contoh No. 1, Jakarta</span>
+            </div>
+            
+          </div>
+          <div class="ofc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1" /><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-5h4v5" /></svg>
+          </div>
+        </div>
+
+        <div class="ofc-card-meta">
+          <div class="ofc-meta-item ofc-meta--time">
+            <span class="ofc-meta-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>Jam Kerja</span>
+            <span class="ofc-meta-value"><strong>08:00</strong> – <strong>17:00</strong> <small>WIB</small></span>
+          </div>
+          <div class="ofc-meta-item ofc-meta--tol">
+            <span class="ofc-meta-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16.5v.01" /></svg>Toleransi</span>
+            <span class="ofc-meta-value"><strong>15</strong> menit</span>
+          </div>
+          <div class="ofc-meta-item ofc-meta--radius">
+            <span class="ofc-meta-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6z" /><path d="M9 12l2 2 4-4" /></svg>Radius GPS</span>
+            <span class="ofc-meta-value"><strong>150</strong> meter</span>
+            <i class="ofc-meta-dot" aria-hidden="true"></i>
+          </div>
+          <button
+            type="button"
+            class="ofc-meta-item ofc-meta--coord"
+            data-copy="-6.208800, 106.845600"
+            onclick="copyCoord(this)"
+            title="Klik untuk menyalin koordinat"
+          >
+            <span class="ofc-meta-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /><circle cx="12" cy="9" r="2.5" /></svg>Koordinat</span>
+            <span class="ofc-meta-value ofc-meta-coord">-6.20880, 106.84560</span>
+          </button>
+        </div>
+
+        <div class="ofc-card-info">
+          <button class="ofc-emp-count" type="button" onclick="showDetail('c86cd686-29cc-4a9a-a3b5-2241e37b9349')" title="Lihat karyawan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></svg>
+            52 staf terdaftar
+          </button>
+          <a href="https://www.google.com/maps?q=-6.2088,106.8456" target="_blank" rel="noopener" class="ofc-map-link" title="Buka di Google Maps">
+            Buka di Maps
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+          </a>
+        </div>
+
+        <div class="ofc-card-actions">
+          <button type="button" class="btn btn-outline btn-sm" onclick="openEdit(this.closest('.ofc-card'))" title="Edit kantor">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+            Edit
+          </button>
+          
+          <button type="button" class="btn btn-outline btn-sm" onclick="toggleOffice('c86cd686-29cc-4a9a-a3b5-2241e37b9349', true, this)">Nonaktifkan</button>
+          
+        </div>
+      </div>
+    </div>
+    
+    <div
+      class="ofc-card"
+      data-id="2b3ff017-5a09-4843-8bf3-7b39edaaeb7d"
+      data-name="Kantor Cabang"
+      data-address="Jl. Contoh No. 2, Tangerang"
+      data-lat="-6.1783"
+      data-lng="106.6319"
+      data-radius="150"
+      data-wstart="08:00"
+      data-wend="17:00"
+      data-tol="15"
+      data-active="true"
+    >
+      <!-- ── Peta OSM: titik GPS + lingkaran radius ── -->
+      <div class="ofc-card-map">
+        <div class="ofc-map" role="img" aria-label="Peta lokasi Kantor Cabang"></div>
+        <div class="ofc-map-tags">
+          
+          <span class="ofc-tag">150m GEOFENCE</span>
+        </div>
+        
+        <span class="ofc-status on"><i></i>Aktif</span>
+        
+      </div>
+
+      <div class="ofc-card-body">
+        <div class="ofc-card-header">
+          <div class="ofc-card-title-wrap">
+            <div class="ofc-card-name">Kantor Cabang</div>
+            
+            <div class="ofc-card-address" title="Jl. Contoh No. 2, Tangerang">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /><circle cx="12" cy="9" r="2.5" /></svg>
+              <span>Jl. Contoh No. 2, Tangerang</span>
+            </div>
+            
+          </div>
+          <div class="ofc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1" /><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-5h4v5" /></svg>
+          </div>
+        </div>
+
+        <div class="ofc-card-meta">
+          <div class="ofc-meta-item ofc-meta--time">
+            <span class="ofc-meta-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>Jam Kerja</span>
+            <span class="ofc-meta-value"><strong>08:00</strong> – <strong>17:00</strong> <small>WIB</small></span>
+          </div>
+          <div class="ofc-meta-item ofc-meta--tol">
+            <span class="ofc-meta-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16.5v.01" /></svg>Toleransi</span>
+            <span class="ofc-meta-value"><strong>15</strong> menit</span>
+          </div>
+          <div class="ofc-meta-item ofc-meta--radius">
+            <span class="ofc-meta-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6z" /><path d="M9 12l2 2 4-4" /></svg>Radius GPS</span>
+            <span class="ofc-meta-value"><strong>150</strong> meter</span>
+            <i class="ofc-meta-dot" aria-hidden="true"></i>
+          </div>
+          <button
+            type="button"
+            class="ofc-meta-item ofc-meta--coord"
+            data-copy="-6.178300, 106.631900"
+            onclick="copyCoord(this)"
+            title="Klik untuk menyalin koordinat"
+          >
+            <span class="ofc-meta-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /><circle cx="12" cy="9" r="2.5" /></svg>Koordinat</span>
+            <span class="ofc-meta-value ofc-meta-coord">-6.17830, 106.63190</span>
+          </button>
+        </div>
+
+        <div class="ofc-card-info">
+          <button class="ofc-emp-count" type="button" onclick="showDetail('2b3ff017-5a09-4843-8bf3-7b39edaaeb7d')" title="Lihat karyawan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></svg>
+            10 staf terdaftar
+          </button>
+          <a href="https://www.google.com/maps?q=-6.1783,106.6319" target="_blank" rel="noopener" class="ofc-map-link" title="Buka di Google Maps">
+            Buka di Maps
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+          </a>
+        </div>
+
+        <div class="ofc-card-actions">
+          <button type="button" class="btn btn-outline btn-sm" onclick="openEdit(this.closest('.ofc-card'))" title="Edit kantor">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+            Edit
+          </button>
+          
+          <button type="button" class="btn btn-outline btn-sm" onclick="toggleOffice('2b3ff017-5a09-4843-8bf3-7b39edaaeb7d', true, this)">Nonaktifkan</button>
+          
+        </div>
+      </div>
+    </div>
+    
+
+    <button class="ofc-add-card" onclick="openAdd()" type="button">
+      <span class="ofc-add-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" /></svg>
+      </span>
+      <span class="ofc-add-title">Tambah Kantor Baru</span>
+      <span class="ofc-add-desc">Daftarkan titik lokasi GPS, batas radius geofence, dan jam kerja kantor operasional baru</span>
+      <span class="ofc-add-cta">+ Buka Formulir</span>
+    </button>
+  </div>
+</div>
+
+<!-- MODAL TAMBAH / EDIT KANTOR -->
+<div class="ofc-modal-overlay" id="ofc-modal-overlay" onclick="closeModal(event)">
+  <div class="ofc-modal" role="dialog" aria-modal="true" aria-labelledby="ofc-modal-title">
+    <div class="ofc-modal-head">
+      <span class="ofc-modal-title" id="ofc-modal-title">Tambah Kantor</span>
+      <button class="ofc-modal-close" onclick="closeModalDirect()" aria-label="Tutup">&times;</button>
+    </div>
+    <div class="ofc-modal-body">
+      <div class="ofc-form-group">
+        <label class="ofc-form-label" for="f-name">Nama Kantor <span>*</span></label>
+        <input type="text" id="f-name" class="form-input" placeholder="cth. Kantor Utama Jakarta" autocomplete="off" />
+      </div>
+      <div class="ofc-form-group">
+        <label class="ofc-form-label" for="f-address">Alamat</label>
+        <input type="text" id="f-address" class="form-input" placeholder="Jl. ... No. ..., Jakarta" />
+      </div>
+
+      <div class="ofc-section-sep">Lokasi GPS</div>
+      <div class="ofc-form-row">
+        <div class="ofc-form-group">
+          <label class="ofc-form-label" for="f-lat">Latitude <span>*</span></label>
+          <input type="number" id="f-lat" class="form-input" step="0.0000001" placeholder="-6.1530189" />
+          <span class="ofc-form-hint">Negatif = selatan khatulistiwa</span>
+        </div>
+        <div class="ofc-form-group">
+          <label class="ofc-form-label" for="f-lng">Longitude <span>*</span></label>
+          <input type="number" id="f-lng" class="form-input" step="0.0000001" placeholder="106.6404759" />
+        </div>
+      </div>
+      <div class="ofc-form-group">
+        <label class="ofc-form-label" for="f-radius">Radius Toleransi GPS (meter) <span>*</span></label>
+        <input type="number" id="f-radius" class="form-input" min="10" max="2000" value="100" />
+        <span class="ofc-form-hint">Karyawan dianggap hadir jika dalam radius ini dari titik kantor</span>
+      </div>
+
+      <div class="ofc-section-sep">Jam Kerja</div>
+      <div class="ofc-form-row">
+        <div class="ofc-form-group">
+          <label class="ofc-form-label" for="f-wstart">Jam Masuk <span>*</span></label>
+          <input type="time" id="f-wstart" class="form-input" value="08:00" />
+        </div>
+        <div class="ofc-form-group">
+          <label class="ofc-form-label" for="f-wend">Jam Pulang <span>*</span></label>
+          <input type="time" id="f-wend" class="form-input" value="17:00" />
+        </div>
+      </div>
+      <div class="ofc-form-group">
+        <label class="ofc-form-label" for="f-tol">Toleransi Keterlambatan (menit) <span>*</span></label>
+        <input type="number" id="f-tol" class="form-input" min="0" max="120" value="15" />
+        <span class="ofc-form-hint">0 = tidak ada toleransi. Karyawan terlambat setelah jam masuk + toleransi ini.</span>
+      </div>
+    </div>
+    <div class="ofc-modal-foot">
+      <button class="btn-modal-cancel" onclick="closeModalDirect()">Batal</button>
+      <button class="btn-modal-submit" id="ofc-save-btn" onclick="saveOffice()">
+        <span id="ofc-save-label">Simpan</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL KARYAWAN -->
+<div class="ofc-modal-overlay" id="ofc-detail-overlay" onclick="closeDetailModal(event)">
+  <div class="ofc-modal ofc-detail-modal" role="dialog" aria-modal="true" aria-labelledby="ofc-detail-title">
+    <div class="ofc-modal-head">
+      <span class="ofc-modal-title" id="ofc-detail-title">Karyawan</span>
+      <button class="ofc-modal-close" aria-label="Tutup" onclick="document.getElementById('ofc-detail-overlay').classList.remove('open')">&times;</button>
+    </div>
+    <div class="ofc-modal-body">
+      <div class="ofc-detail-emp-list" id="ofc-detail-emp-list">
+        <div class="ofc-empty-emp">Memuat…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      </main>
+    </div>
+
+     
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+       
+      <a
+        href="../../../html/manager/dashboard/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a
+        href="../../../html/manager/employees/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+        </svg>
+        <span>Karyawan</span>
+      </a>
+      <a
+        href="../../../html/manager/shift-schedule/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="14" x2="12" y2="14" />
+          <line x1="8" y1="18" x2="16" y2="18" />
+        </svg>
+        <span>Jadwal</span>
+      </a>
+      <a
+        href="../../../html/manager/leaves/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Izin</span>
+      </a>
+      <a
+        href="../../../html/manager/company-calendar/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="15" x2="16" y2="15" />
+        </svg>
+        <span>Kalender</span>
+      </a>
+      <a
+        href="../../../html/manager/reports/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        <span>Laporan</span>
+      </a>
+      <a
+        href="../../../html/manager/production/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+          <circle cx="7.5" cy="11" r="2" />
+          <circle cx="16.5" cy="11" r="2" />
+        </svg>
+        <span>Produksi</span>
+      </a>
+      <a
+        href="../../../html/manager/corrections/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+        <span>Koreksi</span>
+      </a>
+      <a
+        href="../../../html/manager/offices/index.html"
+        class="active"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+          />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Kantor</span>
+      </a>
+      
+      <a
+        href="../../../html/manager/equipment/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <line x1="8" y1="21" x2="16" y2="21" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+        <span>Alat</span>
+      </a>
+      
+      <a
+        href="../../../html/manager/departments/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+          <line x1="12" y1="12" x2="12" y2="16" />
+          <line x1="10" y1="14" x2="14" y2="14" />
+        </svg>
+        <span>Departemen</span>
+      </a>
+      <a
+        href="../../../html/manager/shifts/master/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span>Konfigurasi Shift</span>
+      </a>
+      <form method="post" action="../../../html/auth/logout" class="logout-form">
+        <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+        <button type="submit" class="as-link">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </form>
+
+       
+    </nav>
+    
+    
+    <script src="../../../js/core.js"></script>
+    
+    
+<script>
+  window.I18N = Object.assign({}, window.I18N, {
+    officeAddTitle: "Tambah Kantor",
+    officeAddBtn: "Tambah",
+    officeEditTitle: "Edit Kantor",
+    officeSaveBtn: "Simpan Perubahan",
+    officeSaving: "Menyimpan\u2026",
+    officeNameRequired: "Nama kantor wajib diisi.",
+    officeCoordRequired: "Koordinat latitude/longitude wajib diisi.",
+    officeError: "Terjadi kesalahan.",
+    officeConnFailed: "Koneksi gagal. Coba lagi.",
+    
+    officeConfirmToggle: "Yakin ingin {action} kantor ini?",
+    officeDeactivate: "nonaktifkan",
+    officeActivate: "aktifkan",
+    officeToggleFailed: "Gagal mengubah status kantor.",
+    officeLoading: "Memuat\u2026",
+    officeLoadFailed: "Gagal memuat data.",
+    officeEmployeesTitle: "Karyawan \u2014 ",
+    officeNoEmployees: "Belum ada karyawan yang di-assign ke kantor ini.",
+    officeCopied: "Koordinat disalin",
+    officeCopyFailed: "Gagal menyalin koordinat",
+    officePrimary: "Utama"
+  });
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="../../../js/offices.js"></script>
+
+    <script src="../../../js/app.js"></script>
+    
+    <script>
+      window.I18N = Object.assign({}, window.I18N, {
+      notifTitle: "Notifikasi",
+      notifMarkAllRead: "Tandai semua dibaca",
+      notifLoading: "Memuat\u2026",
+      notifEmpty: "Tidak ada notifikasi",
+      notifError: "Gagal memuat notifikasi"});
+    </script>
+    <script src="../../../js/notifications.js"></script>
+    <script src="../../../js/push.js"></script>
+    
+    <script>
+      // Form logout mengirim POST via fetch, lalu redirect manual berdasarkan
+      // JSON {"redirect": "..."} dari server — pola yang sama dengan
+      // login.js. Tanpa ini, submit form native menampilkan JSON mentah
+      // di layar alih-alih membawa user ke halaman login.
+      document.querySelectorAll(".logout-form").forEach(function (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const btn = form.querySelector("button[type=submit]");
+          if (btn) btn.disabled = true;
+          try { if (window.Push) await window.Push.forgetDevice(); } catch {}
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": form.querySelector(
+                  'input[name="csrf_token"]',
+                ).value,
+              },
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              /* respons bukan JSON — abaikan, pakai fallback di bawah */
+            }
+            window.location.href = data.redirect || "/auth/login";
+          } catch {
+            // Gagal terhubung ke server: tetap arahkan ke login supaya
+            // user tidak macet di halaman dengan sesi yang mungkin sudah
+            // tidak valid.
+            window.location.href = "/auth/login";
+          }
+        });
+      });
+    </script>
+    
+  </body>
+</html>

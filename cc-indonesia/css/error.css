@@ -1,0 +1,111 @@
+/* =============================================================================
+   error.css — Halaman error (500 / 404 / 403)
+   Dimuat SETELAH main.css & theme.css. Hanya memakai token dari theme.css,
+   tanpa warna hardcoded, sehingga ikut berubah jika tema diubah.
+   Prefix .err- agar tidak bentrok dengan kelas lain.
+   ============================================================================= */
+
+.err-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: var(--bg);
+}
+
+.err-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+/* Strip warna di atas kartu — merah untuk 5xx, amber untuk 4xx */
+.err-bar {
+  height: 4px;
+  background: var(--danger);
+}
+.err-card--warn .err-bar {
+  background: var(--accent);
+}
+
+.err-body {
+  padding: clamp(1.5rem, 5vw, 2.25rem);
+  text-align: center;
+}
+
+.err-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.err-card--warn .err-icon {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+.err-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.err-code {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.err-title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(1.15rem, 4vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem;
+}
+
+.err-desc {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin: 0 auto 1.5rem;
+  max-width: 34ch;
+}
+
+.err-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+@media (min-width: 420px) {
+  .err-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.err-foot {
+  border-top: 1px solid var(--border-light);
+  background: var(--brand-xlight);
+  padding: 0.7rem 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.err-foot code {
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--text-secondary);
+}

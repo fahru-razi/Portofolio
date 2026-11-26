@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<script src="../../../js/demo_data.js"></script><script src="../../../js/demo_shim.js"></script>
+    <script>
+    (function() {
+        const saved = localStorage.getItem('user_theme_preference') || 'system';
+        let theme = saved;
+        if (saved === 'system') {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Details - QA System</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/style.css">
+
+    <style>
+        /* ─── Design Tokens ─── */
+        :root {
+            --canvas-bg: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --border-subtle: #E2E8F0;
+            --border-strong: #CBD5E1;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --primary: #0F766E;
+            --primary-hover: #0D9488;
+            --primary-ring: rgba(15,118,110,.18);
+            --emerald-50: #F0FDFA;
+            --emerald-100: #CCFBF1;
+            --emerald-200: #99F6E4;
+            --emerald-600: #0D9488;
+            --emerald-700: #0F766E;
+            --emerald-800: #115E59;
+            --obsidian-900: #0A1C1A;
+            --obsidian-800: #142E2C;
+            --status-success: #059669;
+            --status-success-bg: #ECFDF5;
+            --status-success-border: #A7F3D0;
+            --status-success-text: #065F46;
+            --shadow-card: 0 1px 3px 0 rgba(15,23,42,.05), 0 1px 2px -1px rgba(15,23,42,.05);
+            --shadow-float: 0 4px 12px -2px rgba(15,23,42,.08), 0 2px 4px -1px rgba(15,23,42,.04);
+            --radius: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.25rem;
+            --radius-full: 9999px;
+        }
+
+        /* ─── Base Reset ─── */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body { background: var(--canvas-bg); font-family: 'Inter', sans-serif; color: var(--text-primary); }
+
+        /* ─── Scrollbars ─── */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: var(--radius-full); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* ─── Card ─── */
+        .op-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-card);
+        }
+
+        /* ─── Section Header ─── */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            padding-bottom: 0.875rem;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: 1.25rem;
+        }
+        .section-icon {
+            width: 32px; height: 32px;
+            border-radius: var(--radius);
+            background: var(--emerald-50);
+            color: var(--emerald-700);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin: 0;
+        }
+        .section-meta {
+            margin-left: auto;
+            font-size: 10px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ─── Form Controls ─── */
+        .op-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            margin-bottom: 5px;
+        }
+        .op-input {
+            width: 100%;
+            height: 36px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius);
+            padding: 0 12px;
+            font-size: 12px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: border-color .15s, box-shadow .15s;
+            outline: none;
+        }
+        .op-input::placeholder { color: var(--text-muted); }
+        .op-input:focus {
+            border-color: var(--emerald-700);
+            box-shadow: 0 0 0 2px var(--primary-ring);
+        }
+        .op-input[readonly] {
+            background: #F8FAFC;
+            cursor: not-allowed;
+            color: var(--text-secondary);
+        }
+        .op-input-wrap { position: relative; }
+        .op-input-badge {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            background: #E2E8F0;
+            color: var(--text-secondary);
+            padding: 2px 7px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            pointer-events: none;
+        }
+        .op-input-mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+        .op-eye-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            color: var(--text-muted);
+            line-height: 0;
+            transition: color .15s;
+        }
+        .op-eye-btn:hover { color: var(--text-secondary); }
+
+        /* ─── Buttons ─── */
+        .btn-primary-op {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 36px;
+            padding: 0 18px;
+            background: var(--emerald-700);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background .15s, box-shadow .15s;
+            box-shadow: 0 1px 2px rgba(15,23,42,.06);
+        }
+        .btn-primary-op:hover { background: var(--emerald-600); }
+        .btn-primary-op:active { background: var(--emerald-800); }
+        .btn-primary-op.w-full { width: 100%; }
+
+        .btn-outline-op {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 36px;
+            padding: 0 16px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius);
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background .15s, border-color .15s;
+        }
+        .btn-outline-op:hover { background: #F8FAFC; border-color: var(--text-muted); }
+
+        .btn-ghost-op {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 32px;
+            padding: 0 12px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            border-radius: var(--radius);
+            font-size: 12px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background .15s, color .15s;
+        }
+        .btn-ghost-op:hover { background: #F1F5F9; color: var(--text-primary); }
+
+        /* ─── Badges / Pills ─── */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            height: 22px;
+            padding: 0 9px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .03em;
+            white-space: nowrap;
+        }
+        .status-pill .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .pill-success { background: var(--status-success-bg); color: var(--status-success-text); border: 1px solid var(--status-success-border); }
+        .pill-success .dot { background: var(--status-success); }
+        .pill-role {
+            background: #F0FDFA;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+        .pill-id {
+            background: #F8FAFC;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+        }
+        .label-verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--emerald-700);
+        }
+
+        /* ─── Password Strength ─── */
+        .strength-wrap {
+            background: #F8FAFC;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+        }
+        .strength-bar-track {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            height: 5px;
+            margin: 6px 0;
+        }
+        .strength-bar-track span {
+            border-radius: var(--radius-full);
+            background: var(--border-subtle);
+            transition: background .3s;
+        }
+        .strength-bar-track span.filled { background: var(--emerald-600); }
+        .strength-checks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .strength-check {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--emerald-700);
+        }
+        .strength-check svg { width: 11px; height: 11px; color: var(--emerald-600); }
+
+        /* ─── Profile Avatar Banner ─── */
+        .avatar-banner {
+            height: 76px;
+            background: linear-gradient(135deg, #115E59 0%, #0F766E 50%, #0A1C1A 100%);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            margin: -24px -24px 0 -24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .avatar-banner::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px);
+            background-size: 14px 14px;
+        }
+        .avatar-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--emerald-700);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+            border: 3px solid #fff;
+            box-shadow: var(--shadow-float);
+            position: relative;
+            cursor: pointer;
+            transition: box-shadow .15s;
+        }
+        .avatar-circle:hover { box-shadow: 0 0 0 4px var(--primary-ring), var(--shadow-float); }
+        .avatar-edit-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(15,118,110,.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity .18s;
+        }
+        .avatar-circle:hover .avatar-edit-overlay { opacity: 1; }
+
+        /* ─── Page Header ─── */
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: 1.5rem;
+        }
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.025em;
+            margin: 0 0 3px;
+        }
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* ─── Field Group ─── */
+        .field-group { margin-bottom: 14px; }
+        .field-group:last-child { margin-bottom: 0; }
+        .field-row-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        /* ─── Flash / Alert ─── */
+        .op-alert {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 1.25rem;
+        }
+        .op-alert-success { background: var(--status-success-bg); color: var(--status-success-text); border: 1px solid var(--status-success-border); }
+
+        /* ─── Modal Overlay ─── */
+        .op-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(10,28,26,.55);
+            backdrop-filter: blur(4px);
+            z-index: 1050;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .op-modal {
+            background: var(--card-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 20px 25px -5px rgba(15,23,42,.12), 0 8px 10px -6px rgba(15,23,42,.06);
+            width: 100%;
+            max-width: 440px;
+            overflow: hidden;
+        }
+        .op-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            background: #FAFBFD;
+        }
+        .op-modal-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin: 0; }
+        .op-modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 2px;
+            line-height: 0;
+            border-radius: 6px;
+            transition: color .15s, background .15s;
+        }
+        .op-modal-close:hover { color: var(--text-primary); background: var(--border-subtle); }
+        .op-modal-body { padding: 20px; }
+        .op-modal-footer {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .hidden { display: none !important; }
+        
+        /* ─── Main Layout Grid ─── */
+        .main-layout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+        
+        /* Ubah menjadi 1 kolom pada layar HP dan Tablet */
+        @media (max-width: 992px) {
+            .main-layout-grid {
+                grid-template-columns: 1fr;
+            }
+        }   
+    </style>
+<link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+<body>
+
+    <!-- templates/sidebar.html -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  window.tailwind && (tailwind.config = {
+    prefix: 'tw-',
+    corePlugins: { preflight: false },
+    theme: {
+      extend: {
+        colors: {
+          'shell-bg': '#09201F',
+          'shell-surface': '#0E2A29',
+          'shell-border': '#163836',
+          'shell-text': '#F1F5F9',
+          'shell-muted': '#648A86',
+          primary: '#0F766E',
+          'primary-dark': '#0D9488',
+          secondary: '#0284C7'
+        },
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace']
+        }
+      }
+    }
+  });
+</script>
+<style>
+  .material-symbols-outlined { 
+    font-family: 'Material Symbols Outlined' !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 20px !important;
+    line-height: 1 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    word-wrap: normal !important;
+    direction: ltr !important;
+    -webkit-font-smoothing: antialiased !important;
+    -webkit-font-feature-settings: 'liga' !important;
+    font-feature-settings: 'liga' !important;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  }
+  
+  html { overflow-y: scroll !important; }
+  body { padding-right: 0 !important; }
+  @media (min-width: 1024px) {
+    body.has-app-sidebar { padding-left: 256px !important; }
+  }
+  
+  #appSidebar, #appSidebar * {
+    box-sizing: border-box !important;
+    letter-spacing: -0.01em !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+  
+  #appSidebar a { text-decoration: none !important; }
+  #appSidebar button { background: transparent; border: none; box-shadow: none; outline: none; }
+
+  #appSidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 256px !important;
+    min-width: 256px !important;
+    max-width: 256px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    flex: 0 0 256px !important;
+    will-change: transform;
+    contain: layout style paint;
+    z-index: 1050 !important;
+  }
+
+  @media (max-width: 1023.98px) {
+    #appSidebar {
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.4);
+      transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+    #appSidebar:not(.tw-translate-x-0) {
+      transform: translateX(-100%) !important;
+    }
+    #appSidebar.tw-translate-x-0 {
+      transform: translateX(0) !important;
+    }
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+      #appSidebar .tw-flex-shrink-0.tw-p-2 {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom)) !important;
+      }
+    }
+  }
+</style>
+
+<aside id="appSidebar"
+       class="tw-font-sans tw-fixed tw-left-0 tw-top-0 tw-w-64 tw-bg-shell-bg tw-border-r tw-border-shell-border tw-z-50 tw-flex tw-flex-col tw-justify-between tw-select-none -tw-translate-x-full lg:tw-translate-x-0 tw-transition-transform tw-duration-200">
+    <div class="tw-flex tw-flex-col tw-flex-1 tw-min-h-0">
+
+        <!-- Brand -->
+        <div class="tw-h-16 tw-px-4 tw-flex tw-items-center tw-justify-between tw-gap-2 tw-flex-shrink-0" style="border-bottom: 1px solid #163836 !important;">
+            <div class="tw-flex tw-items-center tw-gap-2.5 tw-min-w-0">
+                <div class="tw-w-8 tw-h-8 tw-rounded-lg tw-bg-primary/80 tw-border tw-border-primary-dark/30 tw-flex tw-items-center tw-justify-center tw-shadow-inner tw-flex-shrink-0">
+                    <span class="material-symbols-outlined tw-text-white tw-text-[18px]">verified</span>
+                </div>
+                <div class="tw-flex tw-flex-col tw-min-w-0">
+                    <span class="tw-text-shell-text tw-font-bold tw-text-sm tw-leading-none tw-tracking-tight tw-truncate">CCIndonesia</span>
+                    <span class="tw-font-mono tw-text-primary/80 tw-uppercase tw-tracking-wider tw-text-[10px] tw-mt-1 tw-font-medium tw-truncate">Kelola Task & QR Code</span>
+                </div>
+            </div>
+            <button type="button" onclick="toggleSidebar(false)" class="lg:tw-hidden tw-w-7 tw-h-7 tw-rounded tw-flex tw-items-center tw-justify-center tw-text-shell-muted hover:tw-text-white hover:tw-bg-shell-surface tw-transition-colors tw-flex-shrink-0">
+                <span class="material-symbols-outlined tw-text-[18px]">close</span>
+            </button>
+        </div>
+
+        <!-- Nav (scrollable) -->
+        <div class="tw-overflow-y-auto tw-flex-1 tw-px-2 tw-py-3 tw-space-y-4">
+
+            <!-- OPERATIONS -->
+            <nav class="tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-px-2 tw-pt-1 tw-pb-1 tw-text-[11px] tw-font-semibold tw-uppercase tw-tracking-wider tw-text-shell-muted">Operasional</div>
+
+                
+                
+                <a href="../../../html/quality-control/dashboard/index.html"
+                class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                         tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">space_dashboard</span>
+                    <span>Dashboard</span>
+                </a>
+                
+
+                <a href="../../../html/quality-control/tasks/index.html"
+                class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                         tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">assignment</span>
+                    <span>Manajemen Task</span>
+                </a>
+
+                
+            </nav>
+
+            <!-- ADMINISTRATION (Developer only) -->
+            
+
+            <!-- SYSTEM & ACCOUNT -->
+            <nav class="tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-px-2 tw-pt-1 tw-pb-1 tw-text-[11px] tw-font-semibold tw-uppercase tw-tracking-wider tw-text-shell-muted">Sistem & Akun</div>
+
+                <a href="../../../html/quality-control/support/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">headset_mic</span>
+                    <span>Layanan Pelanggan</span>
+                </a>
+
+                <a href="../../../html/quality-control/faq/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">menu_book</span>
+                    <span>FAQ & Panduan</span>
+                </a>
+
+                <a href="../../../html/quality-control/profile/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-bg-primary tw-text-white tw-border-primary-dark/40
+                          ">
+                    <span class="material-symbols-outlined tw-text-[18px]">manage_accounts</span>
+                    <span>Pengaturan Profil</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="tw-p-2 tw-bg-black/20 tw-border-t tw-border-shell-border tw-flex tw-flex-col tw-gap-2 tw-flex-shrink-0">
+        <div class="tw-flex tw-items-center tw-gap-1 tw-px-1">
+            <div class="dropup">
+                <button class="tw-bg-transparent tw-border-0 tw-shadow-none tw-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-md tw-text-shell-text tw-text-xs tw-font-mono hover:tw-bg-black/30 tw-transition-colors" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    ID
+                </button>
+                <ul class="dropdown-menu shadow-sm border-0 py-1 theme-dropdown-menu">
+                    <li><a class="dropdown-item py-2 px-3 small active" href="#">🇮🇩 Bahasa Indonesia</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small " href="#">🇬🇧 English</a></li>
+                </ul>
+            </div>
+
+            <div class="dropup">
+                <button class="tw-bg-transparent tw-border-0 tw-shadow-none tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 tw-rounded-md tw-text-shell-text hover:tw-bg-black/30 tw-transition-colors" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Theme">
+                    <span class="material-symbols-outlined tw-text-[16px]">wb_sunny</span>
+                </button>
+                <ul class="dropdown-menu shadow-sm border-0 py-1 theme-dropdown-menu">
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('light')">Terang</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('dark')">Gelap</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('system')">Sistem</a></li>
+                </ul>
+            </div>
+
+            <!-- Tombol Logout: HANYA MUNCUL JIKA SUDAH LOGIN -->
+            
+            <a href="#" title="Keluar" class="tw-no-underline tw-ml-auto tw-w-7 tw-h-7 tw-rounded tw-flex tw-items-center tw-justify-center tw-text-shell-muted hover:tw-bg-black/30 hover:tw-text-rose-400 tw-transition-colors">
+                <span class="material-symbols-outlined tw-text-[16px]">logout</span>
+            </a>
+            
+        </div>
+
+        
+        <div class="tw-flex tw-items-center tw-gap-2.5 tw-p-2 tw-rounded-lg tw-bg-shell-surface tw-border tw-border-shell-border">
+            <div class="tw-relative tw-flex-shrink-0">
+                <div class="tw-w-8 tw-h-8 tw-rounded-full tw-bg-primary/20 tw-text-primary tw-border tw-border-primary/30 tw-flex tw-items-center tw-justify-center">
+                    <span class="material-symbols-outlined tw-text-[16px]">person</span>
+                </div>
+            </div>
+            <div class="tw-flex tw-flex-col tw-min-w-0 tw-flex-1">
+                <span class="tw-text-shell-text tw-text-xs tw-font-bold tw-truncate">qc_andi</span>
+                <span class="tw-font-mono tw-text-primary/90 tw-text-[10px] tw-truncate">Quality Control</span>
+            </div>
+            <span class="tw-w-2 tw-h-2 tw-rounded-full tw-bg-emerald-500 tw-flex-shrink-0"></span>
+        </div>
+        
+    </div>
+</aside>
+
+<!-- Backdrop mobile -->
+<div id="sidebarBackdrop" onclick="toggleSidebar(false)" class="tw-hidden tw-fixed tw-inset-0 tw-bg-black/50 lg:tw-hidden" style="z-index: 1040;"></div>
+
+<script>
+    document.body.classList.add('has-app-sidebar');
+
+    function toggleSidebar(open) {
+        const aside = document.getElementById('appSidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        if (!aside) return;
+        const willOpen = (typeof open === 'boolean') ? open : aside.classList.contains('-tw-translate-x-full');
+        aside.classList.toggle('-tw-translate-x-full', !willOpen);
+        aside.classList.toggle('tw-translate-x-0', willOpen);
+        if (backdrop) backdrop.classList.toggle('tw-hidden', !willOpen);
+    }
+    window.toggleSidebar = toggleSidebar;
+
+    document.getElementById('appSidebar') && document.getElementById('appSidebar').querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+            if (window.innerWidth < 1024) toggleSidebar(false);
+        });
+    });
+</script>
+    <!-- templates/navbar.html -->
+<header class="tw-font-sans tw-sticky tw-top-0 tw-z-40 tw-h-16 tw-flex tw-items-center tw-justify-between tw-gap-3 tw-px-4 md:tw-px-6 tw-flex-shrink-0"
+        style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border-color); backdrop-filter: blur(6px);">
+    <div class="tw-flex tw-items-center tw-gap-3 tw-min-w-0 tw-flex-1">
+        <!-- Hamburger: hanya tampil di mobile, membuka sidebar persistent -->
+        <button type="button" onclick="toggleSidebar(true)"
+                class="lg:tw-hidden tw-w-9 tw-h-9 tw-flex-shrink-0 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-border"
+                style="border-color: var(--border-color); color: var(--text-main);">
+            <span class="material-symbols-outlined tw-text-[20px]">menu</span>
+        </button>
+
+        <!-- BREADCRUMBS DINAMIS BERDASARKAN KATEGORI SIDEBAR -->
+        
+        
+            
+        
+
+        <div class="tw-min-w-0 tw-flex tw-items-center tw-gap-2 tw-text-xs md:tw-text-sm tw-truncate">
+            <span class="material-symbols-outlined tw-text-[16px] tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.5;">home</span>
+            <span style="color: var(--text-main); opacity: 0.3;" class="tw-flex-shrink-0">/</span>
+            <!-- Kategori Sidebar Dinamis -->
+            <span class="tw-font-medium tw-hidden sm:tw-inline tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.7;">Sistem & Akun</span>
+            <span class="tw-hidden sm:tw-inline tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.3;">/</span>
+            
+            <!-- Nama Halaman Aktif -->
+            <span class="tw-font-bold tw-tracking-tight tw-truncate" style="color: var(--text-main);">
+                
+                    Pengaturan Profil
+                
+            </span>
+        </div>
+    </div>
+
+    <div class="tw-flex tw-items-center tw-gap-2 tw-flex-shrink-0">
+        <div class="tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-text-white tw-shadow-sm" style="background-color: var(--primary);">
+            <span class="material-symbols-outlined tw-text-[16px]">person</span>
+        </div>
+    </div>
+</header>
+
+<!-- KOTAK NOTIFIKASI GLOBAL -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 9999; margin-top: 70px; pointer-events: none;">
+    
+        
+    
+</div>
+
+    <div class="container-fluid px-4 pb-5 mt-4">
+
+        <!-- Flash Messages -->
+        
+            
+        
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Pengaturan Profil & Keamanan Akun</h1>
+                <p class="page-subtitle">Kelola identitas personal, preferensi autentikasi, dan kredensial keamanan akun.</p>
+            </div>
+        </div>
+
+        <!-- Two-column Grid -->
+        <div class="main-layout-grid">
+
+            <!-- ── LEFT: Profile Identity ── -->
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+                <!-- Profile Card -->
+                <div class="op-card" style="padding:24px;">
+                    <div class="avatar-banner"></div>
+
+                    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:-36px;">
+                        <!-- Avatar -->
+                        
+                            <div class="avatar-circle" onclick="document.getElementById('editProfileModal').classList.remove('hidden')">
+                                A
+                                <div class="avatar-edit-overlay">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 012.828 2.828L11.828 15.828a4 4 0 01-1.414.828l-3.535.707.707-3.535A4 4 0 019 13z"/></svg>
+                                </div>
+                            </div>
+                        
+
+                        <h4 style="font-size:16px;font-weight:700;color:var(--text-primary);margin:12px 0 6px;">
+                            Andi Saputra
+                        </h4>
+
+                        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin-bottom:16px;">
+                            <span class="status-pill pill-role">Quality Control</span>
+                            <span class="status-pill pill-success">
+                                <span class="dot"></span>
+                                Active
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Info Card -->
+                <div class="op-card" style="padding:24px;">
+                    
+                    <!-- HEADER -->
+                    <div class="section-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                        <!-- Kiri: Ikon dan Judul -->
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <div class="section-icon">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </div>
+                            <h3 class="section-title" style="margin:0;">Account Info</h3>
+                            <span class="section-meta" style="margin-left:8px;">
+                                Diperbarui: 
+                                
+                                    14 Nov 2026
+                                
+                            </span>
+                        </div>
+                        
+                        <!-- Kanan: Tombol Edit Toggle -->
+                        <button type="button" id="btnToggleEdit" style="background:none; border:none; display:flex; align-items:center; gap:5px; font-size:12px; font-weight:600; font-family:'Inter',sans-serif; color:var(--primary, #0F766E); cursor:pointer; padding:4px 8px; border-radius:6px; transition:all 0.2s;">
+                            <span class="material-symbols-outlined" style="font-size:16px;">edit_square</span>
+                            <span id="btnToggleEditLabel">Edit</span>
+                        </button>
+                    </div>
+
+                    <!-- FORM -->
+                    <form id="profileForm" action="/edit_profile" method="POST" enctype="multipart/form-data" style="display:flex;flex-direction:column;gap:14px;">
+
+                        <div class="field-group" style="margin-bottom:0;">
+                            <label class="op-label">Username</label>
+                            <div class="op-input-wrap">
+                                <!-- Tambahkan class readonly-input dan atribut readonly -->
+                                <input class="op-input op-input-mono readonly-input" type="text" name="username" value="qc_andi" required readonly style="background-color:#F1F5F9; cursor:not-allowed; transition: 0.3s;">
+                                <span class="op-input-badge">Sistem Utama</span>
+                            </div>
+                        </div>
+
+                        <div class="field-group" style="margin-bottom:0;">
+                            <label class="op-label">Full Name</label>
+                            <input class="op-input readonly-input" type="text" name="nama_lengkap" value="Andi Saputra" required readonly style="background-color:#F1F5F9; cursor:not-allowed; transition: 0.3s;">
+                        </div>
+
+                        <div class="field-group" style="margin-bottom:0;">
+                            <div class="field-row-label">
+                                <label class="op-label" style="margin:0;">Email Address</label>
+                                <span class="label-verified">
+                                    <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                    Terverifikasi
+                                </span>
+                            </div>
+                            <input class="op-input op-input-mono readonly-input" type="email" name="email" value="qc_andi@contoh.id" required readonly style="background-color:#F1F5F9; cursor:not-allowed; transition: 0.3s;">
+                        </div>
+
+                        <div class="field-group" style="margin-bottom:0;">
+                            <label class="op-label">Account Status</label>
+                            <div style="display:flex;align-items:center;height:36px;padding:0 12px;background:#F8FAFC;border:1px solid var(--border-subtle);border-radius:var(--radius);">
+                                <span class="status-pill pill-success" style="height:20px;font-size:10px;">
+                                    <span class="dot"></span>Active
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Simpan (Disembunyikan secara default) -->
+                        <div id="saveBtnContainer" style="margin-top:4px; display:none;">
+                            <button class="btn-primary-op w-full" type="submit" style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                                <span class="material-symbols-outlined" style="font-size:18px;">save</span>
+                                Simpan Perubahan Identitas
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- SCRIPT UNTUK TOGGLE EDIT MODE -->
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const toggleBtn = document.getElementById('btnToggleEdit');
+                    const labelBtn = document.getElementById('btnToggleEditLabel');
+                    const saveContainer = document.getElementById('saveBtnContainer');
+                    const inputs = document.querySelectorAll('.readonly-input');
+                    
+                    // Simpan teks awal ke variabel
+                    const textEdit = labelBtn ? labelBtn.innerText : "Edit";
+                    const textCancel = "Batal";
+
+                    if(toggleBtn && labelBtn) {
+                        toggleBtn.addEventListener('click', function() {
+                            const isEditing = saveContainer.style.display === 'block';
+
+                            if (!isEditing) {
+                                // MASUK MODE EDIT
+                                inputs.forEach(input => {
+                                    input.removeAttribute('readonly'); 
+                                    input.style.backgroundColor = '#FFFFFF'; 
+                                    input.style.cursor = 'text'; 
+                                });
+                                saveContainer.style.display = 'block'; 
+                                
+                                toggleBtn.innerHTML = `
+                                    <span class="material-symbols-outlined" style="font-size:16px;">close</span>
+                                    <span id="btnToggleEditLabel">${textCancel}</span>
+                                `;
+                                toggleBtn.style.color = '#EF4444'; 
+                                toggleBtn.style.backgroundColor = '#FEF2F2';
+                            } else {
+                                // BATAL EDIT & KEMBALI KE MODE BACA
+                                inputs.forEach(input => {
+                                    input.setAttribute('readonly', 'true'); 
+                                    input.style.backgroundColor = '#F1F5F9'; 
+                                    input.style.cursor = 'not-allowed'; 
+                                    input.value = input.getAttribute('value'); 
+                                });
+                                saveContainer.style.display = 'none'; 
+                                
+                                toggleBtn.innerHTML = `
+                                    <span class="material-symbols-outlined" style="font-size:16px;">edit_square</span>
+                                    <span id="btnToggleEditLabel">${textEdit}</span>
+                                `;
+                                toggleBtn.style.color = 'var(--primary, #0F766E)'; 
+                                toggleBtn.style.backgroundColor = 'transparent';
+                            }
+                        });
+                    }
+                });
+                </script>
+            </div>
+
+            <!-- ── RIGHT: Password & Security ── -->
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+                <!-- Change Password Card -->
+                <div class="op-card" style="padding:24px;">
+                    <!-- HEADER -->
+                    <div class="section-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+                        <div style="display:flex; align-items:flex-start; gap:8px;">
+                            <div class="section-icon">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="section-title" style="margin:0 0 2px;">Ganti Kata Sandi (Credentials)</h3>
+                                <p style="font-size:11px;color:var(--text-muted);margin:0;">Gunakan kata sandi kuat minimal 6 karakter dengan kombinasi simbol.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Tombol Toggle Edit Sandi -->
+                        <button type="button" id="btnTogglePassword" style="background:none; border:none; display:flex; align-items:center; gap:5px; font-size:12px; font-weight:600; font-family:'Inter',sans-serif; color:var(--primary, #0F766E); cursor:pointer; padding:4px 8px; border-radius:6px; transition:all 0.2s;">
+                            <span class="material-symbols-outlined" style="font-size:16px;">edit_square</span>
+                            <span id="btnTogglePasswordLabel">Ganti Sandi</span>
+                        </button>
+                    </div>
+
+                    <form id="passwordForm" action="/change_password" method="POST" style="display:flex;flex-direction:column;gap:14px;">
+
+                        <div class="field-group" style="margin-bottom:0;">
+                            <div class="field-row-label">
+                                <label class="op-label" style="margin:0;">Kata Sandi Saat Ini</label>
+                                <a href="#" style="font-size:11px;color:var(--emerald-700);font-weight:600;text-decoration:none;">Lupa kata sandi?</a>
+                            </div>
+                            <div class="op-input-wrap">
+                                <input class="op-input pass-input readonly-pass" type="password" name="old_password" placeholder="••••••••" required readonly style="padding-right:38px; background-color:#F1F5F9; cursor:not-allowed; transition: 0.3s;">
+                                <button class="op-eye-btn" type="button" onclick="togglePassword(this)">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="two-col">
+                            <div>
+                                <label class="op-label">Kata Sandi Baru</label>
+                                <div class="op-input-wrap">
+                                    <input class="op-input pass-input readonly-pass" id="newPasswordInput" type="password" name="new_password" placeholder="••••••••" required readonly style="padding-right:38px; background-color:#F1F5F9; cursor:not-allowed; transition: 0.3s;" oninput="updateStrength(this.value)">
+                                    <button class="op-eye-btn" type="button" onclick="togglePassword(this)">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="op-label">Konfirmasi Kata Sandi Baru</label>
+                                <div class="op-input-wrap">
+                                    <input class="op-input pass-input readonly-pass" id="confirmPasswordInput" type="password" placeholder="••••••••" required readonly style="padding-right:38px; background-color:#F1F5F9; cursor:not-allowed; transition: 0.3s;">
+                                    <button class="op-eye-btn" type="button" onclick="togglePassword(this)">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </button>
+                                </div>
+                                <!-- Pesan Error jika kata sandi tidak cocok -->
+                                <span id="matchError" style="color:#EF4444; font-size:11px; display:none; margin-top:4px;">Kata sandi tidak cocok!</span>
+                            </div>
+                        </div>
+
+                        <!-- Strength Meter (Disembunyikan saat mode baca) -->
+                        <div class="strength-wrap" id="strengthMeterWrap" style="display:none;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;">
+                                <span style="font-size:11px;font-weight:600;color:var(--text-secondary);">Kekuatan Sandi:</span>
+                                <span id="strengthLabel" style="font-size:11px;font-weight:700;color:var(--emerald-700);">Belum Diisi</span>
+                            </div>
+                            <div class="strength-bar-track" id="strengthBars">
+                                <span></span><span></span><span></span><span></span>
+                            </div>
+                            <div class="strength-checks">
+                                <span class="strength-check" id="chk-len">
+                                    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                    Min. 8 karakter
+                                </span>
+                                <span class="strength-check" id="chk-case">
+                                    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                    Huruf Besar & Angka
+                                </span>
+                                <span class="strength-check" id="chk-special">
+                                    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                    Simbol (@$!%*#?&)
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Simpan Sandi -->
+                        <div id="savePasswordBtnContainer" style="display:flex; justify-content:flex-end; display:none; margin-top:4px;">
+                            <button class="btn-primary-op w-full" type="submit" id="submitPasswordBtn" style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                                <span class="material-symbols-outlined" style="font-size:18px;">save</span>
+                                Perbarui Kata Sandi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- SCRIPT TOGGLE EDIT & VALIDASI PASSWORD -->
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // === 1. FITUR TOGGLE EDIT ===
+                const togglePassBtn = document.getElementById('btnTogglePassword');
+                const labelPassBtn = document.getElementById('btnTogglePasswordLabel');
+                const savePassContainer = document.getElementById('savePasswordBtnContainer');
+                const passInputs = document.querySelectorAll('.readonly-pass');
+                const strengthMeter = document.getElementById('strengthMeterWrap');
+                
+                const textGanti = labelPassBtn ? labelPassBtn.innerText : "Ganti Sandi";
+                const textBatalPass = "Batal";
+                const placeholderOld = "Masukkan kata sandi lama...";
+                const placeholderNew = "Kata sandi baru...";
+                const placeholderConfirm = "Ulangi kata sandi baru...";
+                const placeholderDefault = "••••••••";
+
+                if(togglePassBtn && labelPassBtn) {
+                    togglePassBtn.addEventListener('click', function() {
+                        const isEditing = savePassContainer.style.display === 'flex';
+
+                        if (!isEditing) {
+                            // MASUK MODE EDIT
+                            passInputs.forEach(input => {
+                                input.removeAttribute('readonly');
+                                input.style.backgroundColor = '#FFFFFF';
+                                input.style.cursor = 'text';
+                                input.value = ''; // Kosongkan isian saat mau diedit
+                            });
+                            
+                            // Ubah placeholder
+                            if(passInputs[0]) passInputs[0].placeholder = placeholderOld;
+                            if(passInputs[1]) passInputs[1].placeholder = placeholderNew;
+                            if(passInputs[2]) passInputs[2].placeholder = placeholderConfirm;
+                            
+                            savePassContainer.style.display = 'flex';
+                            strengthMeter.style.display = 'block'; // Tampilkan meteran
+                            
+                            togglePassBtn.innerHTML = `
+                                <span class="material-symbols-outlined" style="font-size:16px;">close</span>
+                                <span id="btnTogglePasswordLabel">${textBatalPass}</span>
+                            `;
+                            togglePassBtn.style.color = '#EF4444'; 
+                            togglePassBtn.style.backgroundColor = '#FEF2F2';
+                        } else {
+                            // BATAL EDIT & KEMBALI KE MODE BACA
+                            passInputs.forEach(input => {
+                                input.setAttribute('readonly', 'true');
+                                input.style.backgroundColor = '#F1F5F9';
+                                input.style.cursor = 'not-allowed';
+                                input.value = ''; // Kosongkan isian jika dibatalkan
+                                input.placeholder = placeholderDefault;
+                            });
+                            savePassContainer.style.display = 'none';
+                            strengthMeter.style.display = 'none'; // Sembunyikan meteran
+                            document.getElementById('matchError').style.display = 'none'; // Sembunyikan error
+                            
+                            togglePassBtn.innerHTML = `
+                                <span class="material-symbols-outlined" style="font-size:16px;">edit_square</span>
+                                <span id="btnTogglePasswordLabel">${textGanti}</span>
+                            `;
+                            togglePassBtn.style.color = 'var(--primary, #0F766E)'; 
+                            togglePassBtn.style.backgroundColor = 'transparent';
+                        }
+                    });
+                }
+
+                // === 2. VALIDASI KONFIRMASI KATA SANDI ===
+                const passForm = document.getElementById('passwordForm');
+                const newPass = document.getElementById('newPasswordInput');
+                const confirmPass = document.getElementById('confirmPasswordInput');
+                const matchError = document.getElementById('matchError');
+
+                // Cek kecocokan saat user mengetik di kolom konfirmasi
+                if (confirmPass) {
+                    confirmPass.addEventListener('input', function() {
+                        if (confirmPass.value !== newPass.value) {
+                            matchError.style.display = 'block';
+                            confirmPass.style.borderColor = '#EF4444';
+                        } else {
+                            matchError.style.display = 'none';
+                            confirmPass.style.borderColor = 'var(--border-subtle)';
+                        }
+                    });
+                }
+
+                // Cegah formulir dikirim jika sandi tidak cocok
+                if(passForm) {
+                    passForm.addEventListener('submit', function(e) {
+                        if (newPass.value !== confirmPass.value) {
+                            e.preventDefault(); // Hentikan pengiriman form
+                            matchError.style.display = 'block';
+                            confirmPass.style.borderColor = '#EF4444';
+                            confirmPass.focus(); // Arahkan kursor ke kolom yang salah
+                        }
+                    });
+                }
+            });
+            </script>
+        </div>
+
+    </div>
+
+    <!-- ─── MODAL: Edit Profile ─── -->
+    <div class="op-modal-backdrop hidden" id="editProfileModal">
+        <div class="op-modal">
+            <div class="op-modal-header">
+                <h5 class="op-modal-title">Edit Profile</h5>
+                <button class="op-modal-close" onclick="document.getElementById('editProfileModal').classList.add('hidden')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form action="/edit_profile" method="POST" enctype="multipart/form-data">
+                <div class="op-modal-body" style="display:flex;flex-direction:column;gap:14px;">
+                    <div>
+                        <label class="op-label">Login Username</label>
+                        <input class="op-input op-input-mono" type="text" name="username" value="qc_andi" required>
+                    </div>
+                    <div>
+                        <label class="op-label">Full Name</label>
+                        <input class="op-input" type="text" name="nama_lengkap" value="Andi Saputra" required>
+                    </div>
+                    <div>
+                        <label class="op-label">Email Address</label>
+                        <input class="op-input op-input-mono" type="email" name="email" value="qc_andi@contoh.id" required>
+                    </div>
+                    <div>
+                        <label class="op-label">Upload Profile Picture (Optional)</label>
+                        <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;">
+                            <span class="btn-outline-op" style="height:32px;font-size:11px;padding:0 12px;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                Pilih File
+                            </span>
+                            <span id="fileLabel" style="font-size:11px;color:var(--text-muted);">Belum ada file</span>
+                            <input type="file" name="foto_profil" accept=".jpg,.jpeg,.png" style="display:none;" onchange="document.getElementById('fileLabel').textContent=this.files[0]?.name||'Belum ada file'">
+                        </label>
+                        <p style="font-size:10px;color:var(--text-muted);margin-top:4px;">Format: JPG, PNG. Leave it blank if you don't wanna change your photo.</p>
+                    </div>
+                </div>
+                <div class="op-modal-footer">
+                    <button class="btn-outline-op" type="button" onclick="document.getElementById('editProfileModal').classList.add('hidden')">Cancel</button>
+                    <button class="btn-primary-op" type="submit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ─── MODAL: Change Password ─── -->
+    <div class="op-modal-backdrop hidden" id="changePasswordModal">
+        <div class="op-modal">
+            <div class="op-modal-header">
+                <h5 class="op-modal-title">Change Account Password</h5>
+                <button class="op-modal-close" onclick="document.getElementById('changePasswordModal').classList.add('hidden')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form action="/change_password" method="POST">
+                <div class="op-modal-body" style="display:flex;flex-direction:column;gap:14px;">
+                    <div>
+                        <label class="op-label">Old Password</label>
+                        <input class="op-input" type="password" name="old_password" placeholder="Enter your old password..." required>
+                    </div>
+                    <div>
+                        <label class="op-label">New Password</label>
+                        <input class="op-input" type="password" name="new_password" placeholder="Enter your new password..." required>
+                    </div>
+                </div>
+                <div class="op-modal-footer">
+                    <button class="btn-outline-op" type="button" onclick="document.getElementById('changePasswordModal').classList.add('hidden')">Cancel</button>
+                    <button class="btn-primary-op" type="submit">Change Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../../js/script.js"></script>
+
+    <script>
+        /* ── Password Show/Hide ── */
+        function togglePassword(btn) {
+            const input = btn.previousElementSibling;
+            if (!input) return;
+            const isText = input.type === 'text';
+            input.type = isText ? 'password' : 'text';
+            btn.innerHTML = isText
+                ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+                : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+        }
+
+        /* ── Password Strength ── */
+        function updateStrength(val) {
+            const hasLen = val.length >= 8;
+            const hasCase = /[A-Z]/.test(val) && /[0-9]/.test(val);
+            const hasSpecial = /[@$!%*#?&]/.test(val);
+            const score = [hasLen, hasCase, hasSpecial].filter(Boolean).length;
+            const bars = document.querySelectorAll('#strengthBars span');
+            
+            // Translasi untuk Label via JS Injection dari Jinja
+            const labelLemah = "Lemah";
+            const labelSedang = "Sedang";
+            const labelKuat = "Kuat";
+            const labelSangatKuat = "Sangat Kuat";
+            
+            const labels = [labelLemah, labelSedang, labelKuat, labelSangatKuat];
+            const percents = ['25%', '50%', '75%', '100%'];
+            const filled = Math.max(1, Math.round((score / 3) * 4));
+            
+            bars.forEach((b, i) => b.classList.toggle('filled', i < filled));
+            const strengthLabelEl = document.getElementById('strengthLabel');
+            if(strengthLabelEl) {
+                strengthLabelEl.textContent = labels[filled - 1] + ' (' + percents[filled - 1] + ')';
+            }
+            
+            const chkLen = document.getElementById('chk-len');
+            const chkCase = document.getElementById('chk-case');
+            const chkSpecial = document.getElementById('chk-special');
+            
+            if(chkLen) chkLen.style.color = hasLen ? 'var(--emerald-700)' : 'var(--text-muted)';
+            if(chkCase) chkCase.style.color = hasCase ? 'var(--emerald-700)' : 'var(--text-muted)';
+            if(chkSpecial) chkSpecial.style.color = hasSpecial ? 'var(--emerald-700)' : 'var(--text-muted)';
+        }
+
+        /* ── Escape to close modals ── */
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                ['editProfileModal', 'changePasswordModal'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) el.classList.add('hidden');
+                });
+            }
+        });
+
+        /* ── Click backdrop to close ── */
+        ['editProfileModal', 'changePasswordModal'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) {
+                el.addEventListener('click', e => { if (e.target === el) el.classList.add('hidden'); });
+            }
+        });
+    </script>
+</body>
+</html>

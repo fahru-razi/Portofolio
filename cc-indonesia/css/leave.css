@@ -1,0 +1,1312 @@
+/* ============================================================
+   leave.css — Halaman Pengajuan Izin
+   Selaras dengan theme.css "Industrial Precision"
+   Brand: Navy #1B4F72 · Accent Amber #D4860A
+   Mobile-first. Breakpoints: md=768px
+   ============================================================ */
+
+/* ── Page layout ────────────────────────────────────────────── */
+.leave-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Halaman employee (.leave-page) — halaman manager memakai .page + .leave-stack */
+.leave-page {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--gap);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ── Page header ─────────────────────────────────────────────── */
+.leave-page .page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.leave-page .page-title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary, #0f2537);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.leave-page .page-sub {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-muted, #5d7a8c);
+  margin-top: 0.2rem;
+}
+
+/* Tombol Ajukan Izin — amber sesuai theme */
+.leave-page .page-header .btn-primary {
+  background: var(--accent, #d4860a) !important;
+  border-color: var(--accent, #d4860a) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(212, 134, 10, 0.22);
+  flex-shrink: 0;
+}
+.leave-page .page-header .btn-primary:hover:not(:disabled) {
+  background: var(--accent-dark, #b45309) !important;
+  border-color: var(--accent-dark, #b45309) !important;
+  box-shadow: 0 4px 12px rgba(212, 134, 10, 0.32);
+}
+
+/* ── Info banner ─────────────────────────────────────────────── */
+.info-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-xs, 4px);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.info-banner--warning {
+  background: var(--warning-bg, #fef3c7);
+  color: var(--warning, #b45309);
+  border: 1px solid rgba(180, 83, 9, 0.18);
+}
+
+.info-banner svg {
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+
+/* ── Leave type info cards ───────────────────────────────────── */
+.leave-types-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 560px) {
+  .leave-types-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+.leave-type-card {
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #e2e8ef);
+  border-radius: var(--radius-sm, 8px);
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.leave-type-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-xs, 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.leave-type-dayoff .leave-type-icon {
+  background: var(--brand-light, #eaf2f8);
+  color: var(--brand, #1b4f72);
+}
+
+.leave-type-extraoff .leave-type-icon {
+  background: var(--warning-bg, #fef3c7);
+  color: var(--warning, #b45309);
+}
+
+.leave-type-sick .leave-type-icon {
+  background: var(--danger-bg, #fee2e2);
+  color: var(--danger, #b91c1c);
+}
+
+.leave-type-name {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary, #0f2537);
+  line-height: 1.2;
+}
+
+.leave-type-desc {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.73rem;
+  color: var(--text-muted, #5d7a8c);
+  margin-top: 0.1rem;
+  line-height: 1.3;
+}
+
+/* ── Table card ─────────────────────────────────────────────── */
+.table-card {
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #e2e8ef);
+  border-radius: var(--radius-sm, 8px);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+.table-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1rem;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-light, #eef2f6);
+}
+
+.section-title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary, #0f2537);
+  letter-spacing: -0.01em;
+}
+
+/* ── Tabs ────────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+}
+
+.tab {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.775rem;
+  font-weight: 500;
+  color: var(--text-muted, #5d7a8c);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs, 4px);
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  transition:
+    background 0.14s,
+    color 0.14s,
+    border-color 0.14s;
+  white-space: nowrap;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab:hover {
+  background: var(--brand-light, #eaf2f8);
+  color: var(--brand, #1b4f72);
+}
+
+.tab.active {
+  background: var(--brand-light, #eaf2f8);
+  color: var(--brand, #1b4f72);
+  border-color: rgba(27, 79, 114, 0.2);
+  font-weight: 600;
+}
+
+/* ── Badge count (pending counter) ─────────────────────────── */
+.badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 0.28rem;
+  border-radius: 9px;
+  background: var(--danger, #b91c1c);
+  color: #fff;
+  font-size: 0.63rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ── MOBILE CARD LIST (default, < 768px) ────────────────────── */
+/*
+   Di mobile, <table> diganti tampilan card list.
+   Setiap <tr> dirender seperti kartu mandiri dengan label-value.
+*/
+
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile: sembunyikan thead, ubah tr jadi card */
+@media (max-width: 767px) {
+  .table-wrap {
+    overflow-x: visible;
+  }
+
+  .leave-table {
+    display: block;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .leave-table thead {
+    display: none;
+  }
+
+  .leave-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .leave-table tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 0.75rem;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-light, #eef2f6);
+    position: relative;
+  }
+
+  .leave-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .leave-table tr.row-hidden {
+    display: none;
+  }
+
+  /* Semua td default: stack label di atas value */
+  .leave-table td {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.82rem;
+  }
+
+  /* Label palsu via data-label */
+  .leave-table td::before {
+    content: attr(data-label);
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint, #8dabbe);
+  }
+
+  /* Kolom jenis & status: full width di baris atas */
+  .leave-table td:nth-child(1) {
+    /* Jenis/Karyawan */
+    grid-column: 1;
+  }
+  .leave-table td:nth-child(2) {
+    /* Jenis (di tabel tim) / Tanggal */
+    grid-column: 2;
+  }
+
+  /* Alasan — full width */
+  .leave-table td.reason-cell {
+    grid-column: 1 / -1;
+  }
+
+  /* Aksi (approve/reject/cancel) — full width, di bawah */
+  .leave-table td:last-child {
+    grid-column: 1 / -1;
+  }
+
+  /* Catatan reviewer juga full width */
+  .leave-table td.manager-note-cell {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Desktop: tabel biasa */
+@media (min-width: 768px) {
+  .leave-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.845rem;
+    min-width: 600px;
+  }
+
+  .leave-table th {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint, #8dabbe);
+    padding: 0.6rem 0.875rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light, #eef2f6);
+    white-space: nowrap;
+  }
+
+  .leave-table td {
+    padding: 0.75rem 0.875rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-light, #eef2f6);
+    color: var(--text-secondary, #2c3e50);
+  }
+
+  .leave-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .leave-table tbody tr:hover td {
+    background: var(--brand-xlight, #f4f9fc);
+  }
+}
+
+/* ── Leave type badge ────────────────────────────────────────── */
+.leave-type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.55rem;
+  border-radius: var(--radius-xs, 4px);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.leave-type-badge--day_off {
+  background: var(--brand-light, #eaf2f8);
+  color: var(--brand-dark, #154360);
+}
+
+.leave-type-badge--extra_off {
+  background: var(--warning-bg, #fef3c7);
+  color: var(--warning, #b45309);
+}
+
+.leave-type-badge--sick {
+  background: var(--danger-bg, #fee2e2);
+  color: var(--danger, #b91c1c);
+}
+
+/* ── Status badge ────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.55rem;
+  border-radius: var(--radius-xs, 4px);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-pending {
+  background: var(--warning-bg, #fef3c7);
+  color: var(--warning, #b45309);
+}
+
+.badge-approved {
+  background: var(--success-bg, #dcfce7);
+  color: var(--success, #15803d);
+}
+
+.badge-rejected {
+  background: var(--danger-bg, #fee2e2);
+  color: var(--danger, #b91c1c);
+}
+
+.badge-cancelled {
+  background: var(--bg, #f7f8fa);
+  color: var(--text-muted, #5d7a8c);
+  border: 1px solid var(--border, #e2e8ef);
+}
+
+/* ── Date range & duration ───────────────────────────────────── */
+.date-range {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  color: var(--text-secondary, #2c3e50);
+  white-space: normal;
+  word-break: break-word;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.date-sep {
+  display: inline-block;
+  margin: 0 0.25rem;
+  color: var(--text-faint, #8dabbe);
+}
+
+.duration-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.45rem;
+  background: var(--bg, #f7f8fa);
+  border: 1px solid var(--border, #e2e8ef);
+  border-radius: var(--radius-xs, 4px);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary, #2c3e50);
+  white-space: nowrap;
+}
+
+/* ── Reason & notes cells ────────────────────────────────────── */
+.reason-cell {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #2c3e50);
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .reason-cell {
+    max-width: 200px;
+  }
+}
+
+.manager-note-cell {
+  font-size: 0.8rem;
+}
+
+@media (min-width: 768px) {
+  .manager-note-cell {
+    max-width: 160px;
+  }
+}
+
+.manager-note {
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-muted, #5d7a8c);
+  font-style: italic;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.45;
+}
+
+/* ── Employee name + dept (di tabel tim) ─────────────────────── */
+.leave-emp-name {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.845rem;
+  font-weight: 600;
+  color: var(--text-primary, #0f2537);
+  display: block;
+}
+
+.leave-emp-dept {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  color: var(--text-muted, #5d7a8c);
+  display: block;
+  margin-top: 0.1rem;
+}
+
+.leave-reviewer-name {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-muted, #5d7a8c);
+  display: block;
+}
+
+/* ── Action buttons (approve/reject) ─────────────────────────── */
+.mgr-pending-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.btn-approve,
+.btn-reject {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-xs, 4px);
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition:
+    background 0.14s,
+    opacity 0.14s;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 767px) {
+  .btn-approve,
+  .btn-reject {
+    flex: 1;
+    justify-content: center;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.82rem;
+  }
+}
+
+.btn-approve {
+  background: var(--success-bg, #dcfce7);
+  color: var(--success, #15803d);
+}
+.btn-approve:hover {
+  background: #bbf7d0;
+}
+
+.btn-reject {
+  background: var(--danger-bg, #fee2e2);
+  color: var(--danger, #b91c1c);
+}
+.btn-reject:hover {
+  background: #fecaca;
+}
+
+/* ── Cancel button ───────────────────────────────────────────── */
+.btn-cancel-leave {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.6rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--danger, #b91c1c);
+  background: var(--danger-bg, #fee2e2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs, 4px);
+  cursor: pointer;
+  transition:
+    background 0.14s,
+    border-color 0.14s;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-cancel-leave:hover {
+  background: #fecaca;
+  border-color: var(--danger, #b91c1c);
+}
+
+@media (max-width: 767px) {
+  .btn-cancel-leave {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.82rem;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ── Empty state ─────────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.empty-title {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted, #5d7a8c);
+}
+
+.empty-sub {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-faint, #8dabbe);
+  margin-top: 0.3rem;
+}
+
+/* ── [hidden] override — HARUS SEBELUM .modal-overlay ─────── */
+[hidden] {
+  display: none !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MODAL
+   ══════════════════════════════════════════════════════════════ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 37, 64, 0.5);
+  z-index: 400;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.modal-overlay.is-open {
+  display: flex;
+  animation: overlayIn 0.18s ease;
+}
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Desktop: centered */
+@media (min-width: 600px) {
+  .modal-overlay.is-open {
+    align-items: center;
+    padding: var(--space-lg);
+  }
+}
+
+/* Modal sheet */
+.modal {
+  background: var(--bg-card, #fff);
+  border-radius: var(--radius-sm, 8px) var(--radius-sm, 8px) 0 0;
+  width: 100%;
+  max-width: 520px;
+  max-height: 92dvh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: modalUp 0.22s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+@media (min-width: 600px) {
+  .modal {
+    border-radius: var(--radius-sm, 8px);
+    animation: modalPop 0.2s cubic-bezier(0.34, 1.1, 0.64, 1);
+  }
+  .modal--sm {
+    max-width: 380px;
+  }
+}
+
+@keyframes modalUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes modalPop {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Modal drag handle hint (mobile) */
+@media (max-width: 599px) {
+  .modal::before {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: var(--border, #e2e8ef);
+    border-radius: 2px;
+    margin: 0.65rem auto 0;
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.1rem;
+  border-bottom: 1px solid var(--border-light, #eef2f6);
+}
+
+.modal-title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary, #0f2537);
+  letter-spacing: -0.01em;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted, #5d7a8c);
+  padding: 0.35rem;
+  border-radius: var(--radius-xs, 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    color 0.14s,
+    background 0.14s;
+  -webkit-tap-highlight-color: transparent;
+}
+.modal-close:hover {
+  color: var(--text-primary, #0f2537);
+  background: var(--bg, #f7f8fa);
+}
+
+.modal-body {
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.875rem 1.1rem;
+  border-top: 1px solid var(--border-light, #eef2f6);
+}
+
+/* Modal footer tombol full-width di mobile */
+@media (max-width: 480px) {
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+  .modal-footer .btn {
+    width: 100%;
+    justify-content: center;
+    height: 46px;
+    font-size: 0.9rem;
+  }
+}
+
+/* ── Form elements ───────────────────────────────────────────── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary, #2c3e50);
+  letter-spacing: 0.01em;
+}
+
+.form-group input[type="date"],
+.form-group textarea,
+.form-group select {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-primary, #0f2537);
+  background: var(--bg-card, #fff);
+  border: 1.5px solid var(--border, #e2e8ef);
+  border-radius: var(--radius-xs, 4px);
+  padding: 0.55rem 0.75rem;
+  width: 100%;
+  outline: none;
+  transition:
+    border-color 0.14s,
+    box-shadow 0.14s;
+  -webkit-appearance: none;
+  line-height: 1.5;
+}
+
+.form-group input[type="date"] {
+  height: 42px;
+  font-size: 0.875rem;
+}
+
+.form-group input[type="date"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--brand, #1b4f72);
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.form-row-2 > * {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 400px) {
+  .form-row-2 {
+    flex-direction: column;
+  }
+}
+
+.required {
+  color: var(--danger, #b91c1c);
+}
+
+.label-hint {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 400;
+  color: var(--text-muted, #5d7a8c);
+  font-size: 0.75rem;
+  margin-left: 0.15rem;
+}
+
+.field-error {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  color: var(--danger, #b91c1c);
+  margin-top: 0.2rem;
+}
+
+/* ── Leave type selector (di modal) ─────────────────────────── */
+.leave-type-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+@media (max-width: 380px) {
+  .leave-type-selector {
+    grid-template-columns: 1fr;
+  }
+}
+
+.type-option {
+  cursor: pointer;
+  display: block;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.type-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.type-option-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.75rem 0.4rem;
+  border: 2px solid var(--border, #e2e8ef);
+  border-radius: var(--radius-xs, 4px);
+  text-align: center;
+  background: var(--bg-card, #fff);
+  transition:
+    border-color 0.14s,
+    background 0.14s;
+}
+
+.type-option input[type="radio"]:checked + .type-option-content {
+  border-color: var(--brand, #1b4f72);
+  background: var(--brand-xlight, #f4f9fc);
+}
+
+.type-option:hover .type-option-content {
+  border-color: var(--brand-mid, #2874a6);
+  background: var(--brand-xlight, #f4f9fc);
+}
+
+.type-option-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-xs, 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.type-icon-dayoff {
+  background: var(--brand-light, #eaf2f8);
+  color: var(--brand, #1b4f72);
+}
+.type-icon-extraoff {
+  background: var(--warning-bg, #fef3c7);
+  color: var(--warning, #b45309);
+}
+.type-icon-sick {
+  background: var(--danger-bg, #fee2e2);
+  color: var(--danger, #b91c1c);
+}
+
+.type-option
+  input[type="radio"]:checked
+  + .type-option-content
+  .type-option-icon {
+  box-shadow: 0 0 0 2px var(--brand-mid, #2874a6);
+}
+
+.type-option-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--text-primary, #0f2537);
+  line-height: 1.2;
+}
+
+.type-option-desc {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.64rem;
+  color: var(--text-muted, #5d7a8c);
+  line-height: 1.3;
+}
+
+/* ── Duration summary ────────────────────────────────────────── */
+.duration-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--brand-light, #eaf2f8);
+  border-radius: var(--radius-xs, 4px);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.82rem;
+  color: var(--brand-dark, #154360);
+  font-weight: 500;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.52rem 1rem;
+  border-radius: var(--radius-xs, 4px);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition:
+    background 0.14s,
+    border-color 0.14s,
+    box-shadow 0.14s,
+    opacity 0.14s;
+  line-height: 1;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent, #d4860a);
+  color: #fff;
+  border-color: var(--accent, #d4860a);
+  box-shadow: 0 2px 8px rgba(212, 134, 10, 0.22);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-dark, #b45309);
+  border-color: var(--accent-dark, #b45309);
+  box-shadow: 0 4px 12px rgba(212, 134, 10, 0.32);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary, #2c3e50);
+  border-color: var(--border, #e2e8ef);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--bg, #f7f8fa);
+}
+
+.btn-danger {
+  background: var(--danger, #b91c1c);
+  color: #fff;
+  border-color: var(--danger, #b91c1c);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #9b1717;
+  border-color: #9b1717;
+}
+
+/* Success override (approve modal) */
+.btn-success-override {
+  background: var(--success, #15803d) !important;
+  border-color: var(--success, #15803d) !important;
+}
+.btn-success-override:hover:not(:disabled) {
+  background: #116b32 !important;
+  border-color: #116b32 !important;
+}
+
+/* ── Spinner ─────────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Hidden rows ─────────────────────────────────────────────── */
+tr[data-status].row-hidden {
+  display: none;
+}
+
+/* ── Miscellaneous ───────────────────────────────────────────── */
+.text-muted {
+  color: var(--text-faint, #8dabbe);
+}
+
+/* ── Company Day-off extras ──────────────────────────────────── */
+.dayoff-year-nav {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.dayoff-date {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.845rem;
+  font-weight: 500;
+  color: var(--text-primary, #0f2537);
+  white-space: nowrap;
+}
+
+.dayoff-weekday {
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  color: var(--text-muted, #5d7a8c);
+  margin-top: 0.1rem;
+}
+
+.dayoff-name {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.845rem;
+  font-weight: 500;
+  color: var(--text-primary, #0f2537);
+}
+
+.dayoff-date-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.dayoff-date-row input[type="date"] {
+  flex: 1;
+}
+
+.dayoff-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.dayoff-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--brand-light, #eaf2f8);
+  color: var(--brand-dark, #154360);
+  border-radius: var(--radius-xs, 4px);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.dayoff-tag-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--brand, #1b4f72);
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  font-family: inherit;
+}
+.dayoff-tag-remove:hover {
+  opacity: 1;
+}
+
+.dayoff-scope-row {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.dayoff-scope-option {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.845rem;
+  cursor: pointer;
+  color: var(--text-secondary, #2c3e50);
+}
+
+.dayoff-scope-option input[type="radio"] {
+  width: auto;
+  accent-color: var(--brand, #1b4f72);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TEAM LEAVE CARDS — Mobile grouped per karyawan
+   ══════════════════════════════════════════════════════════════ */
+
+/* Desktop: sembunyikan card, tampilkan tabel */
+.team-leave-cards {
+  display: none;
+}
+
+/* Mobile: sembunyikan tabel, tampilkan card */
+@media (max-width: 767px) {
+  .team-table-wrap {
+    display: none !important;
+  }
+
+  .team-leave-cards {
+    display: block;
+  }
+}
+
+/* Grup per karyawan */
+.team-user-group {
+  border-bottom: 2px solid var(--border-light, #eef2f6);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0;
+}
+
+.team-user-group:last-child {
+  border-bottom: none;
+}
+
+/* Header nama karyawan */
+.team-user-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.875rem 1rem 0.5rem;
+  background: var(--brand-xlight, #f4f9fc);
+  border-bottom: 1px solid var(--border-light, #eef2f6);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.team-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--brand, #1b4f72);
+  color: #fff;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.team-user-name {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary, #0f2537);
+  line-height: 1.2;
+}
+
+.team-user-dept {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  color: var(--text-muted, #5d7a8c);
+  margin-top: 0.1rem;
+}
+
+/* Item izin di dalam grup */
+.team-leave-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-light, #eef2f6);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.team-leave-item:last-child {
+  border-bottom: none;
+}
+
+.team-leave-item.row-hidden {
+  display: none !important;
+}
+
+.team-leave-item-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 0.75rem;
+}
+
+.team-leave-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.team-leave-cell--full {
+  grid-column: 1 / -1;
+}
+
+.team-leave-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint, #8dabbe);
+}
+
+.team-leave-actions {
+  margin-top: 0.25rem;
+}

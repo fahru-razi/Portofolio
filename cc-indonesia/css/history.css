@@ -1,0 +1,1123 @@
+/* ============================================================
+   history.css — Riwayat kehadiran karyawan
+   Redesign v3 (mengikuti referensi Stitch): kartu ringkasan dengan
+   ring ikon status, badge status pill dengan border tipis, filter
+   jadi segmented dark pill, search bar dengan focus ring biru,
+   tabel dengan hover state + kolom mono untuk jam/durasi.
+   Semua warna dibaca dari token main.css/theme.css yang sudah ada
+   (--success/--warning-mid/--danger/--brand/--sN-ink, dst).
+   Mobile-first, breakpoint mengikuti main.css: 480 / 640 / 768 / 1024.
+   ============================================================ */
+
+/* ── Page header — pakai .page-header-left supaya aturan shrink/wrap
+   yang sudah ada di main.css (min-width:0, flex:1 1 auto) aktif. ─── */
+.page-header-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.page-header-date-full {
+  white-space: nowrap;
+}
+/* [FIX] main.css membuat .page-header-right full-width di ≤480px tapi
+   .page-header-inner tetap nowrap secara global — kombinasi itu memaksa
+   .page-header-left (min-width:0, flex:1 1 auto) menyusut ke lebar nyaris
+   nol di layar sempit, sehingga overflow-wrap:break-word pada
+   .page-header-name memecah tiap huruf ke baris sendiri ("R i w a y a t").
+   Di halaman ini kita betulkan dengan mengizinkan wrap: nama tetap di
+   baris sendiri selebar penuh, lalu tanggal/pill turun ke baris kedua. */
+@media (max-width: 480px) {
+  .page-header-inner {
+    flex-wrap: wrap;
+  }
+  .page-header-left {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+  .page-header-name {
+    font-size: 1.15rem;
+  }
+}
+
+/* ── Toolbar: bungkus summary + filter + search jadi satu blok ────── */
+.hist-toolbar {
+  padding: 1rem clamp(1rem, 3vw, 1.5rem) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* ── Status dot — dipakai di ring summary card & tabel desktop ────── */
+.hdot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--s-ink, var(--text-faint));
+}
+.hdot-present { background: var(--success); }
+.hdot-overtime { background: var(--s4-ink); }
+.hdot-late { background: var(--warning-mid); }
+.hdot-sick { background: #854d0e; }
+.hdot-extoff { background: var(--brand); }
+.hdot-absent { background: var(--danger); }
+.hdot-dayoff { background: var(--text-muted); }
+
+/* ── Summary strip: 7 card dengan ring ikon status + angka besar ──── */
+.hist-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+.hist-summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 0.9rem;
+  box-shadow: var(--shadow-xs);
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 92px;
+}
+.hist-summary-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+.hsc-present:hover { border-color: var(--success-mid); }
+.hsc-overtime:hover { border-color: var(--s4-border); }
+.hsc-late:hover { border-color: var(--warning-mid); }
+.hsc-sick:hover { border-color: #854d0e; }
+.hsc-extoff:hover { border-color: var(--brand-mid); }
+.hsc-absent:hover { border-color: var(--danger); }
+.hsc-dayoff:hover { border-color: var(--border-light); }
+
+.hsc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+.hsc-lbl {
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+.hsc-ring {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg);
+  flex-shrink: 0;
+}
+.hsc-present .hsc-ring { background: var(--success-bg); }
+.hsc-overtime .hsc-ring { background: var(--s4-bg); }
+.hsc-late .hsc-ring { background: var(--warning-bg); }
+.hsc-sick .hsc-ring { background: #fef9c3; }
+.hsc-extoff .hsc-ring { background: var(--brand-light); }
+.hsc-absent .hsc-ring { background: var(--danger-bg); }
+.hsc-dayoff .hsc-ring { background: var(--border-light); }
+
+.hsc-val {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  margin: 0.5rem 0 0.35rem;
+}
+.hsc-num {
+  font-family: "Plus Jakarta Sans", "IBM Plex Sans", sans-serif;
+  font-size: clamp(1.3rem, 3.5vw, 1.55rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.hsc-absent .hsc-num { color: var(--danger); }
+.hsc-late .hsc-num { color: var(--warning); }
+.hsc-unit {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.hsc-note {
+  min-height: 1.1em;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--text-faint);
+}
+.hsc-note-present { color: var(--success); }
+.hsc-note-late { color: var(--warning-mid); }
+.hsc-note-absent { color: var(--danger); }
+
+/* ── Filter bar row: month nav (left) + Unduh Laporan (right) ─────── */
+.hist-filterbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.hist-month-nav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-xs);
+}
+.hist-month-btn {
+  background: none;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-family: inherit;
+  transition: background var(--transition), color var(--transition);
+  display: flex;
+  align-items: center;
+}
+.hist-month-btn:hover {
+  background: var(--brand-light);
+  color: var(--brand);
+}
+.hist-month-btn svg {
+  width: 14px;
+  height: 14px;
+}
+.hist-month-label {
+  padding: 0.5rem 0.75rem;
+  font-family: "IBM Plex Mono", "Menlo", monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  min-width: 118px;
+  text-align: center;
+  white-space: nowrap;
+  background: var(--bg-card);
+}
+
+/* ── Unduh Laporan button ──────────────────────────────────────────── */
+.btn-download-report {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.btn-download-report:hover {
+  background: var(--bg);
+  border-color: var(--text-faint);
+}
+.btn-download-report svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+}
+
+/* ── Controls block: filter pills + search. Di desktop (≥768px) ini
+   menyatu visual dengan .hist-table-wrap di bawahnya (satu card besar:
+   filter → garis pemisah → tabel). Base style di sini adalah default
+   mobile (card list) di mana .hist-controls berdiri sendiri sebagai
+   card utuh — lihat media query ≥768px untuk versi menyatu. */
+.hist-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  box-shadow: var(--shadow-xs);
+}
+
+/* ── Status filter: segmented dark pill (mengikuti referensi) ──────── */
+.hist-status-filter {
+  display: flex;
+  gap: 0.2rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 0.2rem;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.hist-status-filter::-webkit-scrollbar { display: none; }
+
+.hsf-btn {
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-xs);
+  border: none;
+  background: transparent;
+  font-size: 0.74rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.hsf-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.6);
+}
+.hsf-btn.active {
+  background: var(--text-primary);
+  color: #fff;
+  box-shadow: var(--shadow-xs);
+}
+.hsf-btn.active.f-present { background: var(--success); }
+.hsf-btn.active.f-overtime { background: var(--s4-ink); }
+.hsf-btn.active.f-late { background: var(--warning-mid); }
+.hsf-btn.active.f-sick { background: #854d0e; }
+.hsf-btn.active.f-extoff { background: var(--brand); }
+.hsf-btn.active.f-absent { background: var(--danger); }
+.hsf-btn.active.f-dayoff { background: var(--text-muted); }
+
+/* ── Search + shift filter row ─────────────────────────────────────── */
+.hist-searchbar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.hist-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.hist-search-icon {
+  position: absolute;
+  left: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  color: var(--text-faint);
+  pointer-events: none;
+}
+.hist-search-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem 0.55rem 2.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  font-family: inherit;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.hist-search-input::placeholder {
+  color: var(--text-faint);
+}
+.hist-search-input:focus {
+  outline: none;
+  background: var(--bg-card);
+  border-color: var(--brand-mid);
+  box-shadow: 0 0 0 3px rgba(40, 116, 166, 0.14);
+}
+/* ── Custom shift dropdown (bukan <select> native) ─────────────────
+   Native <select> di sebagian browser me-render popup opsinya selebar
+   opsi TERPANJANG ("Shift 1 - Quality Control"), independen dari lebar
+   elemen <select> itu sendiri dan dari overflow container manapun,
+   sehingga bisa "meluber" keluar tabel. Dropdown custom ini pakai
+   button + <ul> posisi absolute biasa, jadi lebar & overflow-nya
+   sepenuhnya terkendali via CSS seperti elemen lain. */
+.hist-shift-dropdown {
+  position: relative;
+  flex-shrink: 0;
+}
+.hist-shift-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 0.7rem 0.55rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  min-width: 140px;
+  max-width: 100%;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.hist-shift-select span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.hist-shift-select:hover {
+  border-color: var(--text-faint);
+}
+.hist-shift-select:focus {
+  outline: none;
+  border-color: var(--brand-mid);
+  box-shadow: 0 0 0 3px rgba(40, 116, 166, 0.14);
+}
+.hist-shift-caret {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  color: var(--text-faint);
+  transition: transform var(--transition);
+}
+.hist-shift-dropdown.open .hist-shift-caret {
+  transform: rotate(180deg);
+}
+
+.hist-shift-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  /* Lebar menu mengikuti tombolnya (bukan opsi terpanjang seperti
+     <select> native), dengan sedikit toleransi lebih lebar supaya
+     label panjang tetap terbaca, dibatasi max-width supaya tidak
+     meluber keluar container di layar sempit. */
+  min-width: 100%;
+  width: max-content;
+  max-width: min(280px, 90vw);
+  margin: 0;
+  padding: 0.3rem;
+  list-style: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md, var(--shadow));
+  z-index: 20;
+  display: none;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.hist-shift-dropdown.open .hist-shift-menu {
+  display: block;
+}
+.hist-shift-menu li {
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: normal;
+  overflow-wrap: break-word;
+  transition: background var(--transition), color var(--transition);
+}
+.hist-shift-menu li:hover {
+  background: var(--brand-light);
+  color: var(--brand);
+}
+.hist-shift-menu li.active {
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+}
+/* Dropdown mepet ke sisi kanan container di layar sempit — buka ke
+   kiri supaya tidak terpotong tepi layar/tabel. */
+@media (max-width: 639px) {
+  .hist-shift-menu {
+    left: auto;
+    right: 0;
+  }
+}
+
+/* ── Content area ─────────────────────────────────────────── */
+.hist-content {
+  padding: 0.85rem clamp(1rem, 3vw, 1.5rem) 1.5rem;
+}
+
+/* ── Empty state ──────────────────────────────────────────── */
+.hist-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-xs);
+}
+.hist-empty-icon {
+  width: 44px;
+  height: 44px;
+  color: var(--text-faint);
+  margin-bottom: 0.75rem;
+  opacity: 0.6;
+}
+.hist-empty-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.3rem;
+}
+.hist-empty-sub {
+  font-size: 0.8rem;
+  color: var(--text-faint);
+}
+
+/* ── Loading skeleton ─────────────────────────────────────── */
+.hist-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.skel-row {
+  height: 84px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--border-light) 25%, var(--border) 50%, var(--border-light) 75%);
+  background-size: 200% 100%;
+  animation: skel-shimmer 1.4s infinite;
+}
+@keyframes skel-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Mobile: card list view ───────────────────────────────── */
+.hist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+/* ── Kartu riwayat (mobile) ──────────────────────────────────────────
+   Kartu netral mengikuti .card di main.css (radius, border, shadow
+   dari token tema). Warna hanya dipakai untuk status (badge) dan
+   keterlambatan; sisanya netral supaya bersih. Ukuran teks mengikuti
+   skala tema (0.68–0.9rem). */
+.hist-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.8rem 0.85rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.hist-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+/* Grid 2 kolom: ikon | teks.
+   - Ikon hanya di BARIS 1, sejajar dengan baris tanggal.
+   - Tanggal (baris 1) dan meta hari+shift (baris 2) sama-sama di
+     KOLOM 2, jadi meta rata kiri dengan teks tanggal, bukan dengan
+     ikon. */
+.hist-card-date-block {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0.5rem;
+  row-gap: 0.2rem;
+  align-items: center;
+}
+.hcd-cal {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand);
+}
+.hcd-cal svg {
+  width: 17px;
+  height: 17px;
+}
+.hist-card-date {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: "Plus Jakarta Sans", "IBM Plex Sans", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.hist-card-meta {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Dua kotak jam. Warna mengikuti konvensi dashboard di theme.css:
+   masuk = hijau (.checkin-icon-in), keluar = biru brand
+   (.checkin-icon-out). Latar kotak memakai tint yang sama dengan
+   badge status supaya keduanya langsung terbedakan. */
+.hist-card-times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.hist-time-box {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--radius-sm);
+  min-width: 0;
+}
+.hist-time-box--in {
+  background: var(--success-bg);
+}
+.hist-time-box--out {
+  background: var(--brand-light);
+}
+.hist-time-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--bg-card);
+}
+.hist-time-box--in .hist-time-icon {
+  color: var(--success);
+}
+.hist-time-box--out .hist-time-icon {
+  color: var(--brand);
+}
+.hist-time-icon svg {
+  width: 14px;
+  height: 14px;
+}
+.hist-time-box-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 0;
+}
+.hist-time-box-lbl {
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.hist-time-box--in .hist-time-box-lbl {
+  color: var(--success);
+}
+.hist-time-box--out .hist-time-box-lbl {
+  color: var(--brand);
+}
+.hist-time-box-val {
+  font-family: "IBM Plex Mono", "Menlo", monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+/* Jam masuk terlambat: angka berubah ke warna peringatan */
+.hist-time-box-val--late {
+  color: var(--warning);
+}
+
+/* Footer: durasi kiri, kantor kanan, tanpa garis */
+.hist-card-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.7rem;
+}
+.hist-card-foot-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.hist-card-foot-item svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.hist-card-foot-dur svg {
+  color: var(--accent);
+}
+.hist-card-foot-office svg {
+  color: var(--brand-mid);
+}
+.hist-card-foot-office {
+  margin-left: auto;
+}
+.hist-card-chevron {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--text-faint);
+  margin-left: -0.3rem;
+}
+
+/* ── Badge status (mobile) — mengikuti .badge di theme.css:
+   persegi radius kecil, 0.68rem/600, tanpa kapital dan tanpa titik.
+   Warna memakai varian yang sama dengan .badge-* di tema. ────────── */
+.hbadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border: none;
+}
+.hbadge-present { background: var(--success-bg); color: var(--success); }
+.hbadge-late { background: var(--warning-bg); color: var(--warning); }
+.hbadge-absent { background: var(--danger-bg); color: var(--danger); }
+.hbadge-day-off,
+.hbadge-extra-off { background: var(--brand-light); color: var(--brand); }
+.hbadge-sick { background: #fef9c3; color: #854d0e; }
+
+/* "+3m" di dalam badge terlambat */
+.hist-late-inline {
+  font-family: "IBM Plex Mono", "Menlo", monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* ── Desktop: table view ──────────────────────────────────── */
+.hist-table-wrap {
+  display: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.hist-table {
+  /* Lebar kolom DINAMIS mengikuti isi tiap kolom, tapi tabel tetap
+     mengisi penuh lebar container. Kuncinya: width:100% dan JANGAN
+     memberi width per-kolom. Dengan table-layout:auto browser membagi
+     surplus lebar secara proporsional ke SEMUA kolom sesuai
+     kebutuhan isinya (Shift paling lebar, Masuk/Keluar sempit), jadi
+     jarak antar-kolom seragam dan responsif terhadap data. Jangan
+     pakai width:auto (tabel berhenti di tengah, sisa kanan kosong)
+     dan jangan paksa satu kolom menampung seluruh surplus. */
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+  table-layout: auto;
+}
+/* Kolom berisi nilai pendek tidak boleh wrap ("07:24", "8j 39m").
+   Shift & Kantor dibiarkan bebas supaya teks panjang bisa turun baris
+   alih-alih memaksa tabel melebar. */
+.hist-table th:nth-child(1),
+.hist-table td:nth-child(1),
+.hist-table th:nth-child(2),
+.hist-table td:nth-child(2),
+.hist-table th:nth-child(4),
+.hist-table td:nth-child(4),
+.hist-table th:nth-child(5),
+.hist-table td:nth-child(5),
+.hist-table th:nth-child(6),
+.hist-table td:nth-child(6) { white-space: nowrap; }
+.hist-table thead th {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.hth-shift {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.hth-shift svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0.8;
+}
+.hist-table tbody td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+  color: var(--text-secondary);
+}
+.hist-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.hist-table tbody tr {
+  transition: background var(--transition);
+}
+.hist-table tbody tr:hover td {
+  background: var(--brand-xlight);
+}
+.hist-table tbody tr:hover .htd-date {
+  color: var(--brand);
+}
+
+.htd-date {
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  transition: color var(--transition);
+}
+.htd-day {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--text-faint);
+  margin-top: 0.1rem;
+}
+/* Badge status di tabel desktop — warna datang dari class hbadge-*
+   yang sama dipakai kartu mobile (satu sumber warna, bukan :has()
+   supaya tetap aman di browser lama). JS menambahkan class ini
+   langsung ke .htd-status saat render. */
+.htd-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.71rem;
+  font-weight: 600;
+}
+.htd-status.hbadge-present { background: var(--success-bg); color: var(--success); }
+.htd-status.hbadge-late { background: var(--warning-bg); color: var(--warning); }
+.htd-status.hbadge-absent { background: var(--danger-bg); color: var(--danger); }
+.htd-status.hbadge-sick { background: #fef9c3; color: #854d0e; }
+.htd-status.hbadge-day-off,
+.htd-status.hbadge-extra-off { background: var(--brand-light); color: var(--brand); }
+
+.htd-shift {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: var(--radius-xs);
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border: 1px solid var(--border-light);
+}
+.htd-mono {
+  font-family: "IBM Plex Mono", "Menlo", monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.htd-mono.empty {
+  color: var(--text-faint);
+  font-weight: 400;
+}
+/* "+N mnt" di kolom Masuk (tabel desktop) — warna warning/kuning
+   sesuai token tema, supaya langsung terlihat beda dari jam masuknya
+   sendiri tanpa perlu baca teksnya. */
+.hist-late-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: var(--warning-bg);
+  color: var(--warning);
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.htd-dur {
+  font-family: "IBM Plex Mono", "Menlo", monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+}
+.htd-dur-inner {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  overflow: hidden;
+}
+.htd-dur svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+.htd-office {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  overflow: hidden;
+}
+.htd-office-inner {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.4rem;
+  overflow: hidden;
+  padding: 0.22rem 0.6rem;
+  border-radius: var(--radius-xs);
+  background: var(--bg);
+  border: 1px solid var(--border-light);
+  width: fit-content;
+}
+.htd-office svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+.htd-office span,
+.htd-dur span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Detail drawer (mobile tap → expand: sumber/catatan) ───────────── */
+.hist-card-detail {
+  display: none;
+  margin-top: 0.55rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--border-light);
+}
+.hist-card-detail.open {
+  display: block;
+}
+.hcd-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  padding: 0.2rem 0;
+  color: var(--text-muted);
+}
+.hcd-row span:last-child {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.hcd-note {
+  margin-top: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* ============================================================
+   RESPONSIVE
+   Mobile-first di atas. Dari sini breakpoint naik bertahap
+   mengikuti skala grid main.css (480 / 640 / 768 / 1024).
+   ============================================================ */
+
+/* ── < 480px: super compact — 2 kolom summary sudah dari base,
+   perkecil lagi padding & font supaya tidak sesak di layar kecil ─── */
+@media (max-width: 479px) {
+  .hist-toolbar {
+    padding: 0.85rem 0.85rem 0;
+    gap: 0.65rem;
+  }
+  .hist-summary {
+    gap: 0.5rem;
+  }
+  .hist-summary-card {
+    padding: 0.7rem 0.75rem;
+    min-height: 82px;
+  }
+  .hsc-lbl {
+    font-size: 0.6rem;
+  }
+  .hsc-ring {
+    width: 18px;
+    height: 18px;
+  }
+  .hsc-num {
+    font-size: 1.2rem;
+  }
+  .hist-controls {
+    padding: 0.6rem;
+  }
+  .hist-month-label {
+    min-width: 96px;
+    font-size: 0.75rem;
+  }
+  .hist-card {
+    padding: 0.75rem 0.8rem;
+  }
+  .hist-card-times {
+    gap: 0.4rem;
+  }
+  .hist-time-box {
+    padding: 0.45rem 0.5rem;
+    gap: 0.4rem;
+  }
+}
+
+/* ── Mobile umum (< 640px): search bar disembunyikan demi tampilan
+   ringkas — filter pill + tap-to-expand sudah cukup untuk layar kecil.
+   Tombol Unduh jadi ikon saja supaya muat sejajar dengan nav bulan. ── */
+@media (max-width: 639px) {
+  .hist-searchbar {
+    display: none;
+  }
+  .hist-controls {
+    padding: 0.5rem;
+  }
+  .btn-download-report span {
+    display: none;
+  }
+  .btn-download-report {
+    padding: 0.55rem;
+  }
+  .hist-filterbar {
+    gap: 0.4rem;
+  }
+  .hist-month-nav {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .hist-month-label {
+    flex: 1;
+  }
+}
+
+/* ── 640–767px: masih pakai card list, tapi ada ruang lebih —
+   summary jadi 3 kolom, search bar boleh kembali muncul ──────────── */
+@media (min-width: 640px) and (max-width: 767px) {
+  .hist-summary {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── ≥ 768px: desktop — table menggantikan card list ──────────────── */
+@media (min-width: 768px) {
+  .hist-list {
+    display: none;
+  }
+  .hist-table-wrap {
+    display: block;
+    /* Menyatu dengan .hist-controls di atasnya: sudut atas persegi,
+       tanpa border-top ganda, tanpa shadow sendiri (shadow gabungan
+       datang dari .hist-controls). */
+    border-radius: 0 0 var(--radius) var(--radius);
+    border-top: none;
+    box-shadow: none;
+  }
+  .hist-summary {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .hist-status-filter {
+    overflow-x: visible;
+    flex-wrap: wrap;
+  }
+  .hist-controls {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    /* Menyatu dengan .hist-table-wrap di bawahnya: sudut bawah persegi,
+       shadow dipindah ke sini supaya "membungkus" kedua blok sekaligus. */
+    border-radius: var(--radius) var(--radius) 0 0;
+    box-shadow: var(--shadow-xs);
+  }
+  .hist-content {
+    /* .hist-table-wrap harus menempel langsung di bawah .hist-controls
+       (dari .hist-toolbar) tanpa celah supaya keduanya terlihat sebagai
+       satu card menyatu. */
+    padding-top: 0;
+  }
+  .hist-searchbar {
+    width: auto;
+    flex: 0 0 auto;
+  }
+  .hist-search-wrap {
+    width: 220px;
+    flex: 0 0 220px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hist-toolbar {
+    padding: 1.25rem 1.5rem 0;
+  }
+  .hist-content {
+    padding-bottom: 2rem;
+  }
+  .hist-summary {
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .hist-search-wrap {
+    width: 260px;
+    flex: 0 0 260px;
+  }
+}
+
+/*
+ * dashboard_patch.css
+ * Fix: GPS chip "Dalam area Kantor X" tidak vertikal centered
+ * dalam mgr-checkin-strip card
+ */
+.mgr-checkin-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.mgr-gps-status {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  gap: 0.4rem;
+}

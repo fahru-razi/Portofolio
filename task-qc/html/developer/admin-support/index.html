@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<script src="../../../js/demo_data.js"></script><script src="../../../js/demo_shim.js"></script>
+    <script>
+    (function() {
+        const saved = localStorage.getItem('user_theme_preference') || 'system';
+        let theme = saved;
+        if (saved === 'system') {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiket Dukungan - QA System</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CSS Terpusat (Dipanggil dari style.css) -->
+    <link rel="stylesheet" href="../../../css/style.css">
+<link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+<body>
+
+    <!-- templates/sidebar.html -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  window.tailwind && (tailwind.config = {
+    prefix: 'tw-',
+    corePlugins: { preflight: false },
+    theme: {
+      extend: {
+        colors: {
+          'shell-bg': '#09201F',
+          'shell-surface': '#0E2A29',
+          'shell-border': '#163836',
+          'shell-text': '#F1F5F9',
+          'shell-muted': '#648A86',
+          primary: '#0F766E',
+          'primary-dark': '#0D9488',
+          secondary: '#0284C7'
+        },
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace']
+        }
+      }
+    }
+  });
+</script>
+<style>
+  .material-symbols-outlined { 
+    font-family: 'Material Symbols Outlined' !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 20px !important;
+    line-height: 1 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    word-wrap: normal !important;
+    direction: ltr !important;
+    -webkit-font-smoothing: antialiased !important;
+    -webkit-font-feature-settings: 'liga' !important;
+    font-feature-settings: 'liga' !important;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  }
+  
+  html { overflow-y: scroll !important; }
+  body { padding-right: 0 !important; }
+  @media (min-width: 1024px) {
+    body.has-app-sidebar { padding-left: 256px !important; }
+  }
+  
+  #appSidebar, #appSidebar * {
+    box-sizing: border-box !important;
+    letter-spacing: -0.01em !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+  
+  #appSidebar a { text-decoration: none !important; }
+  #appSidebar button { background: transparent; border: none; box-shadow: none; outline: none; }
+
+  #appSidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 256px !important;
+    min-width: 256px !important;
+    max-width: 256px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    flex: 0 0 256px !important;
+    will-change: transform;
+    contain: layout style paint;
+    z-index: 1050 !important;
+  }
+
+  @media (max-width: 1023.98px) {
+    #appSidebar {
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.4);
+      transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+    #appSidebar:not(.tw-translate-x-0) {
+      transform: translateX(-100%) !important;
+    }
+    #appSidebar.tw-translate-x-0 {
+      transform: translateX(0) !important;
+    }
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+      #appSidebar .tw-flex-shrink-0.tw-p-2 {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom)) !important;
+      }
+    }
+  }
+</style>
+
+<aside id="appSidebar"
+       class="tw-font-sans tw-fixed tw-left-0 tw-top-0 tw-w-64 tw-bg-shell-bg tw-border-r tw-border-shell-border tw-z-50 tw-flex tw-flex-col tw-justify-between tw-select-none -tw-translate-x-full lg:tw-translate-x-0 tw-transition-transform tw-duration-200">
+    <div class="tw-flex tw-flex-col tw-flex-1 tw-min-h-0">
+
+        <!-- Brand -->
+        <div class="tw-h-16 tw-px-4 tw-flex tw-items-center tw-justify-between tw-gap-2 tw-flex-shrink-0" style="border-bottom: 1px solid #163836 !important;">
+            <div class="tw-flex tw-items-center tw-gap-2.5 tw-min-w-0">
+                <div class="tw-w-8 tw-h-8 tw-rounded-lg tw-bg-primary/80 tw-border tw-border-primary-dark/30 tw-flex tw-items-center tw-justify-center tw-shadow-inner tw-flex-shrink-0">
+                    <span class="material-symbols-outlined tw-text-white tw-text-[18px]">verified</span>
+                </div>
+                <div class="tw-flex tw-flex-col tw-min-w-0">
+                    <span class="tw-text-shell-text tw-font-bold tw-text-sm tw-leading-none tw-tracking-tight tw-truncate">CCIndonesia</span>
+                    <span class="tw-font-mono tw-text-primary/80 tw-uppercase tw-tracking-wider tw-text-[10px] tw-mt-1 tw-font-medium tw-truncate">Kelola Task & QR Code</span>
+                </div>
+            </div>
+            <button type="button" onclick="toggleSidebar(false)" class="lg:tw-hidden tw-w-7 tw-h-7 tw-rounded tw-flex tw-items-center tw-justify-center tw-text-shell-muted hover:tw-text-white hover:tw-bg-shell-surface tw-transition-colors tw-flex-shrink-0">
+                <span class="material-symbols-outlined tw-text-[18px]">close</span>
+            </button>
+        </div>
+
+        <!-- Nav (scrollable) -->
+        <div class="tw-overflow-y-auto tw-flex-1 tw-px-2 tw-py-3 tw-space-y-4">
+
+            <!-- OPERATIONS -->
+            <nav class="tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-px-2 tw-pt-1 tw-pb-1 tw-text-[11px] tw-font-semibold tw-uppercase tw-tracking-wider tw-text-shell-muted">Operasional</div>
+
+                
+                
+                <a href="../../../html/developer/dashboard/index.html"
+                class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                         tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">space_dashboard</span>
+                    <span>Dashboard</span>
+                </a>
+                
+
+                <a href="../../../html/developer/tasks/index.html"
+                class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                         tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">assignment</span>
+                    <span>Manajemen Task</span>
+                </a>
+
+                
+            </nav>
+
+            <!-- ADMINISTRATION (Developer only) -->
+            
+            <nav class="tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-px-2 tw-pt-1 tw-pb-1 tw-text-[11px] tw-font-semibold tw-uppercase tw-tracking-wider tw-text-shell-muted">Administrasi</div>
+
+                <a href="../../../html/developer/admin-users/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">group</span>
+                    <span>Manajemen Pengguna</span>
+                </a>
+
+                <a href="../../../html/developer/admin-support/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-bg-primary tw-text-white tw-border-primary-dark/40
+                          ">
+                    <span class="material-symbols-outlined tw-text-[18px]">confirmation_number</span>
+                    <span>Tiket Dukungan</span>
+                </a>
+            </nav>
+            
+
+            <!-- SYSTEM & ACCOUNT -->
+            <nav class="tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-px-2 tw-pt-1 tw-pb-1 tw-text-[11px] tw-font-semibold tw-uppercase tw-tracking-wider tw-text-shell-muted">Sistem & Akun</div>
+
+                <a href="../../../html/developer/support/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">headset_mic</span>
+                    <span>Layanan Pelanggan</span>
+                </a>
+
+                <a href="../../../html/developer/faq/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">menu_book</span>
+                    <span>FAQ & Panduan</span>
+                </a>
+
+                <a href="../../../html/developer/profile/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">manage_accounts</span>
+                    <span>Pengaturan Profil</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="tw-p-2 tw-bg-black/20 tw-border-t tw-border-shell-border tw-flex tw-flex-col tw-gap-2 tw-flex-shrink-0">
+        <div class="tw-flex tw-items-center tw-gap-1 tw-px-1">
+            <div class="dropup">
+                <button class="tw-bg-transparent tw-border-0 tw-shadow-none tw-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-md tw-text-shell-text tw-text-xs tw-font-mono hover:tw-bg-black/30 tw-transition-colors" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    ID
+                </button>
+                <ul class="dropdown-menu shadow-sm border-0 py-1 theme-dropdown-menu">
+                    <li><a class="dropdown-item py-2 px-3 small active" href="#">🇮🇩 Bahasa Indonesia</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small " href="#">🇬🇧 English</a></li>
+                </ul>
+            </div>
+
+            <div class="dropup">
+                <button class="tw-bg-transparent tw-border-0 tw-shadow-none tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 tw-rounded-md tw-text-shell-text hover:tw-bg-black/30 tw-transition-colors" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Theme">
+                    <span class="material-symbols-outlined tw-text-[16px]">wb_sunny</span>
+                </button>
+                <ul class="dropdown-menu shadow-sm border-0 py-1 theme-dropdown-menu">
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('light')">Terang</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('dark')">Gelap</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('system')">Sistem</a></li>
+                </ul>
+            </div>
+
+            <!-- Tombol Logout: HANYA MUNCUL JIKA SUDAH LOGIN -->
+            
+            <a href="#" title="Keluar" class="tw-no-underline tw-ml-auto tw-w-7 tw-h-7 tw-rounded tw-flex tw-items-center tw-justify-center tw-text-shell-muted hover:tw-bg-black/30 hover:tw-text-rose-400 tw-transition-colors">
+                <span class="material-symbols-outlined tw-text-[16px]">logout</span>
+            </a>
+            
+        </div>
+
+        
+        <div class="tw-flex tw-items-center tw-gap-2.5 tw-p-2 tw-rounded-lg tw-bg-shell-surface tw-border tw-border-shell-border">
+            <div class="tw-relative tw-flex-shrink-0">
+                <div class="tw-w-8 tw-h-8 tw-rounded-full tw-bg-primary/20 tw-text-primary tw-border tw-border-primary/30 tw-flex tw-items-center tw-justify-center">
+                    <span class="material-symbols-outlined tw-text-[16px]">person</span>
+                </div>
+            </div>
+            <div class="tw-flex tw-flex-col tw-min-w-0 tw-flex-1">
+                <span class="tw-text-shell-text tw-text-xs tw-font-bold tw-truncate">developer</span>
+                <span class="tw-font-mono tw-text-primary/90 tw-text-[10px] tw-truncate"></span>
+            </div>
+            <span class="tw-w-2 tw-h-2 tw-rounded-full tw-bg-emerald-500 tw-flex-shrink-0"></span>
+        </div>
+        
+    </div>
+</aside>
+
+<!-- Backdrop mobile -->
+<div id="sidebarBackdrop" onclick="toggleSidebar(false)" class="tw-hidden tw-fixed tw-inset-0 tw-bg-black/50 lg:tw-hidden" style="z-index: 1040;"></div>
+
+<script>
+    document.body.classList.add('has-app-sidebar');
+
+    function toggleSidebar(open) {
+        const aside = document.getElementById('appSidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        if (!aside) return;
+        const willOpen = (typeof open === 'boolean') ? open : aside.classList.contains('-tw-translate-x-full');
+        aside.classList.toggle('-tw-translate-x-full', !willOpen);
+        aside.classList.toggle('tw-translate-x-0', willOpen);
+        if (backdrop) backdrop.classList.toggle('tw-hidden', !willOpen);
+    }
+    window.toggleSidebar = toggleSidebar;
+
+    document.getElementById('appSidebar') && document.getElementById('appSidebar').querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+            if (window.innerWidth < 1024) toggleSidebar(false);
+        });
+    });
+</script>
+    <!-- templates/navbar.html -->
+<header class="tw-font-sans tw-sticky tw-top-0 tw-z-40 tw-h-16 tw-flex tw-items-center tw-justify-between tw-gap-3 tw-px-4 md:tw-px-6 tw-flex-shrink-0"
+        style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border-color); backdrop-filter: blur(6px);">
+    <div class="tw-flex tw-items-center tw-gap-3 tw-min-w-0 tw-flex-1">
+        <!-- Hamburger: hanya tampil di mobile, membuka sidebar persistent -->
+        <button type="button" onclick="toggleSidebar(true)"
+                class="lg:tw-hidden tw-w-9 tw-h-9 tw-flex-shrink-0 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-border"
+                style="border-color: var(--border-color); color: var(--text-main);">
+            <span class="material-symbols-outlined tw-text-[20px]">menu</span>
+        </button>
+
+        <!-- BREADCRUMBS DINAMIS BERDASARKAN KATEGORI SIDEBAR -->
+        
+        
+            
+        
+
+        <div class="tw-min-w-0 tw-flex tw-items-center tw-gap-2 tw-text-xs md:tw-text-sm tw-truncate">
+            <span class="material-symbols-outlined tw-text-[16px] tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.5;">home</span>
+            <span style="color: var(--text-main); opacity: 0.3;" class="tw-flex-shrink-0">/</span>
+            <!-- Kategori Sidebar Dinamis -->
+            <span class="tw-font-medium tw-hidden sm:tw-inline tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.7;">Administrasi</span>
+            <span class="tw-hidden sm:tw-inline tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.3;">/</span>
+            
+            <!-- Nama Halaman Aktif -->
+            <span class="tw-font-bold tw-tracking-tight tw-truncate" style="color: var(--text-main);">
+                
+                    Tiket Dukungan
+                
+            </span>
+        </div>
+    </div>
+
+    <div class="tw-flex tw-items-center tw-gap-2 tw-flex-shrink-0">
+        <div class="tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-text-white tw-shadow-sm" style="background-color: var(--primary);">
+            <span class="material-symbols-outlined tw-text-[16px]">person</span>
+        </div>
+    </div>
+</header>
+
+<!-- KOTAK NOTIFIKASI GLOBAL -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 9999; margin-top: 70px; pointer-events: none;">
+    
+        
+    
+</div>
+
+    <div class="container-fluid px-4 pb-5 pt-4">
+
+        <!-- PAGE HEADER -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 mb-4">
+            <div class="flex flex-col gap-1.5">
+                <h1 class="title-main text-[22px] sm:text-[24px] text-on-surface">
+                    Kotak Masuk Tiket Dukungan
+                </h1>
+                <div class="flex flex-wrap items-center gap-3">
+                    <p class="desc-text text-[14px] sm:text-[15px] max-w-3xl">
+                        Daftar keluhan atau masalah yang dikirimkan oleh pengguna melalui pusat bantuan.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI CARDS -->
+        <div class="row g-3 mb-4">
+            
+            
+            
+
+            <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <div class="kpi-label">Total Tiket</div>
+                            <div class="kpi-value">4</div>
+                        </div>
+                        <div class="kpi-icon" style="background:#F0F9FF;color:#0284C7;">
+                            <span class="material-symbols-outlined" style="font-size:21px;">confirmation_number</span>
+                        </div>
+                    </div>
+                    <div class="kpi-bar" style="background:#0284C7;"></div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <div class="kpi-label">Terbuka</div>
+                            <div class="kpi-value" style="color:#D97706;">3</div>
+                        </div>
+                        <div class="kpi-icon" style="background:#FFFBEB;color:#D97706;">
+                            <span class="material-symbols-outlined" style="font-size:21px;">pending_actions</span>
+                        </div>
+                    </div>
+                    <div class="kpi-bar" style="background:#D97706;"></div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <div class="kpi-label">Selesai</div>
+                            <div class="kpi-value" style="color:#059669;">0</div>
+                        </div>
+                        <div class="kpi-icon" style="background:#ECFDF5;color:#059669;">
+                            <span class="material-symbols-outlined" style="font-size:21px;">task_alt</span>
+                        </div>
+                    </div>
+                    <div class="kpi-bar" style="background:#059669;"></div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div>
+                            <div class="kpi-label">Tingkat Penyelesaian</div>
+                            <div class="kpi-value" style="color:#0F766E;">
+                                0%
+                            </div>
+                        </div>
+                        <div class="kpi-icon" style="background:#ECFDF5;color:#0F766E;">
+                            <span class="material-symbols-outlined" style="font-size:21px;">analytics</span>
+                        </div>
+                    </div>
+                    <div class="kpi-bar" style="background:linear-gradient(90deg,#0F766E,#0D9488);"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN TABLE PANEL -->
+        <div class="content-panel">
+            <!-- Panel Header + Toolbar -->
+            <div class="panel-header flex-wrap gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="material-symbols-outlined" style="color:#0F766E;font-size:20px;">inbox</span>
+                    <span style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:var(--text-primary);">Semua Tiket</span>
+                    <span class="mono" style="font-size:11px;padding:2px 8px;border-radius:6px;background:var(--surface-container-low);color:var(--text-secondary);">
+                        4 entri
+                    </span>
+                </div>
+                <div class="toolbar-wrap">
+                    <!-- Search -->
+                    <div class="search-input-wrap">
+                        <span class="material-symbols-outlined search-icon">search</span>
+                        <input type="text" class="search-input" id="ticketSearch"
+                               placeholder="Cari berdasarkan pengguna atau pesan..."
+                               oninput="filterTickets()">
+                    </div>
+                    <!-- Status filter -->
+                    <div class="select-wrap-sm">
+                        <!-- Value tetap "Open" & "Resolved" karena data backend nya berbahasa Inggris -->
+                        <select class="filter-select" id="statusFilter" onchange="filterTickets()">
+                            <option value="all">Semua Status</option>
+                            <option value="Open">Terbuka</option>
+                            <option value="Resolved">Selesai</option>
+                        </select>
+                        <span class="material-symbols-outlined select-arrow">expand_more</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-scroll">
+                <table class="tickets-table" id="ticketsTable">
+                    <thead>
+                        <tr>
+                            <th style="width:48px;">#</th>
+                            <th>Pengirim</th>
+                            <th>Pesan Kendala</th>
+                            <th style="width:120px;">Status</th>
+                            <th style="width:150px;">Waktu Terkirim</th>
+                            <th style="width:160px; text-align:right; padding-right:20px;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticketsBody">
+                        
+                        <tr data-status="Open" data-search="guest/publik bagaimana cara melihat task yang sudah dikirim?">
+                            <td>
+                                <span class="ticket-no">004</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width:30px;height:30px;border-radius:50%;background:rgba(15,118,110,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                        <span class="material-symbols-outlined" style="font-size:16px;color:#0F766E;">person</span>
+                                    </div>
+                                    <div>
+                                        <div class="ticket-id-cell">Guest/Publik</div>
+                                        <div class="ticket-sender">Akun Pengguna</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ticket-message">Bagaimana cara melihat task yang sudah dikirim?</div>
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                
+                                    <span class="badge-pill badge-open">
+                                        <span class="dot"></span>Terbuka
+                                    </span>
+                                
+                            </td>
+                            <td>
+                                <div class="ticket-time">11 Nov 2026</div>
+                                <div class="ticket-time" style="margin-top:2px;">22:18:46</div>
+                            </td>
+                            <td style="text-align:right; padding-right:16px;">
+                                <div class="d-flex align-items-center justify-content-end gap-2">
+                                    <!-- Tombol Lihat Detail -->
+                                    <button type="button" class="btn-view-detail" 
+                                        onclick="showTicketDetail('4', 'Guest/Publik', '11 Nov 2026, 22:18:46', 'Open', `Bagaimana cara melihat task yang sudah dikirim?`, '')">
+                                        <span class="material-symbols-outlined" style="font-size:14px;">visibility</span>
+                                        Detail
+                                    </button>
+                                    
+                                    <!-- Tombol Selesai / Buka -->
+                                    <form action="/admin/support/4/toggle_status" method="POST" class="d-inline">
+                                        <button type="submit" class="btn-resolve btn-resolve-open">
+                                            <span class="material-symbols-outlined" style="font-size:14px;">
+                                                check_circle
+                                            </span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr data-status="Open" data-search="qc_budi unggah excel gagal untuk file besar.">
+                            <td>
+                                <span class="ticket-no">003</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width:30px;height:30px;border-radius:50%;background:rgba(15,118,110,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                        <span class="material-symbols-outlined" style="font-size:16px;color:#0F766E;">person</span>
+                                    </div>
+                                    <div>
+                                        <div class="ticket-id-cell">qc_budi</div>
+                                        <div class="ticket-sender">Akun Pengguna</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ticket-message">Unggah Excel gagal untuk file besar.</div>
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                
+                                    <span class="badge-pill badge-open">
+                                        <span class="dot"></span>Terbuka
+                                    </span>
+                                
+                            </td>
+                            <td>
+                                <div class="ticket-time">11 Nov 2026</div>
+                                <div class="ticket-time" style="margin-top:2px;">20:18:46</div>
+                            </td>
+                            <td style="text-align:right; padding-right:16px;">
+                                <div class="d-flex align-items-center justify-content-end gap-2">
+                                    <!-- Tombol Lihat Detail -->
+                                    <button type="button" class="btn-view-detail" 
+                                        onclick="showTicketDetail('3', 'qc_budi', '11 Nov 2026, 20:18:46', 'Open', `Unggah Excel gagal untuk file besar.`, '')">
+                                        <span class="material-symbols-outlined" style="font-size:14px;">visibility</span>
+                                        Detail
+                                    </button>
+                                    
+                                    <!-- Tombol Selesai / Buka -->
+                                    <form action="/admin/support/3/toggle_status" method="POST" class="d-inline">
+                                        <button type="submit" class="btn-resolve btn-resolve-open">
+                                            <span class="material-symbols-outlined" style="font-size:14px;">
+                                                check_circle
+                                            </span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr data-status="Closed" data-search="spv_dewi mohon tambah filter berdasarkan paket.">
+                            <td>
+                                <span class="ticket-no">002</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width:30px;height:30px;border-radius:50%;background:rgba(15,118,110,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                        <span class="material-symbols-outlined" style="font-size:16px;color:#0F766E;">person</span>
+                                    </div>
+                                    <div>
+                                        <div class="ticket-id-cell">spv_dewi</div>
+                                        <div class="ticket-sender">Akun Pengguna</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ticket-message">Mohon tambah filter berdasarkan paket.</div>
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                
+                                    <span class="badge-pill badge-open">
+                                        <span class="dot"></span>Terbuka
+                                    </span>
+                                
+                            </td>
+                            <td>
+                                <div class="ticket-time">11 Nov 2026</div>
+                                <div class="ticket-time" style="margin-top:2px;">04:18:46</div>
+                            </td>
+                            <td style="text-align:right; padding-right:16px;">
+                                <div class="d-flex align-items-center justify-content-end gap-2">
+                                    <!-- Tombol Lihat Detail -->
+                                    <button type="button" class="btn-view-detail" 
+                                        onclick="showTicketDetail('2', 'spv_dewi', '11 Nov 2026, 04:18:46', 'Closed', `Mohon tambah filter berdasarkan paket.`, '')">
+                                        <span class="material-symbols-outlined" style="font-size:14px;">visibility</span>
+                                        Detail
+                                    </button>
+                                    
+                                    <!-- Tombol Selesai / Buka -->
+                                    <form action="/admin/support/2/toggle_status" method="POST" class="d-inline">
+                                        <button type="submit" class="btn-resolve btn-resolve-open">
+                                            <span class="material-symbols-outlined" style="font-size:14px;">
+                                                check_circle
+                                            </span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr data-status="Open" data-search="qc_andi tombol kirim ke tim kadang tidak merespons.">
+                            <td>
+                                <span class="ticket-no">001</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width:30px;height:30px;border-radius:50%;background:rgba(15,118,110,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                        <span class="material-symbols-outlined" style="font-size:16px;color:#0F766E;">person</span>
+                                    </div>
+                                    <div>
+                                        <div class="ticket-id-cell">qc_andi</div>
+                                        <div class="ticket-sender">Akun Pengguna</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ticket-message">Tombol kirim ke tim kadang tidak merespons.</div>
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                
+                                    <span class="badge-pill badge-open">
+                                        <span class="dot"></span>Terbuka
+                                    </span>
+                                
+                            </td>
+                            <td>
+                                <div class="ticket-time">10 Nov 2026</div>
+                                <div class="ticket-time" style="margin-top:2px;">14:18:46</div>
+                            </td>
+                            <td style="text-align:right; padding-right:16px;">
+                                <div class="d-flex align-items-center justify-content-end gap-2">
+                                    <!-- Tombol Lihat Detail -->
+                                    <button type="button" class="btn-view-detail" 
+                                        onclick="showTicketDetail('1', 'qc_andi', '10 Nov 2026, 14:18:46', 'Open', `Tombol kirim ke tim kadang tidak merespons.`, '')">
+                                        <span class="material-symbols-outlined" style="font-size:14px;">visibility</span>
+                                        Detail
+                                    </button>
+                                    
+                                    <!-- Tombol Selesai / Buka -->
+                                    <form action="/admin/support/1/toggle_status" method="POST" class="d-inline">
+                                        <button type="submit" class="btn-resolve btn-resolve-open">
+                                            <span class="material-symbols-outlined" style="font-size:14px;">
+                                                check_circle
+                                            </span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+
+                <!-- No results from filter -->
+                <div class="empty-state d-none" id="noResults">
+                    <div class="empty-icon">
+                        <span class="material-symbols-outlined" style="font-size:26px;">search_off</span>
+                    </div>
+                    <div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Tidak Ada Tiket yang Sesuai</div>
+                    <div style="font-family:'Inter',sans-serif;font-size:12px;color:var(--text-muted);">Coba sesuaikan pencarian atau filter Anda.</div>
+                </div>
+            </div>
+
+            <!-- Table Footer -->
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 px-4 py-3"
+                 style="border-top:1px solid var(--border-subtle);">
+                 <!-- Kamus data HTML (multi-bahasa JS) -->
+                <span class="mono" style="font-size:11px;color:var(--text-muted);" id="resultCount"
+                      data-show-id="Menampilkan" 
+                      data-of-id="dari" 
+                      data-entity-id="tiket">
+                    Menampilkan 4 dari 4 tiket
+                </span>
+                <div class="d-flex align-items-center gap-2">
+                    <span style="font-family:'Inter',sans-serif;font-size:11px;color:var(--text-muted);">Pembaruan terakhir:</span>
+                    <span class="mono" style="font-size:11px;color:var(--text-secondary);" id="lastUpdate"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==========================================
+         MODAL DETAIL TIKET
+         ========================================== -->
+    <div class="modal fade" id="ticketDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0" style="border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);">
+                
+                <!-- Modal Header -->
+                <div class="px-4 py-3 border-bottom d-flex align-items-center justify-content-between" style="background-color: var(--card-bg);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width:40px;height:40px;border-radius:10px;background:rgba(15,118,110,0.1);display:flex;align-items:center;justify-content:center;color:#0F766E;">
+                            <span class="material-symbols-outlined" style="font-size:22px;">assignment</span>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold" style="font-family:'Inter',sans-serif; font-size:16px; color:var(--text-primary);">Detail Tiket <span id="modalTicketId" class="mono text-muted" style="font-size:14px; font-weight:500;"></span></h5>
+                            <div class="d-flex align-items-center gap-2 mt-1">
+                                <span class="material-symbols-outlined text-muted" style="font-size:14px;">person</span>
+                                <span id="modalSender" style="font-family:'Inter',sans-serif; font-size:12px; color:var(--text-secondary); font-weight:500;"></span>
+                                <span class="text-muted" style="font-size:10px;">•</span>
+                                <span id="modalTime" class="mono" style="font-size:11px; color:var(--text-muted);"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <span id="modalStatusBadge"></span>
+                        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    </div>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body p-4" style="background-color: var(--surface-container-low, #F8FAFC);">
+                    <!-- Kotak Pesan Keluhan -->
+                    <div class="mb-4">
+                        <h6 style="font-family:'Inter',sans-serif; font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">Pesan Keluhan / Kendala</h6>
+                        <div class="p-3 rounded-3 border" style="background-color: var(--card-bg, #FFFFFF); border-color: var(--border-subtle, #E2E8F0);">
+                            <p id="modalMessage" style="font-family:'Inter',sans-serif; font-size:14px; color:var(--text-primary); line-height:1.6; white-space:pre-wrap; margin-bottom:0;"></p>
+                        </div>
+                    </div>
+
+                    <!-- Area Lampiran Gambar (Disembunyikan jika tidak ada) -->
+                    <div id="modalAttachmentArea" style="display: none;">
+                        <h6 style="font-family:'Inter',sans-serif; font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">Gambar Lampiran</h6>
+                        <div class="p-2 rounded-3 border text-center" style="background-color: var(--card-bg, #FFFFFF); border-color: var(--border-subtle, #E2E8F0);">
+                            <img id="modalImage" src="" alt="Lampiran Tiket" style="max-width: 100%; max-height: 400px; border-radius: 6px; object-fit: contain;">
+                            <div class="mt-2 text-end">
+                                <a id="modalImageDownload" href="#" download class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1" style="font-size: 11px; padding: 4px 10px; border-radius: 6px;">
+                                    <span class="material-symbols-outlined" style="font-size:14px;">download</span> Unduh Gambar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal Footer -->
+                <div class="px-4 py-3 border-top bg-white text-end">
+                    <button type="button" class="btn btn-secondary px-4 py-2 fw-semibold" data-bs-dismiss="modal" style="font-size: 12px; border-radius: 8px;">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../../js/script.js"></script>
+
+    <script>
+        /* ── Live timestamp ── */
+        (function() {
+            const el = document.getElementById('lastUpdate');
+            if (!el) return;
+            const now = new Date();
+            el.textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) +
+                             ' · ' + now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+        })();
+
+        /* ── Search & filter ── */
+        function filterTickets() {
+            const q = document.getElementById('ticketSearch').value.toLowerCase().trim();
+            const status = document.getElementById('statusFilter').value;
+            const rows = document.querySelectorAll('#ticketsBody tr[data-status]');
+            const noResults = document.getElementById('noResults');
+            const resultCount = document.getElementById('resultCount');
+
+            let visible = 0;
+            rows.forEach(row => {
+                const matchSearch = !q || row.dataset.search.includes(q);
+                const matchStatus = status === 'all' || row.dataset.status === status;
+                const show = matchSearch && matchStatus;
+                row.style.display = show ? '' : 'none';
+                if (show) visible++;
+            });
+
+            const total = rows.length;
+            if (resultCount) {
+                const textShow = resultCount.getAttribute('data-show-id') || 'Menampilkan';
+                const textOf = resultCount.getAttribute('data-of-id') || 'dari';
+                const textEntity = resultCount.getAttribute('data-entity-id') || 'tiket';
+                
+                resultCount.textContent = `${textShow} ${visible} ${textOf} ${total} ${textEntity}`;
+            }
+
+            if (noResults) {
+                noResults.classList.toggle('d-none', visible > 0 || total === 0);
+            }
+        }
+
+        /* ── Fungsi Menampilkan Modal Detail Tiket ── */
+        function showTicketDetail(id, sender, time, status, message, imageUrl) {
+            document.getElementById('modalTicketId').textContent = '#' + id;
+            document.getElementById('modalSender').textContent = sender;
+            document.getElementById('modalTime').textContent = time;
+            document.getElementById('modalMessage').textContent = message;
+
+            const badgeEl = document.getElementById('modalStatusBadge');
+            if (status === 'Resolved') {
+                badgeEl.innerHTML = `<span class="badge-pill badge-resolved" style="font-size:12px; padding: 4px 12px;"><span class="dot"></span>Selesai</span>`;
+            } else {
+                badgeEl.innerHTML = `<span class="badge-pill badge-open" style="font-size:12px; padding: 4px 12px;"><span class="dot"></span>Terbuka</span>`;
+            }
+
+            const attachmentArea = document.getElementById('modalAttachmentArea');
+            const imageEl = document.getElementById('modalImage');
+            const downloadLink = document.getElementById('modalImageDownload');
+
+            if (imageUrl && imageUrl.trim() !== '') {
+                imageEl.src = imageUrl;
+                downloadLink.href = imageUrl;
+                attachmentArea.style.display = 'block'; 
+            } else {
+                imageEl.src = '';
+                downloadLink.href = '#';
+                attachmentArea.style.display = 'none'; 
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('ticketDetailModal'));
+            modal.show();
+        }
+    </script>
+</body>
+</html>

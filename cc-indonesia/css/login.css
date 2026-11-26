@@ -1,0 +1,648 @@
+/* ============================================================
+   login.css — Halaman autentikasi
+   Mobile-first. Breakpoints: lg=900px
+   Typefaces: Plus Jakarta Sans + IBM Plex Sans + Mono
+   Brand: Navy #1B4F72 · Accent Amber #D4860A
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+/* ── Reset & body ─────────────────────────────────────────── */
+body.role-guest {
+  font-family:
+    "IBM Plex Sans",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background: var(--bg, #f7f8fa);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body.role-guest .sidebar,
+body.role-guest .bottom-nav,
+body.role-guest .mobile-topbar {
+  display: none !important;
+}
+body.role-guest .main-wrap {
+  margin-left: 0 !important;
+}
+body.role-guest .page-content {
+  padding: 0;
+  max-width: none;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE LAYOUT  (default — semua ukuran layar < 900px)
+   ══════════════════════════════════════════════════════════ */
+
+/* Wrapper: flex column, full viewport */
+.login-wrap {
+  position: relative;
+  min-height: 100dvh; /* dvh agar safe area iOS tidak potong */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Panel kiri — DISEMBUNYIKAN di mobile */
+.login-panel {
+  display: none;
+}
+
+/* Language switcher — pojok kanan atas, z-index tinggi */
+.login-lang-switcher {
+  position: fixed;
+  top: 0.75rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  z-index: 20;
+}
+
+.login-lang-switcher .lang-btn {
+  width: 32px;
+  height: 26px;
+  font-size: 0.65rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-xs, 4px);
+  color: var(--text-faint, #8dabbe);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition:
+    background 0.16s,
+    color 0.16s;
+  border: 1px solid transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+.login-lang-switcher .lang-btn:hover {
+  background: var(--brand-light, #eaf2f8);
+  color: var(--brand, #1b4f72);
+  text-decoration: none;
+}
+.login-lang-switcher .lang-btn.active {
+  background: rgba(212, 134, 10, 0.12);
+  color: var(--accent, #d4860a);
+  border-color: rgba(212, 134, 10, 0.25);
+}
+
+/* Kolom form — mengisi sisa ruang, centered */
+.login-form-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1rem 1.5rem; /* top: beri ruang untuk lang switcher */
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  min-height: 100dvh;
+}
+
+/* Brand mobile */
+.login-brand-mobile {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--brand, #1b4f72);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  margin-bottom: 1.25rem;
+}
+.login-brand-mobile .brand-logo {
+  height: 2.5rem;
+  box-shadow: 0 2px 8px rgba(15, 37, 64, 0.18);   /* tile gelap di atas latar terang */
+}
+
+/* Card form — FULL lebar di mobile, max 400px di atas 400px */
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #e2e8ef);
+  border-radius: var(--radius, 10px);
+  padding: 1.5rem 1.25rem;
+  box-shadow:
+    0 4px 24px rgba(15, 37, 64, 0.08),
+    0 1px 4px rgba(15, 37, 64, 0.04);
+}
+
+/* Footer note — tampil di mobile, di bawah card */
+.login-footer-note {
+  margin-top: 1.25rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.65rem;
+  color: var(--text-faint, #8dabbe);
+  text-align: center;
+  letter-spacing: 0.03em;
+  padding-bottom: 0.5rem;
+}
+
+/* ── Card header ──────────────────────────────────────────── */
+.login-card-head {
+  margin-bottom: 1.5rem;
+}
+.login-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent, #d4860a);
+  margin-bottom: 0.5rem;
+}
+.login-eyebrow::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--accent, #d4860a);
+  border-radius: 2px;
+}
+.login-title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text-primary, #0f2537);
+  line-height: 1.2;
+  margin-bottom: 0.35rem;
+}
+.login-sub {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.82rem;
+  color: var(--text-muted, #5d7a8c);
+  line-height: 1.55;
+}
+
+/* ── Alert error ─────────────────────────────────────────── */
+.login-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  background: var(--danger-bg, #fee2e2);
+  color: var(--danger, #b91c1c);
+  border-radius: var(--radius-sm, 8px);
+  border-left: 3px solid var(--danger, #b91c1c);
+  padding: 0.7rem 0.85rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-bottom: 1.1rem;
+}
+.login-alert[hidden] {
+  display: none;
+}
+.login-alert svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Form fields ─────────────────────────────────────────── */
+.form-field {
+  margin-bottom: 0.9rem;
+}
+.form-label {
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary, #2c3e50);
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.01em;
+}
+
+.input-wrap {
+  position: relative;
+}
+.input-icon {
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  color: var(--text-faint, #8dabbe);
+  pointer-events: none;
+}
+.input-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Input — 16px font agar iOS tidak auto-zoom */
+.form-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 3rem 0 2.5rem;
+  border: 1.5px solid var(--border, #e2e8ef);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--bg-card, #ffffff);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 1rem; /* 16px — mencegah auto-zoom iOS */
+  color: var(--text-primary, #0f2537);
+  outline: none;
+  transition:
+    border-color 0.16s,
+    box-shadow 0.16s;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.form-input::placeholder {
+  color: var(--text-faint, #8dabbe);
+  font-size: 0.875rem;
+}
+.form-input:focus {
+  border-color: var(--brand, #1b4f72);
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
+}
+
+/* Tombol show/hide password — tap target 44×44 min */
+.input-toggle-pw {
+  position: absolute;
+  right: 0.35rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-faint, #8dabbe);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xs, 4px);
+  transition: color 0.16s;
+  width: 40px;
+  height: 40px;
+  -webkit-tap-highlight-color: transparent;
+}
+.input-toggle-pw:hover {
+  color: var(--text-muted, #5d7a8c);
+}
+.input-toggle-pw svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Remember + Lupa sandi ───────────────────────────────── */
+.login-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.login-remember {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.82rem;
+  color: var(--text-muted, #5d7a8c);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.login-remember input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent, #d4860a);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.login-forgot {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--brand, #1b4f72);
+  text-decoration: none;
+  transition: color 0.16s;
+  -webkit-tap-highlight-color: transparent;
+}
+.login-forgot:hover {
+  color: var(--accent, #d4860a);
+  text-decoration: none;
+}
+
+/* ── Tombol Masuk ────────────────────────────────────────── */
+.login-btn {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.925rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  position: relative;
+  background: var(--accent, #d4860a) !important;
+  color: #fff !important;
+  border: none;
+  border-radius: var(--radius-sm, 8px) !important;
+  cursor: pointer;
+  transition:
+    opacity 0.16s,
+    box-shadow 0.16s,
+    transform 0.1s;
+  box-shadow: 0 2px 10px rgba(212, 134, 10, 0.3);
+  -webkit-tap-highlight-color: transparent;
+}
+.login-btn:hover:not(:disabled) {
+  opacity: 0.92;
+  box-shadow: 0 4px 16px rgba(212, 134, 10, 0.4);
+}
+.login-btn:active:not(:disabled) {
+  transform: scale(0.99);
+}
+.login-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Spinner loading */
+.login-spinner {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: loginSpin 0.65s linear infinite;
+}
+@keyframes loginSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.login-btn.is-loading .login-btn-text {
+  display: none;
+}
+.login-btn.is-loading .login-spinner {
+  display: block;
+}
+
+/* ── Divider & bantuan ───────────────────────────────────── */
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.25rem 0 0;
+  color: var(--text-faint, #8dabbe);
+  font-size: 0.68rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  letter-spacing: 0.04em;
+}
+.login-divider::before,
+.login-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border, #e2e8ef);
+}
+
+.login-help {
+  margin-top: 0.85rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.76rem;
+  color: var(--text-faint, #8dabbe);
+  text-align: center;
+  line-height: 1.6;
+}
+.login-help strong {
+  color: var(--text-muted, #5d7a8c);
+  font-weight: 600;
+}
+
+/* ── Responsive: layar sangat kecil ─────────────────────── */
+@media (max-width: 360px) {
+  .login-card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
+  }
+  .login-form-col {
+    padding: 3.5rem 0 1.5rem;
+    justify-content: flex-start;
+    padding-top: 4rem;
+  }
+  .login-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   DESKTOP LAYOUT  (≥ 900px)
+   ══════════════════════════════════════════════════════════ */
+
+@media (min-width: 900px) {
+  /* Wrapper: 2 kolom */
+  .login-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "panel form";
+    min-height: 100vh;
+  }
+
+  /* Panel kiri — tampil */
+  .login-panel {
+    grid-area: panel;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem 3.5rem;
+    background: linear-gradient(160deg, var(--brand, #1b4f72) 0%, #0f2537 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .login-panel::before {
+    content: "";
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: rgba(212, 134, 10, 0.08);
+    pointer-events: none;
+  }
+  .login-panel::after {
+    content: "";
+    position: absolute;
+    bottom: -60px;
+    left: -60px;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    pointer-events: none;
+  }
+
+  .login-panel-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+  }
+  .login-panel-brand .brand-logo {
+    height: 2.75rem;
+  }
+
+  .login-panel-body {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .login-panel-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent, #d4860a);
+    margin-bottom: 0.5rem;
+  }
+  .login-panel-eyebrow::before {
+    content: "";
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent, #d4860a);
+    border-radius: 2px;
+  }
+
+  .login-panel-heading {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: clamp(1.7rem, 2.5vw, 2.5rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+  .login-panel-heading em {
+    font-style: normal;
+    color: var(--accent, #d4860a);
+  }
+
+  .login-panel-desc {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.7;
+    max-width: 28ch;
+  }
+
+  .login-panel-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .login-panel-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .login-panel-features li::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent, #d4860a);
+    flex-shrink: 0;
+  }
+
+  .login-panel-foot {
+    position: relative;
+    z-index: 1;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.04em;
+  }
+
+  /* Kolom form — desktop */
+  .login-form-col {
+    grid-area: form;
+    padding: 3rem 2rem;
+    min-height: 100vh;
+    background: var(--bg-card, #fff);
+    border-left: 1px solid var(--border, #e2e8ef);
+  }
+
+  /* Brand mobile — sembunyikan di desktop */
+  .login-brand-mobile {
+    display: none;
+  }
+
+  /* Card — tanpa shadow/border di desktop (halaman sudah punya border) */
+  .login-card {
+    max-width: 380px;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  /* Footer note — sembunyikan di desktop (ada login-panel-foot) */
+  .login-footer-note {
+    display: none;
+  }
+
+  /* Input & tombol sedikit lebih kecil di desktop */
+  .form-input {
+    height: 44px;
+    font-size: 0.875rem;
+  }
+  .form-input::placeholder {
+    font-size: 0.875rem;
+  }
+  .login-btn {
+    height: 46px;
+  }
+
+  /* Lang switcher — fixed di kanan atas */
+  .login-lang-switcher {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.5rem;
+  }
+}

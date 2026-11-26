@@ -1,0 +1,3240 @@
+
+<!doctype html>
+<html data-root="../../../" lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="csrf-token" content="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+    <meta name="theme-color" content="#1A4A8C" />
+    <link rel="manifest" href="../../../html/manifest.webmanifest" />
+    <link rel="icon" href="../../../img/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../img/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" href="../../../img/apple-touch-icon.png?v=2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Absensi" />
+    <title>Koreksi Absensi</title>
+    
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/ibm-plex-sans-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/plus-jakarta-sans-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/fonts.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="../../../css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/theme.css"
+    />
+    <link rel="stylesheet" href="../../../css/push.css"
+    />
+    
+<link rel="stylesheet" href="../../../css/corrections.css" />
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   CORRECTIONS PAGE — Design System Override
+   "Industrial Precision": Plus Jakarta Sans + IBM Plex Sans/Mono
+   Brand: teal-navy #1B4F72 | Accent: amber #D4860A | Sidebar: #0F2537
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── TOKEN OVERRIDES ─────────────────────────────────────────────────────── */
+:root {
+  --brand:          #1B4F72;
+  --brand-mid:      #2874A6;
+  --brand-dark:     #154360;
+  --brand-light:    #EAF2F8;
+  --brand-xlight:   #F4F9FC;
+  --accent:         #D4860A;
+  --accent-dark:    #B45309;
+  --accent-dim:     rgba(212,134,10,0.09);
+  --accent-border:  rgba(212,134,10,0.25);
+  --bg:             #F7F8FA;
+  --bg-card:        #FFFFFF;
+  --bg-raised:      #FAFBFC;
+  --text-primary:   #0F2537;
+  --text-secondary: #3D5166;
+  --text-muted:     #4A6577;
+  --text-faint:     #567081;
+  --border:         #E2E8EF;
+  --border-mid:     #CDD6DF;
+  --font-display:   'Plus Jakarta Sans', sans-serif;
+  --font-body:      'IBM Plex Sans', sans-serif;
+  --font-mono:      'IBM Plex Mono', monospace;
+  --radius:         10px;
+  --radius-sm:      6px;
+  --radius-xs:      4px;
+  --shadow-card:    0 1px 3px rgba(15,37,64,0.06), 0 4px 16px rgba(15,37,64,0.04);
+  --shadow-modal:   0 8px 40px rgba(10,20,30,0.28);
+  --transition:     150ms ease;
+
+  /* Status colors — refined semantic */
+  --s-hadir-bg:     #E8F5ED; --s-hadir-text:   #16783A; --s-hadir-border:  #B8DCCA;
+  --s-late-bg:      #FEF3C7; --s-late-text:    #8A5300; --s-late-border:   #F5D78A;
+  --s-absent-bg:    #FDECEA; --s-absent-text:  #B03A2E; --s-absent-border: #F5B8B4;
+  --s-sick-bg:      #F5F1E0; --s-sick-text:    #7D6608; --s-sick-border:   #DDD3A4;
+  --s-izin-bg:      #EAF2F8; --s-izin-text:    #1A5276; --s-izin-border:   #B8D3E8;
+  --s-libur-bg:     #F0F2F4; --s-libur-text:   #4A5A68; --s-libur-border:  #C8D4DC;
+  --s-remote-bg:    #F0EAF8; --s-remote-text:  #5B2C8D; --s-remote-border: #C8B0E8;
+}
+
+body { font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+
+/* ── BUTTONS ─────────────────────────────────────────────────────────────── */
+/* Koreksi Baru — amber primary */
+.btn-corr-add {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px;
+  background: var(--accent-dark);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.82rem; font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background var(--transition), box-shadow var(--transition), transform 0.1s;
+}
+.btn-corr-add:hover { background: #92400E; box-shadow: 0 2px 12px rgba(212,134,10,0.28); }
+.btn-corr-add:active { transform: scale(0.98); }
+
+/* Dup badge di tombol */
+.dup-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; padding: 0 4px;
+  border-radius: var(--radius-xs);
+  background: var(--accent-dark); color: #fff;
+  font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700;
+}
+
+/* Secondary / outline */
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 14px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--brand-light);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.8rem; font-weight: 500;
+  color: var(--brand);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+.btn-secondary:hover { background: var(--brand-light); border-color: var(--brand-mid); }
+
+/* Danger solid */
+.btn-danger {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 14px;
+  background: #B03A2E; border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.8rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  transition: background var(--transition);
+}
+.btn-danger:hover { background: #922E24; }
+
+/* Detail link-style */
+.btn-detail-corr {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-body); font-size: 0.75rem;
+  color: var(--text-muted); background: none; border: none;
+  cursor: pointer; padding: 2px 0;
+  transition: color var(--transition);
+}
+.btn-detail-corr:hover { color: var(--brand-mid); }
+.btn-detail-corr svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* Link danger */
+.btn-link-danger {
+  background: none; border: none;
+  font-family: var(--font-body); font-size: 0.8rem;
+  color: var(--s-absent-text); cursor: pointer;
+  padding: 4px 0; text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--transition);
+}
+.btn-link-danger:hover { text-decoration-color: currentColor; }
+
+/* ── SEARCH FILTER ACTIVE STATE ─────────────────────────────────────────── */
+.corr-search-wrap { position: relative; display: flex; align-items: center; }
+.corr-search-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  font-size: 1rem; color: var(--text-muted); cursor: pointer; line-height: 1;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.corr-search-clear:hover { color: var(--s-absent-text); }
+.corr-search-active-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 0.72rem;
+  color: var(--brand); background: var(--brand-light);
+  padding: 3px 10px; border-radius: 20px;
+  border: 1px solid var(--brand-light);
+  white-space: nowrap;
+}
+.corr-search-clear-link { color: var(--accent-dark); font-weight: 600; text-decoration: none; }
+.corr-search-clear-link:hover { text-decoration: underline; }
+
+/* ── STATUS HINT (opsional check-in untuk status izin/sakit/libur) ─────── */
+.corr-status-hint-leave {
+  display: block; font-size: 0.72rem; color: var(--brand-mid);
+  margin-top: 4px; font-style: italic;
+}
+
+/* NEW (overtime): warning window shift non-blocking di panel Lembur —
+   lebih menonjol dari .corr-status-hint-leave karena ini perlu perhatian
+   manajer (jam di luar window shift), meski tidak memblokir submit. */
+.ot-window-warning {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 0.78rem; color: var(--warning);
+  background: var(--warning-bg); border-radius: var(--radius-xs, 5px);
+  padding: 8px 10px;
+}
+
+/* ── TAB NAVIGATION ──────────────────────────────────────────────────────── */
+.corr-tabs {
+  display: flex;
+  background: var(--bg-card);
+  border-bottom: 1.5px solid var(--border);
+  padding: 0 24px;
+}
+.corr-tab {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 11px 16px;
+  font-family: var(--font-body); font-size: 0.8rem; font-weight: 500;
+  color: var(--text-muted);
+  background: none; border: none;
+  border-bottom: 2.5px solid transparent;
+  margin-bottom: -1.5px;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+  white-space: nowrap; letter-spacing: 0.01em;
+}
+.corr-tab:hover { color: var(--text-primary); }
+/* Amber underline = brand signature pada tab aktif */
+.corr-tab.active { color: var(--brand); border-bottom-color: var(--accent); font-weight: 600; }
+
+.tab-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; padding: 0 4px;
+  border-radius: var(--radius-xs);
+  background: var(--accent-dark); color: #fff;
+  font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700;
+}
+.tab-badge-warn { background: #C47A00; }
+
+/* ── CORR PANEL ──────────────────────────────────────────────────────────── */
+.corr-panel { display: none; }
+.corr-panel.active { display: block; }
+
+/* ── SECTION LABEL — amber left accent ──────────────────────────────────── */
+.corr-section-label {
+  display: inline-flex; align-items: center;
+  font-family: var(--font-body); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--brand);
+  border-left: 3px solid var(--accent);
+  padding-left: 8px; margin-bottom: 12px; line-height: 1;
+}
+
+/* ── FILTER BAR ──────────────────────────────────────────────────────────── */
+.corr-filter-bar-v2 {
+  display: flex; gap: 8px; margin-bottom: 12px;
+  flex-wrap: wrap; align-items: center;
+}
+.corr-search-wrap {
+  position: relative; flex: 1; min-width: 200px;
+}
+.corr-search-wrap svg {
+  position: absolute; left: 10px; top: 50%;
+  transform: translateY(-50%);
+  stroke: var(--text-faint); fill: none; stroke-width: 2;
+  pointer-events: none;
+}
+.corr-search-input {
+  width: 100%; padding: 8px 10px 8px 30px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  font-family: var(--font-body); font-size: 0.8rem; color: var(--text-primary);
+  outline: none; transition: border-color var(--transition), box-shadow var(--transition);
+}
+.corr-search-input:focus { border-color: var(--brand-mid); box-shadow: 0 0 0 3px rgba(27,79,114,0.08); }
+.corr-search-input::placeholder { color: var(--text-faint); }
+
+.corr-select {
+  padding: 8px 28px 8px 10px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  font-family: var(--font-body); font-size: 0.8rem; color: var(--text-primary);
+  outline: none; cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238899AA' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 8px center;
+  transition: border-color var(--transition);
+}
+.corr-select:focus { border-color: var(--brand-mid); }
+
+.btn-filter-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px;
+  background: var(--bg-card); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 0.78rem; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  position: relative; transition: all var(--transition);
+}
+.btn-filter-toggle:hover { border-color: var(--border-mid); color: var(--text-primary); }
+.filter-active-dot {
+  position: absolute; top: -3px; right: -3px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); border: 1.5px solid var(--bg-card);
+}
+
+/* Advanced filter panel */
+.corr-adv-filter {
+  background: #F0F4F7;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 12px 16px; margin-bottom: 12px;
+  animation: slideDown 0.14s ease;
+}
+@keyframes slideDown { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:none; } }
+.corr-adv-inner { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+.corr-adv-field { display: flex; flex-direction: column; gap: 4px; min-width: 130px; }
+.corr-adv-field-wide { flex: 1; min-width: 180px; }
+.corr-adv-label {
+  font-family: var(--font-body); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+}
+.corr-date-input {
+  padding: 7px 10px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-primary);
+  outline: none; transition: border-color var(--transition);
+}
+.corr-date-input:focus { border-color: var(--brand-mid); }
+.corr-adv-actions { display: flex; align-items: center; gap: 8px; padding-bottom: 1px; }
+.btn-apply-filter {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 14px; background: var(--accent-dark); color: #fff; border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 0.78rem; font-weight: 600;
+  cursor: pointer; transition: background var(--transition);
+}
+.btn-apply-filter:hover { background: #92400E; }
+.btn-clear-filter {
+  font-family: var(--font-body); font-size: 0.75rem;
+  color: var(--text-muted); background: none; border: none;
+  cursor: pointer; padding: 6px 4px; text-decoration: none;
+  transition: color var(--transition);
+}
+.btn-clear-filter:hover { color: var(--s-absent-text); }
+
+/* ── TABLE CARD ──────────────────────────────────────────────────────────── */
+.corr-table-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.corr-table-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 16px; border-bottom: 1px solid var(--border);
+}
+.corr-table-title {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 0.88rem; color: var(--text-primary);
+}
+.corr-count {
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);
+}
+.table-wrap { overflow-x: auto; }
+
+/* ── TABLE ───────────────────────────────────────────────────────────────── */
+.corr-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+
+/* Column headers — amber bottom border sebagai authority visual */
+.corr-table thead th {
+  font-family: var(--font-body); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 10px 14px; text-align: left;
+  background: var(--bg-raised);
+  border-bottom: 1.5px solid var(--accent);
+  white-space: nowrap;
+}
+.corr-table tbody tr { border-bottom: 1px solid var(--border); transition: background var(--transition); }
+.corr-table tbody tr:last-child { border-bottom: none; }
+.corr-table tbody tr:hover { background: var(--brand-xlight); }
+.corr-table td { padding: 11px 14px; vertical-align: middle; }
+
+/* Employee cell */
+.mgr-employee-cell { display: flex; align-items: center; gap: 10px; }
+.mgr-avatar {
+  width: 30px; height: 30px; border-radius: var(--radius-xs);
+  background: var(--brand); color: #fff;
+  font-family: var(--font-display); font-weight: 700; font-size: 0.65rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; letter-spacing: 0.02em;
+}
+.mgr-avatar-sm { width: 26px; height: 26px; font-size: 0.6rem; }
+.mgr-emp-name {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 0.82rem; color: var(--text-primary);
+  display: block; line-height: 1.2;
+}
+.mgr-emp-dept {
+  font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-faint);
+  display: block;
+}
+.mgr-td-mono { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); white-space: nowrap; }
+.mgr-td-muted { font-size: 0.78rem; color: var(--text-muted); }
+
+/* Change cell */
+.corr-change-cell { display: flex; flex-direction: column; gap: 2px; }
+.corr-change-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.corr-change-arrow { font-size: 0.62rem; color: var(--text-faint); padding-left: 2px; line-height: 1; }
+.corr-time-compact { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary); white-space: nowrap; }
+.corr-change-new .corr-time-compact { color: var(--text-primary); }
+
+/* ── STATUS PILLS ────────────────────────────────────────────────────────── */
+/* radius 4px = professional, bukan pill bulat */
+.status-pill {
+  display: inline-flex; align-items: center;
+  padding: 3px 8px; border-radius: var(--radius-xs);
+  font-family: var(--font-body); font-size: 0.68rem; font-weight: 600;
+  white-space: nowrap; border: 1px solid transparent;
+}
+.pill-sm { font-size: 0.62rem !important; padding: 1px 6px !important; }
+
+.pill-present, .pill-hadir      { background: var(--s-hadir-bg);  color: var(--s-hadir-text);  border-color: var(--s-hadir-border); }
+.pill-late,    .pill-terlambat  { background: var(--s-late-bg);   color: var(--s-late-text);   border-color: var(--s-late-border); }
+.pill-absent,  .pill-alpha      { background: var(--s-absent-bg); color: var(--s-absent-text); border-color: var(--s-absent-border); }
+.pill-sick,    .pill-sakit      { background: var(--s-sick-bg);   color: var(--s-sick-text);   border-color: var(--s-sick-border); }
+.pill-extra_off, .pill-izin     { background: var(--s-izin-bg);   color: var(--s-izin-text);   border-color: var(--s-izin-border); }
+.pill-day_off, .pill-libur      { background: var(--s-libur-bg);  color: var(--s-libur-text);  border-color: var(--s-libur-border); }
+.pill-remote                    { background: var(--s-remote-bg); color: var(--s-remote-text); border-color: var(--s-remote-border); }
+
+/* ── ACTION BADGES ───────────────────────────────────────────────────────── */
+/* Tiga warna, tiga makna yang berbeda — tidak ambigu */
+.action-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: var(--radius-xs);
+  font-family: var(--font-body); font-size: 0.68rem; font-weight: 600;
+  border: 1px solid transparent; white-space: nowrap;
+}
+/* Manual/correction = brand teal → pencatatan resmi */
+.action-manual, .action-correction {
+  background: var(--brand-light); color: var(--brand-dark);
+  border-color: rgba(27,79,114,0.2);
+}
+/* Bulk delete/delete = danger → destruktif */
+.action-bulk_delete, .action-delete {
+  background: var(--s-absent-bg); color: var(--s-absent-text);
+  border-color: rgba(176,58,46,0.2);
+}
+/* Merge = amber → intervensi yang disengaja */
+.action-merge {
+  background: var(--accent-dim); color: var(--accent-dark);
+  border-color: var(--accent-border);
+}
+
+/* ── PAGINATION ──────────────────────────────────────────────────────────── */
+.corr-pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; padding: 11px 16px; border-top: 1px solid var(--border);
+}
+.btn-page {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 5px 12px;
+  border-radius: var(--radius-xs); border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary);
+  text-decoration: none; cursor: pointer; transition: all var(--transition);
+}
+.btn-page:hover { border-color: var(--brand-mid); color: var(--brand); }
+.page-info { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+
+/* Empty / no-results state */
+.corr-empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 36px 16px; text-align: center; gap: 10px;
+  color: var(--text-faint);
+}
+.corr-empty-state p { font-size: 0.82rem; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PANEL: DUPLIKAT
+   ═══════════════════════════════════════════════════════════════════════════ */
+.dup-panel-topbar {
+  display: flex; align-items: flex-end; gap: 8px;
+  margin-bottom: 16px; flex-wrap: wrap;
+}
+.dup-date-field { display: flex; flex-direction: column; gap: 4px; min-width: 140px; }
+.dup-date-label {
+  font-family: var(--font-body); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+}
+.dup-date-input {
+  padding: 7px 10px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-primary);
+  outline: none; transition: border-color var(--transition);
+}
+.dup-date-input:focus { border-color: var(--brand-mid); }
+.btn-refresh {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px;
+  background: var(--bg-card); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 0.78rem; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  align-self: flex-end;
+  transition: all var(--transition);
+}
+.btn-refresh:hover { border-color: var(--brand-mid); color: var(--brand); background: var(--brand-light); }
+.dup-summary {
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);
+  align-self: flex-end; padding-bottom: 8px;
+}
+
+/* Dup group card */
+.dup-group {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; margin-bottom: 12px;
+  box-shadow: var(--shadow-card);
+}
+.dup-group-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; background: var(--bg-raised);
+  border-bottom: 1px solid var(--border); gap: 8px;
+}
+.dup-group-identity { display: flex; align-items: center; gap: 8px; }
+.dup-group-name {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 0.84rem; color: var(--text-primary);
+}
+.dup-group-dept {
+  font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); margin-left: 4px;
+}
+.dup-group-meta { display: flex; align-items: center; gap: 4px; }
+/* Date badge: informatif, netral */
+.dup-date-badge {
+  font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--border); border: 1px solid var(--border-mid);
+  padding: 2px 8px; border-radius: var(--radius-xs);
+}
+/* Count badge: dark, jumlah duplikat */
+.dup-count-badge {
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600;
+  color: #fff; background: var(--text-muted);
+  padding: 2px 8px; border-radius: var(--radius-xs);
+}
+
+/* Log card */
+.dup-log-card {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  background: var(--bg-card); transition: background var(--transition);
+}
+.dup-log-card:last-of-type { border-bottom: none; }
+.dup-log-card:hover { background: var(--bg-raised); }
+/* Recommended: teal-xlight + left border brand */
+.dup-log-recommended {
+  background: var(--brand-xlight) !important;
+  border-left: 3px solid var(--brand-mid);
+}
+.dup-log-recommended:hover { background: var(--brand-light) !important; }
+
+.dup-log-select-wrap { display: flex; align-items: flex-start; padding-top: 3px; }
+.dup-log-checkbox {
+  width: 15px; height: 15px;
+  border: 1.5px solid var(--border-mid); border-radius: 3px;
+  cursor: pointer; accent-color: var(--brand);
+}
+
+.dup-log-content { flex: 1; min-width: 0; }
+.dup-log-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 4px; flex-wrap: wrap;
+}
+/* Jam: monospace wajib untuk scanability shift supervisor */
+.dup-log-time {
+  font-family: var(--font-mono); font-weight: 600;
+  font-size: 0.88rem; color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+.dup-log-rec-badge {
+  font-family: var(--font-body); font-size: 0.65rem; font-weight: 600;
+  color: var(--accent-dark);
+}
+.dup-log-meta {
+  font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted);
+  display: flex; align-items: center; gap: 10px;
+  flex-wrap: wrap; line-height: 1.4;
+}
+.dup-log-id { font-size: 0.65rem; color: var(--text-faint); }
+.dup-log-flag { font-size: 0.68rem; color: var(--s-absent-text); margin-top: 3px; }
+
+/* Source badges */
+.dup-log-src {
+  display: inline-flex; align-items: center;
+  padding: 2px 6px; border-radius: var(--radius-xs);
+  font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600;
+}
+.src-gps        { background: var(--brand-light);   color: var(--brand-dark);   border: 1px solid rgba(27,79,114,0.15); }
+.src-system     { background: var(--bg-raised);     color: var(--text-muted);   border: 1px solid var(--border); }
+.src-correction { background: var(--accent-dim);    color: var(--accent-dark);  border: 1px solid var(--accent-border); }
+.src-deleted    { background: var(--s-absent-bg);   color: var(--s-absent-text);border: 1px solid var(--s-absent-border); }
+
+.dup-log-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+.btn-dup-detail {
+  padding: 4px 10px; border-radius: var(--radius-xs);
+  font-family: var(--font-body); font-size: 0.72rem; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text-secondary);
+  transition: all var(--transition); white-space: nowrap;
+}
+.btn-dup-detail:hover { border-color: var(--brand-mid); color: var(--brand); }
+.btn-dup-keep {
+  padding: 4px 10px; border-radius: var(--radius-xs);
+  font-family: var(--font-body); font-size: 0.72rem; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--brand-light);
+  background: var(--brand-light); color: var(--brand-dark);
+  transition: all var(--transition); white-space: nowrap;
+}
+.btn-dup-keep:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+/* Group actions footer */
+.dup-group-actions {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px; background: var(--bg-raised);
+  border-top: 1px solid var(--border); flex-wrap: wrap;
+}
+.btn-merge-group {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; background: var(--accent-dark); color: #fff; border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 0.78rem; font-weight: 600;
+  cursor: pointer; transition: background var(--transition);
+}
+.btn-merge-group:hover { background: #92400E; }
+.btn-select-all-group {
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border); background: none;
+  font-family: var(--font-body); font-size: 0.75rem;
+  color: var(--text-muted); cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-select-all-group:hover { border-color: var(--border-mid); color: var(--text-secondary); }
+
+/* ── BULK BAR — sticky bottom ────────────────────────────────────────────── */
+.bulk-bar {
+  position: sticky; bottom: 16px;
+  background: #1E2D3E;
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 4px 24px rgba(10,20,30,0.22);
+  margin-top: 12px;
+}
+.bulk-bar-count {
+  font-family: var(--font-mono); font-size: 0.8rem;
+  color: #fff; font-weight: 600;
+}
+.bulk-bar-actions { display: flex; gap: 8px; margin-left: auto; }
+.btn-bulk-cancel {
+  padding: 6px 12px; border-radius: var(--radius-xs);
+  background: transparent; border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.65);
+  font-family: var(--font-body); font-size: 0.75rem;
+  cursor: pointer; transition: all var(--transition);
+}
+.btn-bulk-cancel:hover { border-color: rgba(255,255,255,0.35); color: #fff; }
+.btn-bulk-delete {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 14px; border-radius: var(--radius-xs);
+  background: #B03A2E; color: #fff; border: none;
+  font-family: var(--font-body); font-size: 0.75rem; font-weight: 600;
+  cursor: pointer; transition: background var(--transition);
+}
+.btn-bulk-delete:hover { background: #922E24; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PANEL: ABSENSI HILANG
+   ═══════════════════════════════════════════════════════════════════════════ */
+.missing-topbar {
+  display: flex; align-items: flex-end; gap: 8px;
+  margin-bottom: 16px; flex-wrap: wrap;
+}
+.missing-filters {
+  display: flex; align-items: flex-end; gap: 8px; flex-wrap: wrap; flex: 1;
+}
+.missing-filter-field { display: flex; flex-direction: column; gap: 4px; }
+.missing-filter-wide { flex: 1; min-width: 180px; }
+.missing-filter-label {
+  font-family: var(--font-body); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+}
+.missing-summary {
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);
+  white-space: nowrap; align-self: flex-end; padding-bottom: 8px;
+}
+/* Alert stripe: jumlah absensi hilang */
+.missing-alert {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 14px;
+  background: #FEF3C7; border-left: 3px solid #C47A00;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom: 12px;
+  font-family: var(--font-body); font-size: 0.8rem;
+  font-weight: 600; color: #92400E;
+}
+.missing-result-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+  flex-wrap: wrap; gap: 8px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODAL
+   ═══════════════════════════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10,20,30,0.60);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 16px;
+  backdrop-filter: blur(2px);
+}
+.modal-box {
+  background: var(--bg-card); border-radius: var(--radius);
+  box-shadow: var(--shadow-modal);
+  overflow: auto; max-height: 85vh;
+  display: flex; flex-direction: column;
+  animation: modalIn 0.18s ease;
+}
+.modal-md { width: 480px; max-width: 100%; }
+.modal-sm { width: 380px; max-width: 100%; }
+@keyframes modalIn { from { opacity:0; transform:scale(0.97) translateY(6px); } to { opacity:1; transform:none; } }
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 20px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.modal-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 1rem; color: var(--text-primary);
+}
+.modal-close {
+  width: 28px; height: 28px; border-radius: var(--radius-xs);
+  border: none; background: none; cursor: pointer;
+  color: var(--text-muted); font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+.modal-close:hover { background: #F0F2F4; color: var(--text-primary); }
+.modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+.modal-footer {
+  padding: 12px 20px; border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0;
+}
+
+/* ── FORM ────────────────────────────────────────────────────────────────── */
+.form-group { margin-bottom: 15px; }
+.form-group:last-child { margin-bottom: 0; }
+.form-label {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--font-body); font-size: 0.72rem; font-weight: 600;
+  color: var(--text-secondary); margin-bottom: 5px; letter-spacing: 0.01em;
+}
+.req { color: var(--s-absent-text); }
+.form-input {
+  width: 100%; padding: 8px 10px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  font-family: var(--font-body); font-size: 0.82rem; color: var(--text-primary);
+  outline: none; transition: border-color var(--transition), box-shadow var(--transition);
+}
+.form-input:focus { border-color: var(--brand-mid); box-shadow: 0 0 0 3px rgba(27,79,114,0.08); }
+.form-input::placeholder { color: var(--text-faint); }
+.form-hint {
+  display: block; font-family: var(--font-mono); font-size: 0.68rem;
+  color: var(--text-muted); margin-top: 3px;
+}
+.form-error {
+  padding: 8px 12px;
+  background: var(--s-absent-bg); border-left: 3px solid var(--s-absent-text);
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  font-size: 0.78rem; color: var(--s-absent-text); margin-top: 8px;
+}
+
+/* Data preview */
+.corr-preview-card {
+  padding: 12px 14px;
+  background: var(--brand-xlight); border: 1px solid var(--brand-light);
+  border-radius: var(--radius-sm); margin-bottom: 14px;
+}
+.corr-preview-label {
+  font-family: var(--font-body); font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--brand-mid); margin-bottom: 6px;
+}
+.corr-preview-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.corr-preview-col {}
+.corr-preview-val {
+  font-family: var(--font-mono); font-weight: 600; font-size: 0.9rem;
+  color: var(--text-primary);
+}
+.corr-shift-info {
+  margin-top: 8px; font-size: 0.72rem;
+  font-family: var(--font-mono); color: var(--text-muted);
+}
+/* Deleted preview */
+.corr-preview-deleted { background: var(--s-absent-bg) !important; border-color: var(--s-absent-border) !important; }
+.corr-preview-deleted-banner {
+  font-size: 0.775rem; font-weight: 600; color: #7f1d1d;
+  padding-bottom: 8px; margin-bottom: 8px; border-bottom: 1px solid var(--s-absent-border);
+}
+/* New log */
+.corr-preview-new { background: var(--brand-xlight); }
+.corr-preview-new-label { font-size: 0.82rem; color: var(--brand-dark); font-weight: 500; display: block; }
+.corr-preview-new-ws { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; display: block; }
+
+/* Dup warning */
+#corrDupWarning {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 9px 12px;
+  background: #FEF3C7; border-left: 3px solid #C47A00;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  font-size: 0.8rem; color: #92400E;
+  margin-bottom: 14px; flex-wrap: wrap;
+}
+
+/* Autocomplete */
+.corr-emp-wrap { position: relative; }
+.corr-emp-icon {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  stroke: var(--text-faint); fill: none; stroke-width: 2; pointer-events: none;
+}
+.corr-emp-input { padding-left: 30px !important; }
+.corr-emp-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; font-size: 1rem; padding: 2px 4px;
+  transition: color var(--transition);
+}
+.corr-emp-clear:hover { color: var(--text-primary); }
+.corr-emp-dropdown {
+  position: absolute; top: 100%; left: 0; right: 0;
+  background: var(--bg-card); border: 1.5px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 20px rgba(15,37,64,0.12);
+  z-index: 200; overflow: hidden; max-height: 200px; overflow-y: auto;
+}
+.emp-option {
+  padding: 8px 12px; font-size: 0.8rem;
+  cursor: pointer; transition: background var(--transition);
+  display: flex; align-items: center; gap: 8px;
+}
+.emp-option:hover { background: var(--brand-xlight); }
+
+/* Auto status badge */
+.corr-auto-badge {
+  display: inline-flex; padding: 1px 6px; border-radius: 3px;
+  font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600;
+}
+.corr-auto-label { font-size: 0.68rem; color: var(--text-faint); font-weight: 400; }
+
+/* Created-at hint */
+.corr-created-hint {
+  display: block; font-family: var(--font-mono); font-size: 0.7rem;
+  color: var(--text-muted); margin-top: 3px;
+  padding: 2px 6px; background: #F0F4F7; border-radius: var(--radius-xs);
+}
+
+/* Merge cards */
+.merge-cards-list { display: flex; flex-direction: column; gap: 8px; }
+.merge-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; transition: all var(--transition);
+}
+.merge-card:hover { border-color: var(--brand-mid); background: var(--brand-xlight); }
+.merge-card-rec { border-color: var(--brand); background: var(--brand-xlight); }
+.merge-card-content { flex: 1; }
+.merge-card-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 3px; }
+.merge-card-time { font-family: var(--font-mono); font-weight: 600; font-size: 0.88rem; }
+.merge-card-meta { font-size: 0.7rem; font-family: var(--font-mono); color: var(--text-muted); }
+.merge-rec-star { color: var(--accent); }
+
+/* Detail modal */
+#logDetailBody table { width: 100%; font-size: 0.8rem; border-collapse: collapse; }
+#logDetailBody td { padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+#logDetailBody td:first-child { color: var(--text-muted); width: 38%; font-size: 0.75rem; }
+.detail-corr-history { margin-top: 14px; }
+.detail-corr-item {
+  border: 1px solid var(--border); border-radius: var(--radius-xs);
+  padding: 8px 12px; margin-bottom: 6px; font-size: 0.8rem;
+}
+.detail-deleted-notice {
+  background: var(--s-absent-bg); border: 1px solid var(--s-absent-border);
+  border-left: 3px solid var(--s-absent-text);
+  border-radius: var(--radius-xs); padding: 8px 12px;
+  font-size: 0.78rem; color: #7f1d1d; margin-bottom: 14px;
+}
+
+/* Spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Absent Sistem panel ─────────────────────────────────────────────── */
+.fa-tab-badge { background: #DC2626; }  /* merah — urgent */
+
+.fa-cat-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  font-size: 0.65rem; font-weight: 700; margin-right: 6px; flex-shrink: 0;
+}
+.fa-cat-conflict { background: #FEE2E2; color: #991B1B; }
+.fa-cat-open     { background: #FEF9C3; color: #854D0E; }
+.fa-cat-closed   { background: #F0FDF4; color: #166534; }
+
+.fa-cat-count {
+  display: inline-block; font-size: 0.72rem; font-weight: 600;
+  color: var(--text-muted); margin-left: 6px;
+}
+
+.btn-fa-delete {
+  padding: 5px 14px; border-radius: var(--radius-sm);
+  background: #DC2626; color: #fff;
+  border: none; font-size: 0.78rem; font-weight: 600;
+  cursor: pointer; transition: opacity var(--transition);
+}
+.btn-fa-delete:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-fa-delete:not(:disabled):hover { opacity: 0.88; }
+
+.fa-info-notice {
+  padding: 10px 16px; margin: 0 0 12px 0;
+  background: #F0FDF4; border: 1px solid #BBF7D0;
+  border-left: 3px solid #16A34A;
+  border-radius: var(--radius-xs);
+  font-size: 0.78rem; color: #166534;
+}
+
+.fa-badge-absent-sys {
+  display: inline-block; padding: 1px 7px;
+  background: #FEE2E2; color: #991B1B;
+  border-radius: 99px; font-size: 0.68rem; font-weight: 700; margin-left: 4px;
+}
+
+</style>
+
+    <style>
+      /* Form logout dibungkus supaya method-nya POST (bukan link GET) —
+         lihat auth.py: /auth/logout adalah POST-only untuk mencegah CSRF
+         logout lewat <img>/<a> pihak ketiga. Reset tampilan <button> agar
+         identik dengan link sidebar/bottom-nav di sekitarnya. */
+      .logout-form {
+        margin: 0;
+        padding: 0;
+        display: contents; /* form tidak mengubah layout flex/grid induk */
+      }
+      /* [FIX] Sebelumnya `all: unset` + `display: inherit`. Karena parent
+         .logout-form adalah `display: contents`, `inherit` menghasilkan
+         `contents` juga (bukan `flex`), sehingga tombol kehilangan seluruh
+         layout bottom-nav. Sekarang hanya reset tampilan bawaan <button>;
+         layout diatur oleh selector konteks masing-masing (main.css). */
+      button.as-link {
+        background: none;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Sidebar desktop: tombol tetap selebar item menu lain. */
+      .sidebar .logout-form button.as-link {
+        display: flex;
+        width: 100%;
+      }
+    </style>
+  <script>(()=>{const R="../../../",f=window.fetch;window.fetch=(u,o={})=>{u=String(u);if((o.method||"GET").toUpperCase()!=="GET")return Promise.resolve(new Response(JSON.stringify({ok:true,demo:true}),{headers:{"Content-Type":"application/json"}}));if(u[0]==="/")u=u.indexOf("/static/")===0?R+u.slice(8):R+"html"+u;return f(u,o)};document.addEventListener("submit",e=>{e.preventDefault();alert("Mode demo: aksi disimulasikan dan tidak disimpan.")},true)})()</script><link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+  <body
+    class="role-manager"
+  >
+    
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-brand">
+        <img
+          class="brand-logo"
+          src="../../../img/Logo-App-wide.jpg"
+          alt=""
+          width="70"
+          height="36"
+          decoding="async"
+        />
+        <span>CC Indonesia</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar">RI</div>
+        <div>
+          <div class="sidebar-user-name">
+            Rina
+          </div>
+          <div class="sidebar-user-role">Manager</div>
+        </div>
+        <div id="notif-bell-wrap" style="margin-left: auto"></div>
+      </div>
+
+      <nav class="sidebar-nav">
+         
+        <a
+          href="../../../html/manager/dashboard/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          Dashboard
+        </a>
+        <a
+          href="../../../html/manager/employees/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          Karyawan
+        </a>
+
+        
+        <a
+          href="../../../html/manager/shift-schedule/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="14" x2="12" y2="14" />
+            <line x1="8" y1="18" x2="16" y2="18" />
+          </svg>
+          <span>Jadwal</span>
+        </a>
+        <a
+          href="../../../html/manager/leaves/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          Pengajuan izin
+        </a>
+        <a
+          href="../../../html/manager/shifts/master/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          Konfigurasi Shift
+        </a>
+        <a
+          href="../../../html/manager/company-calendar/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="8" y1="15" x2="16" y2="15" />
+          </svg>
+          Kalender
+        </a>
+        <a
+          href="../../../html/manager/corrections/index.html"
+          class="active"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          Koreksi
+        </a>
+        <a
+          href="../../../html/manager/reports/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          Laporan
+        </a>
+        <a
+          href="../../../html/manager/production/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+            <circle cx="7.5" cy="11" r="2" />
+            <circle cx="16.5" cy="11" r="2" />
+          </svg>
+          Produksi
+        </a>
+        <a
+          href="../../../html/manager/offices/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Kantor
+        </a>
+        
+        <a
+          href="../../../html/manager/equipment/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+          Perlengkapan
+        </a>
+        
+        <a
+          href="../../../html/manager/departments/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+            <line x1="12" y1="12" x2="12" y2="16" />
+            <line x1="10" y1="14" x2="14" y2="14" />
+          </svg>
+          Departemen
+        </a>
+
+         
+      </nav>
+
+
+      <div class="sidebar-footer">
+        
+        <div class="lang-switcher" aria-label="Pilih bahasa">
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+        <form method="post" action="../../../html/auth/logout" class="logout-form">
+          <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+          <button type="submit" class="sidebar-logout as-link">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </aside>
+        
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-inner">
+        <span class="mobile-topbar-title">CC Indonesia</span>
+        <div
+          class="lang-switcher lang-switcher--mobile"
+          aria-label="Pilih bahasa"
+        >
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+      </div>
+    </div>
+     
+
+    <div class="main-wrap">
+        
+      <main class="page-content" id="main-content">
+        
+
+<!-- ── Page Header ── -->
+<div class="page-header page-header--std">
+  <div class="page-header-inner">
+    <div class="page-header-left">
+      <p class="page-header-sub">Manajemen</p>
+      <h1 class="page-header-name">Koreksi Absensi</h1>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-outline" id="btnScanDup">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><polyline points="21 21 16.65 16.65"/>
+          <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+        </svg>
+        Scan Duplikat
+        <span class="dup-badge" id="dupBadge" style="display:none"></span>
+      </button>
+      <button class="btn btn-primary" id="btnCorrNew">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Koreksi Baru
+      </button>
+      <button class="btn btn-outline" id="btnOtNew">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Lembur
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Container ─────────────────────────────────────────────────────────── -->
+<div class="page">
+
+  <!-- TAB NAV -->
+  <div class="corr-tabs">
+    <button class="corr-tab active" data-tab="history">Riwayat Koreksi</button>
+    <button class="corr-tab" data-tab="duplicates">
+      Duplikat
+      <span class="tab-badge" id="tabDupCount" style="display:none"></span>
+    </button>
+    <button class="corr-tab" data-tab="missing">
+      Absensi Hilang
+      <span class="tab-badge tab-badge-warn" id="tabMissingCount" style="display:none"></span>
+    </button>
+    <button class="corr-tab" data-tab="midnight">
+      Shift Malam
+      <span class="tab-badge mw-tab-badge" id="tabMidnightCount" style="display:none"></span>
+    </button>
+    <button class="corr-tab" data-tab="false_absent">
+      Absent Sistem
+      <span class="tab-badge fa-tab-badge" id="tabFalseAbsentCount" style="display:none"></span>
+    </button>
+    <button class="corr-tab" data-tab="overtime">
+      Lembur
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       PANEL: RIWAYAT KOREKSI
+       ══════════════════════════════════════════════════════════════════════ -->
+  <div id="panelHistory" class="corr-panel active" style="display:block">
+
+    <!-- Filter Bar -->
+    <div class="corr-filter-bar-v2">
+      <div class="corr-search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" class="corr-search-input" id="corrSearch"
+          placeholder="Cari karyawan…" autocomplete="off"
+          value=""/>
+        
+      </div>
+      
+      <select class="corr-select" id="corrStatusFilter" aria-label="Filter status">
+        <option value="">Semua Status</option>
+        <option value="present">Hadir</option>
+        <option value="late">Terlambat</option>
+        <option value="absent">Tidak Hadir</option>
+        <option value="sick">Sakit</option>
+        <option value="day_off">Libur</option>
+        <option value="extra_off">Izin</option>
+        <option value="remote">Remote</option>
+      </select>
+      <select class="corr-select" id="corrActionFilter" aria-label="Filter aksi">
+        <option value="" selected>Semua Aksi</option>
+        <option value="correction" >Koreksi</option>
+        <option value="manual"     >Manual</option>
+        <option value="overtime"   >Lembur</option>
+        <option value="delete"     >Hapus</option>
+        <option value="bulk_delete">Bulk Hapus</option>
+        <option value="merge"      >Merge</option>
+        <option value="false_absent_cleanup" >Cleanup Absent Palsu</option>
+      </select>
+      <button class="btn-filter-toggle" id="btnToggleAdvFilter" title="Filter Lanjutan">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </svg>
+        Filter
+        
+      </button>
+    </div>
+
+    <!-- Advanced Filter (collapsible) -->
+    <div class="corr-adv-filter" id="corrAdvFilter"
+      
+      style="display:none">
+      <div class="corr-adv-inner">
+        <div class="corr-adv-field">
+          <label class="corr-adv-label">Dari</label>
+          <input type="date" class="corr-date-input" id="histDateFrom" value=""/>
+        </div>
+        <div class="corr-adv-field">
+          <label class="corr-adv-label">Sampai</label>
+          <input type="date" class="corr-date-input" id="histDateTo" value=""/>
+        </div>
+        <div class="corr-adv-field corr-adv-field-wide">
+          <label class="corr-adv-label">Karyawan</label>
+          <select class="corr-select" id="histEmpFilter" style="width:100%">
+            <option value="">Semua Karyawan</option>
+            
+            <option value="26b587c0-fffa-4db0-a260-ef4c83f9a80c" >
+              Budi Anggraini · Manajemen
+            </option>
+            
+            <option value="fc8c8a4e-4438-4ef6-b38a-e91b02319459" >
+              Budi Firmansyah · Produksi
+            </option>
+            
+            <option value="f597b217-edf1-481c-a439-1cfba566d80b" >
+              Budi Hidayat · Produksi
+            </option>
+            
+            <option value="561a3a1d-d388-4efc-a8a0-2a81d226dd02" >
+              Budi Permata · Produksi
+            </option>
+            
+            <option value="f5464ac8-4f99-445a-a3c1-a131710a7256" >
+              Budi Setiawan · Produksi
+            </option>
+            
+            <option value="2cb37c47-b4fe-4e73-ab79-1808a3b3d969" >
+              Budi Susilo · Produksi
+            </option>
+            
+            <option value="4072eeac-01b3-4613-ae6f-313e310aec8c" >
+              Budi Wijaya · Produksi
+            </option>
+            
+            <option value="1658de7e-d339-487a-9151-e8c3a98febd9" >
+              Citra Anggraini · Staff
+            </option>
+            
+            <option value="69266bff-8231-40b6-9b31-84cccfa80a7a" >
+              Citra Firmansyah · Staff
+            </option>
+            
+            <option value="7082f876-2082-4dbd-98e5-5eb9f80cfa08" >
+              Citra Handayani · Produksi
+            </option>
+            
+            <option value="32bd5792-9513-47f2-87a2-545a3091737c" >
+              Citra Nugroho · Manajemen
+            </option>
+            
+            <option value="528b2830-fddd-4b08-a9f1-dc51f0b89f83" >
+              Citra Saputra · Produksi
+            </option>
+            
+            <option value="0597cbad-3ce5-4c5d-a706-7a37f248bcf8" >
+              Dewi Nugroho · Produksi
+            </option>
+            
+            <option value="ac315799-023b-4898-91e2-26479ff0a3fb" >
+              Dewi Prasetyo · Produksi
+            </option>
+            
+            <option value="1078a957-6072-4b74-b456-47011cbb4fe5" >
+              Dewi Santoso · Produksi
+            </option>
+            
+            <option value="be603686-99cf-4391-8579-93c04a158352" >
+              Dewi Saputra · Produksi
+            </option>
+            
+            <option value="7ac64052-c3a0-4ed6-bca6-a4da963c7924" >
+              Dewi Setiawan · Produksi
+            </option>
+            
+            <option value="ad0dc340-a40d-43c1-88a8-0edcbf2c29ef" >
+              Eko Permata · Produksi
+            </option>
+            
+            <option value="0cc6abbd-1cd8-454a-a396-a14d251bc11c" >
+              Eko Prasetyo · Produksi
+            </option>
+            
+            <option value="f08dd535-789d-412b-9117-5febc89472f0" >
+              Eko Wijaya · Produksi
+            </option>
+            
+            <option value="4d17786b-7786-46de-891d-ef23ef18bc26" >
+              Fitri Nugroho · Produksi
+            </option>
+            
+            <option value="27b8524b-5f83-4227-bb5a-19566a1936a2" >
+              Gilang Permata · Manajemen
+            </option>
+            
+            <option value="fea9866e-8c12-477d-96c3-f43a12424abf" >
+              Gilang Saputra · Produksi
+            </option>
+            
+            <option value="b0c1755e-5dcc-48c2-8c68-e28bf6620fb1" >
+              Gilang Wijaya · Produksi
+            </option>
+            
+            <option value="9c0e9027-35f9-4995-96fc-aad6894f30db" >
+              Hana Kusuma · Staff
+            </option>
+            
+            <option value="adc955a7-e4f6-4001-b6c1-1a4088b63244" >
+              Hana Lestari · Produksi
+            </option>
+            
+            <option value="d1777ad4-9c17-479e-a9e7-d9e7a48c3a3b" >
+              Hana Nugroho · Supervisor
+            </option>
+            
+            <option value="f051f622-7a4d-4d4d-8758-121ceb2b91b0" >
+              Hana Santoso · Produksi
+            </option>
+            
+            <option value="f8070337-db21-47a1-b3f8-b6c74014ea93" >
+              Hana Setiawan · Supervisor
+            </option>
+            
+            <option value="de61338f-d05b-4927-9d19-57b952e2c032" >
+              Joko Permata · Produksi
+            </option>
+            
+            <option value="640c2677-9ce8-4118-8915-5bccaa1d4d46" >
+              Joko Prasetyo · Produksi
+            </option>
+            
+            <option value="ec7cd925-8865-49a7-95d0-fcdb9db1f140" >
+              Joko Wijaya · Produksi
+            </option>
+            
+            <option value="03ac8e1f-c58f-4fb2-95eb-fae2c1f1914c" >
+              Kirana Handayani · Produksi
+            </option>
+            
+            <option value="1b3ac671-bcd9-4c2a-b75b-e53e5e3f3896" >
+              Kirana Saputra · Produksi
+            </option>
+            
+            <option value="8b2be325-d261-4800-9f66-08e9367cd783" >
+              Lukman Firmansyah · Produksi
+            </option>
+            
+            <option value="724b49a2-5bc5-4cf0-b171-faa367bce20b" >
+              Lukman Kusuma · Produksi
+            </option>
+            
+            <option value="3b1ac601-4f85-4c2b-87fb-a89cb91b40d5" >
+              Lukman Wijaya · Produksi
+            </option>
+            
+            <option value="2a93193b-b34f-401f-aa16-ba5088f7c9ff" >
+              Maya Kusuma · Produksi
+            </option>
+            
+            <option value="5cd10b6e-d605-4a35-8c1e-29cda4efd155" >
+              Maya Pratama · Produksi
+            </option>
+            
+            <option value="c91554a3-5cbd-45ad-bb07-416a64417ccb" >
+              Nanda Firmansyah · Manajemen
+            </option>
+            
+            <option value="e180659c-f901-45ea-b705-f6bb54e0cda1" >
+              Nanda Pratama · Produksi
+            </option>
+            
+            <option value="343c5c50-9cdc-41fb-af78-99e33b51a0d5" >
+              Nanda Ramadhan · Manajemen
+            </option>
+            
+            <option value="d6133fb0-acd2-4e7b-a843-c5de5958d40a" >
+              Nanda Wijaya · Produksi
+            </option>
+            
+            <option value="3438dc11-e857-4cdd-b7b6-778c47ba0f22" >
+              Oki Firmansyah · Produksi
+            </option>
+            
+            <option value="cd26220f-7a5d-4ba3-b69c-a309a94e1ab8" >
+              Oki Susilo · Produksi
+            </option>
+            
+            <option value="148ce27c-191c-4fae-ba2c-d105ed492927" >
+              Putri Firmansyah · Produksi
+            </option>
+            
+            <option value="99bc85ad-819d-4000-93ee-ad1575a1a8fc" >
+              Rangga Anggraini · Produksi
+            </option>
+            
+            <option value="f0172ab5-e93d-4771-b269-59d833bd1399" >
+              Sari Firmansyah · Produksi
+            </option>
+            
+            <option value="eb164d11-14a1-4b10-9267-905fcba7b38d" >
+              Sari Lestari · Produksi
+            </option>
+            
+            <option value="3a55539f-d9e4-4146-9e5e-0bcee18516fa" >
+              Sari Permata · Produksi
+            </option>
+            
+            <option value="a9a646da-df59-48c9-8ad7-1703fe56313a" >
+              Sari Prasetyo · Produksi
+            </option>
+            
+            <option value="34806087-3366-41d0-99f4-58e02fd9dd81" >
+              Sari Pratama · Supervisor
+            </option>
+            
+            <option value="69dfcd18-1143-4a84-b481-a6159420b43d" >
+              Sari Saputra · Produksi
+            </option>
+            
+            <option value="37f0a00f-f691-446e-8c38-eb0345b68dc1" >
+              Sari Susilo · Produksi
+            </option>
+            
+            <option value="65f84a65-2783-4708-ad3a-41d3523f7ea8" >
+              Tegar Hidayat · Supervisor
+            </option>
+            
+            <option value="c5bb0e35-1ce7-44d1-a2cb-522240bb8942" >
+              Tegar Kusuma · Supervisor
+            </option>
+            
+            <option value="da2d6fea-8d13-4303-a64a-eb4049a60ddc" >
+              Tegar Prasetyo · Produksi
+            </option>
+            
+            <option value="f42bb53b-ab15-4382-8489-200fd5ecb53d" >
+              Tegar Pratama · Produksi
+            </option>
+            
+            <option value="73414ec8-127d-4cd8-9dbf-f605a757016d" >
+              Tegar Santoso · Produksi
+            </option>
+            
+            <option value="db0b3d84-b109-4186-98c9-780140c1fac9" >
+              Tegar Saputra · Produksi
+            </option>
+            
+            <option value="eb31353e-e7f7-4b84-b5d2-174b2c95ab51" >
+              Tegar Wijaya · Produksi
+            </option>
+            
+            <option value="d5b8f251-4cf7-43c3-8c06-1b7a69bdf80b" >
+              Wulan Nugroho · Produksi
+            </option>
+            
+          </select>
+        </div>
+        <div class="corr-adv-actions">
+          <button class="btn-apply-filter" id="btnApplyHistFilter">Terapkan</button>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="corr-table-card">
+      <div class="corr-table-header">
+        <span class="corr-table-title">Riwayat Koreksi</span>
+        <span class="corr-count" id="corrCount"
+          data-server-total="0 total · Hal. 1/0">
+          
+            0 total · Hal. 1/0
+          
+        </span>
+      </div>
+      <div class="table-wrap">
+        <table class="corr-table">
+          <thead>
+            <tr>
+              <th>Karyawan</th>
+              <th>Tanggal</th>
+              <th>Perubahan</th>
+              <th>Status Saat Ini</th>
+              <th>Aksi</th>
+              <th>Oleh</th>
+              <th><span class="sr-only">Aksi</span></th>
+            </tr>
+          </thead>
+          <tbody id="corrBody">
+            
+          </tbody>
+        </table>
+      </div>
+
+      
+      <div id="corrEmptyHistory" class="corr-empty-state">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--border-mid)">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <p>Belum ada riwayat koreksi.</p>
+      </div>
+      
+
+      <div id="corrNoResults" class="corr-empty-state" style="display:none">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--border-mid)">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <p>Tidak ada hasil yang sesuai filter.</p>
+      </div>
+
+      
+    </div>
+    <!-- /corr-table-card -->
+
+  </div>
+  <!-- /panelHistory -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       PANEL: DUPLIKAT
+       ══════════════════════════════════════════════════════════════════════ -->
+  <div id="panelDuplicates" class="corr-panel" style="display:none">
+
+    <!-- Topbar: date range + refresh -->
+    <div class="dup-panel-topbar">
+      <div class="dup-date-field">
+        <span class="dup-date-label">Dari</span>
+        <input type="date" class="dup-date-input" id="dupDateFrom"/>
+      </div>
+      <div class="dup-date-field">
+        <span class="dup-date-label">Sampai</span>
+        <input type="date" class="dup-date-input" id="dupDateTo"/>
+      </div>
+      <button class="btn-refresh" id="btnRefreshDup">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+        Refresh
+      </button>
+      <span class="dup-summary" id="dupSummary"></span>
+    </div>
+
+    <!-- Loading -->
+    <div id="dupLoading" class="corr-empty-state" style="display:none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        style="animation:spin 0.9s linear infinite">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+      </svg>
+      <p>Memuat data duplikat…</p>
+    </div>
+
+    <!-- Empty -->
+    <div id="dupEmpty" class="corr-empty-state" style="display:none">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--border-mid)">
+        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <p>Tidak ada duplikat ditemukan pada rentang tanggal ini.</p>
+    </div>
+
+    <!-- Group list — diisi JS -->
+    <div id="dupGroupList"></div>
+
+    <!-- Bulk action bar -->
+    <div class="bulk-bar" id="bulkBar" style="display:none">
+      <span class="bulk-bar-count" id="bulkSelectedCount">0 log dipilih</span>
+      <div class="bulk-bar-actions">
+        <button class="btn-bulk-cancel" id="btnBulkCancel">Batal</button>
+        <button class="btn-bulk-delete" id="btnBulkDelete">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+            <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+          </svg>
+          Hapus yang Dipilih
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <!-- /panelDuplicates -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       PANEL: ABSENSI HILANG
+       ══════════════════════════════════════════════════════════════════════ -->
+  <div id="panelMissing" class="corr-panel" style="display:none">
+
+    <!-- Filter Controls -->
+    <div class="missing-topbar">
+      <div class="missing-filters">
+        <div class="missing-filter-field">
+          <span class="missing-filter-label">Dari</span>
+          <input type="date" id="missingDateFrom" class="corr-date-input"/>
+        </div>
+        <div class="missing-filter-field">
+          <span class="missing-filter-label">Sampai</span>
+          <input type="date" id="missingDateTo" class="corr-date-input"/>
+        </div>
+        <div class="missing-filter-field missing-filter-wide">
+          <span class="missing-filter-label">Karyawan</span>
+          <select id="missingUserFilter" class="corr-select" style="width:100%">
+            <option value="">Semua Karyawan</option>
+            
+            <option value="26b587c0-fffa-4db0-a260-ef4c83f9a80c">Budi Anggraini · Manajemen</option>
+            
+            <option value="fc8c8a4e-4438-4ef6-b38a-e91b02319459">Budi Firmansyah · Produksi</option>
+            
+            <option value="f597b217-edf1-481c-a439-1cfba566d80b">Budi Hidayat · Produksi</option>
+            
+            <option value="561a3a1d-d388-4efc-a8a0-2a81d226dd02">Budi Permata · Produksi</option>
+            
+            <option value="f5464ac8-4f99-445a-a3c1-a131710a7256">Budi Setiawan · Produksi</option>
+            
+            <option value="2cb37c47-b4fe-4e73-ab79-1808a3b3d969">Budi Susilo · Produksi</option>
+            
+            <option value="4072eeac-01b3-4613-ae6f-313e310aec8c">Budi Wijaya · Produksi</option>
+            
+            <option value="1658de7e-d339-487a-9151-e8c3a98febd9">Citra Anggraini · Staff</option>
+            
+            <option value="69266bff-8231-40b6-9b31-84cccfa80a7a">Citra Firmansyah · Staff</option>
+            
+            <option value="7082f876-2082-4dbd-98e5-5eb9f80cfa08">Citra Handayani · Produksi</option>
+            
+            <option value="32bd5792-9513-47f2-87a2-545a3091737c">Citra Nugroho · Manajemen</option>
+            
+            <option value="528b2830-fddd-4b08-a9f1-dc51f0b89f83">Citra Saputra · Produksi</option>
+            
+            <option value="0597cbad-3ce5-4c5d-a706-7a37f248bcf8">Dewi Nugroho · Produksi</option>
+            
+            <option value="ac315799-023b-4898-91e2-26479ff0a3fb">Dewi Prasetyo · Produksi</option>
+            
+            <option value="1078a957-6072-4b74-b456-47011cbb4fe5">Dewi Santoso · Produksi</option>
+            
+            <option value="be603686-99cf-4391-8579-93c04a158352">Dewi Saputra · Produksi</option>
+            
+            <option value="7ac64052-c3a0-4ed6-bca6-a4da963c7924">Dewi Setiawan · Produksi</option>
+            
+            <option value="ad0dc340-a40d-43c1-88a8-0edcbf2c29ef">Eko Permata · Produksi</option>
+            
+            <option value="0cc6abbd-1cd8-454a-a396-a14d251bc11c">Eko Prasetyo · Produksi</option>
+            
+            <option value="f08dd535-789d-412b-9117-5febc89472f0">Eko Wijaya · Produksi</option>
+            
+            <option value="4d17786b-7786-46de-891d-ef23ef18bc26">Fitri Nugroho · Produksi</option>
+            
+            <option value="27b8524b-5f83-4227-bb5a-19566a1936a2">Gilang Permata · Manajemen</option>
+            
+            <option value="fea9866e-8c12-477d-96c3-f43a12424abf">Gilang Saputra · Produksi</option>
+            
+            <option value="b0c1755e-5dcc-48c2-8c68-e28bf6620fb1">Gilang Wijaya · Produksi</option>
+            
+            <option value="9c0e9027-35f9-4995-96fc-aad6894f30db">Hana Kusuma · Staff</option>
+            
+            <option value="adc955a7-e4f6-4001-b6c1-1a4088b63244">Hana Lestari · Produksi</option>
+            
+            <option value="d1777ad4-9c17-479e-a9e7-d9e7a48c3a3b">Hana Nugroho · Supervisor</option>
+            
+            <option value="f051f622-7a4d-4d4d-8758-121ceb2b91b0">Hana Santoso · Produksi</option>
+            
+            <option value="f8070337-db21-47a1-b3f8-b6c74014ea93">Hana Setiawan · Supervisor</option>
+            
+            <option value="de61338f-d05b-4927-9d19-57b952e2c032">Joko Permata · Produksi</option>
+            
+            <option value="640c2677-9ce8-4118-8915-5bccaa1d4d46">Joko Prasetyo · Produksi</option>
+            
+            <option value="ec7cd925-8865-49a7-95d0-fcdb9db1f140">Joko Wijaya · Produksi</option>
+            
+            <option value="03ac8e1f-c58f-4fb2-95eb-fae2c1f1914c">Kirana Handayani · Produksi</option>
+            
+            <option value="1b3ac671-bcd9-4c2a-b75b-e53e5e3f3896">Kirana Saputra · Produksi</option>
+            
+            <option value="8b2be325-d261-4800-9f66-08e9367cd783">Lukman Firmansyah · Produksi</option>
+            
+            <option value="724b49a2-5bc5-4cf0-b171-faa367bce20b">Lukman Kusuma · Produksi</option>
+            
+            <option value="3b1ac601-4f85-4c2b-87fb-a89cb91b40d5">Lukman Wijaya · Produksi</option>
+            
+            <option value="2a93193b-b34f-401f-aa16-ba5088f7c9ff">Maya Kusuma · Produksi</option>
+            
+            <option value="5cd10b6e-d605-4a35-8c1e-29cda4efd155">Maya Pratama · Produksi</option>
+            
+            <option value="c91554a3-5cbd-45ad-bb07-416a64417ccb">Nanda Firmansyah · Manajemen</option>
+            
+            <option value="e180659c-f901-45ea-b705-f6bb54e0cda1">Nanda Pratama · Produksi</option>
+            
+            <option value="343c5c50-9cdc-41fb-af78-99e33b51a0d5">Nanda Ramadhan · Manajemen</option>
+            
+            <option value="d6133fb0-acd2-4e7b-a843-c5de5958d40a">Nanda Wijaya · Produksi</option>
+            
+            <option value="3438dc11-e857-4cdd-b7b6-778c47ba0f22">Oki Firmansyah · Produksi</option>
+            
+            <option value="cd26220f-7a5d-4ba3-b69c-a309a94e1ab8">Oki Susilo · Produksi</option>
+            
+            <option value="148ce27c-191c-4fae-ba2c-d105ed492927">Putri Firmansyah · Produksi</option>
+            
+            <option value="99bc85ad-819d-4000-93ee-ad1575a1a8fc">Rangga Anggraini · Produksi</option>
+            
+            <option value="f0172ab5-e93d-4771-b269-59d833bd1399">Sari Firmansyah · Produksi</option>
+            
+            <option value="eb164d11-14a1-4b10-9267-905fcba7b38d">Sari Lestari · Produksi</option>
+            
+            <option value="3a55539f-d9e4-4146-9e5e-0bcee18516fa">Sari Permata · Produksi</option>
+            
+            <option value="a9a646da-df59-48c9-8ad7-1703fe56313a">Sari Prasetyo · Produksi</option>
+            
+            <option value="34806087-3366-41d0-99f4-58e02fd9dd81">Sari Pratama · Supervisor</option>
+            
+            <option value="69dfcd18-1143-4a84-b481-a6159420b43d">Sari Saputra · Produksi</option>
+            
+            <option value="37f0a00f-f691-446e-8c38-eb0345b68dc1">Sari Susilo · Produksi</option>
+            
+            <option value="65f84a65-2783-4708-ad3a-41d3523f7ea8">Tegar Hidayat · Supervisor</option>
+            
+            <option value="c5bb0e35-1ce7-44d1-a2cb-522240bb8942">Tegar Kusuma · Supervisor</option>
+            
+            <option value="da2d6fea-8d13-4303-a64a-eb4049a60ddc">Tegar Prasetyo · Produksi</option>
+            
+            <option value="f42bb53b-ab15-4382-8489-200fd5ecb53d">Tegar Pratama · Produksi</option>
+            
+            <option value="73414ec8-127d-4cd8-9dbf-f605a757016d">Tegar Santoso · Produksi</option>
+            
+            <option value="db0b3d84-b109-4186-98c9-780140c1fac9">Tegar Saputra · Produksi</option>
+            
+            <option value="eb31353e-e7f7-4b84-b5d2-174b2c95ab51">Tegar Wijaya · Produksi</option>
+            
+            <option value="d5b8f251-4cf7-43c3-8c06-1b7a69bdf80b">Wulan Nugroho · Produksi</option>
+            
+          </select>
+        </div>
+        <button class="btn-corr-add" id="btnCheckMissing" style="align-self:flex-end">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          Cek Sekarang
+        </button>
+      </div>
+      <span class="missing-summary" id="missingSummary"></span>
+    </div>
+
+    <!-- Loading -->
+    <div id="missingLoading" class="corr-empty-state" style="display:none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        style="animation:spin 0.9s linear infinite">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+      </svg>
+      <p>Memuat data…</p>
+    </div>
+
+    <!-- Prompt state (belum cek) -->
+    <div id="missingPrompt" class="corr-empty-state">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--border-mid)">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+      </svg>
+      <p>Pilih rentang tanggal lalu klik Cek Sekarang</p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="missingEmpty" class="corr-empty-state" style="display:none">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--border-mid)">
+        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <p>Tidak ada absensi yang hilang pada rentang tanggal ini.</p>
+    </div>
+
+    <!-- Hasil -->
+    <div id="missingResults" style="display:none">
+      <!-- Alert banner -->
+      <div class="missing-alert" id="missingAlertBanner" style="display:none">
+        <span>⚠</span>
+        <span id="missingResultTitle"></span>
+      </div>
+
+      <div class="corr-table-card">
+        <div class="missing-result-header">
+          <span class="corr-section-label">Daftar Absensi Hilang</span>
+          <button class="btn-secondary" id="btnFillAllMissing" style="font-size:.775rem;padding:.35rem .8rem">
+            📝 Buat Semua (Absent)
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table class="corr-table">
+            <thead>
+              <tr>
+                <th>Karyawan</th>
+                <th>Tanggal</th>
+                <th>Hari</th>
+                <th><span class="sr-only">Aksi</span></th>
+              </tr>
+            </thead>
+            <tbody id="missingTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /panelMissing -->
+  <!-- ══════════════════════════════════════════════════════════════════════
+       PANEL: MASALAH SHIFT MALAM (Midnight-Window Fix)
+       ══════════════════════════════════════════════════════════════════════ -->
+  <div id="panelMidnight" class="corr-panel" style="display:none">
+
+    <!-- Filter & Tombol Pindai -->
+    <div class="mw-topbar">
+      <div class="mw-filters">
+        <div class="mw-filter-field">
+          <span class="mw-filter-label">Dari</span>
+          <input type="date" id="mwDateFrom" class="corr-date-input"/>
+        </div>
+        <div class="mw-filter-field">
+          <span class="mw-filter-label">Sampai</span>
+          <input type="date" id="mwDateTo" class="corr-date-input"/>
+        </div>
+        <button class="btn-corr-add" id="btnScanMidnight" style="align-self:flex-end">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          Pindai
+        </button>
+      </div>
+      <span class="mw-summary" id="mwSummary"></span>
+    </div>
+
+    <!-- Loading -->
+    <div id="mwLoading" class="corr-empty-state" style="display:none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        style="animation:spin 0.9s linear infinite">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+      </svg>
+      <p>Memindai log shift malam…</p>
+    </div>
+
+    <!-- Prompt state (belum pindai) -->
+    <div id="mwPrompt" class="corr-empty-state">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--border-mid)">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+        <path d="M12 8v4l3 3"/>
+      </svg>
+      <p>Pilih rentang tanggal lalu klik Pindai</p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="mwEmpty" class="corr-empty-state" style="display:none">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--border-mid)">
+        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <p>Tidak ada log bermasalah ditemukan pada rentang ini.</p>
+    </div>
+
+    <!-- Hasil scan -->
+    <div id="mwResults" style="display:none">
+
+      <!-- Alert banner -->
+      <div class="mw-alert" id="mwAlertBanner" style="display:none">
+        <span>🌙</span>
+        <span id="mwAlertText"></span>
+      </div>
+
+      <div class="corr-table-card">
+        <div class="mw-result-header">
+          <span class="corr-section-label">Log Shift Malam Bermasalah</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label class="mw-check-all-wrap">
+              <input type="checkbox" id="mwCheckAll"/> Pilih Semua
+            </label>
+            <button class="btn-mw-apply" id="btnApplyMidnight" disabled>
+              ✓ Terapkan Koreksi Terpilih
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="corr-table">
+            <thead>
+              <tr>
+                <th style="width:32px"><span class="sr-only">Pilih</span></th>
+                <th>Karyawan</th>
+                <th>Shift</th>
+                <th>Check-in</th>
+                <th>Tanggal Lama → Baru</th>
+                <th>Status</th>
+                <th>Duplikat Absent</th>
+              </tr>
+            </thead>
+            <tbody id="mwTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+    <!-- /mwResults -->
+
+  </div>
+  <!-- /panelMidnight -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       PANEL: ABSENT SISTEM
+       ══════════════════════════════════════════════════════════════════════ -->
+  <div id="panelFalseAbsent" class="corr-panel" style="display:none">
+
+    <!-- Filter Bar -->
+    <div class="mw-topbar">
+      <div class="mw-filters">
+        <div class="mw-filter-field">
+          <span class="mw-filter-label">Dari</span>
+          <input type="date" id="faDateFrom" class="corr-date-input"/>
+        </div>
+        <div class="mw-filter-field">
+          <span class="mw-filter-label">Sampai</span>
+          <input type="date" id="faDateTo" class="corr-date-input"/>
+        </div>
+        <div class="mw-filter-field">
+          <span class="mw-filter-label">Shift</span>
+          <select id="faShiftFilter" class="corr-select" style="min-width:140px">
+            <option value="">Semua Shift</option>
+            <option value="shift_2">Shift 2 – Produksi</option>
+            <option value="shift_5">Shift 5 – Inventaris</option>
+            <option value="shift_6">Shift 6 – Security</option>
+          </select>
+        </div>
+        <button class="btn-corr-add" id="btnScanFalseAbsent" style="align-self:flex-end">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          Pindai
+        </button>
+      </div>
+      <span class="mw-summary" id="faSummary"></span>
+    </div>
+
+    <!-- Loading -->
+    <div id="faLoading" class="corr-empty-state" style="display:none">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        style="animation:spin 0.9s linear infinite">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+      </svg>
+      <p>Memindai absent sistem…</p>
+    </div>
+
+    <!-- Prompt state -->
+    <div id="faPrompt" class="corr-empty-state">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--border-mid)">
+        <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+      </svg>
+      <p>Pilih rentang tanggal lalu klik Pindai</p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="faEmpty" class="corr-empty-state" style="display:none">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--border-mid)">
+        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <p>Tidak ada absent sistem mencurigakan pada rentang ini.</p>
+    </div>
+
+    <!-- Hasil scan -->
+    <div id="faResults" style="display:none">
+
+      <!-- Alert banner -->
+      <div class="mw-alert" id="faAlertBanner" style="display:none">
+        <span>⚠</span>
+        <span id="faAlertText"></span>
+      </div>
+
+      <!-- Kategori A: Konflik -->
+      <div id="faSectionConflict" style="display:none">
+        <div class="corr-table-card" style="margin-bottom:16px">
+          <div class="mw-result-header">
+            <span class="corr-section-label">
+              <span class="fa-cat-badge fa-cat-conflict">A</span>
+              Konflik dengan check-in nyata
+              <span class="fa-cat-count" id="faConflictCount"></span>
+            </span>
+            <div style="display:flex;gap:8px;align-items:center">
+              <label class="mw-check-all-wrap">
+                <input type="checkbox" id="faCheckAllConflict" onchange="faToggleAll('conflict', this.checked)"/>
+                Pilih Semua
+              </label>
+              <button class="btn-fa-delete" id="btnDeleteConflict" onclick="faDeleteSelected('conflict')" disabled>
+                🗑 Hapus Terpilih
+              </button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="corr-table">
+              <thead>
+                <tr>
+                  <th style="width:32px"><span class="sr-only">Pilih</span></th>
+                  <th>Karyawan</th>
+                  <th>Shift</th>
+                  <th>Tanggal</th>
+                  <th>Ditulis Sistem</th>
+                  <th>Window Buka</th>
+                  <th>Check-in Nyata</th>
+                </tr>
+              </thead>
+              <tbody id="faBodyConflict"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kategori B: Window Masih Buka -->
+      <div id="faSectionWindowOpen" style="display:none">
+        <div class="corr-table-card" style="margin-bottom:16px">
+          <div class="mw-result-header">
+            <span class="corr-section-label">
+              <span class="fa-cat-badge fa-cat-open">B</span>
+              Window masih buka — karyawan belum check-in
+              <span class="fa-cat-count" id="faWindowOpenCount"></span>
+            </span>
+            <div style="display:flex;gap:8px;align-items:center">
+              <label class="mw-check-all-wrap">
+                <input type="checkbox" id="faCheckAllOpen" onchange="faToggleAll('window_open', this.checked)"/>
+                Pilih Semua
+              </label>
+              <button class="btn-fa-delete" id="btnDeleteOpen" onclick="faDeleteSelected('window_open')" disabled>
+                🗑 Hapus Terpilih
+              </button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="corr-table">
+              <thead>
+                <tr>
+                  <th style="width:32px"><span class="sr-only">Pilih</span></th>
+                  <th>Karyawan</th>
+                  <th>Shift</th>
+                  <th>Tanggal</th>
+                  <th>Ditulis Sistem</th>
+                  <th>Window Check-in</th>
+                  <th>Cutoff</th>
+                </tr>
+              </thead>
+              <tbody id="faBodyWindowOpen"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kategori C: Window Tutup (informatif) -->
+      <div id="faSectionWindowClosed" style="display:none">
+        <div class="corr-table-card">
+          <div class="mw-result-header">
+            <span class="corr-section-label">
+              <span class="fa-cat-badge fa-cat-closed">C</span>
+              Absent valid — window sudah tutup, karyawan tidak hadir
+              <span class="fa-cat-count" id="faWindowClosedCount"></span>
+            </span>
+          </div>
+          <div class="fa-info-notice">
+            ℹ Tidak perlu tindakan — absent ini kini sudah benar karena karyawan memang tidak hadir. Ditampilkan hanya untuk keperluan audit.
+          </div>
+          <div class="table-wrap">
+            <table class="corr-table">
+              <thead>
+                <tr>
+                  <th>Karyawan</th>
+                  <th>Shift</th>
+                  <th>Tanggal</th>
+                  <th>Ditulis Sistem</th>
+                  <th>Cutoff</th>
+                </tr>
+              </thead>
+              <tbody id="faBodyWindowClosed"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /faResults -->
+
+  </div>
+  <!-- /panelFalseAbsent -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       PANEL: LEMBUR
+       Form entry langsung (bukan modal cari-dulu seperti Koreksi Baru) —
+       lembur TIDAK melakukan lookup "log sudah ada?" karena tujuannya
+       justru menambah baris kedua/ketiga di tanggal yang sudah punya log.
+       Backend: POST /manager/overtime/create-log (overtime_create_log()).
+       ══════════════════════════════════════════════════════════════════════ -->
+  <div id="panelOvertime" class="corr-panel" style="display:none">
+
+    <!-- [FRONTEND-OVERTIME-MODAL] Panel Lembur sekarang tabel riwayat murni
+         — form Cari/Catat/Edit dipindah ke modalOvertime (dipicu tombol
+         header "Lembur"). Baris di tabel ini bisa diklik untuk membuka
+         modal tsb langsung dalam mode edit baris tersebut. -->
+    <div class="corr-table-card">
+      <div class="corr-table-header">
+        <span class="corr-table-title">Riwayat Lembur</span>
+        <a href="../../../html/manager/corrections/index.html" class="corr-count" style="text-decoration:none">
+          Lihat semua di Riwayat →
+        </a>
+      </div>
+      <div class="table-wrap">
+        <table class="corr-table">
+          <thead>
+            <tr>
+              <th>Karyawan</th>
+              <th>Tanggal</th>
+              <th>Shift</th>
+              <th>Jam</th>
+              <th>Kategori</th>
+              <th>Dicatat Oleh</th>
+            </tr>
+          </thead>
+          <tbody id="otRecentBody">
+            
+            <tr><td colspan="6" class="mgr-td-muted" style="text-align:center;padding:20px">Belum ada catatan lembur.</td></tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <!-- /panelOvertime -->
+
+
+</div>
+<!-- /container -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     Modal: KOREKSI BARU / EDIT LOG
+     ════════════════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalCorr" style="display:none">
+  <div class="modal-box modal-md">
+    <div class="modal-header">
+      <span class="modal-title" id="corrModalTitle">✏️ Koreksi Absensi</span>
+      <button class="modal-close" id="btnCloseCorr">×</button>
+    </div>
+    <div class="modal-body">
+      <select id="corrEmployeeSource" style="display:none">
+        <option value=""></option>
+        
+        <option value="26b587c0-fffa-4db0-a260-ef4c83f9a80c">Budi Anggraini · Manajemen</option>
+        
+        <option value="fc8c8a4e-4438-4ef6-b38a-e91b02319459">Budi Firmansyah · Produksi</option>
+        
+        <option value="f597b217-edf1-481c-a439-1cfba566d80b">Budi Hidayat · Produksi</option>
+        
+        <option value="561a3a1d-d388-4efc-a8a0-2a81d226dd02">Budi Permata · Produksi</option>
+        
+        <option value="f5464ac8-4f99-445a-a3c1-a131710a7256">Budi Setiawan · Produksi</option>
+        
+        <option value="2cb37c47-b4fe-4e73-ab79-1808a3b3d969">Budi Susilo · Produksi</option>
+        
+        <option value="4072eeac-01b3-4613-ae6f-313e310aec8c">Budi Wijaya · Produksi</option>
+        
+        <option value="1658de7e-d339-487a-9151-e8c3a98febd9">Citra Anggraini · Staff</option>
+        
+        <option value="69266bff-8231-40b6-9b31-84cccfa80a7a">Citra Firmansyah · Staff</option>
+        
+        <option value="7082f876-2082-4dbd-98e5-5eb9f80cfa08">Citra Handayani · Produksi</option>
+        
+        <option value="32bd5792-9513-47f2-87a2-545a3091737c">Citra Nugroho · Manajemen</option>
+        
+        <option value="528b2830-fddd-4b08-a9f1-dc51f0b89f83">Citra Saputra · Produksi</option>
+        
+        <option value="0597cbad-3ce5-4c5d-a706-7a37f248bcf8">Dewi Nugroho · Produksi</option>
+        
+        <option value="ac315799-023b-4898-91e2-26479ff0a3fb">Dewi Prasetyo · Produksi</option>
+        
+        <option value="1078a957-6072-4b74-b456-47011cbb4fe5">Dewi Santoso · Produksi</option>
+        
+        <option value="be603686-99cf-4391-8579-93c04a158352">Dewi Saputra · Produksi</option>
+        
+        <option value="7ac64052-c3a0-4ed6-bca6-a4da963c7924">Dewi Setiawan · Produksi</option>
+        
+        <option value="ad0dc340-a40d-43c1-88a8-0edcbf2c29ef">Eko Permata · Produksi</option>
+        
+        <option value="0cc6abbd-1cd8-454a-a396-a14d251bc11c">Eko Prasetyo · Produksi</option>
+        
+        <option value="f08dd535-789d-412b-9117-5febc89472f0">Eko Wijaya · Produksi</option>
+        
+        <option value="4d17786b-7786-46de-891d-ef23ef18bc26">Fitri Nugroho · Produksi</option>
+        
+        <option value="27b8524b-5f83-4227-bb5a-19566a1936a2">Gilang Permata · Manajemen</option>
+        
+        <option value="fea9866e-8c12-477d-96c3-f43a12424abf">Gilang Saputra · Produksi</option>
+        
+        <option value="b0c1755e-5dcc-48c2-8c68-e28bf6620fb1">Gilang Wijaya · Produksi</option>
+        
+        <option value="9c0e9027-35f9-4995-96fc-aad6894f30db">Hana Kusuma · Staff</option>
+        
+        <option value="adc955a7-e4f6-4001-b6c1-1a4088b63244">Hana Lestari · Produksi</option>
+        
+        <option value="d1777ad4-9c17-479e-a9e7-d9e7a48c3a3b">Hana Nugroho · Supervisor</option>
+        
+        <option value="f051f622-7a4d-4d4d-8758-121ceb2b91b0">Hana Santoso · Produksi</option>
+        
+        <option value="f8070337-db21-47a1-b3f8-b6c74014ea93">Hana Setiawan · Supervisor</option>
+        
+        <option value="de61338f-d05b-4927-9d19-57b952e2c032">Joko Permata · Produksi</option>
+        
+        <option value="640c2677-9ce8-4118-8915-5bccaa1d4d46">Joko Prasetyo · Produksi</option>
+        
+        <option value="ec7cd925-8865-49a7-95d0-fcdb9db1f140">Joko Wijaya · Produksi</option>
+        
+        <option value="03ac8e1f-c58f-4fb2-95eb-fae2c1f1914c">Kirana Handayani · Produksi</option>
+        
+        <option value="1b3ac671-bcd9-4c2a-b75b-e53e5e3f3896">Kirana Saputra · Produksi</option>
+        
+        <option value="8b2be325-d261-4800-9f66-08e9367cd783">Lukman Firmansyah · Produksi</option>
+        
+        <option value="724b49a2-5bc5-4cf0-b171-faa367bce20b">Lukman Kusuma · Produksi</option>
+        
+        <option value="3b1ac601-4f85-4c2b-87fb-a89cb91b40d5">Lukman Wijaya · Produksi</option>
+        
+        <option value="2a93193b-b34f-401f-aa16-ba5088f7c9ff">Maya Kusuma · Produksi</option>
+        
+        <option value="5cd10b6e-d605-4a35-8c1e-29cda4efd155">Maya Pratama · Produksi</option>
+        
+        <option value="c91554a3-5cbd-45ad-bb07-416a64417ccb">Nanda Firmansyah · Manajemen</option>
+        
+        <option value="e180659c-f901-45ea-b705-f6bb54e0cda1">Nanda Pratama · Produksi</option>
+        
+        <option value="343c5c50-9cdc-41fb-af78-99e33b51a0d5">Nanda Ramadhan · Manajemen</option>
+        
+        <option value="d6133fb0-acd2-4e7b-a843-c5de5958d40a">Nanda Wijaya · Produksi</option>
+        
+        <option value="3438dc11-e857-4cdd-b7b6-778c47ba0f22">Oki Firmansyah · Produksi</option>
+        
+        <option value="cd26220f-7a5d-4ba3-b69c-a309a94e1ab8">Oki Susilo · Produksi</option>
+        
+        <option value="148ce27c-191c-4fae-ba2c-d105ed492927">Putri Firmansyah · Produksi</option>
+        
+        <option value="99bc85ad-819d-4000-93ee-ad1575a1a8fc">Rangga Anggraini · Produksi</option>
+        
+        <option value="f0172ab5-e93d-4771-b269-59d833bd1399">Sari Firmansyah · Produksi</option>
+        
+        <option value="eb164d11-14a1-4b10-9267-905fcba7b38d">Sari Lestari · Produksi</option>
+        
+        <option value="3a55539f-d9e4-4146-9e5e-0bcee18516fa">Sari Permata · Produksi</option>
+        
+        <option value="a9a646da-df59-48c9-8ad7-1703fe56313a">Sari Prasetyo · Produksi</option>
+        
+        <option value="34806087-3366-41d0-99f4-58e02fd9dd81">Sari Pratama · Supervisor</option>
+        
+        <option value="69dfcd18-1143-4a84-b481-a6159420b43d">Sari Saputra · Produksi</option>
+        
+        <option value="37f0a00f-f691-446e-8c38-eb0345b68dc1">Sari Susilo · Produksi</option>
+        
+        <option value="65f84a65-2783-4708-ad3a-41d3523f7ea8">Tegar Hidayat · Supervisor</option>
+        
+        <option value="c5bb0e35-1ce7-44d1-a2cb-522240bb8942">Tegar Kusuma · Supervisor</option>
+        
+        <option value="da2d6fea-8d13-4303-a64a-eb4049a60ddc">Tegar Prasetyo · Produksi</option>
+        
+        <option value="f42bb53b-ab15-4382-8489-200fd5ecb53d">Tegar Pratama · Produksi</option>
+        
+        <option value="73414ec8-127d-4cd8-9dbf-f605a757016d">Tegar Santoso · Produksi</option>
+        
+        <option value="db0b3d84-b109-4186-98c9-780140c1fac9">Tegar Saputra · Produksi</option>
+        
+        <option value="eb31353e-e7f7-4b84-b5d2-174b2c95ab51">Tegar Wijaya · Produksi</option>
+        
+        <option value="d5b8f251-4cf7-43c3-8c06-1b7a69bdf80b">Wulan Nugroho · Produksi</option>
+        
+      </select>
+      <input type="hidden" id="corrEmployee"/>
+
+      <div class="form-group">
+        <label class="form-label">Karyawan <span class="req">*</span></label>
+        <div class="corr-emp-wrap">
+          <svg class="corr-emp-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="corrEmpSearch" class="form-input corr-emp-input"
+            placeholder="Ketik nama karyawan…" autocomplete="off"/>
+          <button class="corr-emp-clear" id="corrEmpClear" style="display:none" title="Hapus pilihan">×</button>
+        </div>
+        <div class="corr-emp-dropdown" id="corrEmpDropdown" style="display:none"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tanggal Absensi <span class="req">*</span></label>
+        <input type="date" id="corrDate" class="form-input" style="font-family:var(--font-mono)"/>
+        <small id="created-at-hint" class="corr-created-hint" style="display:none"></small>
+      </div>
+
+      <!-- [REVERT-OVERTIME-SCOPE] Dropdown pilih shift dihapus — shift
+           reguler diresolve otomatis oleh backend (get_user_shift()),
+           persis seperti sebelum fitur lembur ada. Modal ini sekarang
+           HANYA menangani log shift reguler (is_overtime=False); baris
+           lembur di tanggal yang sama ditampilkan sebagai info read-only
+           di #corrOvertimeContext (lihat renderDataPreview()) dan
+           dikoreksi lewat modal Lembur terpisah. -->
+      <div class="form-error" id="corrStep1Error" style="display:none"></div>
+      <div id="corrDataPreview" style="display:none"></div>
+      <div id="corrOvertimeContext" style="display:none"></div>
+
+      <!-- [MULTI-SHIFT FIX] Sebelumnya berlabel "kemungkinan duplikat" —
+           sekarang menampilkan log shift LAIN yang sudah tercatat di
+           tanggal ini secara netral (bisa jadi shift reguler + lembur yang
+           memang sah, bukan duplikat keliru). -->
+      <div id="corrDupWarning" style="display:none">
+        ℹ️ <span id="corrDupWarnText" style="flex:1"></span>
+      </div>
+
+      <div id="corrFormFields" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group">
+            <label class="form-label">Check-in Baru</label>
+            <input type="time" id="corrNewIn" class="form-input" style="font-family:var(--font-mono)"/>
+            <span class="form-hint">Kosongkan jika tidak diubah</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Check-out Baru</label>
+            <input type="time" id="corrNewOut" class="form-input" style="font-family:var(--font-mono)"/>
+            <span class="form-hint">Kosongkan jika tidak diubah</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" style="display:flex;align-items:center;gap:6px">
+            Status Baru
+            <span class="corr-auto-badge" id="corrAutoStatus" style="display:none"></span>
+            <span class="corr-auto-label">OTOMATIS</span>
+          </label>
+          <select id="corrNewStatus" class="form-input">
+            <option value="">— Tidak diubah —</option>
+            <option value="present">Hadir</option>
+            <option value="late">Terlambat</option>
+            <option value="absent">Tidak Hadir</option>
+            <option value="sick">Sakit</option>
+            <option value="day_off">Libur</option>
+            <option value="extra_off">Izin</option>
+            <option value="remote">Remote</option>
+          </select>
+          <span class="form-hint" id="corrStatusHint"></span>
+          <span class="corr-status-hint-leave" id="corrStatusLeaveHint" style="display:none">
+            ℹ️ Status ini tidak memerlukan jam check-in.
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Alasan Koreksi <span class="req">*</span></label>
+          <textarea id="corrReason" class="form-input" rows="2"
+            placeholder="Contoh: Lupa checkout, koreksi jam masuk…"></textarea>
+        </div>
+
+        <div id="corrDeleteRow" style="display:none;margin-top:6px;padding-top:10px;border-top:1px dashed var(--border)">
+          <button id="btnDeleteThisLog" class="btn-link-danger">🗑️ Hapus Log Ini</button>
+        </div>
+        <div class="form-error" id="corrError" style="display:none;margin-top:10px"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="btnCancelCorr">Batal</button>
+      <button class="btn-corr-add" id="btnCorrSearch">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Cari Data Absensi
+      </button>
+      <button class="btn-corr-add" id="btnCorrSubmit" style="display:none">
+        <span id="corrSubmitSpinner" style="display:none">⏳</span>
+        ✏️ Simpan Koreksi
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     Modal: LEMBUR (Cari → Edit, atau + Catat Baru)
+     [FRONTEND-OVERTIME-MODAL] Menggantikan form inline lama di panelOvertime.
+     Alur: pilih karyawan + tanggal → "Cari Lembur" (GET /manager/overtime/
+     lookup). 0 hasil → tampil tombol "+ Catat Baru" (form create, shift
+     BEBAS dipilih dari seluruh shift aktif kantor+dept karyawan). 1 hasil →
+     langsung tampil form edit baris itu. >1 hasil → tampil daftar pilihan
+     dulu, baru form edit muncul setelah salah satu dipilih.
+     ════════════════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOvertime" style="display:none">
+  <div class="modal-box modal-md">
+    <div class="modal-header">
+      <span class="modal-title" id="otModalTitle">🕒 Lembur</span>
+      <button class="modal-close" id="btnCloseOt">×</button>
+    </div>
+    <div class="modal-body">
+      <select id="otEmployeeSource" style="display:none">
+        <option value=""></option>
+        
+        <option value="26b587c0-fffa-4db0-a260-ef4c83f9a80c">Budi Anggraini · Manajemen</option>
+        
+        <option value="fc8c8a4e-4438-4ef6-b38a-e91b02319459">Budi Firmansyah · Produksi</option>
+        
+        <option value="f597b217-edf1-481c-a439-1cfba566d80b">Budi Hidayat · Produksi</option>
+        
+        <option value="561a3a1d-d388-4efc-a8a0-2a81d226dd02">Budi Permata · Produksi</option>
+        
+        <option value="f5464ac8-4f99-445a-a3c1-a131710a7256">Budi Setiawan · Produksi</option>
+        
+        <option value="2cb37c47-b4fe-4e73-ab79-1808a3b3d969">Budi Susilo · Produksi</option>
+        
+        <option value="4072eeac-01b3-4613-ae6f-313e310aec8c">Budi Wijaya · Produksi</option>
+        
+        <option value="1658de7e-d339-487a-9151-e8c3a98febd9">Citra Anggraini · Staff</option>
+        
+        <option value="69266bff-8231-40b6-9b31-84cccfa80a7a">Citra Firmansyah · Staff</option>
+        
+        <option value="7082f876-2082-4dbd-98e5-5eb9f80cfa08">Citra Handayani · Produksi</option>
+        
+        <option value="32bd5792-9513-47f2-87a2-545a3091737c">Citra Nugroho · Manajemen</option>
+        
+        <option value="528b2830-fddd-4b08-a9f1-dc51f0b89f83">Citra Saputra · Produksi</option>
+        
+        <option value="0597cbad-3ce5-4c5d-a706-7a37f248bcf8">Dewi Nugroho · Produksi</option>
+        
+        <option value="ac315799-023b-4898-91e2-26479ff0a3fb">Dewi Prasetyo · Produksi</option>
+        
+        <option value="1078a957-6072-4b74-b456-47011cbb4fe5">Dewi Santoso · Produksi</option>
+        
+        <option value="be603686-99cf-4391-8579-93c04a158352">Dewi Saputra · Produksi</option>
+        
+        <option value="7ac64052-c3a0-4ed6-bca6-a4da963c7924">Dewi Setiawan · Produksi</option>
+        
+        <option value="ad0dc340-a40d-43c1-88a8-0edcbf2c29ef">Eko Permata · Produksi</option>
+        
+        <option value="0cc6abbd-1cd8-454a-a396-a14d251bc11c">Eko Prasetyo · Produksi</option>
+        
+        <option value="f08dd535-789d-412b-9117-5febc89472f0">Eko Wijaya · Produksi</option>
+        
+        <option value="4d17786b-7786-46de-891d-ef23ef18bc26">Fitri Nugroho · Produksi</option>
+        
+        <option value="27b8524b-5f83-4227-bb5a-19566a1936a2">Gilang Permata · Manajemen</option>
+        
+        <option value="fea9866e-8c12-477d-96c3-f43a12424abf">Gilang Saputra · Produksi</option>
+        
+        <option value="b0c1755e-5dcc-48c2-8c68-e28bf6620fb1">Gilang Wijaya · Produksi</option>
+        
+        <option value="9c0e9027-35f9-4995-96fc-aad6894f30db">Hana Kusuma · Staff</option>
+        
+        <option value="adc955a7-e4f6-4001-b6c1-1a4088b63244">Hana Lestari · Produksi</option>
+        
+        <option value="d1777ad4-9c17-479e-a9e7-d9e7a48c3a3b">Hana Nugroho · Supervisor</option>
+        
+        <option value="f051f622-7a4d-4d4d-8758-121ceb2b91b0">Hana Santoso · Produksi</option>
+        
+        <option value="f8070337-db21-47a1-b3f8-b6c74014ea93">Hana Setiawan · Supervisor</option>
+        
+        <option value="de61338f-d05b-4927-9d19-57b952e2c032">Joko Permata · Produksi</option>
+        
+        <option value="640c2677-9ce8-4118-8915-5bccaa1d4d46">Joko Prasetyo · Produksi</option>
+        
+        <option value="ec7cd925-8865-49a7-95d0-fcdb9db1f140">Joko Wijaya · Produksi</option>
+        
+        <option value="03ac8e1f-c58f-4fb2-95eb-fae2c1f1914c">Kirana Handayani · Produksi</option>
+        
+        <option value="1b3ac671-bcd9-4c2a-b75b-e53e5e3f3896">Kirana Saputra · Produksi</option>
+        
+        <option value="8b2be325-d261-4800-9f66-08e9367cd783">Lukman Firmansyah · Produksi</option>
+        
+        <option value="724b49a2-5bc5-4cf0-b171-faa367bce20b">Lukman Kusuma · Produksi</option>
+        
+        <option value="3b1ac601-4f85-4c2b-87fb-a89cb91b40d5">Lukman Wijaya · Produksi</option>
+        
+        <option value="2a93193b-b34f-401f-aa16-ba5088f7c9ff">Maya Kusuma · Produksi</option>
+        
+        <option value="5cd10b6e-d605-4a35-8c1e-29cda4efd155">Maya Pratama · Produksi</option>
+        
+        <option value="c91554a3-5cbd-45ad-bb07-416a64417ccb">Nanda Firmansyah · Manajemen</option>
+        
+        <option value="e180659c-f901-45ea-b705-f6bb54e0cda1">Nanda Pratama · Produksi</option>
+        
+        <option value="343c5c50-9cdc-41fb-af78-99e33b51a0d5">Nanda Ramadhan · Manajemen</option>
+        
+        <option value="d6133fb0-acd2-4e7b-a843-c5de5958d40a">Nanda Wijaya · Produksi</option>
+        
+        <option value="3438dc11-e857-4cdd-b7b6-778c47ba0f22">Oki Firmansyah · Produksi</option>
+        
+        <option value="cd26220f-7a5d-4ba3-b69c-a309a94e1ab8">Oki Susilo · Produksi</option>
+        
+        <option value="148ce27c-191c-4fae-ba2c-d105ed492927">Putri Firmansyah · Produksi</option>
+        
+        <option value="99bc85ad-819d-4000-93ee-ad1575a1a8fc">Rangga Anggraini · Produksi</option>
+        
+        <option value="f0172ab5-e93d-4771-b269-59d833bd1399">Sari Firmansyah · Produksi</option>
+        
+        <option value="eb164d11-14a1-4b10-9267-905fcba7b38d">Sari Lestari · Produksi</option>
+        
+        <option value="3a55539f-d9e4-4146-9e5e-0bcee18516fa">Sari Permata · Produksi</option>
+        
+        <option value="a9a646da-df59-48c9-8ad7-1703fe56313a">Sari Prasetyo · Produksi</option>
+        
+        <option value="34806087-3366-41d0-99f4-58e02fd9dd81">Sari Pratama · Supervisor</option>
+        
+        <option value="69dfcd18-1143-4a84-b481-a6159420b43d">Sari Saputra · Produksi</option>
+        
+        <option value="37f0a00f-f691-446e-8c38-eb0345b68dc1">Sari Susilo · Produksi</option>
+        
+        <option value="65f84a65-2783-4708-ad3a-41d3523f7ea8">Tegar Hidayat · Supervisor</option>
+        
+        <option value="c5bb0e35-1ce7-44d1-a2cb-522240bb8942">Tegar Kusuma · Supervisor</option>
+        
+        <option value="da2d6fea-8d13-4303-a64a-eb4049a60ddc">Tegar Prasetyo · Produksi</option>
+        
+        <option value="f42bb53b-ab15-4382-8489-200fd5ecb53d">Tegar Pratama · Produksi</option>
+        
+        <option value="73414ec8-127d-4cd8-9dbf-f605a757016d">Tegar Santoso · Produksi</option>
+        
+        <option value="db0b3d84-b109-4186-98c9-780140c1fac9">Tegar Saputra · Produksi</option>
+        
+        <option value="eb31353e-e7f7-4b84-b5d2-174b2c95ab51">Tegar Wijaya · Produksi</option>
+        
+        <option value="d5b8f251-4cf7-43c3-8c06-1b7a69bdf80b">Wulan Nugroho · Produksi</option>
+        
+      </select>
+      <input type="hidden" id="otEmployee"/>
+
+      <!-- Step 1: pilih karyawan + tanggal, lalu cari -->
+      <div id="otStep1">
+        <div class="form-group">
+          <label class="form-label">Karyawan <span class="req">*</span></label>
+          <div class="corr-emp-wrap">
+            <svg class="corr-emp-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="otEmpSearch" class="form-input corr-emp-input"
+              placeholder="Ketik nama karyawan…" autocomplete="off"/>
+            <button class="corr-emp-clear" id="otEmpClear" style="display:none" title="Hapus pilihan">×</button>
+          </div>
+          <div class="corr-emp-dropdown" id="otEmpDropdown" style="display:none"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tanggal <span class="req">*</span></label>
+          <input type="date" id="otDate" class="form-input" style="font-family:var(--font-mono)"/>
+        </div>
+
+        <div class="form-error" id="otStep1Error" style="display:none"></div>
+      </div>
+
+      <!-- Step 2a: >1 hasil — daftar pilihan -->
+      <div id="otResultsList" style="display:none;margin-bottom:12px"></div>
+
+      <!-- Step 2b: 0 hasil — prompt catat baru -->
+      <div id="otNoResult" style="display:none">
+        <div class="corr-preview-card corr-preview-new">
+          <span class="corr-preview-new-label" id="otNoResultText">📋 Belum ada lembur tercatat untuk karyawan & tanggal ini.</span>
+        </div>
+      </div>
+
+      <!-- Step 3: form create/edit -->
+      <div id="otFormFields" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Shift <span class="req">*</span></label>
+          <select id="otShift" class="form-input">
+            <option value="">— Pilih shift —</option>
+          </select>
+          <span class="form-hint" id="otShiftHint">Difilter ke kantor & departemen karyawan ini.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Kategori Lembur <span class="req">*</span></label>
+          <select id="otReason" class="form-input">
+            <option value="extra_shift">Shift Tambahan</option>
+            <option value="day_off_work">Kerja di Hari Libur Mingguan</option>
+            <option value="holiday_work">Kerja di Hari Libur</option>
+          </select>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group">
+            <label class="form-label">Check-in <span class="req">*</span></label>
+            <input type="time" id="otCheckIn" class="form-input" style="font-family:var(--font-mono)"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Check-out</label>
+            <input type="time" id="otCheckOut" class="form-input" style="font-family:var(--font-mono)"/>
+            <span class="form-hint">Kosongkan jika belum selesai.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select id="otStatus" class="form-input">
+            <option value="present">Hadir</option>
+            <option value="remote">Remote</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Catatan / Alasan Lembur <span class="req">*</span></label>
+          <textarea id="otReasonNote" class="form-input" rows="2"
+            placeholder="Contoh: Menutup shift 2 karena Shift 2 Produksi kekurangan orang…"></textarea>
+        </div>
+
+        <div id="otWindowWarning" class="ot-window-warning" style="display:none;margin-bottom:10px">
+          ⚠️ <span id="otWindowWarningText"></span>
+        </div>
+
+        <div class="form-error" id="otError" style="display:none;margin-bottom:10px"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="btnCancelOt">Batal</button>
+      <button class="btn-corr-add" id="btnOtSearch">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Cari Lembur
+      </button>
+      <button class="btn-corr-add" id="btnOtCreateNew" style="display:none">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Catat Baru
+      </button>
+      <button class="btn-corr-add" id="btnOtSubmit" style="display:none">
+        <span id="otSubmitSpinner" style="display:none">⏳</span>
+        Simpan Lembur
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal: DETAIL LOG -->
+<div class="modal-overlay" id="modalLogDetail" style="display:none">
+  <div class="modal-box modal-md">
+    <div class="modal-header">
+      <span class="modal-title">📋 Detail Log Absensi</span>
+      <button class="modal-close" id="btnCloseLogDetail">×</button>
+    </div>
+    <div class="modal-body" id="logDetailBody">
+      <div class="corr-empty-state"><p>Memuat…</p></div>
+    </div>
+    <div class="modal-footer" id="logDetailFooter">
+      <button class="btn-secondary" id="btnCloseLogDetailFooter">Tutup</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal: MERGE DUPLIKAT -->
+<div class="modal-overlay" id="modalMerge" style="display:none">
+  <div class="modal-box modal-md">
+    <div class="modal-header">
+      <span class="modal-title">⇌ Merge Duplikat</span>
+      <button class="modal-close" id="btnCloseMerge">×</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:14px;line-height:1.6">
+        Pilih log yang akan dipertahankan. Log lainnya akan di-hapus (soft-delete) dan dicatat di audit trail.
+      </p>
+      <div id="mergeLogCards" class="merge-cards-list"></div>
+      <div class="form-group" style="margin-top:14px">
+        <label class="form-label">Alasan Merge <span class="req">*</span></label>
+        <textarea id="mergeReason" class="form-input" rows="2"
+          placeholder="Contoh: Duplikat dari scheduler vs GPS check-in…"></textarea>
+      </div>
+      <div class="form-error" id="mergeError" style="display:none"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="btnCancelMerge">Batal</button>
+      <button class="btn-danger" id="btnConfirmMerge" disabled>
+        <span id="mergeSpinner" style="display:none">⏳</span>
+        ⇌ Konfirmasi Merge
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal: KONFIRMASI HAPUS / RESTORE (shared) -->
+<div class="modal-overlay" id="modalConfirmDelete" style="display:none">
+  <div class="modal-box modal-sm">
+    <div class="modal-header">
+      <span class="modal-title">🗑️ Konfirmasi Hapus</span>
+      <button class="modal-close" id="btnCloseConfirmDelete">×</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirmDeleteMsg" style="font-size:.82rem;color:var(--text-muted);margin-bottom:14px;line-height:1.6"></p>
+      <div class="form-group">
+        <label class="form-label">Alasan <span class="req">*</span></label>
+        <textarea id="confirmDeleteReason" class="form-input" rows="2"
+          placeholder="Masukkan alasan…"></textarea>
+      </div>
+      <div class="form-error" id="confirmDeleteError" style="display:none"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="btnCancelConfirmDelete">Batal</button>
+      <button class="btn-danger" id="btnDoDelete">
+        <span id="deleteSpinner" style="display:none">⏳</span>
+        🗑️ Hapus
+      </button>
+    </div>
+  </div>
+</div>
+
+
+      </main>
+    </div>
+
+     
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+       
+      <a
+        href="../../../html/manager/dashboard/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a
+        href="../../../html/manager/employees/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+        </svg>
+        <span>Karyawan</span>
+      </a>
+      <a
+        href="../../../html/manager/shift-schedule/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="14" x2="12" y2="14" />
+          <line x1="8" y1="18" x2="16" y2="18" />
+        </svg>
+        <span>Jadwal</span>
+      </a>
+      <a
+        href="../../../html/manager/leaves/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Izin</span>
+      </a>
+      <a
+        href="../../../html/manager/company-calendar/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="8" y1="15" x2="16" y2="15" />
+        </svg>
+        <span>Kalender</span>
+      </a>
+      <a
+        href="../../../html/manager/reports/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        <span>Laporan</span>
+      </a>
+      <a
+        href="../../../html/manager/production/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M4 6h16a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4l-1.5-2h-5L8 17H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+          <circle cx="7.5" cy="11" r="2" />
+          <circle cx="16.5" cy="11" r="2" />
+        </svg>
+        <span>Produksi</span>
+      </a>
+      <a
+        href="../../../html/manager/corrections/index.html"
+        class="active"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+        <span>Koreksi</span>
+      </a>
+      <a
+        href="../../../html/manager/offices/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+          />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Kantor</span>
+      </a>
+      
+      <a
+        href="../../../html/manager/equipment/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <line x1="8" y1="21" x2="16" y2="21" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+        <span>Alat</span>
+      </a>
+      
+      <a
+        href="../../../html/manager/departments/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+          <line x1="12" y1="12" x2="12" y2="16" />
+          <line x1="10" y1="14" x2="14" y2="14" />
+        </svg>
+        <span>Departemen</span>
+      </a>
+      <a
+        href="../../../html/manager/shifts/master/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span>Konfigurasi Shift</span>
+      </a>
+      <form method="post" action="../../../html/auth/logout" class="logout-form">
+        <input type="hidden" name="csrf_token" value="IjFmNDRkZTRiMGMwZWM4ZTlmMTJiNjMyYWZiMzc2NzhlMWFiM2UwNTki.avZ7bA.tRJCYgkpsImVmv-d7WpWTLvC7bk" />
+        <button type="submit" class="as-link">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </form>
+
+       
+    </nav>
+    
+    
+    <script src="../../../js/core.js"></script>
+    
+    
+<script src="../../../js/corrections.js"></script>
+
+    <script src="../../../js/app.js"></script>
+    
+    <script>
+      window.I18N = Object.assign({}, window.I18N, {
+      notifTitle: "Notifikasi",
+      notifMarkAllRead: "Tandai semua dibaca",
+      notifLoading: "Memuat\u2026",
+      notifEmpty: "Tidak ada notifikasi",
+      notifError: "Gagal memuat notifikasi"});
+    </script>
+    <script src="../../../js/notifications.js"></script>
+    <script src="../../../js/push.js"></script>
+    
+    <script>
+      // Form logout mengirim POST via fetch, lalu redirect manual berdasarkan
+      // JSON {"redirect": "..."} dari server — pola yang sama dengan
+      // login.js. Tanpa ini, submit form native menampilkan JSON mentah
+      // di layar alih-alih membawa user ke halaman login.
+      document.querySelectorAll(".logout-form").forEach(function (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const btn = form.querySelector("button[type=submit]");
+          if (btn) btn.disabled = true;
+          try { if (window.Push) await window.Push.forgetDevice(); } catch {}
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": form.querySelector(
+                  'input[name="csrf_token"]',
+                ).value,
+              },
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              /* respons bukan JSON — abaikan, pakai fallback di bawah */
+            }
+            window.location.href = data.redirect || "/auth/login";
+          } catch {
+            // Gagal terhubung ke server: tetap arahkan ke login supaya
+            // user tidak macet di halaman dengan sesi yang mungkin sudah
+            // tidak valid.
+            window.location.href = "/auth/login";
+          }
+        });
+      });
+    </script>
+    
+  </body>
+</html>

@@ -1,0 +1,88 @@
+/* executive_managers.css — scoped styles untuk halaman Manajemen Manager
+   Ditata agar visualnya konsisten dengan halaman Data Karyawan (manager).
+   Kelas utama (emp-toolbar, emp-search-*, btn-emp-add, emp-table-card,
+   emp-count-bar, emp-table, emp-name-cell, emp-avatar, emp-fullname,
+   status-pill, td-muted, action-row, btn-action, btn-delete, notice,
+   form-*, modal-*, toggle-switch, btn-modal-submit/cancel, mgr-empty)
+   sudah tersedia global di main.css/theme.css — file ini hanya berisi
+   penyesuaian kecil + kelas yang benar-benar baru untuk halaman ini. */
+
+/* Kartu tabel: beri warna latar count-bar seperti halaman Data Karyawan */
+.emp-count-bar {
+  background: var(--brand-xlight);
+}
+
+/* Avatar bersudut (rounded-square), bukan lingkaran — samakan dengan
+   avatar di halaman Data Karyawan */
+.emp-avatar {
+  border-radius: 8px;
+}
+
+/* ── Action buttons: warna default per jenis aksi ─────────────────────── */
+.btn-edit {
+  color: var(--brand);
+}
+.btn-edit:hover {
+  background: var(--brand-xlight);
+  border-color: var(--brand-light);
+}
+
+.btn-resetpw {
+  color: var(--warning, #c47a00);
+}
+.btn-resetpw:hover {
+  background: var(--warning-bg, #fef3c7);
+  border-color: #f0e0b0;
+}
+
+/* Nonaktifkan — ikon saja, warna danger langsung (bukan hanya saat hover) */
+.btn-delete {
+  color: var(--danger);
+  padding: 0.32rem 0.45rem;
+}
+
+@media (max-width: 640px) {
+  .emp-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn-emp-add {
+    justify-content: center;
+  }
+}
+
+/* ── Toast notifikasi (konfirmasi aksi berhasil/gagal) ─────────────────── */
+.page-success-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #166534;
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  z-index: 9999;
+  animation: mgr-toast-in 0.25s ease;
+  white-space: nowrap;
+}
+@keyframes mgr-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .page-success-toast {
+    max-width: calc(100vw - 2rem);
+    white-space: normal;
+    text-align: center;
+  }
+}

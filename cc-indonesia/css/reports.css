@@ -1,0 +1,6037 @@
+/*
+ * reports.css — CC Indonesia · "Intelligence Report"
+ * Design direction: McKinsey Annual Report × Linear Product Precision
+ *
+ * Prinsip utama (Don Norman + Nielsen + Krug + Rynzhuk):
+ *   1. SCANNABILITY FIRST — report dibaca non-linear, bukan dashboard real-time
+ *   2. DATA HIERARCHY — angka adalah protagonis, label adalah konteks
+ *   3. BREATHING ROOM — white space bukan kemewahan, itu kejelasan
+ *   4. PURPOSEFUL CONTRAST — setiap warna harus beralasan, bukan dekoratif
+ *   5. EDITORIAL TYPOGRAPHY — report perlu suara, bukan sekadar teks
+ *
+ * Typeface logic:
+ *   DM Serif Display  → masthead, angka KPI besar (editorial authority)
+ *   IBM Plex Sans     → body, label, UI (technical clarity)
+ *   IBM Plex Mono     → semua angka/waktu (tabular precision)
+ *
+ * Color philosophy:
+ *   Background tonal bukan putih murni — #F8F7F4 (kertas premium)
+ *   Accent tetap --rp-gold dari theme, tapi digunakan dengan intent
+ *   Status colors: understated, muted — bukan traffic lights
+ */
+
+/* Font tambahan khusus laporan (dihosting sendiri; sebelumnya @import Google Fonts).
+   Bobot 400/500/600 IBM Plex Sans/Mono sudah disediakan oleh fonts.css di base.html. */
+/* dm-serif-display-latin-ext-400-normal */
+@font-face {
+  font-family: 'DM Serif Display';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../fonts/dm-serif-display-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* dm-serif-display-latin-400-normal */
+@font-face {
+  font-family: 'DM Serif Display';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../fonts/dm-serif-display-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* dm-serif-display-latin-ext-400-italic */
+@font-face {
+  font-family: 'DM Serif Display';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../fonts/dm-serif-display-latin-ext-400-italic.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* dm-serif-display-latin-400-italic */
+@font-face {
+  font-family: 'DM Serif Display';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../fonts/dm-serif-display-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ibm-plex-mono-latin-300-normal */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src: url(../fonts/ibm-plex-mono-latin-300-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ibm-plex-sans-latin-300-normal */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src: url(../fonts/ibm-plex-sans-latin-300-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ibm-plex-sans-latin-300-italic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 300;
+  src: url(../fonts/ibm-plex-sans-latin-300-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ── ROOT TOKENS ──────────────────────────────────────────────────────────── */
+:root {
+  /* ── Bridge ke theme.css tokens ────────────────────────────────────── */
+  /* Paper — selaras dengan --bg dan --bg-card dari theme */
+  --rp-paper: var(--bg, #f7f8fa);
+  --rp-paper-warm: var(--brand-xlight, #f4f9fc);
+  --rp-white: var(--bg-card, #ffffff);
+
+  /* Ink system — selaras dengan --text-* dari theme */
+  --rp-ink: var(--text-primary, #0f2537);
+  --rp-ink-80: var(--text-secondary, #2c3e50);
+  --rp-ink-60: var(--text-muted, #5d7a8c);
+  --rp-ink-40: var(--text-faint, #8dabbe);
+  --rp-ink-20: var(--border, #e2e8ef);
+  --rp-ink-10: var(--border-light, #eef2f6);
+  --rp-ink-05: var(--brand-xlight, #f4f9fc);
+
+  /* Gold — selaras dengan --accent dari theme */
+  --rp-gold: var(--accent, #d4860a);
+  --rp-gold-dk: var(--accent-dark, #b45309);
+  --rp-gold-lt: rgba(212, 134, 10, 0.12);
+  --rp-gold-xlt: rgba(212, 134, 10, 0.05);
+  --rp-gold-line: rgba(212, 134, 10, 0.3);
+
+  /* Brand navy — selaras dengan --brand dari theme */
+  --rp-navy: var(--brand, #1b4f72);
+  --rp-navy-mid: var(--brand-mid, #2874a6);
+  --rp-navy-lt: var(--brand-light, #eaf2f8);
+
+  /* Status — muted, sophisticated */
+  --rp-present: #166534;
+  --rp-present-bg: #dcfce7;
+  --rp-present-subtle: #f0fdf4;
+  --rp-late: #92400e;
+  --rp-late-bg: #fef3c7;
+  --rp-late-subtle: #fffbeb;
+  --rp-absent: #991b1b;
+  --rp-absent-bg: #fee2e2;
+  --rp-absent-subtle: #fef2f2;
+  --rp-dayoff: #1e3a5f;
+  --rp-dayoff-bg: #dbeafe;
+  --rp-dayoff-subtle: #eff6ff;
+  --rp-extoff: #1e4d8c;
+  --rp-extoff-bg: #e0f2fe;
+  --rp-extoff-subtle: #f0f9ff;
+  --rp-sick: #78350f;
+  --rp-sick-bg: #fef9c3;
+  --rp-sick-subtle: #fefce8;
+  --rp-remote: #14532d;
+  --rp-remote-bg: #dcfce7;
+  --rp-remote-subtle: #f0fdf4;
+
+  /* Rules — selaras dengan --border dari theme */
+  --rp-rule: var(--border, #e2e8ef);
+  --rp-rule-lt: var(--border-light, #eef2f6);
+
+  /* Shape — selaras dengan --radius dari theme */
+  --rp-radius: var(--radius-sm, 8px);
+  --rp-radius-sm: var(--radius-xs, 4px);
+
+  /* Shadow — selaras dengan --shadow dari theme */
+  --rp-shadow-card: var(
+    --shadow,
+    0 1px 3px rgba(15, 37, 64, 0.06),
+    0 4px 16px rgba(15, 37, 64, 0.04)
+  );
+  --rp-shadow-hover: var(
+    --shadow-md,
+    0 2px 8px rgba(15, 37, 64, 0.07),
+    0 1px 2px rgba(15, 37, 64, 0.04)
+  );
+
+  /* Spacing grid — 4px base */
+  --rp-px: 48px; /* horizontal padding halaman */
+  --rp-px-sm: 24px;
+}
+
+/* ── TYPOGRAPHY BASE ──────────────────────────────────────────────────────── */
+
+/* DM Serif Display untuk semua elemen editorial besar */
+.rp-masthead-title,
+.scard-val,
+.rp-kpi-num {
+  font-family: "DM Serif Display", "Georgia", serif;
+}
+
+/* IBM Plex Sans untuk body operational */
+.rp-masthead-eyebrow,
+.rp-masthead-meta,
+.rp-insight-text,
+.filter-label,
+.scard-lbl,
+.scard-sub,
+.rp-section-desc,
+.log-emp-name,
+.log-emp-dept,
+.rekap-emp-name,
+.rekap-emp-dept,
+.log-search-input,
+.filter-select,
+.btn-apply,
+.btn-export,
+.qr-pill,
+.rp-section-header h2,
+.rp-section-header p,
+.legend-item {
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+/* IBM Plex Mono untuk semua angka/waktu */
+.hm-date-num,
+.hm-sum-td,
+.hm-pct-val,
+.log-td-mono,
+.log-td-date,
+.log-late-badge,
+.log-stat-badge,
+.log-status-badge,
+.rekap-td-num,
+.rekap-pct-val,
+.dt-cell-time,
+.dt-cell-late,
+.dt-td-date,
+.log-count,
+.log-page-info,
+.log-entry-count,
+.hm-cell-in {
+  font-family: "IBM Plex Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MASTHEAD — Compact strip: hanya periode, badge, dan insight sentence
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-masthead {
+  padding: 18px var(--rp-px) 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--rp-white);
+  border-top: 3px solid var(--rp-gold);
+  border-bottom: 1px solid var(--rp-rule);
+}
+
+.rp-masthead-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rp-masthead-right {
+  flex-shrink: 0;
+}
+
+/* Eyebrow */
+.rp-masthead-eyebrow {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rp-gold-dk);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 2px;
+}
+.rp-masthead-eyebrow svg {
+  opacity: 0.8;
+}
+
+/* Meta row */
+.rp-masthead-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.rp-masthead-meta {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--rp-ink-60);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rp-meta-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rp-gold);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+/* Insight sentence */
+.rp-insight-sentence {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  color: var(--rp-ink-60);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 0;
+  line-height: 1.5;
+}
+.rp-is-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.rp-is-item strong {
+  font-weight: 600;
+  color: var(--rp-ink);
+}
+.rp-is-item svg {
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+.rp-is-item.rp-is-warn {
+  color: var(--rp-late);
+}
+.rp-is-item.rp-is-warn svg {
+  color: var(--rp-late);
+  opacity: 0.8;
+}
+.rp-is-item.rp-is-bad {
+  color: var(--rp-absent);
+}
+.rp-is-item.rp-is-bad svg {
+  color: var(--rp-absent);
+  opacity: 0.8;
+}
+.rp-is-item.rp-is-muted {
+  color: var(--rp-ink-40);
+}
+.rp-is-sep {
+  color: var(--rp-ink-20);
+  font-weight: 300;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FILTER BAR — Tool bar untuk mengontrol data. Harus jelas, tidak distraktif.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-header {
+  display: none; /* digantikan masthead */
+}
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 16px var(--rp-px);
+  border-bottom: 1px solid var(--rp-rule);
+  background: var(--rp-white);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  box-shadow: 0 1px 0 var(--rp-rule);
+}
+
+.filter-label {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rp-ink-40);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Date range widget */
+.dr-widget {
+  display: flex;
+  align-items: center;
+  background: var(--rp-paper);
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  overflow: hidden;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.dr-widget:focus-within {
+  border-color: var(--rp-navy);
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
+}
+.dr-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+}
+.dr-input svg {
+  color: var(--rp-ink-40);
+  flex-shrink: 0;
+}
+.dr-input input[type="date"] {
+  border: none;
+  outline: none;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--rp-ink);
+  background: transparent;
+  cursor: pointer;
+  width: 118px;
+}
+.dr-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--rp-rule);
+  flex-shrink: 0;
+}
+.dr-arrow {
+  padding: 0 8px;
+  color: var(--rp-ink-40);
+  font-size: 10px;
+}
+
+/* Quick range pills */
+.quick-ranges {
+  display: flex;
+  gap: 4px;
+}
+.qr-pill {
+  padding: 5px 11px;
+  border-radius: var(--rp-radius);
+  border: 1px solid var(--rp-rule);
+  background: transparent;
+  font-size: 0.68rem;
+  font-weight: 400;
+  color: var(--rp-ink-60);
+  cursor: pointer;
+  transition: all 0.12s;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.qr-pill:hover {
+  border-color: var(--rp-ink-40);
+  color: var(--rp-ink);
+  background: var(--rp-paper);
+}
+.qr-pill.active {
+  border-color: var(--rp-gold);
+  color: var(--rp-gold-dk);
+  background: var(--rp-gold-xlt);
+  font-weight: 500;
+}
+
+/* Filter select */
+.filter-select {
+  appearance: none;
+  background: var(--rp-paper)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  padding: 7px 28px 7px 12px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--rp-ink);
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.filter-select:focus {
+  border-color: var(--rp-navy);
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
+}
+
+/* CTA apply */
+.btn-apply {
+  padding: 7px 20px;
+  background: var(--rp-ink);
+  color: #fff;
+  border: 1px solid var(--rp-ink);
+  border-radius: var(--rp-radius);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+.btn-apply:hover {
+  background: var(--rp-navy);
+  border-color: var(--rp-navy);
+  transform: translateY(-1px);
+}
+.btn-apply:active {
+  transform: translateY(0);
+}
+
+/* Export button — secondary action */
+.btn-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  background: transparent;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--rp-ink-60);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.btn-export:hover {
+  border-color: var(--rp-ink-40);
+  color: var(--rp-ink);
+  background: var(--rp-paper);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SUMMARY GRID — KPI Strip. Ini inti report. Bukan card grid biasa.
+   Konsep: seperti data strip di laporan tahunan — angka besar, label kecil.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  background: var(--rp-white);
+  border-bottom: 1px solid var(--rp-rule);
+  overflow-x: auto;
+}
+
+.scard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px 20px 28px;
+  border-right: 1px solid var(--rp-rule);
+  background: transparent;
+  position: relative;
+  cursor: default;
+  transition: background 0.18s;
+  min-width: 100px;
+}
+.scard:last-child {
+  border-right: none;
+}
+.scard:hover {
+  background: var(--rp-gold-xlt);
+}
+
+/* Top accent strip — setiap KPI memiliki warna status tersendiri */
+.scard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--scard-color, transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.scard:hover::before {
+  opacity: 1;
+}
+
+/* Bottom progress line — indicator visual tingkat */
+.scard::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: var(--rp-rule-lt);
+}
+
+/* Nilai KPI — DM Serif Display, bold editorial presence */
+.scard-val {
+  font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+  font-weight: 400;
+  color: var(--rp-ink);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  transition: color 0.15s;
+}
+.scard:hover .scard-val {
+  color: var(--scard-color, var(--rp-ink));
+}
+
+/* Label KPI — uppercase micro-text */
+.scard-lbl {
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rp-ink-60);
+  margin-top: 8px;
+  line-height: 1.3;
+}
+
+/* Sub-label — faint descriptor */
+.scard-sub {
+  font-size: 0.6rem;
+  font-weight: 300;
+  color: var(--rp-ink-40);
+  margin-top: 3px;
+  font-style: italic;
+}
+
+/* Dot — tidak digunakan tapi dijaga */
+.scard-dot {
+  display: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SECTION WRAPPER — Container konten utama
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-section {
+  margin: 24px var(--rp-px);
+  background: var(--rp-white);
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  box-shadow: var(--rp-shadow-card);
+  overflow: hidden;
+}
+
+.rp-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px var(--rp-px-sm) 18px;
+  border-bottom: 1px solid var(--rp-rule);
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--rp-paper);
+}
+
+/* Section label — uppercase micro, konsisten dengan filter */
+.rp-section-header h2 {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rp-ink-60);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+/* Gold accent titik di kiri section header */
+.rp-section-header h2::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--rp-gold);
+  border-radius: 0;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.rp-section-header p,
+.rp-section-desc {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--rp-ink-40);
+  margin: 5px 0 0;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.rp-section-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LEGEND — Kompak, informatif
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.63rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  letter-spacing: 0.04em;
+}
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--rp-radius-sm);
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HEATMAP — Visualisasi paling kompleks. Butuh precision.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hm-scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 440px;
+  padding: 0 var(--rp-px-sm) 24px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+.hm-scroll::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.hm-scroll::-webkit-scrollbar-thumb {
+  background: var(--rp-rule);
+  border-radius: 2px;
+}
+.hm-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--rp-ink-20);
+}
+
+.hm-table {
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+/* Nama karyawan — sticky di kiri (z-index ditingkatkan di fix block bawah) */
+.hm-name-th {
+  min-width: 180px;
+  width: 180px;
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 25;
+  background: var(--rp-white, #ffffff) !important;
+  border-right: 2px solid var(--rp-rule, #e2e8ef);
+  padding-left: 16px;
+}
+.hm-name-cell {
+  min-width: 180px;
+  width: 180px;
+  white-space: nowrap;
+  padding: 2px 16px 2px 16px;
+  position: sticky;
+  left: 0;
+  background: var(--rp-white, #ffffff) !important;
+  z-index: 15;
+  border-right: 2px solid var(--rp-rule, #e2e8ef);
+}
+/* Ensure rows don't create new stacking contexts that break sticky */
+.hm-row {
+  position: static;
+}
+.hm-row:hover .hm-name-cell {
+  background: var(--rp-gold-xlt, #fdf9ef) !important;
+}
+.hm-emp-name {
+  font-size: 0.73rem;
+  font-weight: 500;
+  color: var(--rp-ink);
+  line-height: 1.3;
+}
+.hm-emp-role {
+  font-size: 0.59rem;
+  font-weight: 400;
+  color: var(--rp-ink-40);
+  letter-spacing: 0.03em;
+}
+
+/* Header tanggal */
+.hm-date-th {
+  min-width: 26px;
+  text-align: center;
+  padding-bottom: 8px;
+  vertical-align: bottom;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--rp-white, #ffffff);
+}
+.hm-date-num {
+  display: block;
+  font-size: 0.59rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  letter-spacing: -0.01em;
+}
+.hm-date-day {
+  display: block;
+  font-size: 7.5px;
+  color: var(--rp-ink-40);
+  text-transform: uppercase;
+  letter-spacing: 0.1px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 400;
+}
+.hm-wkend .hm-date-num,
+.hm-wkend .hm-date-day {
+  color: var(--rp-ink-40);
+}
+
+/* HM Cells — ukuran presisi, hover clean */
+.hm-cell {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--rp-radius-sm);
+  text-align: center;
+  vertical-align: middle;
+  cursor: default;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+  position: relative;
+}
+.hm-cell:hover {
+  transform: scale(1.3);
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.hm-cell-in {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* ── Status Cell Colors — dikalibrasi untuk readability dan keindahan ── */
+.s-present {
+  background: #bbf7d0;
+  color: #14532d;
+}
+.s-late {
+  background: #fde68a;
+  color: #78350f;
+}
+.s-absent {
+  background: #fecaca;
+  color: #7f1d1d;
+}
+.s-dayoff {
+  background: #bfdbfe;
+  color: #1e3a5f;
+}
+.s-extoff {
+  background: #bae6fd;
+  color: #0c4a6e;
+}
+.s-sick {
+  background: #fef08a;
+  color: #713f12;
+}
+.s-remote {
+  background: #bbf7d0;
+  color: #14532d;
+}
+.s-none {
+  background: var(--rp-ink-10);
+  color: var(--rp-ink-40);
+}
+.s-weekend {
+  background: var(--rp-rule-lt);
+  color: var(--rp-ink-20);
+}
+
+/* [REPORT-OVERTIME FIX v2] Indikator lembur di sel heatmap — badge kecil di
+   pojok, TIDAK menimpa warna status utama sel (shift reguler tetap warna
+   normalnya). Plum #86198f dipilih supaya beda dari 7 warna status yang
+   sudah dipakai (present/late/absent/dayoff/extoff/sick/remote) dan tidak
+   tertukar dengan amber Terlambat. */
+.hm-cell-has-ot {
+  box-shadow: inset 0 0 0 1.5px #86198f;
+}
+.hm-cell-ot-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  min-width: 11px;
+  height: 11px;
+  padding: 0 2px;
+  border-radius: 999px;
+  background: #86198f;
+  color: #fff;
+  font-size: 6px;
+  line-height: 11px;
+  text-align: center;
+  font-weight: 700;
+  box-shadow: 0 0 0 1px #fff;
+}
+/* Sel lembur murni (hari tanpa shift reguler tapi ada lembur) */
+.hm-cell-ot-only {
+  background: #fef3c7;
+  color: #92400e;
+}
+.hm-cell-ot-only .hm-cell-in {
+  font-size: 7px;
+}
+
+/* Tooltip — dihandle oleh JS (#hm-js-tip) agar tidak ter-clip overflow */
+
+/* Separator dan summary */
+.hm-sep-th {
+  width: 16px;
+}
+.hm-sum-th {
+  min-width: 36px;
+  text-align: center;
+  padding: 0 4px 8px;
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: var(--rp-ink-40);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.hm-sum-td {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 4px;
+  vertical-align: middle;
+}
+.hm-zero {
+  color: var(--rp-ink-20);
+  font-weight: 300;
+}
+.hm-present {
+  color: var(--rp-present);
+}
+.hm-late {
+  color: var(--rp-late);
+}
+.hm-absent {
+  color: var(--rp-absent);
+}
+
+/* Progress bar di kanan heatmap */
+.hm-pct-td {
+  vertical-align: middle;
+  padding: 2px 8px;
+  min-width: 52px;
+}
+.hm-pct-val {
+  font-size: 0.65rem;
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+.hm-bar {
+  height: 2px;
+  background: var(--rp-rule);
+  overflow: hidden;
+  border-radius: 1px;
+}
+.hm-bar-fill {
+  height: 100%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 1px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LOG TOOLBAR — Controls untuk accordion log
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.log-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px var(--rp-px-sm);
+  border-bottom: 1px solid var(--rp-rule);
+  background: var(--rp-paper);
+}
+
+/* Search */
+.log-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+}
+.log-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 13px;
+  height: 13px;
+  color: var(--rp-ink-40);
+  pointer-events: none;
+}
+.log-search-input {
+  width: 100%;
+  padding: 7px 12px 7px 32px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  outline: none;
+  background: var(--rp-white);
+  color: var(--rp-ink);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.log-search-input:focus {
+  border-color: var(--rp-navy);
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
+}
+.log-search-input::placeholder {
+  color: var(--rp-ink-40);
+  font-style: italic;
+}
+
+.log-count {
+  font-size: 0.63rem;
+  font-weight: 400;
+  color: var(--rp-ink-40);
+  margin-left: auto;
+  letter-spacing: 0.04em;
+}
+
+.log-loading {
+  padding: 56px var(--rp-px-sm);
+  text-align: center;
+  color: var(--rp-ink-40);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LOG ACCORDION — Tiap karyawan = collapsible row
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.log-emp-card {
+  border-bottom: 1px solid var(--rp-rule);
+}
+.log-emp-card:last-child {
+  border-bottom: none;
+}
+
+.log-emp-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px var(--rp-px-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+.log-emp-header:hover {
+  background: var(--rp-paper);
+}
+.log-emp-card.is-open .log-emp-header {
+  background: var(--rp-gold-xlt);
+  border-left: 3px solid var(--rp-gold);
+  padding-left: calc(var(--rp-px-sm) - 3px);
+}
+
+/* Virtual list */
+#log-list-root {
+  max-height: 560px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+#log-list-root::-webkit-scrollbar {
+  width: 4px;
+}
+#log-list-root::-webkit-scrollbar-thumb {
+  background: var(--rp-rule);
+  border-radius: 2px;
+}
+#log-list-root::-webkit-scrollbar-thumb:hover {
+  background: var(--rp-ink-20);
+}
+
+/* Avatar — persegi dengan inisial, brand navy */
+.log-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--rp-radius);
+  background: var(--rp-navy);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.58rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  letter-spacing: 0.06em;
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+.log-emp-info {
+  flex: 1;
+  min-width: 0;
+}
+.log-emp-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--rp-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.01em;
+}
+.log-emp-dept {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.6rem;
+  font-weight: 300;
+  color: var(--rp-ink-40);
+  margin-top: 1px;
+  letter-spacing: 0.04em;
+}
+
+/* Status summary badges */
+.log-stat-badges {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+.log-stat-badge {
+  font-size: 0.58rem;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: var(--rp-radius-sm);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+.sb-present {
+  background: var(--rp-present-bg);
+  color: var(--rp-present);
+}
+.sb-late {
+  background: var(--rp-late-bg);
+  color: var(--rp-late);
+}
+.sb-absent {
+  background: var(--rp-absent-bg);
+  color: var(--rp-absent);
+}
+.sb-sick {
+  background: var(--rp-sick-bg);
+  color: var(--rp-sick);
+}
+.sb-dayoff {
+  background: var(--rp-dayoff-bg);
+  color: var(--rp-dayoff);
+}
+.sb-extoff {
+  background: var(--rp-extoff-bg);
+  color: var(--rp-extoff);
+}
+.sb-remote {
+  background: var(--rp-remote-bg);
+  color: var(--rp-remote);
+}
+
+/* Entry count */
+.log-entry-count {
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: var(--rp-ink-40);
+  background: var(--rp-paper);
+  padding: 2px 8px;
+  border-radius: var(--rp-radius-sm);
+  border: 1px solid var(--rp-rule);
+  white-space: nowrap;
+}
+
+/* Chevron */
+.log-chevron {
+  color: var(--rp-ink-40);
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.log-emp-card.is-open .log-chevron {
+  transform: rotate(180deg);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LOG TABLE — Rincian per hari. Kejelasan di atas segalanya.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.log-emp-body {
+  border-top: 1px solid var(--rp-rule-lt);
+  animation: fadeSlide 0.18s ease;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.log-table-wrap {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+.log-table-wrap::-webkit-scrollbar {
+  height: 4px;
+}
+.log-table-wrap::-webkit-scrollbar-thumb {
+  background: var(--rp-rule);
+  border-radius: 2px;
+}
+
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+  min-width: 600px;
+}
+
+/* Header — gold accent, uppercase */
+.log-table th {
+  position: sticky;
+  top: 0;
+  background: var(--rp-paper-warm);
+  z-index: 2;
+  padding: 9px 16px;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--rp-ink-40);
+  text-align: left;
+  border-bottom: 1px solid var(--rp-gold-line);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+/* Data cells */
+.log-table td {
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+  vertical-align: middle;
+  color: var(--rp-ink-80);
+  font-weight: 400;
+}
+.log-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.log-table tbody tr:hover td {
+  background: var(--rp-gold-xlt);
+}
+
+/* Tanggal & waktu */
+.log-td-date {
+  font-size: 0.73rem;
+  font-weight: 500;
+  color: var(--rp-ink);
+  white-space: nowrap;
+}
+.log-td-day {
+  font-size: 0.72rem;
+  font-weight: 300;
+  color: var(--rp-ink-60);
+  white-space: nowrap;
+  font-style: italic;
+}
+.log-td-mono {
+  font-size: 0.73rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  color: var(--rp-ink);
+  white-space: nowrap;
+}
+.log-td-dash {
+  color: var(--rp-ink-20);
+  text-align: center;
+  font-weight: 300;
+}
+
+/* Late badge */
+.log-late-badge {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.57rem;
+  font-weight: 600;
+  color: var(--rp-late);
+  background: var(--rp-late-bg);
+  padding: 1px 5px;
+  border-radius: var(--rp-radius-sm);
+}
+
+/* Status badge */
+.log-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: var(--rp-radius-sm);
+  font-size: 0.62rem;
+  font-weight: 500;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+
+/* [REPORT-OVERTIME FIX v2] Baris & badge lembur di Panel Log — baris diberi
+   tint plum tipis sebagai penanda "ini bukan baris shift reguler",
+   badge kategori ditaruh terpisah dari badge status karena status log
+   lembur tetap present/remote (jenis kerjanya, bukan kategorinya). */
+.log-tr-overtime td {
+  background: #fdf4ff;
+}
+.log-tr-overtime:hover td {
+  background: #fae8ff !important;
+}
+.log-ot-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: var(--rp-radius-sm);
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #701a75;
+  background: #f5d0fe;
+  border: 1px solid #86198f;
+  white-space: nowrap;
+}
+
+/* Source badge */
+.log-td-source {
+  white-space: nowrap;
+}
+.log-src-gps,
+.log-src-correction,
+.log-src-manual {
+  display: inline-block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: var(--rp-radius-sm);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.log-src-gps {
+  background: var(--rp-navy-lt);
+  color: var(--rp-navy);
+}
+.log-src-correction {
+  background: var(--rp-late-bg);
+  color: var(--rp-late);
+}
+.log-src-manual {
+  background: var(--rp-ink-05);
+  color: var(--rp-ink-60);
+}
+
+/* ── LOG PAGINATION ── */
+.log-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px var(--rp-px-sm);
+  border-top: 1px solid var(--rp-rule);
+  background: var(--rp-paper);
+}
+.log-page-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  background: transparent;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.log-page-btn:hover:not(:disabled) {
+  border-color: var(--rp-ink-40);
+  color: var(--rp-ink);
+  background: var(--rp-paper-warm);
+}
+.log-page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.log-page-info {
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: var(--rp-ink-40);
+  letter-spacing: 0.04em;
+}
+
+/* ── LOG / DAILY TAB TOGGLE ── */
+.log-tab-group {
+  display: flex;
+  gap: 0;
+}
+.log-tab {
+  padding: 6px 16px;
+  border: 1px solid var(--rp-rule);
+  background: transparent;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  cursor: pointer;
+  transition: all 0.12s;
+  letter-spacing: 0.04em;
+}
+.log-tab:first-child {
+  border-radius: var(--rp-radius) 0 0 var(--rp-radius);
+}
+.log-tab:last-child {
+  border-radius: 0 var(--rp-radius) var(--rp-radius) 0;
+  border-left: none;
+}
+.log-tab.is-active {
+  background: var(--rp-ink);
+  color: #fff;
+  border-color: var(--rp-ink);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DAILY TRANSPOSED TABLE — Pivot view: baris = hari, kolom = karyawan
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.daily-table-wrap {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 540px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+.daily-table-wrap::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.daily-table-wrap::-webkit-scrollbar-thumb {
+  background: var(--rp-rule);
+  border-radius: 2px;
+}
+
+.daily-table {
+  border-collapse: collapse;
+  font-size: 0.72rem;
+}
+.daily-table th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--rp-paper-warm);
+  padding: 8px 12px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--rp-ink-40);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rp-gold-line);
+  white-space: nowrap;
+}
+
+/* Sticky tanggal-kolom */
+.dt-th-fixed {
+  position: sticky;
+  left: 0;
+  z-index: 4 !important;
+  background: var(--rp-paper-warm, #faf9f6) !important;
+  min-width: 90px;
+  text-align: left;
+  border-right: 2px solid var(--rp-rule, #e2e8ef);
+}
+.dt-td-date {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--rp-white, #ffffff) !important;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--rp-ink);
+  white-space: nowrap;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+  border-right: 2px solid var(--rp-rule, #e2e8ef);
+}
+.dt-td-day {
+  position: sticky;
+  left: 90px;
+  z-index: 2;
+  background: var(--rp-white);
+  font-size: 0.68rem;
+  color: var(--rp-ink-60);
+  font-weight: 300;
+  font-style: italic;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+
+/* Weekend rows */
+.dt-row-weekend .dt-td-date,
+.dt-row-weekend .dt-td-day {
+  background: var(--rp-paper);
+  color: var(--rp-ink-40);
+}
+.daily-table tbody tr:hover .dt-td-date,
+.daily-table tbody tr:hover .dt-td-day {
+  background: var(--rp-gold-xlt);
+}
+
+/* Employee header columns */
+.dt-th-emp {
+  min-width: 90px;
+  max-width: 120px;
+  text-align: center;
+  vertical-align: bottom;
+  padding-bottom: 10px;
+}
+.dt-emp-name {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--rp-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 110px;
+  display: block;
+}
+.dt-emp-dept {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.56rem;
+  font-weight: 300;
+  color: var(--rp-ink-40);
+  margin-top: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 110px;
+  display: block;
+}
+.dt-td-emp {
+  text-align: center;
+  vertical-align: middle;
+  padding: 5px 4px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+.daily-table tbody tr:hover td {
+  background: var(--rp-gold-xlt);
+}
+.daily-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.dt-row-weekend {
+  background: var(--rp-paper);
+}
+
+/* Cell content */
+.dt-cell-time {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--rp-ink);
+  display: block;
+}
+.dt-cell-late {
+  display: inline-block;
+  font-size: 0.56rem;
+  font-weight: 600;
+  color: var(--rp-late);
+  background: var(--rp-late-bg);
+  padding: 1px 4px;
+  border-radius: var(--rp-radius-sm);
+  margin-top: 2px;
+}
+.dt-cell-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.56rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: var(--rp-radius-sm);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+.dt-cell-none {
+  color: var(--rp-ink-20);
+  font-size: 0.7rem;
+  font-weight: 300;
+}
+
+/* [REPORT-OVERTIME FIX v2] Badge lembur di sel pivot Harian — ditumpuk DI
+   BAWAH konten shift reguler (kalau ada), bukan menggantikannya. Sel
+   dengan lembur murni (tanpa shift reguler di tanggal itu) memakai warna
+   sel yang sama seperti heatmap untuk konsistensi. */
+.dt-td-has-ot {
+  background: #fdf4ff;
+}
+.dt-cell-ot-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  justify-content: center;
+  margin-top: 2px;
+}
+.dt-cell-ot-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.56rem;
+  font-weight: 600;
+  color: #701a75;
+  background: #f5d0fe;
+  border: 1px solid #86198f;
+  padding: 1px 4px;
+  border-radius: var(--rp-radius-sm);
+  white-space: nowrap;
+  cursor: default;
+}
+.dt-cell-present {
+  background: var(--rp-present-subtle);
+  color: var(--rp-present);
+}
+.dt-cell-wkend {
+  color: var(--rp-rule);
+  font-size: 12px;
+}
+
+/* Weekend columns */
+.dt-th-weekend {
+  background: var(--rp-paper);
+  color: var(--rp-ink-40);
+}
+.dt-td-weekend {
+  background: var(--rp-paper);
+}
+
+/* Date header in transposed mode */
+.dt-date-num {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--rp-ink);
+  line-height: 1.2;
+  display: block;
+}
+.dt-date-day {
+  font-size: 0.56rem;
+  font-weight: 400;
+  color: var(--rp-ink-60);
+  display: block;
+}
+.dt-wkend-lbl {
+  color: var(--rp-ink-40);
+}
+
+/* Transposed layout specifics */
+.daily-table-transposed .dt-th-fixed {
+  min-width: 150px;
+  text-align: left;
+  padding: 8px 12px;
+}
+.daily-table-transposed .dt-th-emp {
+  min-width: 44px;
+  max-width: 64px;
+  text-align: center;
+  padding: 4px 2px;
+}
+.daily-table-transposed .dt-td-date {
+  min-width: 150px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+.daily-table-transposed .dt-td-emp {
+  text-align: center;
+  padding: 4px 2px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+.daily-table-transposed tbody tr:hover td {
+  background: var(--rp-gold-xlt);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REKAP TABLE — Ringkasan per karyawan. Clean, scannable.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rekap-table-wrap {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 420px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+  border-bottom: 1px solid var(--rp-rule);
+}
+.rekap-table-wrap::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.rekap-table-wrap::-webkit-scrollbar-thumb {
+  background: var(--rp-rule);
+  border-radius: 2px;
+}
+.rekap-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: var(--rp-ink-20);
+}
+
+.rekap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+/* Header sticky */
+.rekap-table thead th {
+  padding: 10px 16px;
+  background: var(--rp-paper-warm);
+  border-bottom: 1px solid var(--rp-gold-line);
+  text-align: center;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--rp-ink-40);
+  white-space: nowrap;
+  text-transform: uppercase;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.rekap-th-name {
+  text-align: left !important;
+  min-width: 180px;
+}
+.rekap-th-num {
+  min-width: 60px;
+}
+.rekap-th-pct {
+  min-width: 110px;
+}
+
+/* Body rows */
+.rekap-tr:hover td {
+  background: var(--rp-gold-xlt);
+}
+
+.rekap-td-name {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+.rekap-emp-name {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--rp-ink);
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+.rekap-emp-dept {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.59rem;
+  font-weight: 300;
+  color: var(--rp-ink-40);
+  margin-top: 1px;
+  letter-spacing: 0.04em;
+}
+
+.rekap-td-num {
+  text-align: center;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+.rekap-td-num.rekap-present {
+  color: var(--rp-present);
+}
+.rekap-td-num.rekap-late {
+  color: var(--rp-late);
+}
+.rekap-td-num.rekap-sick {
+  color: var(--rp-sick);
+}
+.rekap-td-num.rekap-extoff {
+  color: var(--rp-extoff);
+}
+.rekap-td-num.rekap-absent {
+  color: var(--rp-absent);
+}
+
+.rekap-td-pct {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+  min-width: 100px;
+}
+.rekap-pct-val {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.rekap-bar {
+  height: 3px;
+  background: var(--rp-rule);
+  overflow: hidden;
+  border-radius: 1.5px;
+}
+.rekap-bar-fill {
+  height: 100%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 1.5px;
+}
+
+/* Total footer row */
+.rekap-tr-total td {
+  background: var(--rp-paper-warm);
+  border-top: 2px solid var(--rp-gold-line);
+  border-bottom: none;
+  padding: 10px 16px;
+}
+.rekap-tr-total .rekap-td-num {
+  border-top: 2px solid var(--rp-gold-line);
+}
+
+/* ── Rekap: column group headers ── */
+.rekap-th-colgroup {
+  text-align: center !important;
+  font-size: 0.55rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 6px 8px 4px !important;
+}
+.rekap-colgroup--late {
+  background: #fef9ee !important;
+  color: #78350f !important;
+  border-bottom: 2px solid #fde68a !important;
+}
+.rekap-colgroup--libur {
+  background: #eef2ff !important;
+  color: #3730a3 !important;
+  border-bottom: 2px solid #c7d2fe !important;
+}
+/* [REPORT-OVERTIME FIX v2] Plum/fuchsia — pengganti teal lama, yang jarak
+   RGB-nya cuma ~42 dari --rp-extoff (biru "Izin"), terlalu mirip. Plum
+   #86198f punya jarak minimum ~85 dari seluruh warna status yang ada. */
+.rekap-colgroup--overtime {
+  background: #fdf4ff !important;
+  color: #86198f !important;
+  border-bottom: 2px solid #f0abfc !important;
+}
+
+/* Tier sub-headers */
+.rekap-th-tier {
+  font-size: 0.5rem !important;
+  min-width: 44px;
+  background: #fffbf0 !important;
+  border-bottom: 1px solid #fde68a !important;
+}
+.rekap-th-tier-total {
+  font-size: 0.5rem !important;
+  min-width: 44px;
+  font-weight: 700 !important;
+  background: #fef3c7 !important;
+  border-bottom: 1px solid #f59e0b !important;
+}
+/* [REPORT-OVERTIME FIX v2] Varian plum/fuchsia khusus sub-header Lembur —
+   sebelumnya kolom ini memakai .rekap-th-tier / .rekap-th-tier-total generik
+   yang hardcode amber, sehingga terlihat identik dengan warna Terlambat.
+   #86198f dipilih karena jarak RGB minimum ke seluruh warna status lain
+   (termasuk Izin/biru yang paling dekat dengan teal sebelumnya) adalah yang
+   terjauh dari beberapa kandidat yang diuji. */
+.rekap-th-tier-ot {
+  font-size: 0.5rem !important;
+  min-width: 44px;
+  background: #fdf4ff !important;
+  border-bottom: 1px solid #f0abfc !important;
+}
+.rekap-th-tier-total-ot {
+  font-size: 0.5rem !important;
+  min-width: 44px;
+  font-weight: 700 !important;
+  background: #fae8ff !important;
+  border-bottom: 1px solid #86198f !important;
+}
+.rekap-th-num.rekap-libur {
+  color: #3730a3;
+}
+.rekap-th-num.rekap-overtime {
+  color: #86198f;
+}
+
+/* Tier cell styles */
+.rekap-td-tier {
+  font-size: 0.72rem;
+  color: var(--rp-ink-40) !important;
+  background: #fffdf5;
+}
+.rekap-td-tier.rekap-num--nonzero {
+  color: var(--rp-late) !important;
+  font-weight: 500;
+}
+.rekap-td-tier.rekap-num--warn {
+  color: #dc2626 !important;
+  font-weight: 600;
+}
+.rekap-td-tier-total {
+  font-weight: 600;
+  background: #fef9ee;
+}
+.rekap-td-tier-total-ot {
+  font-weight: 600;
+  background: #fdf4ff;
+}
+.rekap-num--strong {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+.rekap-num--alert {
+  font-weight: 700 !important;
+  background: #fff0f0;
+}
+.rekap-td-num.rekap-libur {
+  color: #3730a3;
+  font-size: 0.72rem;
+  background: #f5f7ff;
+}
+.rekap-td-num.rekap-libur.rekap-num--nonzero {
+  font-weight: 500;
+  color: #4338ca;
+}
+.rekap-td-num.rekap-overtime {
+  color: #86198f;
+  font-size: 0.72rem;
+  background: #fdf4ff;
+}
+.rekap-td-num.rekap-overtime.rekap-num--nonzero {
+  font-weight: 500;
+  color: #86198f;
+}
+
+/* ── Rekap tier legend ── */
+.rekap-tier-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 16px 12px;
+  font-size: 0.58rem;
+  color: var(--rp-ink-40);
+  border-top: 1px solid var(--rp-rule-lt);
+  background: var(--rp-paper-warm);
+}
+.rekap-tier-legend-title {
+  font-weight: 600;
+  color: var(--rp-ink-60);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.55rem;
+}
+.rekap-tier-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.rekap-tier-item--libur {
+  color: #3730a3;
+}
+.rekap-tier-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.rekap-tier-dot--1 {
+  background: #d97706;
+}
+.rekap-tier-dot--2 {
+  background: #f59e0b;
+}
+.rekap-tier-dot--3 {
+  background: #ef4444;
+}
+.rekap-tier-dot--4 {
+  background: #7f1d1d;
+}
+.rekap-tier-sep {
+  color: var(--rp-ink-20);
+  font-size: 0.7rem;
+  margin: 0 4px;
+}
+
+/* ── Arrival chart shift-toggle buttons ── */
+.rpab-arrival-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 16px 4px;
+}
+.rpab-arrival-btn {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--rp-rule);
+  background: var(--rp-white);
+  color: var(--rp-ink-60);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+  white-space: nowrap;
+}
+.rpab-arrival-btn:hover {
+  background: var(--rp-gold-xlt);
+  border-color: var(--rp-gold-line);
+  color: var(--rp-ink);
+}
+.rpab-arrival-btn--active {
+  background: var(--rp-ink);
+  border-color: var(--rp-ink);
+  color: #fff;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DAILY ATTENDANCE CHART — Grafik kehadiran per hari
+   Unicorn-level: bersih, bermakna, tidak dekoratif.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-chart-canvas-wrap {
+  padding: 24px var(--rp-px-sm) 20px;
+  overflow: hidden;
+  background: var(--rp-white);
+  position: relative;
+}
+
+/* Chart container untuk canvas */
+.rp-daily-chart {
+  width: 100%;
+  height: 220px;
+  display: block;
+}
+
+/* Legend strip di bawah chart */
+.rp-chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 14px var(--rp-px-sm);
+  border-top: 1px solid var(--rp-rule);
+  background: var(--rp-paper);
+  flex-wrap: wrap;
+}
+.rp-chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 0.12s;
+  user-select: none;
+}
+.rp-chart-legend-item:hover {
+  color: var(--rp-ink);
+}
+.rp-chart-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Tooltip overlay untuk chart */
+.rp-chart-tooltip {
+  position: absolute;
+  background: var(--rp-ink);
+  color: #fff;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.7rem;
+  padding: 10px 14px;
+  border-radius: var(--rp-radius);
+  pointer-events: none;
+  z-index: 100;
+  display: none;
+  min-width: 140px;
+  line-height: 1.7;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+.rp-chart-tooltip strong {
+  font-weight: 600;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  display: block;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+.rp-chart-tooltip .tt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.65rem;
+}
+.rp-chart-tooltip .tt-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* ── Attendance Rate Banner di dalam chart section header ─── */
+.rp-chart-rate-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: var(--rp-radius-sm);
+  background: var(--rp-navy-lt);
+  color: var(--rp-navy);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LAYOUT FIXES — perbaikan urutan, spacing, dan visual hierarchy
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Masthead — lebih clean, tighter */
+.rp-masthead {
+  padding: 40px var(--rp-px) 28px;
+}
+
+/* Summary grid — responsif, tidak overflow diam-diam */
+.summary-grid {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.summary-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* Section spacing konsisten */
+.rp-section + .rp-section {
+  margin-top: 20px;
+}
+
+/* Section header — action area lebih rapat */
+.rp-section-header {
+  padding: 16px var(--rp-px-sm) 14px;
+}
+
+/* Filter bar — tidak terlalu tebal */
+.filter-bar {
+  padding: 12px var(--rp-px);
+}
+
+/* Log list root — bounded scroll agar tidak overflow halaman */
+#log-list-root {
+  max-height: 480px;
+}
+
+/* Rekap pagination — tambahan di bawah tabel rekap */
+.rekap-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-top: 1px solid var(--rp-rule);
+  background: var(--rp-paper);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rekap-page-info {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.63rem;
+  color: var(--rp-ink-40);
+  letter-spacing: 0.04em;
+}
+.rekap-page-btns {
+  display: flex;
+  gap: 4px;
+}
+.rekap-page-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius-sm);
+  background: var(--rp-white);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.rekap-page-btn:hover:not(:disabled) {
+  border-color: var(--rp-navy);
+  color: var(--rp-navy);
+  background: var(--rp-navy-lt);
+}
+.rekap-page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SPACER & UTILITIES
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-spacer {
+  height: 64px;
+}
+
+/* Status text colors sesuai class di template */
+.text-present {
+  color: var(--rp-present);
+}
+.text-late {
+  color: var(--rp-late);
+}
+.text-absent {
+  color: var(--rp-absent);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE — Mobile-first adaptations
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  :root {
+    --rp-px: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --rp-px: 20px;
+    --rp-px-sm: 16px;
+  }
+
+  .rp-masthead {
+    padding: 32px 20px 24px;
+  }
+  .rp-masthead-title {
+    font-size: 1.9rem;
+  }
+  .filter-bar {
+    gap: 8px;
+  }
+  .quick-ranges {
+    display: none; /* hide on mobile — tidak ada ruang */
+  }
+  .summary-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .scard {
+    min-width: unset;
+  }
+  .rp-section {
+    margin: 16px var(--rp-px);
+  }
+  .log-stat-badges {
+    display: none;
+  }
+  #log-list-root {
+    max-height: 400px;
+  }
+  .hm-scroll {
+    max-height: 320px;
+  }
+  .rekap-table-wrap {
+    max-height: 380px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRINT — Laporan layak dicetak
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media print {
+  .filter-bar,
+  .quick-ranges,
+  .btn-export,
+  .btn-apply,
+  .log-toolbar,
+  .log-pagination {
+    display: none !important;
+  }
+  .rp-section {
+    border: 0.5px solid #ccc;
+    box-shadow: none;
+    margin: 0 0 16px;
+    break-inside: avoid;
+  }
+  .hm-cell:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .log-emp-body {
+    display: block !important;
+  }
+  #log-list-root,
+  .rekap-table-wrap {
+    max-height: none;
+    overflow: visible;
+  }
+  .hm-scroll {
+    max-height: none;
+    overflow: clip;
+  }
+  .rp-masthead-title {
+    font-size: 1.8rem;
+  }
+  .summary-grid {
+    grid-template-columns: repeat(9, 1fr);
+    break-inside: avoid;
+  }
+}
+
+/*
+ * reports_additions.css
+ * Tambahkan di AKHIR reports.css yang sudah ada.
+ * Berisi: masthead baru, kpi-rail, filter bar baru,
+ *         chart section, unified section + tabs, bank column.
+ */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MASTHEAD REDESIGN — Split hero: meta kiri, actions kanan
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-masthead {
+  padding: 36px var(--rp-px) 28px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: var(--rp-white);
+  border-top: 3px solid var(--rp-gold);
+  border-bottom: 1px solid var(--rp-rule);
+}
+
+.rp-masthead-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.rp-masthead-right {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Meta row: periode + insight badge on same line */
+.rp-masthead-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.rp-masthead-meta {
+  font-size: 0.68rem;
+  color: var(--rp-ink-40);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rp-masthead-meta::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rp-gold);
+  opacity: 0.6;
+}
+
+/* Inline condition badge */
+.rp-insight-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 2px 9px;
+  border-radius: 3px;
+}
+.rp-insight-badge.badge-good {
+  background: #dcfce7;
+  color: #166534;
+}
+.rp-insight-badge.badge-warn {
+  background: #fef3c7;
+  color: #92400e;
+}
+.rp-insight-badge.badge-bad {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* One-line summary sentence below meta */
+.rp-insight-sentence {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  color: var(--rp-ink-60);
+  font-style: italic;
+  line-height: 1.6;
+  margin-top: 8px;
+  letter-spacing: 0.01em;
+}
+.rp-insight-sentence strong {
+  font-style: normal;
+  color: var(--rp-ink);
+  font-weight: 600;
+}
+
+/* SQL backup button variant */
+.btn-export-sql {
+  border-color: var(--rp-gold-line);
+  color: var(--rp-gold-dk);
+}
+.btn-export-sql:hover {
+  background: var(--rp-gold-xlt);
+  border-color: var(--rp-gold);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   KPI RAIL — Horizontal data strip, replaces summary-grid cards
+   Konsep: angka besar inline dengan label kecil, separated by dividers
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.kpi-rail {
+  display: flex;
+  align-items: stretch;
+  background: var(--rp-white);
+  border-bottom: 1px solid var(--rp-rule);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.kpi-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.kpi-item {
+  flex: 1;
+  min-width: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 18px 18px;
+  border-right: 1px solid var(--rp-rule);
+  position: relative;
+  cursor: default;
+  transition: background 0.15s;
+}
+.kpi-item:last-child {
+  border-right: none;
+}
+.kpi-item:hover {
+  background: var(--rp-gold-xlt);
+}
+
+/* Color accent line at top on hover */
+.kpi-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.18s;
+  border-radius: 0;
+}
+.kpi-item:hover::after {
+  opacity: 1;
+}
+
+.kpi-navy::after {
+  background: #1b4f72;
+}
+.kpi-green::after {
+  background: #1a5c35;
+}
+.kpi-amber::after {
+  background: #8c5e00;
+}
+.kpi-red::after {
+  background: #8c2e22;
+}
+.kpi-blue::after {
+  background: #2a3d8c;
+}
+.kpi-teal::after {
+  background: #1a4f72;
+}
+.kpi-yellow::after {
+  background: #5e4d00;
+}
+.kpi-slate::after {
+  background: #5d7a8c;
+}
+
+.kpi-val {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+  font-weight: 400;
+  color: var(--rp-ink);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  transition: color 0.12s;
+}
+.kpi-item:hover .kpi-val {
+  color: inherit;
+}
+.kpi-navy:hover .kpi-val {
+  color: #1b4f72;
+}
+.kpi-green:hover .kpi-val {
+  color: #1a5c35;
+}
+.kpi-amber:hover .kpi-val {
+  color: #8c5e00;
+}
+.kpi-red:hover .kpi-val {
+  color: #8c2e22;
+}
+.kpi-blue:hover .kpi-val {
+  color: #2a3d8c;
+}
+.kpi-teal:hover .kpi-val {
+  color: #1a4f72;
+}
+.kpi-yellow:hover .kpi-val {
+  color: #5e4d00;
+}
+.kpi-slate:hover .kpi-val {
+  color: #5d7a8c;
+}
+
+.kpi-lbl {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rp-ink-60);
+  margin-top: 7px;
+}
+.kpi-sub {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.58rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--rp-ink-40);
+  margin-top: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FILTER BAR REDESIGN — Two-group layout: left (period) + right (office + apply)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.filter-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 11px var(--rp-px) !important;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-group-right {
+  margin-left: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHART SECTION REDESIGN — Cleaner, tighter
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-chart-section {
+  margin: 20px var(--rp-px) !important;
+}
+
+.rp-chart-body {
+  background: var(--rp-white);
+}
+
+.rp-chart-canvas-wrap {
+  padding: 20px var(--rp-px-sm) 8px !important;
+}
+
+.rp-chart-legend {
+  padding: 12px var(--rp-px-sm) 14px !important;
+  gap: 18px !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   UNIFIED SECTION — The main data section with tab navigation
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-unified-section {
+  margin: 0 var(--rp-px) 24px !important;
+}
+
+/* Header: title left, controls right */
+.rp-unified-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px var(--rp-px-sm) 0;
+  background: var(--rp-paper);
+  border-bottom: 1px solid var(--rp-rule);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rp-unified-title h2 {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rp-ink-60);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rp-unified-title h2::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--rp-gold);
+  border-radius: 0;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.rp-unified-title p {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  color: var(--rp-ink-40);
+  font-style: italic;
+  margin: 4px 0 0;
+  letter-spacing: 0.01em;
+}
+
+.rp-unified-controls {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+/* ── Tab Switcher ── */
+.unified-tabs {
+  display: flex;
+  align-items: stretch;
+  background: var(--rp-white);
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  overflow: hidden;
+  margin-bottom: -1px; /* flush with border-bottom of header */
+}
+
+.utab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--rp-rule);
+  cursor: pointer;
+  transition:
+    color 0.12s,
+    background 0.12s;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.utab:last-child {
+  border-right: none;
+}
+.utab:hover {
+  color: var(--rp-ink);
+  background: var(--rp-paper);
+}
+.utab.utab-active {
+  color: var(--rp-navy);
+  background: var(--rp-navy-lt);
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--rp-navy);
+}
+.utab svg {
+  opacity: 0.7;
+}
+.utab.utab-active svg {
+  opacity: 1;
+}
+
+/* ── Shared Toolbar (search + filters) ── */
+.rp-unified-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px var(--rp-px-sm);
+  border-bottom: 1px solid var(--rp-rule);
+  background: var(--rp-white);
+  flex-wrap: wrap;
+}
+
+/* ── Tab Panels ── */
+.unified-panel {
+  background: var(--rp-white);
+}
+.unified-panel[hidden] {
+  display: none;
+}
+
+/* Heatmap inside unified section */
+.unified-panel .hm-scroll {
+  max-height: 500px;
+  padding: 0 var(--rp-px-sm) 20px 0;
+}
+
+.hm-legend-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 12px var(--rp-px-sm) 10px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+  background: var(--rp-paper);
+}
+
+/* Log panel */
+#panel-log #log-list-root {
+  max-height: 520px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+
+/* Daily panel */
+#panel-daily #daily-list-root {
+  max-height: 520px;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+
+/* Rekap panel */
+#panel-rekap .rekap-table-wrap {
+  max-height: 520px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REKAP TABLE — Bank account column additions
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rekap-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rekap-th-bank {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rp-ink-60);
+  padding: 10px 16px;
+  text-align: left;
+  background: var(--rp-paper);
+  border-bottom: 1px solid var(--rp-rule);
+  white-space: nowrap;
+  min-width: 200px;
+}
+
+.rekap-td-bank {
+  padding: 10px 16px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+
+.bank-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.bank-entry + .bank-entry {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dashed var(--rp-rule-lt);
+}
+
+.bank-name {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--rp-navy);
+  white-space: nowrap;
+  background: var(--rp-navy-lt);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.bank-number {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--rp-ink);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.bank-holder {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 400;
+  color: var(--rp-ink-60);
+  white-space: nowrap;
+}
+
+.bank-empty {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  color: var(--rp-ink-40);
+}
+
+/* Secondary bank (additional accounts) */
+.bank-entry-secondary .bank-name {
+  background: var(--rp-paper);
+  color: var(--rp-ink-60);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE OVERRIDES
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .utab {
+    padding: 7px 12px;
+    font-size: 0.68rem;
+  }
+  .kpi-item {
+    min-width: 80px;
+    padding: 16px 12px 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .rp-masthead {
+    padding: 28px 20px 20px !important;
+  }
+  .filter-group-right {
+    margin-left: 0;
+  }
+  .unified-tabs {
+    flex-wrap: wrap;
+    border-radius: var(--rp-radius-sm);
+  }
+  .utab {
+    border-right: none;
+    border-bottom: 1px solid var(--rp-rule);
+    flex: 1;
+    justify-content: center;
+  }
+  .utab:last-child {
+    border-bottom: none;
+  }
+  .kpi-rail {
+    flex-wrap: nowrap;
+  }
+  .rekap-th-bank,
+  .rekap-td-bank {
+    min-width: 160px;
+  }
+  .rp-unified-section {
+    margin: 0 16px 20px !important;
+  }
+  .rp-chart-section {
+    margin: 16px 16px !important;
+  }
+}
+
+@media print {
+  .unified-tabs,
+  .rp-unified-toolbar,
+  .btn-export,
+  .export-dropdown {
+    display: none !important;
+  }
+  .unified-panel[hidden] {
+    display: block !important;
+  }
+  .kpi-rail {
+    flex-wrap: wrap;
+  }
+}
+
+/*
+ * reports_additions.css — v2
+ * Tambahkan di AKHIR reports.css (atau load sebagai file terpisah setelah reports.css)
+ *
+ * Fix & redesign:
+ *   1. rp-masthead — cleaner, lebih tipografi-editorial
+ *   2. kpi-rail — CSS variable driven, satu sumber accent
+ *   3. filter-bar — grouped layout
+ *   4. chart section — layout row: main line + 2 donut
+ *   5. dmt-btn — style lengkap (sebelumnya tidak ada)
+ *   6. heatmap — tanpa summary columns
+ *   7. mini legend items
+ */
+
+/* ── Fonts ── */
+/* (@import Google Fonts dihapus: sudah diganti @font-face lokal di bagian atas file) */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MASTHEAD — Teks besar, satu baris meta, insight badge inline
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-masthead {
+  padding: 36px var(--rp-px) 28px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: var(--rp-white);
+  border-top: 3px solid var(--rp-gold);
+  border-bottom: 1px solid var(--rp-rule);
+}
+
+.rp-masthead-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.rp-masthead-eyebrow {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rp-gold-dk);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rp-masthead-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: var(--rp-gold);
+}
+
+.rp-masthead-title {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  color: var(--rp-ink);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin: 0;
+}
+.rp-masthead-title em {
+  font-style: italic;
+  color: var(--rp-ink-60);
+  font-weight: 400;
+}
+
+.rp-masthead-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.rp-masthead-meta {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  color: var(--rp-ink-40);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rp-masthead-meta::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rp-gold);
+  opacity: 0.55;
+}
+
+.rp-insight-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 2px 9px;
+  border-radius: 4px;
+}
+.badge-good {
+  background: #dcfce7;
+  color: #15803d;
+}
+.badge-warn {
+  background: #fef9c3;
+  color: #854d0e;
+}
+.badge-bad {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.rp-insight-sentence {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  color: var(--rp-ink-60);
+  font-style: italic;
+  margin-top: 8px;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+}
+.rp-insight-sentence strong {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--rp-ink);
+}
+
+/* SQL backup btn */
+.btn-export-sql {
+  border-color: rgba(212, 134, 10, 0.3);
+  color: var(--rp-gold-dk);
+  flex-shrink: 0;
+}
+.btn-export-sql:hover {
+  background: rgba(212, 134, 10, 0.05);
+  border-color: var(--rp-gold);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   KPI RAIL — CSS-variable driven accent color, no class-per-color
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.kpi-rail {
+  display: flex;
+  align-items: stretch;
+  background: var(--rp-white);
+  border-bottom: 1px solid var(--rp-rule);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.kpi-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.kpi-item {
+  flex: 1;
+  min-width: 88px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 18px 16px 16px;
+  border-right: 1px solid var(--rp-rule);
+  cursor: default;
+  transition: background 0.15s;
+  position: relative;
+}
+.kpi-item:last-child {
+  border-right: none;
+}
+.kpi-item:hover {
+  background: rgba(212, 134, 10, 0.03);
+}
+
+/* Top accent — color comes from CSS var on element */
+.kpi-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--kpi-acc, transparent);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.kpi-item:hover::after {
+  opacity: 1;
+}
+
+.kpi-val {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 400;
+  color: var(--rp-ink);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  transition: color 0.12s;
+}
+.kpi-item:hover .kpi-val {
+  color: var(--kpi-acc, var(--rp-ink));
+}
+
+.kpi-lbl {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rp-ink-60);
+  margin-top: 6px;
+}
+
+.kpi-sub {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.58rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--rp-ink-40);
+  margin-top: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FILTER BAR
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.filter-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 11px var(--rp-px) !important;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-group-right {
+  margin-left: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHART SECTION — Row layout: big line chart + 2 mini donuts
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-charts-row {
+  display: flex;
+  gap: 16px;
+  margin: 20px var(--rp-px);
+  align-items: flex-start;
+}
+
+.rp-chart-main {
+  flex: 1;
+  min-width: 0;
+  margin: 0 !important;
+}
+
+.rp-charts-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex-shrink: 0;
+  width: 200px;
+}
+
+.rp-chart-mini {
+  margin: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 16px;
+}
+
+/* Donut wrapper — overflow visible agar animasi tidak terpotong */
+.rp-donut-wrap {
+  width: 180px;
+  height: 180px;
+  overflow: visible;
+  flex-shrink: 0;
+}
+.rp-donut-wrap canvas {
+  overflow: visible;
+}
+
+.rp-mini-header h3 {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rp-ink-60);
+  margin: 14px 0 12px;
+  text-align: center;
+}
+
+.rp-mini-legend {
+  width: 100%;
+  padding: 0 12px;
+  margin-top: 10px;
+}
+
+.rp-mini-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  color: var(--rp-ink-60);
+  padding: 2px 0;
+}
+.rp-mini-legend-item span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.rp-mini-legend-item em {
+  font-style: normal;
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--rp-ink-40);
+  font-size: 0.6rem;
+  margin-left: auto;
+}
+
+/* Chart.js canvas height */
+.rp-chart-canvas-wrap {
+  padding: 12px var(--rp-px-sm) 8px !important;
+  height: 240px;
+  position: relative;
+}
+.rp-chart-canvas-wrap--bar {
+  height: 220px;
+}
+.rp-chart-canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Chart row 2 */
+.rp-charts-row-2 {
+  margin-top: 0;
+}
+.rp-charts-row-2 .rp-chart-main {
+  flex: 1;
+}
+
+/* Legend strip under line chart */
+.rp-chart-legend {
+  display: flex !important;
+  align-items: center;
+  gap: 18px;
+  padding: 12px var(--rp-px-sm) 14px !important;
+  border-top: 1px solid var(--rp-rule);
+  background: var(--rp-paper);
+  flex-wrap: wrap;
+}
+.rp-chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.12s;
+}
+.rp-chart-legend-item:hover {
+  color: var(--rp-ink);
+}
+.rp-chart-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Chart rate badge */
+.rp-chart-rate-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: var(--rp-navy-lt);
+  color: var(--rp-navy);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   UNIFIED SECTION TABS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-unified-section {
+  margin: 0 var(--rp-px) 24px !important;
+}
+
+.rp-unified-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px var(--rp-px-sm) 0;
+  background: var(--rp-paper);
+  border-bottom: 1px solid var(--rp-rule);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rp-unified-title h2 {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rp-ink-60);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rp-unified-title h2::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--rp-gold);
+  border-radius: 0;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.rp-unified-title p {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.67rem;
+  color: var(--rp-ink-40);
+  font-style: italic;
+  margin: 3px 0 0;
+}
+
+.rp-unified-controls {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+/* ── Tab buttons ── */
+.unified-tabs {
+  display: flex;
+  align-items: stretch;
+  background: var(--rp-white);
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  overflow: hidden;
+  margin-bottom: -1px;
+}
+
+.utab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--rp-rule);
+  cursor: pointer;
+  transition:
+    color 0.12s,
+    background 0.12s;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.utab:last-child {
+  border-right: none;
+}
+.utab:hover {
+  color: var(--rp-ink);
+  background: var(--rp-paper);
+}
+.utab.utab-active {
+  color: var(--rp-navy);
+  background: var(--rp-navy-lt);
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--rp-navy);
+}
+.utab svg {
+  opacity: 0.65;
+}
+.utab.utab-active svg {
+  opacity: 1;
+}
+
+/* Shared toolbar */
+.rp-unified-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px var(--rp-px-sm);
+  border-bottom: 1px solid var(--rp-rule);
+  background: var(--rp-white);
+  flex-wrap: wrap;
+}
+
+/* Panels */
+.unified-panel {
+  background: var(--rp-white);
+}
+.unified-panel[hidden] {
+  display: none;
+}
+
+/* Heatmap panel scroll */
+.unified-panel .hm-scroll {
+  max-height: 500px;
+  padding: 0 var(--rp-px-sm) 20px 0;
+}
+
+/* Heatmap legend */
+.hm-legend-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 10px var(--rp-px-sm);
+  border-bottom: 1px solid var(--rp-rule-lt);
+  background: var(--rp-paper);
+}
+
+/* Log panel scroll */
+#panel-log #log-list-root {
+  max-height: 520px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+
+/* Daily panel scroll */
+#panel-daily #daily-list-root {
+  max-height: 520px;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DMT-BTN — Daily view toggle (Jam Masuk / Status)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.daily-view-header {
+  padding: 12px var(--rp-px-sm);
+  border-bottom: 1px solid var(--rp-rule);
+  background: var(--rp-paper);
+}
+
+.daily-mode-toggle {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius-sm);
+  overflow: hidden;
+  background: var(--rp-white);
+}
+
+.dmt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--rp-rule);
+  cursor: pointer;
+  transition:
+    color 0.12s,
+    background 0.12s;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.dmt-btn:last-child {
+  border-right: none;
+}
+.dmt-btn:hover {
+  color: var(--rp-ink);
+  background: var(--rp-paper);
+}
+.dmt-btn.dmt-active {
+  color: var(--rp-navy);
+  background: var(--rp-navy-lt);
+  font-weight: 600;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REKAP — Bank column
+   ══════════════════════════════════════════════════════════════════════════ */
+
+#panel-rekap .rekap-table-wrap {
+  max-height: 520px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+
+.rekap-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rekap-th-bank {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rp-ink-60);
+  padding: 10px 16px;
+  text-align: left;
+  background: var(--rp-paper);
+  border-bottom: 1px solid var(--rp-rule);
+  white-space: nowrap;
+  min-width: 190px;
+}
+
+.rekap-td-bank {
+  padding: 8px 16px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+
+.bank-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.bank-entry + .bank-entry {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dashed var(--rp-rule-lt);
+}
+
+.bank-name {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--rp-navy);
+  background: var(--rp-navy-lt);
+  padding: 1px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.bank-number {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--rp-ink);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.bank-holder {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  color: var(--rp-ink-60);
+  white-space: nowrap;
+}
+
+.bank-empty {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  color: var(--rp-ink-40);
+}
+
+.bank-entry-secondary .bank-name {
+  background: var(--rp-paper);
+  color: var(--rp-ink-60);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SPACER & UTILS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-spacer {
+  height: 64px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .rp-charts-row {
+    flex-direction: column;
+  }
+  .rp-charts-mini {
+    flex-direction: row;
+    width: 100%;
+  }
+  .rp-chart-mini {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .rp-masthead {
+    padding: 28px 20px 20px !important;
+  }
+  .rp-charts-row {
+    margin: 16px 16px;
+  }
+  .rp-unified-section {
+    margin: 0 0 20px !important;
+  }
+  .unified-tabs {
+    flex-wrap: wrap;
+  }
+  .utab {
+    flex: 1;
+    justify-content: center;
+    border-right: none;
+    border-bottom: 1px solid var(--rp-rule);
+  }
+  .utab:last-child {
+    border-bottom: none;
+  }
+  .filter-group-right {
+    margin-left: 0;
+  }
+  .rp-charts-mini {
+    flex-direction: column;
+  }
+  .kpi-item {
+    min-width: 76px;
+    padding: 14px 10px 12px;
+  }
+}
+
+@media print {
+  .unified-tabs,
+  .rp-unified-toolbar,
+  .btn-export,
+  .export-dropdown,
+  .rp-charts-mini {
+    display: none !important;
+  }
+  .unified-panel[hidden] {
+    display: block !important;
+  }
+  .rp-charts-row {
+    flex-direction: column;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FIX PATCH — v3
+   1. Export dropdown — proper styled dropdown with animation
+   2. Daily cell time — styled badge per status
+   3. Heatmap scroll sticky — shadow separator
+   4. Toast notification
+   5. dt-cell-status as pill
+   6. Chart row 2 single width
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Export Dropdown ── */
+.export-dropdown {
+  position: relative;
+}
+
+#btn-export-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--rp-navy);
+  color: #fff;
+  border: 1px solid var(--rp-navy);
+  border-radius: var(--rp-radius);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    background 0.14s,
+    box-shadow 0.14s;
+  white-space: nowrap;
+}
+#btn-export-trigger:hover {
+  background: var(--rp-navy-mid);
+  border-color: var(--rp-navy-mid);
+  box-shadow: 0 2px 8px rgba(27, 79, 114, 0.22);
+}
+#btn-export-trigger[aria-expanded="true"] {
+  background: var(--rp-navy-mid);
+  box-shadow: 0 2px 8px rgba(27, 79, 114, 0.22);
+}
+.exp-caret {
+  transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.75;
+}
+#btn-export-trigger[aria-expanded="true"] .exp-caret {
+  transform: rotate(180deg);
+}
+
+.export-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 220px;
+  background: var(--rp-white);
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  box-shadow:
+    0 4px 20px rgba(15, 37, 64, 0.13),
+    0 1px 4px rgba(15, 37, 64, 0.06);
+  z-index: 200;
+  overflow: hidden;
+  /* animation */
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+  pointer-events: none;
+}
+.export-menu:not([hidden]) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Jinja renders hidden attr; override animation when visible */
+#export-menu:not([hidden]) {
+  display: block !important;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.export-menu::before {
+  content: "";
+  display: block;
+  padding: 6px var(--rp-px-sm) 4px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rp-ink-40);
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+
+.export-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--rp-rule-lt);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--rp-ink);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background 0.1s,
+    color 0.1s;
+  letter-spacing: 0.01em;
+}
+.export-menu-item:last-child {
+  border-bottom: none;
+}
+.export-menu-item:hover {
+  background: var(--rp-navy-lt);
+  color: var(--rp-navy);
+}
+.export-menu-item svg {
+  flex-shrink: 0;
+  opacity: 0.55;
+  color: var(--rp-ink-60);
+}
+.export-menu-item:hover svg {
+  opacity: 1;
+  color: var(--rp-navy);
+}
+
+/* ── 2. Daily cell time — styled badge ── */
+.dt-cell-time {
+  display: inline-block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 5px;
+  border-radius: 3px;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}
+.dt-cell-time.s-present {
+  background: #bbf7d0;
+  color: #14532d;
+}
+.dt-cell-time.s-late {
+  background: #fde68a;
+  color: #78350f;
+}
+.dt-cell-time.s-absent {
+  background: #fecaca;
+  color: #7f1d1d;
+}
+.dt-cell-time.s-dayoff {
+  background: #bfdbfe;
+  color: #1e3a5f;
+}
+.dt-cell-time.s-extoff {
+  background: #bae6fd;
+  color: #0c4a6e;
+}
+.dt-cell-time.s-sick {
+  background: #fef08a;
+  color: #713f12;
+}
+.dt-cell-time.s-remote {
+  background: #bbf7d0;
+  color: #14532d;
+}
+
+/* dt-cell-status as pill (status view) */
+.dt-cell-status {
+  display: inline-block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+}
+.dt-cell-status.s-present {
+  background: #bbf7d0;
+  color: #14532d;
+}
+.dt-cell-status.s-late {
+  background: #fde68a;
+  color: #78350f;
+}
+.dt-cell-status.s-absent {
+  background: #fecaca;
+  color: #7f1d1d;
+}
+.dt-cell-status.s-dayoff {
+  background: #bfdbfe;
+  color: #1e3a5f;
+}
+.dt-cell-status.s-extoff {
+  background: #bae6fd;
+  color: #0c4a6e;
+}
+.dt-cell-status.s-sick {
+  background: #fef08a;
+  color: #713f12;
+}
+.dt-cell-status.s-remote {
+  background: #bbf7d0;
+  color: #14532d;
+}
+
+/* ── 3. Heatmap sticky column — shadow handled by the fix block above ── */
+
+/* ── 4. Toast notification ── */
+.rp-toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: var(--rp-ink);
+  color: #fff;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  border-radius: var(--rp-radius);
+  box-shadow: 0 4px 20px rgba(15, 37, 64, 0.22);
+  opacity: 0;
+  transform: translateY(12px) scale(0.97);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+  pointer-events: none;
+  max-width: 320px;
+  letter-spacing: 0.01em;
+}
+.rp-toast.rp-toast-show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.rp-toast.rp-toast-success svg {
+  color: #86efac;
+}
+.rp-toast.rp-toast-error {
+  background: #991b1b;
+}
+.rp-toast.rp-toast-error svg {
+  color: #fca5a5;
+}
+
+/* ── 5. Chart row-2 single chart full width ── */
+.rp-charts-row-2 {
+  margin-top: 0;
+}
+.rp-charts-row-2 .rp-chart-main {
+  flex: 1;
+  max-width: 100%;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MASTHEAD v2 — redesigned header card
+════════════════════════════════════════════════════════════════ */
+.rp-masthead-v2 {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 28px;
+  background: var(--rp-white);
+  border-bottom: 1px solid var(--rp-rule);
+  border-top: 3px solid var(--brand);
+  flex-wrap: wrap;
+}
+
+.rp-mh-brand {
+  flex: 1;
+  min-width: 220px;
+}
+.rp-mh-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.rp-mh-org {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 1.05rem;
+  color: var(--rp-ink);
+  letter-spacing: -0.01em;
+}
+.rp-mh-divider {
+  color: var(--rp-ink-30);
+  font-size: 0.9rem;
+}
+.rp-mh-module {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--brand);
+}
+.rp-mh-period {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.rp-mh-period-icon {
+  color: var(--rp-ink-40);
+  flex-shrink: 0;
+}
+.rp-mh-period-range {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.73rem;
+  color: var(--rp-ink-60);
+}
+.rp-mh-period-days {
+  font-size: 0.66rem;
+  background: var(--rp-gold-xlt);
+  color: var(--brand);
+  border: 1px solid var(--rp-rule);
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-weight: 500;
+}
+.rp-mh-stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rp-mh-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.rp-mh-stat--ok {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+.rp-mh-stat--warn {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+.rp-mh-stat--bad {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+.rp-mh-stat--muted {
+  background: var(--rp-paper);
+  color: var(--rp-ink-60);
+  border: 1px solid var(--rp-rule);
+}
+
+/* Gauge ring */
+.rp-mh-gauge-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.rp-mh-gauge-svg {
+  display: block;
+  overflow: visible;
+}
+.rp-gauge-big {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 20px;
+  fill: var(--rp-ink);
+}
+.rp-gauge-small {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 8px;
+  fill: var(--rp-ink-40);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.rp-mh-gauge-badge {
+  font-size: 0.63rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+.rp-mh-gauge-badge.badge-good {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+.rp-mh-gauge-badge.badge-warn {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+.rp-mh-gauge-badge.badge-bad {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+/* Right actions */
+.rp-mh-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.rp-mh-emp-count {
+  text-align: right;
+}
+.rp-mh-emp-num {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 1.9rem;
+  color: var(--brand);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.rp-mh-emp-lbl {
+  display: block;
+  font-size: 0.63rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rp-ink-40);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   KPI RAIL v2 — card-based grid
+════════════════════════════════════════════════════════════════ */
+.kpi-rail-v2 {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  background: var(--rp-white);
+  border-bottom: 1px solid var(--rp-rule);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.kpi-rail-v2::-webkit-scrollbar {
+  display: none;
+}
+
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 14px;
+  border-right: 1px solid var(--rp-rule-lt);
+  border-top: 3px solid transparent;
+  transition:
+    background 0.14s,
+    border-top-color 0.14s;
+  cursor: default;
+  position: relative;
+}
+.kpi-card:last-child {
+  border-right: none;
+}
+.kpi-card:hover {
+  background: var(--rp-gold-xlt);
+  border-top-color: var(--kpi-acc);
+}
+.kpi-card-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--kpi-acc);
+  opacity: 0;
+  transition: opacity 0.14s;
+  border-radius: 0 2px 2px 0;
+}
+.kpi-card:hover .kpi-card-accent {
+  opacity: 1;
+}
+
+.kpi-card-val {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 400;
+  color: var(--rp-ink);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.kpi-card:hover .kpi-card-val {
+  color: var(--kpi-acc);
+}
+
+.kpi-card-lbl {
+  font-size: 0.63rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rp-ink-60);
+  margin-top: 4px;
+}
+.kpi-card-sub {
+  font-size: 0.6rem;
+  color: var(--rp-ink-30);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+@media (max-width: 1100px) {
+  .kpi-rail-v2 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .kpi-rail-v2 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .rp-masthead-v2 {
+    padding: 14px 16px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CHARTS GRID v2 — CSS grid layout for charts section
+════════════════════════════════════════════════════════════════ */
+.rp-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 180px 180px;
+  grid-template-rows: auto auto;
+  gap: 0;
+  border-bottom: 1px solid var(--rp-rule);
+}
+.rp-chart-span2 {
+  grid-column: span 2;
+}
+
+/* Donut charts smaller in grid */
+.rp-charts-grid .rp-chart-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 14px 16px;
+  border-left: 1px solid var(--rp-rule-lt);
+}
+.rp-charts-grid .rp-chart-mini:first-of-type {
+  border-top: none;
+}
+.rp-charts-grid .rp-chart-main {
+  border-right: 1px solid var(--rp-rule-lt);
+  border-bottom: 1px solid var(--rp-rule-lt);
+  padding: 20px 20px 16px;
+}
+.rp-charts-grid .rp-chart-span2 {
+  border-right: 1px solid var(--rp-rule-lt);
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+
+@media (max-width: 1200px) {
+  .rp-charts-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  .rp-chart-span2 {
+    grid-column: span 2;
+  }
+}
+@media (max-width: 768px) {
+  .rp-charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .rp-chart-span2 {
+    grid-column: span 1;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   NEW ADDITIONS — Page Heading, Stat Strip, Filter v3, Top Charts
+   + Width fixes, Heatmap bug fix
+════════════════════════════════════════════════════════════════ */
+
+/* ── PAGE HEADING (replaces rp-masthead-v2) ── */
+.rp-page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px var(--rp-px) 18px;
+  background: var(--rp-white);
+  border-bottom: none;
+  border-top: 3px solid var(--rp-gold);
+  flex-wrap: wrap;
+}
+.rp-page-heading-left {
+  flex: 1;
+  min-width: 0;
+}
+.rp-page-heading-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rp-gold-dk);
+  margin-bottom: 6px;
+}
+.rp-page-heading-title {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 400;
+  color: var(--rp-ink);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+  line-height: 1.1;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+/* "LAPORAN" — focal point, large + gold accent */
+.rp-heading-laporan {
+  color: var(--rp-gold-dk, #b45309);
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+/* Tanggal — sekunder, mono, ukuran lebih kecil */
+.rp-heading-period {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  letter-spacing: 0;
+  align-self: flex-end;
+  padding-bottom: 4px;
+}
+.rp-page-heading-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.rp-page-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--rp-paper);
+  color: var(--rp-ink-60);
+  border: 1px solid var(--rp-rule);
+}
+.rp-page-meta-pill--good {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+.rp-page-meta-pill--warn {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #fde68a;
+}
+.rp-page-meta-pill--bad {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+.rp-page-heading-right {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 4px;
+}
+
+/* ── STAT STRIP (replaces kpi-rail-v2) ── */
+.rp-stat-strip {
+  display: flex;
+  align-items: stretch;
+  background: var(--rp-white);
+  border: 1px solid var(--rp-rule);
+  border-bottom: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Jarak dari page-heading, lebar sama dengan unified-panel */
+  margin: 16px var(--rp-px) 0;
+  border-radius: var(--rp-radius) var(--rp-radius) 0 0;
+}
+.rp-stat-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.rp-stat-divider {
+  width: 1px;
+  background: var(--rp-rule);
+  flex-shrink: 0;
+  margin: 12px 0;
+}
+
+.rp-stat-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 14px 20px 12px;
+  border-right: 1px solid var(--rp-rule-lt);
+  flex: 1;
+  min-width: 80px;
+  cursor: default;
+  position: relative;
+  transition: background 0.12s;
+}
+.rp-stat-item:last-child {
+  border-right: none;
+}
+.rp-stat-item::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--rp-stat-color, transparent);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.rp-stat-item:hover {
+  background: var(--rp-paper);
+}
+.rp-stat-item:hover::before {
+  opacity: 1;
+}
+
+.rp-stat-val {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+  font-weight: 400;
+  color: var(--rp-ink);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  transition: color 0.12s;
+}
+.rp-stat-item:hover .rp-stat-val {
+  color: var(--rp-stat-color, var(--rp-ink));
+}
+
+.rp-stat-lbl {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rp-ink-40);
+}
+
+/* Color variants */
+.rp-stat--neutral {
+  --rp-stat-color: var(--rp-navy);
+}
+.rp-stat--good {
+  --rp-stat-color: #16a34a;
+}
+.rp-stat--warn {
+  --rp-stat-color: #d97706;
+}
+.rp-stat--bad {
+  --rp-stat-color: #dc2626;
+}
+.rp-stat--blue {
+  --rp-stat-color: #0ea5e9;
+}
+.rp-stat--amber {
+  --rp-stat-color: #f59e0b;
+}
+.rp-stat--purple {
+  --rp-stat-color: #818cf8;
+}
+/* [REPORT-OVERTIME FIX v2] Plum #86198f — dipakai konsisten di seluruh
+   indikator lembur (KPI, heatmap, panel Harian, panel Log, tabel Rekap)
+   supaya tidak lagi tertukar dengan amber Terlambat maupun mirip biru Izin
+   seperti teal yang dipakai sebelumnya. */
+.rp-stat--overtime {
+  --rp-stat-color: #86198f;
+}
+
+/* ── FILTER V3 ── */
+.rp-filter-v3 {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--rp-paper);
+  border: 1px solid var(--rp-rule);
+  border-top: none;
+  padding: 0 16px;
+  min-height: 52px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  /* Langsung menyambung dengan rp-stat-strip — tanpa margin-top */
+  margin: 0 var(--rp-px);
+  border-radius: 0;
+}
+.rp-filter-v3-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  flex-wrap: wrap;
+  padding: 10px 0;
+}
+.rp-filter-v3-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-left: 1px solid var(--rp-rule);
+  margin-left: 12px;
+  padding-left: 16px;
+}
+.rp-filter-v3-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rp-ink-40);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.rp-daterange {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--rp-white);
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  overflow: hidden;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.rp-daterange:focus-within {
+  border-color: var(--rp-navy);
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.08);
+}
+.rp-date-input {
+  border: none;
+  outline: none;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.73rem;
+  color: var(--rp-ink);
+  background: transparent;
+  padding: 7px 10px;
+  width: 115px;
+  cursor: pointer;
+}
+.rp-daterange-sep {
+  color: var(--rp-ink-40);
+  font-size: 0.8rem;
+  padding: 0 4px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--rp-rule-lt);
+  border-right: 1px solid var(--rp-rule-lt);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background: var(--rp-paper);
+}
+.rp-quick-pills {
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+.rp-qpill {
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--rp-rule);
+  background: var(--rp-white);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.66rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  cursor: pointer;
+  transition: all 0.12s;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.rp-qpill:hover {
+  border-color: var(--rp-navy);
+  color: var(--rp-navy);
+  background: var(--rp-navy-lt);
+}
+.rp-qpill.active,
+.rp-qpill.qr-pill.active {
+  border-color: var(--rp-gold);
+  color: var(--rp-gold-dk);
+  background: var(--rp-gold-xlt);
+}
+.rp-filter-select {
+  appearance: none;
+  background: var(--rp-white)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius);
+  padding: 7px 28px 7px 12px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.73rem;
+  color: var(--rp-ink);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.rp-filter-select:focus {
+  border-color: var(--rp-navy);
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
+}
+.rp-btn-apply {
+  padding: 7px 18px;
+  background: var(--rp-ink);
+  color: #fff;
+  border: 1px solid var(--rp-ink);
+  border-radius: var(--rp-radius);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+  white-space: nowrap;
+}
+.rp-btn-apply:hover {
+  background: var(--rp-navy);
+  border-color: var(--rp-navy);
+}
+
+/* ── WIDTH FIX: all content sections match unified-panel width ── */
+/* rp-masthead-v2 kept fullwidth intentionally (page-heading replaces it)
+   charts-grid and charts-row should use same horizontal span as unified-panel */
+.rp-charts-grid {
+  margin: 16px var(--rp-px) 0;
+  border-radius: var(--rp-radius) var(--rp-radius) 0 0;
+  border: 1px solid var(--rp-rule);
+  overflow: hidden;
+  background: var(--rp-white);
+  margin-bottom: 0;
+}
+.rp-charts-grid .rp-section {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ── TOP CHARTS ROW — 3 equal horizontal bar cards ── */
+.rp-top-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  margin: 0 var(--rp-px) 0;
+  border: 1px solid var(--rp-rule);
+  border-top: none;
+  border-radius: 0 0 var(--rp-radius) var(--rp-radius);
+  overflow: hidden;
+  background: var(--rp-white);
+}
+.rp-top-chart-card {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border-right: 1px solid var(--rp-rule-lt) !important;
+}
+.rp-top-chart-card:last-child {
+  border-right: none !important;
+}
+.rp-top-chart-wrap {
+  /* Dynamic height based on data: 10 items × ~32px + padding */
+  min-height: 240px;
+  height: 340px;
+  padding: 12px 16px 16px;
+  position: relative;
+}
+.rp-top-chart-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Top badge labels */
+.rp-top-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  padding: 3px 9px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.rp-top-badge--bad {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+.rp-top-badge--blue {
+  background: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+.rp-top-badge--amber {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+/* ── UNIFIED SECTION width alignment ── */
+.rp-unified-section {
+  margin: 20px var(--rp-px) 24px !important;
+  border-top: 1px solid var(--rp-rule) !important;
+  border-radius: var(--rp-radius) !important;
+}
+
+/* ── HEATMAP BUG FIX — sticky column + tooltip overflow ── */
+
+/* Ensure hm-scroll creates a proper stacking context for sticky children */
+.hm-scroll {
+  overflow: auto;
+  /* isolation ensures sticky children create their own stacking context */
+  isolation: isolate;
+}
+
+/* Table must NOT have overflow:visible — let scroll container handle clipping */
+.hm-table {
+  overflow: clip;
+}
+.hm-table thead th {
+  overflow: clip;
+}
+
+/* Data cells: clip their own content — do NOT use overflow:visible
+   This is critical: overflow:visible on cells causes them to bleed
+   past the sticky name column during horizontal scroll */
+.hm-cell {
+  overflow: clip;
+}
+
+.hm-tbody {
+  overflow: clip;
+}
+
+/* Sticky header and name cell: ensure they paint ABOVE scrolling cells */
+.hm-name-th {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 25;
+  min-width: 180px;
+  width: 180px;
+  padding-left: 16px;
+  background: var(--rp-white, #ffffff) !important;
+  /* Add right padding to cover any cell that slides under */
+  box-shadow:
+    3px 0 0 0 var(--rp-white, #ffffff),
+    4px 0 8px rgba(15, 37, 64, 0.08);
+}
+.hm-name-cell {
+  position: sticky;
+  left: 0;
+  z-index: 15;
+  min-width: 180px;
+  width: 180px;
+  padding-left: 16px;
+  background: var(--rp-white, #ffffff) !important;
+  box-shadow:
+    3px 0 0 0 var(--rp-white, #ffffff),
+    4px 0 8px rgba(15, 37, 64, 0.08);
+}
+
+/* Row hover keeps name cell background distinct */
+.hm-row:hover .hm-name-cell {
+  background: var(--rp-gold-xlt, #fdf9ef) !important;
+  box-shadow:
+    3px 0 0 0 var(--rp-gold-xlt, #fdf9ef),
+    4px 0 8px rgba(15, 37, 64, 0.08);
+}
+
+/* Hover scale: scale the cell but clip via parent, don't let it escape */
+.hm-cell:hover {
+  transform: scale(1.25);
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Tooltip pseudo-elements — tooltip is handled by #hm-js-tip (position:fixed JS tooltip)
+   so CSS ::before/::after on hm-cell are not used for tooltip — clear any residual */
+.hm-cell[data-tip]:hover::after,
+.hm-cell[data-tip]:hover::before {
+  display: none;
+}
+
+/* Responsive overrides for new sections */
+@media (max-width: 1024px) {
+  .rp-top-charts-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .rp-top-chart-card:nth-child(3) {
+    grid-column: 1 / -1;
+    border-right: none !important;
+    border-top: 1px solid var(--rp-rule-lt) !important;
+  }
+  .rp-filter-v3 {
+    padding: 0 var(--rp-px-sm);
+  }
+  .rp-charts-grid {
+    margin: 0 var(--rp-px);
+  }
+  .rp-top-charts-row {
+    margin: 0 var(--rp-px);
+  }
+  .rp-unified-section {
+    margin: 0 var(--rp-px) 24px !important;
+  }
+}
+@media (max-width: 768px) {
+  .rp-top-charts-row {
+    grid-template-columns: 1fr;
+  }
+  .rp-top-chart-card {
+    border-right: none !important;
+    border-bottom: 1px solid var(--rp-rule-lt) !important;
+  }
+  .rp-top-chart-wrap {
+    height: 280px;
+  }
+  .rp-page-heading {
+    padding: 14px 20px 14px;
+  }
+  .rp-quick-pills {
+    display: none;
+  }
+  .rp-filter-v3-right {
+    border-left: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
+  .rp-stat-strip {
+    flex-wrap: wrap;
+  }
+  .rp-stat-item {
+    min-width: calc(33.33% - 1px);
+    flex: unset;
+  }
+  .rp-stat-divider {
+    display: none;
+  }
+}
+
+/* ── Override grid template for new 2-donut-only layout ── */
+.rp-charts-grid {
+  grid-template-columns: 1fr 1fr 180px 180px;
+  grid-template-rows: auto;
+  border-bottom: none !important;
+}
+/* Remove double borders from cells now that grid has outer border */
+.rp-charts-grid .rp-chart-main {
+  padding: 0 !important;
+}
+.rp-charts-grid .rp-chart-span2 {
+  border-right: 1px solid var(--rp-rule-lt);
+  border-bottom: none;
+}
+.rp-charts-grid .rp-chart-mini {
+  border-left: 1px solid var(--rp-rule-lt);
+  border-bottom: none;
+}
+
+/* Adjust spacing inside chart cards inside grid */
+.rp-charts-grid .rp-section-header {
+  background: var(--rp-paper);
+  border-bottom: 1px solid var(--rp-rule);
+}
+.rp-charts-grid .rp-chart-canvas-wrap {
+  padding: 12px 20px 8px !important;
+  height: 240px;
+  position: relative;
+}
+.rp-charts-grid .rp-chart-canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 1200px) {
+  .rp-charts-grid {
+    grid-template-columns: 1fr 180px 180px;
+  }
+  .rp-chart-span2 {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+}
+@media (max-width: 900px) {
+  .rp-charts-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .rp-chart-span2 {
+    grid-column: span 2;
+  }
+}
+
+/*
+ * reports_new_sections.css
+ * TAMBAHKAN DI AKHIR reports.css (atau load setelah reports.css di base.html)
+ *
+ * Redesign direction: "Editorial Intelligence Command"
+ *
+ * Color theory applied (Johannes Itten):
+ *   — Contrast of hue: Navy #1B4F72 ↔ Amber #D4860A (split-complementary)
+ *   — Contrast of saturation: Brand colors vivid, chart fills muted (simultaneous contrast)
+ *   — Contrast of light-dark: White cards on warm paper, dark navy sidebar
+ *
+ * Typography (Edward Rolf Tufte + Bringhurst):
+ *   — DM Serif Display: display numbers (editorial authority)
+ *   — IBM Plex Mono: all numeric data (tabular precision)
+ *   — IBM Plex Sans: labels, UI, prose (technical clarity)
+ *
+ * Layout innovation:
+ *   — Asymmetric 3-column bento grid (240px | 1fr | 210px)
+ *   — Column A: Score + donuts (supporting context)
+ *   — Column B: Main trend + arrival distribution (editorial center stage)
+ *   — Column C: Radar pattern + insight cards (peripheral insight)
+ */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BADGE VARIANTS — for rpab-insight-badge inside score panel
+   (badge-good / badge-warn / badge-bad are generated by Jinja insight_cond_cls)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rpab-insight-badge.badge-good {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+.rpab-insight-badge.badge-warn {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+.rpab-insight-badge.badge-bad {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+/* Rate badge in trend panel header */
+.rp-chart-rate-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--rp-navy-lt);
+  color: var(--rp-navy);
+  border: 1px solid rgba(27, 79, 114, 0.15);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MASTHEAD GAUGE ADDITIONS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-page-heading-right--with-gauge {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.rph-gauge-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: default;
+}
+
+.rph-gauge-svg {
+  display: block;
+  filter: drop-shadow(0 1px 4px rgba(15, 37, 64, 0.1));
+  transition: filter 0.2s;
+}
+.rph-gauge-wrap:hover .rph-gauge-svg {
+  filter: drop-shadow(0 2px 8px rgba(15, 37, 64, 0.15));
+}
+
+.rph-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ANALYTICS BENTO — The primary chart stage
+   3 columns: [A: 240px] [B: 1fr] [C: 210px]
+   All connected as one unified card with internal dividers.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-analytics-bento {
+  display: grid;
+  grid-template-columns: 240px 1fr 210px;
+  grid-template-rows: 1fr;
+  margin: 20px var(--rp-px) 0;
+  border: 1px solid var(--rp-rule);
+  border-radius: var(--rp-radius) var(--rp-radius) 0 0;
+  border-bottom: none;
+  overflow: hidden;
+  background: var(--rp-white);
+  box-shadow: var(--rp-shadow-card);
+}
+
+.rpab-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Column A: score panel + 2 donuts */
+.rpab-col--a {
+  border-right: 1px solid var(--rp-rule);
+  background: var(--rp-paper);
+}
+
+/* Column B: main charts */
+.rpab-col--b {
+  background: var(--rp-white);
+  min-height: 520px;
+}
+
+/* Column C: radar + insight stack */
+.rpab-col--c {
+  border-left: 1px solid var(--rp-rule);
+  background: var(--rp-paper);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+.rpab-col--c::-webkit-scrollbar {
+  width: 3px;
+}
+.rpab-col--c::-webkit-scrollbar-thumb {
+  background: var(--rp-rule);
+  border-radius: 2px;
+}
+
+/* ── Shared panel primitives ── */
+.rpab-panel-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rp-ink-60);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rpab-panel-label::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: var(--rp-gold);
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+.rpab-panel-label--lg {
+  font-size: 0.62rem;
+}
+
+.rpab-panel-sub {
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--rp-ink-40);
+  margin-top: 3px;
+  letter-spacing: 0.01em;
+}
+
+.rpab-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 18px 12px;
+  background: var(--rp-paper);
+  border-bottom: 1px solid var(--rp-rule-lt);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rpab-insight-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.59rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ── Score Panel (top of column A) ── */
+.rpab-score-panel {
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.rpab-score-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rpab-score-gauge-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rpab-score-svg {
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(15, 37, 64, 0.1));
+}
+
+/* 4-cell breakdown grid below gauge */
+.rpab-score-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  width: 100%;
+}
+
+.rpab-sg-item {
+  background: var(--rp-white);
+  border: 1px solid var(--rp-rule-lt);
+  border-radius: var(--rp-radius-sm);
+  padding: 7px 8px 6px;
+  text-align: center;
+  border-left: 3px solid var(--rpsg-border, var(--rp-rule));
+  transition: background 0.12s;
+}
+.rpab-sg-item:hover {
+  background: var(--rp-paper);
+}
+
+.rpab-sg-val {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--rpsg-val, var(--rp-ink));
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.rpab-sg-lbl {
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rp-ink-40);
+  margin-top: 2px;
+}
+
+.rpab-sg--green {
+  --rpsg-border: #bbf7d0;
+  --rpsg-val: #15803d;
+}
+.rpab-sg--amber {
+  --rpsg-border: #fde68a;
+  --rpsg-val: #b45309;
+}
+.rpab-sg--red {
+  --rpsg-border: #fecaca;
+  --rpsg-val: #dc2626;
+}
+.rpab-sg--sky {
+  --rpsg-border: #bae6fd;
+  --rpsg-val: #0284c7;
+}
+
+/* ── Donut Panels (in column A) ── */
+.rpab-donut-panel {
+  border-bottom: 1px solid var(--rp-rule-lt);
+  flex: 1;
+}
+.rpab-donut-panel:last-child {
+  border-bottom: none;
+  flex: 1;
+}
+
+.rpab-donut-header {
+  padding: 12px 20px 10px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+  background: var(--rp-white);
+}
+
+.rpab-donut-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px 14px 14px;
+}
+
+.rpab-donut-canvas-wrap {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.rpab-donut-legend {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.rpab-donut-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  color: var(--rp-ink-60);
+}
+.rpab-donut-legend-item > span:first-child {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.rpab-dl-lbl {
+  flex: 1;
+}
+.rpab-dl-pct {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.6rem;
+  color: var(--rp-ink-40);
+  font-weight: 500;
+  min-width: 28px;
+  text-align: right;
+}
+
+/* ── Trend Panel (top of column B) ── */
+.rpab-trend-panel {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--rp-rule-lt);
+  flex: 1;
+}
+
+.rpab-trend-canvas-wrap {
+  flex: 1;
+  min-height: 220px;
+  max-height: 280px;
+  padding: 14px 18px 8px;
+  position: relative;
+}
+.rpab-trend-canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Legend strip beneath line chart */
+.rpab-legend-strip {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 18px 12px;
+  border-top: 1px solid var(--rp-rule-lt);
+  background: var(--rp-paper);
+  flex-wrap: wrap;
+}
+.rpab-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--rp-ink-60);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.12s;
+  letter-spacing: 0.02em;
+}
+.rpab-legend-item:hover {
+  color: var(--rp-ink);
+}
+.rpab-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Arrival Distribution Panel (bottom of column B) ── */
+.rpab-arrival-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.rpab-arrival-note {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--rp-ink-40);
+  flex-shrink: 0;
+}
+
+.rpab-arrival-canvas-wrap {
+  height: 200px;
+  padding: 12px 18px 14px;
+  position: relative;
+}
+.rpab-arrival-canvas-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ── DOW Radar Panel (top of column C) ── */
+.rpab-dow-panel {
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.rpab-dow-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 4px;
+}
+
+.rpab-dow-canvas-wrap {
+  width: 100%;
+  max-width: 178px;
+}
+
+/* ── Libur Berbayar Panel ── */
+.rpab-libur-panel {
+  padding: 12px 16px 14px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+.rpab-libur-header {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 10px;
+}
+.rpab-libur-body {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.rpab-libur-total {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-bottom: 2px;
+}
+.rpab-libur-num {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--rp-ink);
+  letter-spacing: -0.04em;
+}
+.rpab-libur-unit {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rp-ink-40);
+}
+.rpab-libur-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rpab-libur-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 8px;
+  border-radius: var(--rp-radius-sm);
+  background: var(--rp-white);
+  border: 1px solid var(--rp-rule-lt);
+}
+.rpab-libur-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.rpab-libur-row--nas .rpab-libur-dot {
+  background: #6366f1;
+}
+.rpab-libur-row--bers .rpab-libur-dot {
+  background: #0ea5e9;
+}
+.rpab-libur-row--perush .rpab-libur-dot {
+  background: #a855f7;
+}
+.rpab-libur-lbl {
+  flex: 1;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--rp-ink-80);
+}
+.rpab-libur-val {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--rp-ink);
+  font-variant-numeric: tabular-nums;
+}
+.rpab-libur-src {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.55rem;
+  color: var(--rp-ink-40);
+  letter-spacing: 0.03em;
+  margin-top: 2px;
+}
+
+/* ── Per Departemen Panel ── */
+.rpab-dept-panel {
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+.rpab-dept-header {
+  padding: 10px 16px 6px;
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+.rpab-dept-list {
+  padding: 4px 0;
+  max-height: 190px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-rule) transparent;
+}
+.rpab-dept-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  transition: background 0.1s;
+}
+.rpab-dept-row:hover {
+  background: var(--rp-paper);
+}
+.rpab-dept-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--rp-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.rpab-dept-badge--good {
+  background: #dcfce7;
+  color: #14532d;
+}
+.rpab-dept-badge--warn {
+  background: #fef3c7;
+  color: #78350f;
+}
+.rpab-dept-badge--bad {
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+
+.rpab-dept-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.rpab-dept-name {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.67rem;
+  font-weight: 500;
+  color: var(--rp-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rpab-dept-sub {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.57rem;
+  color: var(--rp-ink-40);
+}
+.rpab-dept-bar {
+  height: 3px;
+  background: var(--rp-rule-lt);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 3px;
+  width: 100%;
+}
+.rpab-dept-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.rpab-dept-bar--good {
+  background: #16a34a;
+}
+.rpab-dept-bar--warn {
+  background: #d97706;
+}
+.rpab-dept-bar--bad {
+  background: #dc2626;
+}
+.rpab-dept-pct {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.rpab-dept-pct--good {
+  color: #15803d;
+}
+.rpab-dept-pct--warn {
+  color: #b45309;
+}
+.rpab-dept-pct--bad {
+  color: #dc2626;
+}
+.rpab-dept-empty {
+  padding: 16px;
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--rp-ink-40);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+/* ── Insight Cards Stack (bottom of column C) ── */
+.rpab-insights-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+  padding: 10px 14px 14px;
+  gap: 8px;
+}
+
+.rpab-insight-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  background: var(--rp-white);
+  border: 1px solid var(--rp-rule-lt);
+  border-left: 3px solid var(--rpai-col, var(--rp-gold));
+  border-radius: var(--rp-radius-sm);
+  cursor: default;
+  transition:
+    background 0.12s,
+    box-shadow 0.12s;
+}
+.rpab-insight-card:hover {
+  background: var(--rp-paper);
+  box-shadow: 0 1px 4px rgba(15, 37, 64, 0.06);
+}
+
+.rpai-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--rp-radius-sm);
+  /* color-mix fallback: use a semi-transparent white overlay instead */
+  background: rgba(255, 255, 255, 0.7);
+  outline: 1px solid rgba(0, 0, 0, 0.04);
+  color: var(--rpai-col, var(--rp-gold));
+  flex-shrink: 0;
+}
+
+.rpai-val {
+  display: block;
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--rp-ink);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.rpai-lbl {
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rp-ink-40);
+  margin-top: 2px;
+}
+
+/* Empty state */
+.rpab-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 100px;
+  color: var(--rp-ink-40);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RANKINGS BENTO — 3-column horizontal lollipop charts
+   Connects flush to analytics bento above (shared border)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-rankings-bento {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 0 var(--rp-px) 20px;
+  border: 1px solid var(--rp-rule);
+  border-radius: 0 0 var(--rp-radius) var(--rp-radius);
+  overflow: hidden;
+  background: var(--rp-white);
+  box-shadow: var(--rp-shadow-card);
+}
+
+/* Individual ranking card */
+.rprc-card {
+  /* Override default rp-section margins */
+  margin: 0 !important;
+  border: none !important;
+  border-right: 1px solid var(--rp-rule-lt) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: var(--rp-white) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: visible !important;
+}
+.rprc-card:last-child {
+  border-right: none !important;
+}
+
+/* Increase header contrast for rankings */
+.rprc-card .rp-section-header {
+  border-bottom: 1px solid var(--rp-rule-lt);
+}
+
+.rprc-chart-wrap {
+  flex: 1;
+  height: 360px;
+  padding: 14px 18px 18px;
+  position: relative;
+}
+.rprc-chart-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   OVERRIDE: Connect analytics-bento to stat-strip seamlessly
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Stat strip bottom border matches bento top border */
+.rp-stat-strip {
+  border-bottom: 1px solid var(--rp-rule) !important;
+}
+
+/* Filter inherits the border chain from stat-strip */
+.rp-filter-v3 {
+  border-bottom: 1px solid var(--rp-rule) !important;
+  background: var(--rp-paper) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   OVERRIDE: Adjust unified section margin to connect to rankings
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rp-unified-section {
+  margin: 20px var(--rp-px) 24px !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HEATMAP STICKY FIX — overflow:clip prevents bleed past sticky name column.
+   Tooltip is rendered by JS (#hm-js-tip position:fixed), so overflow:visible NOT needed.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hm-cell {
+  overflow: clip;
+}
+.hm-scroll {
+  overflow: auto;
+  padding-left: 0 !important;
+}
+.hm-table,
+.hm-table thead th,
+.hm-tbody {
+  overflow: clip;
+}
+
+/* CSS tooltip pseudo-elements disabled — JS tip handles display */
+.hm-cell[data-tip]:hover::after,
+.hm-cell[data-tip]:hover::before {
+  display: none;
+}
+
+.hm-name-th,
+.hm-name-cell {
+  position: sticky !important;
+  left: 0 !important;
+  min-width: 180px !important;
+  width: 180px !important;
+  background: var(--rp-white) !important;
+  box-shadow:
+    3px 0 0 0 var(--rp-white),
+    4px 0 8px rgba(15, 37, 64, 0.07);
+}
+
+.hm-name-th {
+  top: 0;
+  z-index: 25 !important;
+  padding-left: 16px !important;
+}
+
+.hm-name-cell {
+  z-index: 15 !important;
+  padding-left: 16px !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1280px) {
+  .rp-analytics-bento {
+    grid-template-columns: 220px 1fr 190px;
+  }
+}
+
+@media (max-width: 1060px) {
+  /* Column C drops below, spans full width */
+  .rp-analytics-bento {
+    grid-template-columns: 220px 1fr;
+    grid-template-rows: auto auto;
+  }
+  .rpab-col--c {
+    grid-column: 1 / -1;
+    border-left: none;
+    border-top: 1px solid var(--rp-rule);
+    flex-direction: row;
+    overflow: visible;
+  }
+  .rpab-dow-panel {
+    flex: 1;
+    border-bottom: none;
+    border-right: 1px solid var(--rp-rule-lt);
+  }
+  .rpab-insights-stack {
+    flex: 1.5;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 14px 16px;
+  }
+}
+
+@media (max-width: 820px) {
+  .rp-analytics-bento {
+    grid-template-columns: 1fr;
+    border-radius: var(--rp-radius);
+    border-bottom: 1px solid var(--rp-rule) !important;
+    margin-bottom: 16px;
+  }
+  .rpab-col--a {
+    border-right: none;
+    border-bottom: 1px solid var(--rp-rule);
+  }
+  .rpab-col--b {
+    min-height: 400px;
+  }
+  .rpab-col--c {
+    grid-column: 1;
+    border-top: 1px solid var(--rp-rule);
+    flex-direction: column;
+  }
+  .rpab-dow-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--rp-rule-lt);
+  }
+  .rpab-insights-stack {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .rp-rankings-bento {
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--rp-rule) !important;
+    border-radius: var(--rp-radius);
+    margin-top: 16px;
+  }
+  .rprc-card {
+    border-right: none !important;
+    border-bottom: 1px solid var(--rp-rule-lt) !important;
+  }
+  .rprc-card:last-child {
+    border-bottom: none !important;
+  }
+  .rph-gauge-wrap {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .rp-analytics-bento {
+    margin: 16px var(--rp-px-sm);
+  }
+  .rp-rankings-bento {
+    margin: 16px var(--rp-px-sm) 20px;
+  }
+  .rpab-insights-stack {
+    grid-template-columns: 1fr 1fr;
+  }
+  .rp-rankings-bento {
+    grid-template-columns: 1fr;
+  }
+  .rprc-chart-wrap {
+    height: 240px;
+  }
+}
+
+@media print {
+  .rp-analytics-bento,
+  .rp-rankings-bento {
+    break-inside: avoid;
+    border-radius: var(--rp-radius) !important;
+    border-bottom: 1px solid var(--rp-rule) !important;
+    margin-bottom: 16px !important;
+  }
+  .rp-rankings-bento {
+    border-top: 1px solid var(--rp-rule) !important;
+  }
+  .rpab-col--c {
+    flex-direction: column;
+  }
+  .rpab-insights-stack {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── Late Tier Breakdown Panel (col-A) ── */
+.rpab-late-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rp-rule-lt);
+  min-height: 0;
+}
+.rpab-late-body {
+  flex: 1;
+  padding: 12px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.rpab-late-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.rpab-late-total-val {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--rp-ink);
+  line-height: 1;
+}
+.rpab-late-total-lbl {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  color: var(--rp-ink-40);
+}
+.rpab-late-tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.rpab-late-tier-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rpab-late-tier-lbl {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.59rem;
+  font-weight: 600;
+  min-width: 42px;
+}
+.rpab-late-tier-bar-wrap {
+  flex: 1;
+  height: 5px;
+  background: var(--rp-rule-lt);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.rpab-late-tier-bar {
+  height: 100%;
+  border-radius: 3px;
+  min-width: 2px;
+  transition: width 0.5s ease;
+}
+.rpab-late-tier-count {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.6rem;
+  font-weight: 600;
+  min-width: 22px;
+  text-align: right;
+}
+.rpab-tier--t1 {
+  color: #b45309;
+}
+.rpab-tier--t2 {
+  color: #c2410c;
+}
+.rpab-tier--t3 {
+  color: #dc2626;
+}
+.rpab-tier--t4 {
+  color: #7f1d1d;
+}
+.rpab-late-tier-bar.rpab-tier--t1 {
+  background: #fbbf24;
+}
+.rpab-late-tier-bar.rpab-tier--t2 {
+  background: #f97316;
+}
+.rpab-late-tier-bar.rpab-tier--t3 {
+  background: #ef4444;
+}
+.rpab-late-tier-bar.rpab-tier--t4 {
+  background: #991b1b;
+}

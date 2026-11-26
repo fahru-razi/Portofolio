@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Risiko Diabetes</title>
+
+    <!-- Favicon -->
+    <script src="../js/model.js"></script>
+    <script src="data/geojson.js"></script>
+    <script src="js/shim.js"></script>
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <!-- Font Awesome untuk ikon-ikon -->
+    <link rel="stylesheet" href="vendor/fa/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/homepage.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+    <!-- Chart.js -->
+    <script src="vendor/chart.umd.js"></script>
+
+<link rel="stylesheet" href="../../avatar.css"><script src="../../avatar.js" defer></script></head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="brand">
+                <a href="#beranda">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>DiabetesCheck</span>
+                </a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#beranda" class="active">Beranda</a></li>
+                <li><a href="#tentang-aplikasi">Tentang Aplikasi</a></li>
+                <li><a href="#faktor-risiko">Faktor Risiko</a></li>
+                <li><a href="#prediksi">Prediksi</a></li>
+                <li><a href="#peta-visualisasi">Peta</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 1. Beranda Section -->
+        <section id="beranda" class="section hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>DiabetesCheck: Cek Risiko Diabetes dengan Akurat & Mudah</h1>
+                        <p>DiabetesCheck adalah aplikasi berbasis kecerdasan buatan yang bisa bantu kamu prediksi risiko
+                            diabetes akurat sampai 98%! Cukup isi data kesehatan dan riwayat diabetes keluarga, langsung
+                            dapat hasilnya. Gampang banget, kan?</p>
+                        <div class="hero-cta">
+                            <a href="#prediksi" class="btn-primary">Mulai Prediksi</a>
+                            <a href="#tentang-aplikasi" class="btn-secondary">Pelajari Lebih Lanjut</a>
+                        </div>
+                    </div>
+                    <div class="hero-image">
+                        <div class="image-container">
+                            <img src="images/diabetes-check.png"
+                                alt="Diabetes Check Illustration">
+                            <div class="accuracy-badge">
+                                <span class="accuracy-value">98%</span>
+                                <span class="accuracy-text">Akurasi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Tentang Aplikasi Section -->
+        <section id="tentang-aplikasi" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Tentang Aplikasi</h2>
+                    <p>Kenali DiabetesCheck dan bagaimana aplikasi ini dapat membantu kamu</p>
+                </div>
+                <div class="about-content">
+                    <div class="about-image">
+                        <img src="images/about-app.png" alt="About DiabetesCheck">
+                    </div>
+                    <div class="about-text">
+                        <h3>Apa itu DiabetesCheck?</h3>
+                        <p>DiabetesCheck tuh aplikasi next-level buat prediksi risiko diabetes, pake machine learning
+                            yang jago banget ngitung data. Kamu bisa tau seberapa besar risiko diabetes kamu berdasarkan
+                            kondisi kesehatan dan keturunan—no hoax, pure science!</p>
+                        <h3>Cara Kerja DiabetesCheck</h3>
+                        <div class="workflow">
+                            <div class="workflow-item">
+                                <div class="workflow-icon">
+                                    <i class="fas fa-file-medical"></i>
+                                </div>
+                                <div class="workflow-text">
+                                    <h4>Isi dulu dong datanya</h4>
+                                    <p>Masukin data kesehatan dan riwayat diabetes keluarga kamu, terus biarkan si AI
+                                        yang ngolah.</p>
+                                </div>
+                            </div>
+                            <div class="workflow-item">
+                                <div class="workflow-icon">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                                <div class="workflow-text">
+                                    <h4>Analisis</h4>
+                                    <p>Aplikasi ini learn dari ribuan data diabetes buat analisis data kamu—so, it’s
+                                        legit!</p>
+                                </div>
+                            </div>
+                            <div class="workflow-item">
+                                <div class="workflow-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="workflow-text">
+                                    <h4>Hasil Prediksi</h4>
+                                    <p>Dapatkan hasil prediksi risiko diabetes dan rekomendasi berdasarkan analisis data
+                                        kamu.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Faktor Risiko Section -->
+        <section id="faktor-risiko" class="section bg-light">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Faktor Risiko Diabetes</h2>
+                    <p>Kenali faktor-faktor yang dapat meningkatkan risiko diabetes</p>
+                </div>
+                <div class="risk-factors">
+                    <div class="risk-factor-item">
+                        <div class="risk-factor-icon">
+                            <i class="fas fa-weight"></i>
+                        </div>
+                        <h3>Indeks Massa Tubuh (IMT)</h3>
+                        <p>IMT di atas 25 (kelebihan berat badan) atau di atas 30 (obesitas) meningkatkan risiko
+                            diabetes tipe 2 secara signifikan.</p>
+                    </div>
+                    <div class="risk-factor-item">
+                        <div class="risk-factor-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <h3>Kadar Glukosa</h3>
+                        <p>Kadar glukosa puasa atau kadar glukosa setelah makan yang tinggi adalah tanda awal
+                            kemungkinan diabetes.</p>
+                    </div>
+                    <div class="risk-factor-item">
+                        <div class="risk-factor-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>Tekanan Darah</h3>
+                        <p>Tekanan darah tinggi (hipertensi) sering berkaitan dengan resistensi insulin dan peningkatan
+                            risiko diabetes.</p>
+                    </div>
+                    <div class="risk-factor-item">
+                        <div class="risk-factor-icon">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <h3>Riwayat Keluarga</h3>
+                        <p>Memiliki anggota keluarga tingkat pertama (orangtua, saudara) dengan diabetes meningkatkan
+                            risiko Anda hingga 3 kali lipat.</p>
+                    </div>
+                    <div class="risk-factor-item">
+                        <div class="risk-factor-icon">
+                            <i class="fas fa-birthday-cake"></i>
+                        </div>
+                        <h3>Usia</h3>
+                        <p>Risiko diabetes tipe 2 meningkat seiring bertambahnya usia, terutama setelah usia 45 tahun.
+                        </p>
+                    </div>
+                    <div class="risk-factor-item">
+                        <div class="risk-factor-icon">
+                            <i class="fas fa-venus"></i>
+                        </div>
+                        <h3>Riwayat Diabetes Gestasional</h3>
+                        <p>Perempuan yang pernah mengalami diabetes selama kehamilan memiliki risiko lebih tinggi untuk
+                            mengembangkan diabetes di kemudian hari.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Form Prediksi Section -->
+        <section id="prediksi" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Periksa Risiko Diabetes Anda</h2>
+                    <p>Isikan data kesehatan dan riwayat diabetes keluarga kamu untuk mendapatkan penilaian risiko
+                        diabetes secara instan. Daripada galau mikirin risiko, mending cek sekarang!</p>
+                </div>
+
+                <div class="prediction-form">
+                    <div class="form-card">
+                        <h3>Info Kesehatan Kamu</h3>
+                        <div class="progress-bar">
+                            <div class="progress" id="formProgress"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age">Usia (tahun)</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="age" name="age" min="1" placeholder="contoh: 21" step="0.1">
+                            </div>
+                        </div>
+
+                        <div class="form-group location-selection">
+                            <label for="provinsi">Lokasi</label>
+                            <div class="input-wrapper">
+                                <select id="provinsi" name="provinsi" required>
+                                    <option value="" selected disabled>Pilih Provinsi</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group city-selection" id="citySelectionGroup" style="display: none;">
+                            <label for="kota_kabupaten">Kota/Kabupaten</label>
+                            <div class="input-wrapper">
+                                <select id="kota_kabupaten" name="kota_kabupaten" required>
+                                    <option value="" selected disabled>Pilih Kabupaten/Kota</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <form id="healthForm">
+                            <div class="form-group">
+                                <label for="pregnancies">Jumlah Kehamilan - Untuk Wanita</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="pregnancies" name="pregnancies" min="0"
+                                        placeholder="contoh: 3">
+                                    <div class="tooltip">
+                                        <i class="fas fa-question-circle"></i>
+                                        <span class="tooltip-text">Untuk perempuan aja: Masukkan jumlah total kehamilan
+                                            yang
+                                            pernah dialami. Kalau kamu pria atau belum pernah hamil, isi dengan angka
+                                            0.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="glucose">Plasma Glukosa (mg/dL) - Kadar gula darah 2 jam setelah menjalani
+                                    OGTT</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="glucose" name="glucose" min="0" placeholder="contoh: 140">
+                                    <div class="tooltip">
+                                        <i class="fas fa-question-circle"></i>
+                                        <span class="tooltip-text">Kadar gula darah kamu 2 jam setelah menjalani Tes
+                                            Toleransi Glukosa Oral (OGTT). Normalnya di bawah 140 mg/dL. Kamu bisa cek
+                                            angka
+                                            ini di hasil tes darah kamu!</span>
+                                    </div>
+                                </div>
+                                <div class="range-info">
+                                    <span>Normal: &lt;140 mg/dL</span>
+                                    <span>Pre-diabetes: 140-199 mg/dL</span>
+                                    <span>Diabetes: ≥200 mg/dL</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bloodPressure">Tekanan Darah (mmHg) - Diastolik</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="bloodPressure" name="bloodPressure" min="0"
+                                        placeholder="contoh: 80">
+                                    <div class="tooltip">
+                                        <i class="fas fa-question-circle"></i>
+                                        <span class="tooltip-text">Ini adalah tekanan darah diastolik kamu (angka bawah
+                                            dalam hasil pengukuran tekanan darah). Normalnya di kisaran 60-80 mmHg.
+                                            Kamu bisa cek angka ini di hasil pemeriksaan tekanan darah kamu.</span>
+                                    </div>
+                                </div>
+                                <div class="range-info">
+                                    <span>Normal: &lt;80 mmHg</span>
+                                    <span>Hipertensi Tahap 1: 80-89 mmHg</span>
+                                    <span>Hipertensi Tahap 2: ≥90 mmHg</span>
+                                    <span>Krisis Hipertensi: &gt;120 mmHg (darurat medis)</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Indeks Massa Tubuh</label>
+                                <div class="bmi-calculator">
+                                    <div class="bmi-inputs">
+                                        <div class="bmi-input-group">
+                                            <label for="height">Tinggi Badan</label>
+                                            <div class="input-with-unit">
+                                                <input type="number" id="height" name="height" min="0" step="0.01">
+                                                <span class="unit">cm</span>
+                                            </div>
+                                        </div>
+                                        <div class="bmi-input-group">
+                                            <label for="weight">Berat Badan</label>
+                                            <div class="input-with-unit">
+                                                <input type="number" id="weight" name="weight" min="0" step="0.1">
+                                                <span class="unit">kg</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bmi-result">
+                                        <div class="result-value">
+                                            <span id="bmiValue"></span>
+                                            <input type="hidden" id="bmi" name="bmi" value="24.2">
+                                        </div>
+                                        <div class="result-category" id="bmiCategory">Normal</div>
+                                    </div>
+                                </div>
+                                <div class="range-info">
+                                    <span>Kurus: &lt;18.5</span>
+                                    <span>Normal: 18.5-24.9</span>
+                                    <span>Berat Badan Berlebih: 25-29.9</span>
+                                    <span>Obesitas: ≥30</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="diabetesHistory">Riwayat Keluarga dengan Diabetes</label>
+                                <div class="diabetes-history-calculator">
+                                    <div class="history-options">
+                                        <!-- Parents section -->
+                                        <div class="history-section">
+                                            <h4>Orang Tua</h4>
+                                            <div class="history-option">
+                                                <input type="checkbox" id="father" name="father" value="0.5"
+                                                    onclick="calculateDPF()">
+                                                <label for="father">Ayah dengan diabetes</label>
+                                            </div>
+                                            <div class="history-option">
+                                                <input type="checkbox" id="mother" name="mother" value="0.5"
+                                                    onclick="calculateDPF()">
+                                                <label for="mother">Ibu dengan diabetes</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Siblings section -->
+                                        <div class="history-section">
+                                            <h4>Saudara Kandung</h4>
+                                            <div class="siblings-container">
+                                                <div class="counter-control">
+                                                    <button type="button" class="counter-btn" data-type="sibling"
+                                                        data-action="decrement">-</button>
+                                                    <span id="siblingCounter">0</span>
+                                                    <button type="button" class="counter-btn" data-type="sibling"
+                                                        data-action="increment">+</button>
+                                                </div>
+                                                <div class="history-label">Saudara kandung dengan diabetes</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Grandparents section -->
+                                        <div class="history-section">
+                                            <h4>Kakek & Nenek</h4>
+                                            <div class="grandparents-container">
+                                                <div class="counter-control">
+                                                    <button type="button" class="counter-btn" data-type="grandparent"
+                                                        data-action="decrement">-</button>
+                                                    <span id="grandparentCounter">0</span>
+                                                    <button type="button" class="counter-btn" data-type="grandparent"
+                                                        data-action="increment">+</button>
+                                                </div>
+                                                <div class="history-label">Kakek/Nenek dengan diabetes</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Uncles/Aunts section -->
+                                        <div class="history-section">
+                                            <h4>Paman & Bibi</h4>
+                                            <div class="relatives-container">
+                                                <div class="counter-control">
+                                                    <button type="button" class="counter-btn" data-type="relative"
+                                                        data-action="decrement">-</button>
+                                                    <span id="relativeCounter">0</span>
+                                                    <button type="button" class="counter-btn" data-type="relative"
+                                                        data-action="increment">+</button>
+                                                </div>
+                                                <div class="history-label">Paman/Bibi dengan diabetes</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="history-result">
+                                        <div class="result-label">Diabetes Pedigree Function</div>
+                                        <div class="result-value">
+                                            <span id="dpfValue">0.000</span>
+                                            <input type="hidden" id="diabetesPedigreeFunction"
+                                                name="diabetesPedigreeFunction" value="0.000">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tooltip">
+                                <i class="fas fa-question-circle"></i>
+                                <span class="tooltip-text">Nilai ini menunjukkan kecenderungan genetik kamu terhadap
+                                    diabetes berdasarkan riwayat keluarga. Semakin tinggi nilainya, semakin kuat riwayat
+                                    diabetes dalam keluargamu.</span>
+                            </div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="button" id="resetBtn" class="btn-secondary">Reset Form</button>
+                        <button type="button" id="predictBtn" class="btn-primary">Dapatkan Hasil Penilaian
+                            Diabetes</button>
+                    </div>
+                    </form>
+                </div>
+
+                <!-- Result Card -->
+                <div class="result-card" id="resultCard" style="display: none;">
+                    <div class="result-header">
+                        <h3>Hasil Prediksi Diabetes</h3>
+                        <button id="closeResultBtn" class="close-btn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="result-content">
+                        <div class="result-icon">
+                            <i id="resultIcon" class="fas fa-heart"></i>
+                        </div>
+                        <h2 id="resultTitle">Risk Level</h2>
+                        <p id="resultDescription">Description of the risk level.</p>
+
+                        <div class="risk-meter">
+                            <div class="meter-container">
+                                <div class="meter-levels">
+                                    <span>Rendah</span>
+                                    <span>Sedang</span>
+                                    <span>Tinggi</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div id="riskIndicator" class="indicator"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="key-factors">
+                            <h4>Faktor Utama:</h4>
+                            <ul id="keyFactors">
+                                <!-- Factors will be inserted by JavaScript -->
+                            </ul>
+                        </div>
+
+                        <div class="disclaimer">
+                            <p>Disclaimer: Ini hanya prediksi dan tidak menggantikan diagnosis medis profesional. Selalu
+                                konsultasikan dengan dokter untuk diagnosis dan penanganan medis.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="peta-visualisasi" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Visualisasi Data Diabetes di Indonesia</h2>
+                    <p>Peta interaktif penyebaran kasus diabetes berdasarkan provinsi dan kota</p>
+                </div>
+
+                <div class="visualisasi-container">
+                    <div class="map-container">
+                        <div id="indonesiaMap"></div>
+                        <div class="map-info">
+                            <p>Klik pada provinsi untuk melihat detail kota/kabupaten</p>
+                            <div class="legend-container">
+                                <h4 class="legend-title">Keterangan Tingkat Prevalensi Diabetes (%):</h4>
+                                <div class="legend"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container" id="chartContainer">
+                        <h3 class="province-title">Pilih provinsi untuk melihat data</h3>
+                        <div class="canvas-container">
+                            <canvas id="cityChart"></canvas>
+                        </div>
+                        <div class="chart-info">
+                            <p class="chart-desc">Menampilkan 5 kota/kabupaten dengan jumlah kasus diabetes tertinggi
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. FAQ Section -->
+        <section id="faq" class="section bg-light">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Pertanyaan yang Sering Diajukan</h2>
+                    <p>Temukan jawaban untuk pertanyaan umum seputar diabetes dan aplikasi kami</p>
+                </div>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Apa itu diabetes?</h3>
+                            <div class="faq-toggle">
+                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-minus"></i>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Diabetes adalah kondisi kronis dimana tubuh tidak dapat memproduksi insulin dalam jumlah
+                                yang cukup atau tidak dapat menggunakan insulin dengan efektif. Ini menyebabkan kadar
+                                gula dalam darah menjadi terlalu tinggi, yang dapat menyebabkan berbagai komplikasi
+                                kesehatan jika tidak dikelola dengan baik.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Apa perbedaan antara diabetes tipe 1 dan tipe 2?</h3>
+                            <div class="faq-toggle">
+                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-minus"></i>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Diabetes tipe 1 adalah kondisi autoimun di mana pankreas tidak dapat memproduksi insulin
+                                sama sekali. Biasanya muncul sejak masa kanak-kanak atau remaja dan memerlukan suntikan
+                                insulin seumur hidup.</p>
+                            <p>Diabetes tipe 2 terjadi ketika tubuh menjadi resisten terhadap insulin atau pankreas
+                                tidak memproduksi insulin yang cukup. Ini sering dikaitkan dengan gaya hidup dan dapat
+                                dikelola dengan diet, olahraga, dan obat-obatan.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Seberapa akurat aplikasi DiabetesCheck?</h3>
+                            <div class="faq-toggle">
+                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-minus"></i>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>DiabetesCheck memiliki tingkat akurasi sekitar 98% berdasarkan data pengujian kami.
+                                Aplikasi ini menggunakan algoritma machine learning yang telah dilatih menggunakan
+                                dataset besar kasus diabetes. Namun, hasil prediksi tidak boleh menggantikan diagnosis
+                                medis dari dokter.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Apakah saya perlu melakukan tes laboratorium untuk menggunakan aplikasi ini?</h3>
+                            <div class="faq-toggle">
+                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-minus"></i>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Untuk hasil yang paling akurat, sebaiknya Anda memasukkan data dari hasil tes
+                                laboratorium seperti kadar glukosa darah dan tekanan darah. Namun, Anda tetap bisa
+                                menggunakan aplikasi ini dengan perkiraan nilai terbaik jika Anda tidak memiliki data
+                                tes tersebut.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Bagaimana cara mengurangi risiko diabetes?</h3>
+                            <div class="faq-toggle">
+                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-minus"></i>
+                            </div>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Beberapa cara untuk mengurangi risiko diabetes tipe 2:</p>
+                            <ul>
+                                <li>Menjaga berat badan ideal</li>
+                                <li>Melakukan aktivitas fisik secara teratur</li>
+                                <li>Makan makanan sehat dan seimbang</li>
+                                <li>Membatasi konsumsi gula dan karbohidrat olahan</li>
+                                <li>Rutin melakukan pemeriksaan kesehatan</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="#beranda">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>DiabetesCheck</span>
+                    </a>
+                    <p>Aplikasi prediksi risiko diabetes berbasis machine learning dengan akurasi tinggi.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h3>Tautan Cepat</h3>
+                    <ul>
+                        <li><a href="#beranda">Beranda</a></li>
+                        <li><a href="#tentang-aplikasi">Tentang Aplikasi</a></li>
+                        <li><a href="#faktor-risiko">Faktor Risiko</a></li>
+                        <li><a href="#prediksi">Prediksi</a></li>
+                        <li><a href="#peta-visualisasi">Peta</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h3>Hubungi Kami</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div class="contact-details">
+                                <span class="contact-label">Email</span>
+                                <a href="razi:info@diabetescheck.com">info@diabetescheck.com</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <div class="contact-details">
+                                <span class="contact-label">WhatsApp</span>
+                                <a href="https://wa.me/6288213234511" target="_blank">+62 812-3456-7890</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="contact-details">
+                                <span class="contact-label">Lokasi</span>
+                                <span>Bandung, Jawa Barat, Indonesia</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-social">
+                    <h3>Ikuti Kami</h3>
+                    <div class="social-icons">
+                        <a href="https://web.facebook.com/ahmedfahru.arrazi/" target="_blank" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://x.com/r4z100" target="_blank" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/fahru.ar.razi/" target="_blank" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/muhamadfahrurrozi/" target="_blank" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="vendor/leaflet/leaflet.js"></script>
+    <!-- Custom JS -->
+    <script src="js/homepage.js"></script>
+    <script src="js/visualisasi.js"></script>
+</body>
+
+</html>

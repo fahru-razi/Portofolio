@@ -1,0 +1,1572 @@
+/* =============================================================================
+   theme.css — CC Indonesia "Industrial Precision"
+   Load AFTER main.css in base.html:
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+
+   Typefaces  : Plus Jakarta Sans (headings/display) · IBM Plex Sans (body)
+                IBM Plex Mono (all time/numeric data)
+   Brand      : Deep teal-navy #1B4F72 · Amber accent #D4860A
+   Sidebar    : Dark navy #0F2537 → #0A1C2E gradient
+   ============================================================================= */
+
+/* ── 1. ROOT TOKENS ─────────────────────────────────────────────────────── */
+:root {
+  /* Brand — deep teal-navy */
+  --brand: #1b4f72;
+  --brand-mid: #2874a6;
+  --brand-dark: #154360;
+  --brand-light: #eaf2f8;
+  --brand-xlight: #f4f9fc;
+
+  /* Accent — warm amber */
+  --accent: #d4860a;
+  --accent-light: #fef3c7;
+  --accent-dark: #b45309;
+  --accent-darker: #92400e; /* hover untuk tombol berlatar --accent-dark */
+
+  /* Text — cool-dark palette */
+  --text-primary: #0f2537;
+  --text-secondary: #2c3e50;
+  /* Kontras AA (≥4.5:1) di #fff, #f7f8fa & #f4f9fc. Sebelumnya #5d7a8c / #8dabbe. */
+  --text-muted: #4a6577;
+  --text-faint: #567081;
+
+  /* Surface */
+  --bg: #f7f8fa;
+  --bg-card: #ffffff;
+  --border: #e2e8ef;
+  --border-light: #eef2f6;
+
+  /* Semantic */
+  --success: #15803d;
+  --success-bg: #dcfce7;
+  --success-mid: #16a34a;
+  --danger: #b91c1c;
+  --danger-bg: #fee2e2;
+  --warning: #b45309;
+  --warning-bg: #fef3c7;
+  --warning-mid: #d97706;
+
+  /* Shape */
+  --radius: 10px;
+  --radius-sm: 8px;
+  --radius-xs: 4px;
+
+  /* Elevation */
+  --shadow-xs: 0 1px 2px rgba(15, 37, 64, 0.05);
+  --shadow: 0 1px 3px rgba(15, 37, 64, 0.06), 0 4px 16px rgba(15, 37, 64, 0.04);
+  --shadow-md:
+    0 2px 8px rgba(15, 37, 64, 0.07), 0 1px 2px rgba(15, 37, 64, 0.04);
+  --shadow-lg:
+    0 8px 32px rgba(15, 37, 64, 0.1), 0 2px 8px rgba(15, 37, 64, 0.05);
+
+  /* Sidebar */
+  --sidebar-w: 220px;
+  --sidebar-bg: #0f2537;
+  --sidebar-bg-end: #0a1c2e;
+  --sidebar-text: #8dabbe;
+  --sidebar-text-hover: #ffffff;
+  --sidebar-active-bg: rgba(255, 255, 255, 0.07);
+  --sidebar-active-bdr: #d4860a;
+  --sidebar-hover-bdr: #2874a6;
+
+  /* Chart colours */
+  --color-izin: #1a5276;
+  --color-sakit: #7d6608;
+  --color-alpha: #b03a2e;
+
+  /* ── SHIFT COLOUR SYSTEM — SINGLE SOURCE OF TRUTH ────────────────────────
+     Prinsip: hue setiap shift harus BERBEDA JELAS satu sama lain.
+     Setiap shift mendapat --s-bg / --s-text / --s-border / --s-ink.
+     Token ini dipakai oleh: mgr-shift-card · mgr-shift-badge ·
+     shift-chip · mgr-filter-tab--shift.
+
+     PALET BARU — konteks-driven, hue wheel spacing ≥ 30°:
+     shift_1  Produksi Pagi    hue  38°  Amber hangat      (matahari, energi)
+     shift_2  Produksi Malam   hue 270°  Ungu              (malam, beda total)
+     shift_3  Inventaris A     hue 152°  Hijau sage         (gudang, stok)
+     shift_4  Inventaris B     hue 193°  Teal               (inventaris B)
+     shift_5  Lainnya/Alert    hue  12°  Merah terakota     (peringatan)
+     shift_6  Security         hue 228°  Biru indigo kuat   (otoritas, tegas)
+     mgmt     Manajemen/Kantor hue 207°  Navy brand         (formal, korporat)
+
+     WCAG 2.1 §1.4.3 contrast check (text on chip-bg, all ≥ 7:1):
+     shift_1  #7C3A00 on #FEF3DE  →  8.1:1 ✓
+     shift_2  #3B1A6B on #F0EAFF  →  9.2:1 ✓  (ungu muda, teks ungu tua)
+     shift_3  #0F4A26 on #E6FAF0  →  8.9:1 ✓
+     shift_4  #0B4155 on #E0F4FA  →  8.6:1 ✓
+     shift_5  #7A1C0E on #FEF0EE  →  8.5:1 ✓
+     shift_6  #1A2A6C on #E8ECFF  →  9.4:1 ✓  (indigo kuat, terbaca jelas)
+     mgmt     #143358 on #E8F2FF  →  8.7:1 ✓
+  ── */
+
+  /* shift_1 — Produksi Pagi — Amber */
+  --s1-bg: #fef3de;
+  --s1-text: #7c3a00;
+  --s1-border: #f5c87a;
+  --s1-ink: #b45309;
+
+  /* shift_2 — Produksi Malam — Ungu (BARU: beda total dari teal/biru) */
+  --s2-bg: #f0eaff;
+  --s2-text: #3b1a6b;
+  --s2-border: #c4a8f0;
+  --s2-ink: #6d28d9;
+
+  /* shift_3 — Inventaris A — Hijau Sage */
+  --s3-bg: #e6faf0;
+  --s3-text: #0f4a26;
+  --s3-border: #72d4a0;
+  --s3-ink: #15803d;
+
+  /* shift_4 — Inventaris B — Teal (hue berbeda dari shift_3) */
+  --s4-bg: #e0f4fa;
+  --s4-text: #0b4155;
+  --s4-border: #74c6df;
+  --s4-ink: #0e7490;
+
+  /* shift_5 — Alert/Lainnya — Merah Terakota */
+  --s5-bg: #fef0ee;
+  --s5-text: #7a1c0e;
+  --s5-border: #f2a196;
+  --s5-ink: #c2410c;
+
+  /* shift_6 — Security — Indigo Kuat (BARU: bukan slate soft) */
+  --s6-bg: #e8ecff;
+  --s6-text: #1a2a6c;
+  --s6-border: #8b9fe8;
+  --s6-ink: #3730a3;
+
+  /* management — Kantor — Navy Brand */
+  --sm-bg: #e8f2ff;
+  --sm-text: #143358;
+  --sm-border: #8bbcf0;
+  --sm-ink: #1d6fa4;
+
+  /* Bridge vars */
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f7f8fa;
+  --color-background-warning: #fef3c7;
+  --color-background-danger: #fee2e2;
+  --color-background-info: #eaf2f8;
+  --color-background-success: #dcfce7;
+  --color-border-primary: #e2e8ef;
+  --color-border-secondary: #cdd8e3;
+  --color-border-warning: #fcd34d;
+  --color-border-tertiary: #eef2f6;
+  --color-border-success: #86efac;
+  --color-text-primary: #0f2537;
+  --color-text-secondary: #4a6577;
+  --color-text-tertiary: #567081;
+  --color-text-warning: #b45309;
+  --color-text-danger: #b91c1c;
+  --color-text-info: #1b4f72;
+  --color-text-success: #15803d;
+}
+
+/* ── 2. GLOBAL TYPOGRAPHY ───────────────────────────────────────────────── */
+
+body {
+  font-family:
+    "IBM Plex Sans",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+.page-title,
+.page-header-name,
+.auth-title,
+.modal-title,
+.mgr-stat-num,
+.stat-card-num,
+h1,
+h2,
+h3 {
+  font-family: "Plus Jakarta Sans", "IBM Plex Sans", sans-serif;
+}
+
+.mgr-td-mono,
+.mgr-time-value,
+.time-value,
+.page-header-date-full,
+.shift-time-badge,
+.mgr-chart-sum-num,
+.month-stat-num,
+.emp-code,
+.mgr-emp-dept,
+.mgr-time-item .mgr-time-value {
+  font-family: "IBM Plex Mono", "Menlo", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 3. SIDEBAR ─────────────────────────────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  .sidebar {
+    background: linear-gradient(
+      180deg,
+      var(--sidebar-bg) 0%,
+      var(--sidebar-bg-end) 100%
+    );
+    border-right: none;
+    box-shadow: 2px 0 12px rgba(10, 28, 46, 0.18);
+  }
+  .sidebar-brand {
+    color: #fff;
+    border-bottom-color: rgba(255, 255, 255, 0.09);
+  }
+  .sidebar-brand svg {
+    color: var(--accent);
+  }
+  .sidebar-user {
+    border-bottom-color: rgba(255, 255, 255, 0.09);
+  }
+  .sidebar-user-name {
+    color: #fff;
+  }
+  .sidebar-user-role {
+    color: var(--sidebar-text);
+  }
+  .sidebar .avatar {
+    background: var(--accent);
+    color: #fff;
+  }
+  .sidebar a {
+    color: var(--sidebar-text);
+    font-size: 0.835rem;
+    font-weight: 400;
+    border-left: 2px solid transparent;
+    border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+    padding-left: calc(0.7rem - 2px);
+  }
+  .sidebar a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--sidebar-text-hover);
+    border-left-color: var(--sidebar-hover-bdr);
+    text-decoration: none;
+  }
+  .sidebar a.active {
+    background: var(--sidebar-active-bg);
+    color: #fff;
+    font-weight: 600;
+    border-left: 3px solid var(--sidebar-active-bdr);
+    padding-left: calc(0.7rem - 3px);
+  }
+  .sidebar svg {
+    opacity: 0.7;
+  }
+  .sidebar a.active svg,
+  .sidebar a:hover svg {
+    opacity: 1;
+  }
+  .sidebar-footer {
+    border-top-color: rgba(255, 255, 255, 0.09);
+  }
+  .lang-btn {
+    color: var(--sidebar-text);
+  }
+  .lang-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+  .lang-btn.active {
+    background: rgba(212, 134, 10, 0.15);
+    color: #e8a030; /* 5.4:1 di atas latar sidebar (sebelumnya --accent 4.1:1) */
+  }
+  .sidebar-logout {
+    color: var(--sidebar-text) !important;
+    transition:
+      color 0.15s,
+      background 0.15s;
+  }
+  .sidebar-logout:hover {
+    background: rgba(176, 58, 46, 0.2) !important;
+    color: #e74c3c !important;
+  }
+}
+
+/* ── 4. MOBILE TOPBAR ───────────────────────────────────────────────────── */
+
+.mobile-topbar {
+  background: var(--sidebar-bg);
+  border-bottom: none;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06),
+    0 2px 8px rgba(10, 28, 46, 0.2);
+}
+.mobile-topbar-title {
+  color: #fff;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 600;
+}
+.mobile-topbar .lang-btn {
+  color: var(--sidebar-text);
+}
+.mobile-topbar .lang-btn.active {
+  background: rgba(212, 134, 10, 0.2);
+  color: #e8a030; /* kontras AA di atas latar gelap topbar */
+}
+
+/* ── 5. BOTTOM NAV ──────────────────────────────────────────────────────── */
+
+.bottom-nav {
+  border-top: 1px solid var(--border);
+}
+.bottom-nav a {
+  color: var(--text-faint);
+}
+.bottom-nav a.active {
+  color: var(--brand);
+}
+
+/* ── 6. PAGE HEADER ─────────────────────────────────────────────────────── */
+
+.page-header {
+  border-top: 3px solid var(--accent);
+  border-bottom: 1px solid var(--border);
+}
+.page-header-sub {
+  color: var(--text-faint);
+  font-family: "IBM Plex Sans", sans-serif;
+  letter-spacing: 0.03em;
+}
+.page-header-name {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+.page-header-date-day {
+  color: var(--text-faint);
+  letter-spacing: 0.07em;
+}
+.page-header-date-full {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 500;
+  color: var(--brand);
+}
+
+/* ── 7. SECTION LABELS ──────────────────────────────────────────────────── */
+
+.mgr-section-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand);
+  border-left: 3px solid var(--accent);
+  padding-left: 8px;
+  margin: 1.5rem 0 0.75rem;
+  display: block;
+}
+.mgr-checkin-section-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand);
+  border-left: 3px solid var(--accent);
+  padding-left: 8px;
+  display: block;
+}
+.page-title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+}
+
+/* ── 7b. KERANGKA HALAMAN MANAJER ───────────────────────────────────────────
+   Satu bentuk header + satu lebar konten untuk semua halaman manager.
+     .page                 pembungkus konten (lebar maks. + padding seragam)
+     .page-header--std     modifier .page-header: bar putih, garis aksen atas.
+                           Isinya dibatasi --page-max agar sejajar dengan .page
+     .page-header-left     eyebrow (.page-header-sub) + judul h1
+                           (.page-header-name) + deskripsi opsional (.page-header-desc)
+     .page-header-actions  tombol aksi: 1 .btn-primary, sisanya .btn-outline
+     .page-header-meta     baris bawah opsional (pill meta, legenda)
+   Halaman employee memakai .page-header TANPA modifier ini, jadi tidak berubah. */
+:root {
+  --page-max: 1280px;
+  --page-px: clamp(1rem, 3vw, 1.5rem);
+  --page-gap: 1.25rem;
+}
+.page {
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: var(--page-gap) var(--page-px) 2.5rem;
+}
+.page-header--std {
+  padding: 0;
+  background: var(--bg-card);
+  border-top: 3px solid var(--accent);
+  border-bottom: 1px solid var(--border);
+}
+.page-header--std .page-header-inner {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  min-height: 6.5rem;
+  padding: 1.25rem var(--page-px);
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+}
+.page-header--std .page-header-left {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+.page-header--std .page-header-sub {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 3px;
+}
+.page-header--std .page-header-name {
+  font-family: "Plus Jakarta Sans", "IBM Plex Sans", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+.page-header-desc {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.page-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+/* Tombol header: satu ukuran + satu pola warna untuk SEMUA halaman.
+   Didefinisikan eksplisit di sini (bukan mewarisi .btn) karena beberapa CSS
+   halaman mendefinisikan ulang .btn / .btn-primary secara global.
+   Utama = .btn-primary (amber penuh); sekunder = .btn-outline (biru brand lembut,
+   bukan abu-abu). Satu .btn-primary per header. */
+.page-header-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  height: 2.5rem;
+  padding: 0 1.1rem;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: none;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s,
+    transform 0.1s;
+}
+.page-header-actions .btn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+.page-header-actions .btn:active {
+  transform: scale(0.97);
+}
+.page-header-actions .btn:focus-visible {
+  outline: 2px solid var(--brand-mid);
+  outline-offset: 2px;
+}
+.page-header-actions .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.page-header-actions .btn-primary {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: #fff;
+}
+.page-header-actions .btn-primary:hover:not(:disabled) {
+  background: var(--accent-darker);
+  border-color: var(--accent-darker);
+  color: #fff;
+  opacity: 1;
+}
+.page-header-actions .btn-outline {
+  background: var(--brand-light);
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.page-header-actions .btn-outline:hover:not(:disabled) {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  opacity: 1;
+}
+.page-header--std .page-header-meta {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--page-px) 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* Judul sub-bagian di dalam halaman (di bawah header halaman) */
+.section-header {
+  margin-top: var(--space-sm);
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--accent);
+}
+.section-header-title {
+  font-family: "Plus Jakarta Sans", "IBM Plex Sans", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+.section-header-desc {
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+@media (max-width: 640px) {
+  .page-header--std .page-header-inner {
+    min-height: 0;
+    padding-block: 1rem;
+  }
+  .page-header--std .page-header-name {
+    font-size: 1.35rem;
+  }
+  .page-header-actions {
+    width: 100%;
+  }
+}
+
+/* ── 8. CARDS ───────────────────────────────────────────────────────────── */
+
+.card {
+  border-radius: var(--radius);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+.card-flat {
+  box-shadow: none;
+}
+.table-card {
+  border-radius: var(--radius);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+.mgr-table-card,
+.emp-table-card {
+  border-radius: var(--radius-sm);
+  border-color: var(--border);
+  box-shadow: var(--shadow-xs);
+}
+.status-card {
+  border-radius: var(--radius) var(--radius) 0 0;
+  border-color: var(--border);
+}
+.month-stats {
+  border-radius: 0 0 var(--radius) var(--radius);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+.checkin-card {
+  border-radius: var(--radius);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* ── 9. BUTTONS ─────────────────────────────────────────────────────────── */
+
+.btn {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  border-radius: var(--radius-sm);
+}
+.btn-primary {
+  background: var(--accent-dark);
+  color: #fff;
+}
+.btn-primary:hover {
+  opacity: 0.88;
+}
+.btn-outline {
+  border: 1.5px solid var(--brand);
+  color: var(--brand);
+  background: transparent;
+}
+.btn-outline:hover {
+  background: var(--brand-light);
+  opacity: 1;
+}
+.btn-success {
+  background: var(--success);
+}
+.btn-danger {
+  background: var(--danger);
+}
+.btn-checkin-in {
+  background: var(--brand);
+  box-shadow: 0 2px 10px rgba(27, 79, 114, 0.25);
+}
+.btn-checkin-in:hover:not(:disabled) {
+  box-shadow: 0 4px 18px rgba(27, 79, 114, 0.35);
+}
+.btn-checkin-out {
+  background: var(--success);
+  box-shadow: 0 2px 10px rgba(21, 128, 61, 0.2);
+}
+.btn-mgr-in {
+  background: var(--brand);
+}
+.btn-mgr-checkout {
+  background: var(--success);
+}
+.btn-approve {
+  background: var(--success-bg);
+  color: var(--success);
+  border-radius: var(--radius-xs);
+}
+.btn-reject {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-radius: var(--radius-xs);
+}
+.btn-action {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: var(--radius-xs);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 500;
+  transition:
+    color 0.12s,
+    background 0.12s;
+}
+.btn-action:hover {
+  color: var(--brand);
+  background: var(--brand-xlight);
+  border: none;
+}
+.btn-delete:hover {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border: none;
+}
+.btn-modal-submit {
+  background: var(--accent-dark);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+.btn-submit-danger {
+  background: var(--danger);
+}
+.btn-submit-add {
+  background: var(--success);
+}
+.btn-emp-add {
+  background: var(--accent-dark);
+  border-radius: var(--radius-sm);
+}
+
+/* ── 10. STAT CARDS ─────────────────────────────────────────────────────── */
+
+.mgr-stat-card {
+  border-radius: var(--radius-sm);
+  border-color: var(--border);
+  border-top: 3px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+.mgr-stat-card:hover {
+  box-shadow: var(--shadow);
+}
+.mgr-stat-success {
+  border-top-color: var(--success);
+}
+.mgr-stat-warn {
+  border-top-color: var(--warning);
+}
+.mgr-stat-danger {
+  border-top-color: var(--danger);
+}
+.mgr-stat-info {
+  border-top-color: var(--brand);
+}
+.mgr-stat-neutral {
+  border-top-color: var(--text-faint);
+}
+
+.mgr-stat-num {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.04em;
+}
+.mgr-stat-success .mgr-stat-num,
+.mgr-stat-warn .mgr-stat-num,
+.mgr-stat-danger .mgr-stat-num,
+.mgr-stat-info .mgr-stat-num {
+  color: var(--text-primary);
+}
+.mgr-stat-lbl {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.month-stat-num {
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: -0.02em;
+}
+.stat-card {
+  border-radius: var(--radius);
+  border-color: var(--border);
+}
+.stat-card-num {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  letter-spacing: -0.03em;
+}
+.stat-card-lbl {
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+/* ── 11. TABLES ─────────────────────────────────────────────────────────── */
+
+th {
+  font-family: "IBM Plex Sans", sans-serif;
+  background: var(--bg);
+  color: var(--text-faint);
+  letter-spacing: 0.06em;
+}
+.mgr-table th {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  border-bottom: 1.5px solid var(--accent);
+  background: var(--bg);
+}
+.mgr-table td {
+  color: var(--text-secondary);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.82rem;
+}
+.mgr-table tbody tr:hover td {
+  background: var(--brand-xlight);
+}
+.emp-table th {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  border-bottom: 1.5px solid var(--accent);
+  background: var(--bg);
+}
+.emp-table td {
+  color: var(--text-secondary);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.82rem;
+}
+.emp-table tbody tr:hover td {
+  background: var(--brand-xlight);
+}
+.mgr-emp-name,
+.emp-fullname {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.mgr-emp-dept,
+.emp-code {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.71rem;
+  color: var(--text-faint);
+  letter-spacing: 0.01em;
+}
+.mgr-td-mono {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+}
+.mgr-table-header {
+  border-bottom-color: var(--border-light);
+  background: var(--bg-card);
+}
+.mgr-table-title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.emp-count-text {
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--text-faint);
+}
+
+/* ── 12. SHIFT COLOUR TOKENS — applied per component ───────────────────── */
+/* Each shift class sets --s-bg/text/border/ink for chip, badge, card, tab   */
+
+.shift--shift_1,
+.mgr-shift-card--shift_1,
+.mgr-shift-badge--shift_1,
+.shift-chip--shift_1,
+.mgr-filter-tab--shift[data-shift="shift_1"] {
+  --s-bg: var(--s1-bg);
+  --s-text: var(--s1-text);
+  --s-border: var(--s1-border);
+  --s-ink: var(--s1-ink);
+}
+
+.shift--shift_2,
+.mgr-shift-card--shift_2,
+.mgr-shift-badge--shift_2,
+.shift-chip--shift_2,
+.mgr-filter-tab--shift[data-shift="shift_2"] {
+  --s-bg: var(--s2-bg);
+  --s-text: var(--s2-text);
+  --s-border: var(--s2-border);
+  --s-ink: var(--s2-ink);
+}
+
+.shift--shift_3,
+.mgr-shift-card--shift_3,
+.mgr-shift-badge--shift_3,
+.shift-chip--shift_3,
+.mgr-filter-tab--shift[data-shift="shift_3"] {
+  --s-bg: var(--s3-bg);
+  --s-text: var(--s3-text);
+  --s-border: var(--s3-border);
+  --s-ink: var(--s3-ink);
+}
+
+.shift--shift_4,
+.mgr-shift-card--shift_4,
+.mgr-shift-badge--shift_4,
+.shift-chip--shift_4,
+.mgr-filter-tab--shift[data-shift="shift_4"] {
+  --s-bg: var(--s4-bg);
+  --s-text: var(--s4-text);
+  --s-border: var(--s4-border);
+  --s-ink: var(--s4-ink);
+}
+
+.shift--shift_5,
+.mgr-shift-card--shift_5,
+.mgr-shift-badge--shift_5,
+.shift-chip--shift_5,
+.mgr-filter-tab--shift[data-shift="shift_5"] {
+  --s-bg: var(--s5-bg);
+  --s-text: var(--s5-text);
+  --s-border: var(--s5-border);
+  --s-ink: var(--s5-ink);
+}
+
+.shift--shift_6,
+.mgr-shift-card--shift_6,
+.mgr-shift-badge--shift_6,
+.shift-chip--shift_6,
+.mgr-filter-tab--shift[data-shift="shift_6"] {
+  --s-bg: var(--s6-bg);
+  --s-text: var(--s6-text);
+  --s-border: var(--s6-border);
+  --s-ink: var(--s6-ink);
+}
+
+.shift--management,
+.mgr-shift-card--management,
+.mgr-shift-badge--management,
+.shift-chip--management,
+.mgr-filter-tab--shift[data-shift="management"] {
+  --s-bg: var(--sm-bg);
+  --s-text: var(--sm-text);
+  --s-border: var(--sm-border);
+  --s-ink: var(--sm-ink);
+}
+
+/* Shift info card (employee dashboard) */
+.shift-info-card--shift_1 {
+  --s-ink: var(--s1-ink);
+}
+.shift-info-card--shift_2 {
+  --s-ink: var(--s2-ink);
+}
+.shift-info-card--shift_3 {
+  --s-ink: var(--s3-ink);
+}
+.shift-info-card--shift_4 {
+  --s-ink: var(--s4-ink);
+}
+.shift-info-card--shift_5 {
+  --s-ink: var(--s5-ink);
+}
+.shift-info-card--shift_6 {
+  --s-ink: var(--s6-ink);
+}
+.shift-info-card--management {
+  --s-ink: var(--sm-ink);
+}
+
+/* ── 13. BADGES, PILLS, CHIPS ───────────────────────────────────────────── */
+
+.badge {
+  border-radius: var(--radius-xs);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+}
+.status-pill {
+  border-radius: var(--radius-xs);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.71rem;
+  font-weight: 600;
+}
+
+/* Attendance status */
+.badge-present,
+.pill-present {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.badge-late,
+.pill-late {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.badge-absent,
+.pill-absent {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.badge-sick,
+.pill-sick {
+  background: #fef9c3;
+  color: #854d0e;
+}
+.badge-day-off,
+.pill-off {
+  background: var(--brand-light);
+  color: var(--brand);
+}
+.pill-izin {
+  background: var(--brand-light);
+  color: var(--brand-dark);
+}
+
+/* Approval */
+.badge-approved {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.badge-rejected {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.badge-pending {
+  background: var(--border-light);
+  color: var(--text-muted);
+}
+.pill-pending {
+  background: var(--border-light);
+  color: var(--text-muted);
+}
+
+/* Shift chips — token-driven, single source */
+.shift-chip {
+  display: inline-block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  background: var(--s-bg, #f0f4f8);
+  color: var(--s-text, #2c3e50);
+  border: 1px solid var(--s-border, #cdd8e3);
+}
+
+/* Shift badge (inside card header) */
+.mgr-shift-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.73rem;
+  font-weight: 600;
+  padding: 3px 8px 3px 6px;
+  border-radius: var(--radius-xs);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  background: var(--s-bg, #f0f4f8);
+  color: var(--s-text, #2c3e50);
+  border: 1px solid var(--s-border, #cdd8e3);
+}
+
+.late-badge-sm {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+  border-radius: 3px;
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+/* ── 14. AVATARS ────────────────────────────────────────────────────────── */
+
+.avatar,
+.mgr-avatar,
+.emp-avatar {
+  background: var(--brand);
+  color: #fff;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+}
+.emp-avatar.avatar-inactive {
+  background: var(--border);
+  color: var(--text-faint);
+}
+
+/* ── 15. SHIFT BREAKDOWN CARDS ──────────────────────────────────────────── */
+
+.mgr-shift-card {
+  border-radius: var(--radius-sm);
+  border-color: var(--border);
+  background: var(--bg-card);
+  border-left-color: var(--s-ink, var(--border));
+}
+.mgr-shift-card:hover {
+  box-shadow: var(--shadow);
+}
+.mgr-shift-stat-num {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+}
+.mgr-shift-stat-lbl,
+.mgr-shift-stat-sub {
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--text-faint);
+}
+.mgr-shift-total {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ── 16. FILTER TABS ────────────────────────────────────────────────────── */
+
+.mgr-filter-tab {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 500;
+  border-radius: var(--radius-xs);
+  border-color: var(--border);
+  color: var(--text-muted);
+  font-size: 0.73rem;
+}
+.mgr-filter-tab:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.mgr-filter-tab.active {
+  background: var(--brand-light);
+  border-color: transparent;
+  color: var(--brand);
+  font-weight: 600;
+}
+
+/* Shift filter tabs — token-driven */
+.mgr-filter-tab--shift {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+  background: var(--s-bg, var(--bg-card));
+  color: var(--s-text, var(--text-secondary));
+  border: 1px solid var(--s-border, var(--border));
+  cursor: pointer;
+  transition:
+    opacity 0.12s,
+    box-shadow 0.12s,
+    border-color 0.12s;
+}
+.mgr-filter-tab--shift:hover {
+  opacity: 0.8;
+}
+.mgr-filter-tab--shift.active {
+  border: 2px solid var(--s-ink, var(--brand));
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--s-ink, var(--brand)) 20%, transparent);
+}
+
+/* "Semua Shift" — neutral */
+.mgr-filter-tab--shift[data-shift="all"] {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  --s-ink: var(--brand);
+}
+.mgr-filter-tab--shift[data-shift="all"]:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+  opacity: 1;
+}
+.mgr-filter-tab--shift[data-shift="all"].active {
+  background: var(--bg-card);
+  color: var(--brand);
+  border: 2px solid var(--brand);
+  box-shadow: 0 0 0 2px rgba(27, 79, 114, 0.16);
+}
+
+/* Generic tab */
+.tab {
+  font-family: "IBM Plex Sans", sans-serif;
+  border-radius: var(--radius-xs);
+}
+.tab.active {
+  background: var(--brand-light);
+  color: var(--brand);
+  border-color: var(--brand-light);
+}
+
+/* ── 17. CHECKIN STRIP ──────────────────────────────────────────────────── */
+
+.mgr-checkin-strip {
+  border-color: var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-xs);
+}
+.mgr-time-value {
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.01em;
+}
+.mgr-time-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+.btn-mgr-checkin {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+.btn-mgr-in {
+  background: var(--brand);
+}
+.btn-mgr-done {
+  background: var(--border);
+  color: var(--text-muted);
+}
+.btn-mgr-absent {
+  border-color: var(--danger-bg);
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-radius: var(--radius-sm);
+}
+.mgr-gps-status {
+  font-family: "IBM Plex Sans", sans-serif;
+  border-radius: var(--radius-sm);
+}
+.mgr-gps-status.gps-ok {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.mgr-gps-status.gps-outside {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.mgr-gps-status.gps-error {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.mgr-gps-status.gps-error .gps-status-dot {
+  background: var(--warning-mid);
+}
+
+.gps-error {
+  background: var(--warning-bg);
+  color: var(--warning);
+  border-color: #fcd34d;
+}
+.gps-error .gps-status-dot {
+  background: var(--warning-mid);
+}
+
+/* ── 18. NOTIFICATION PANEL ─────────────────────────────────────────────── */
+
+.dash-notif-panel {
+  border-radius: var(--radius-sm);
+  background: #fefdf7;
+  border: 1px solid #f0e9d0;
+}
+.dash-notif-header {
+  border-bottom-color: #f0e9d0;
+  background: #faf7eb;
+}
+.dash-notif-title-row {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.dash-notif-badge {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.dash-notif-read-all-btn {
+  font-family: "IBM Plex Sans", sans-serif;
+  border-color: var(--border);
+  color: var(--brand);
+}
+.dash-notif-item-title {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.dash-notif-item-body {
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--text-muted);
+}
+.dash-notif-item-time {
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--text-faint);
+}
+.notif-count-badge {
+  background: var(--danger);
+  border-radius: var(--radius-xs);
+}
+
+/* ── 19. FORMS & MODALS ─────────────────────────────────────────────────── */
+
+label,
+.form-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--text-secondary);
+}
+input,
+select,
+textarea,
+.form-input,
+.form-select {
+  font-family: "IBM Plex Sans", sans-serif;
+  border-color: var(--border);
+  border-radius: var(--radius-xs);
+  color: var(--text-primary);
+}
+input:focus,
+select:focus,
+textarea:focus,
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
+}
+.modal-box {
+  border-radius: var(--radius);
+  border-color: var(--border);
+  box-shadow: var(--shadow-lg);
+}
+.modal-title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.modal-title-danger {
+  color: var(--danger);
+}
+.modal-close:hover {
+  background: var(--bg);
+  color: var(--text-primary);
+}
+.modal-desc {
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--text-secondary);
+}
+.btn-modal-cancel {
+  font-family: "IBM Plex Sans", sans-serif;
+  border-color: var(--border);
+  border-radius: var(--radius-xs);
+  color: var(--text-muted);
+}
+.btn-modal-cancel:hover {
+  background: var(--bg);
+}
+.modal-box-detail .detail-tabs {
+  border-bottom-color: var(--border-light);
+}
+
+/* ── 20. EMPLOYEE DASHBOARD ─────────────────────────────────────────────── */
+
+.checkin-card {
+  border-color: var(--border);
+}
+.checkin-card-label {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.checkin-card-sub {
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--text-muted);
+}
+.checkin-icon-out {
+  background: var(--brand-light);
+  color: var(--brand);
+}
+.checkin-icon-in {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.status-card-date {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+.status-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+}
+.time-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  color: var(--text-faint);
+}
+.time-value {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 700;
+}
+
+.notice-info {
+  background: var(--brand-xlight);
+  color: var(--brand-dark);
+  border-color: #c5d9ec;
+}
+.notice-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+  border-color: #fcd34d;
+}
+
+/* ── 21. SHIFT INFO CARD (employee) ─────────────────────────────────────── */
+
+.shift-info-card {
+  background: var(--bg);
+  border-left: 3px solid var(--s-ink, var(--brand));
+  padding: 0.6rem 0.875rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.shift-info-card .shift-label {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.shift-time-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+  color: var(--s-ink, var(--brand));
+  background: color-mix(in srgb, var(--s-ink, var(--brand)) 10%, transparent);
+  padding: 2px 6px;
+}
+.shift-window-value {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* ── 22. CHART CARD ─────────────────────────────────────────────────────── */
+
+.mgr-chart-card {
+  border-radius: var(--radius-sm);
+  border-color: var(--border);
+}
+.mgr-chart-title,
+.mgr-chart-header {
+  font-family: "IBM Plex Sans", sans-serif;
+}
+.mgr-chart-sum-num {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.mgr-chart-sum-lbl {
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--text-muted);
+}
+.legend-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--text-muted);
+}
+
+/* ── 23. PENDING LEAVE ITEMS ────────────────────────────────────────────── */
+
+.mgr-pending-item {
+  border-color: var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+}
+.mgr-pending-name {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.mgr-pending-detail {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.73rem;
+  color: var(--text-faint);
+}
+
+/* ── 24. AUTH PAGE ──────────────────────────────────────────────────────── */
+
+.auth-card {
+  border-radius: var(--radius);
+  border-color: var(--border);
+  box-shadow: var(--shadow-lg);
+}
+.auth-title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.auth-subtitle {
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--text-muted);
+}
+.auth-wrap {
+  background: var(--bg);
+}
+
+/* ── 25. FLASH MESSAGES ─────────────────────────────────────────────────── */
+
+.flash {
+  font-family: "IBM Plex Sans", sans-serif;
+}
+.flash-success {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.flash-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.flash-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.flash-info {
+  background: var(--brand-light);
+  color: var(--brand);
+}
+
+/* ── 26. MISCELLANEOUS ──────────────────────────────────────────────────── */
+
+.mgr-stat-note {
+  font-family: "IBM Plex Sans", sans-serif;
+  background: var(--bg);
+  border-color: var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+.leave-comment-box {
+  background: var(--bg);
+  border-color: var(--border);
+  border-radius: var(--radius-sm);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+.emp-search-input {
+  border-color: var(--border);
+  border-radius: var(--radius-sm);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+.emp-search-input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
+}
+.emp-count-bar {
+  border-bottom-color: var(--border-light);
+}
+
+.badge-manual,
+[class*="badge-koreksi-manual"] {
+  background: var(--brand-light);
+  color: var(--brand);
+}
+.badge-merge,
+[class*="badge-koreksi-merge"] {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+.badge-bulk-delete,
+[class*="badge-koreksi-bulk"] {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+tr[data-source="correction"] {
+  background-color: rgba(212, 134, 10, 0.04);
+}
+
+#notif-bell-wrap svg {
+  color: var(--sidebar-text);
+}
+
+/* eof — theme.css */
+
+/* ── Teks khusus pembaca layar (dipakai header kolom Aksi, dsb.) ─────────── */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── LOGO APLIKASI (static/img/Logo-App-wide.jpg) ───────────────────────────
+   JPG punya latar navy solid (#0e1f2e), jadi dipakai sebagai "tile" berujung
+   membulat: tampil sama di latar gelap (sidebar, panel login) maupun terang.
+   Tinggi diatur per tempat; lebar mengikuti rasio gambar (width:auto). */
+.brand-logo {
+  display: block;
+  flex-shrink: 0;
+  width: auto;
+  height: 2.25rem;
+  object-fit: contain;
+  background: #0e1f2e;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+.sidebar-brand .brand-logo {
+  height: 2.25rem;
+}

@@ -1,0 +1,747 @@
+
+<!doctype html>
+<html data-root="../../../" lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="csrf-token" content="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+    <meta name="theme-color" content="#1A4A8C" />
+    <link rel="manifest" href="../../../html/manifest.webmanifest" />
+    <link rel="icon" href="../../../img/favicon.ico?v=2" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../../img/favicon-32.png?v=2" />
+    <link rel="apple-touch-icon" href="../../../img/apple-touch-icon.png?v=2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Absensi" />
+    <title>Riwayat Kehadiran — Nanda</title>
+    
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/ibm-plex-sans-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="../../../fonts/plus-jakarta-sans-latin-700-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/fonts.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="../../../css/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../css/theme.css"
+    />
+    <link rel="stylesheet" href="../../../css/push.css"
+    />
+    
+<link
+  rel="stylesheet"
+  href="../../../css/history.css"
+/>
+
+    <style>
+      /* Form logout dibungkus supaya method-nya POST (bukan link GET) —
+         lihat auth.py: /auth/logout adalah POST-only untuk mencegah CSRF
+         logout lewat <img>/<a> pihak ketiga. Reset tampilan <button> agar
+         identik dengan link sidebar/bottom-nav di sekitarnya. */
+      .logout-form {
+        margin: 0;
+        padding: 0;
+        display: contents; /* form tidak mengubah layout flex/grid induk */
+      }
+      /* [FIX] Sebelumnya `all: unset` + `display: inherit`. Karena parent
+         .logout-form adalah `display: contents`, `inherit` menghasilkan
+         `contents` juga (bukan `flex`), sehingga tombol kehilangan seluruh
+         layout bottom-nav. Sekarang hanya reset tampilan bawaan <button>;
+         layout diatur oleh selector konteks masing-masing (main.css). */
+      button.as-link {
+        background: none;
+        border: 0;
+        margin: 0;
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Sidebar desktop: tombol tetap selebar item menu lain. */
+      .sidebar .logout-form button.as-link {
+        display: flex;
+        width: 100%;
+      }
+    </style>
+  <script>(()=>{const R="../../../",f=window.fetch;window.fetch=(u,o={})=>{u=String(u);if((o.method||"GET").toUpperCase()!=="GET")return Promise.resolve(new Response(JSON.stringify({ok:true,demo:true}),{headers:{"Content-Type":"application/json"}}));if(u[0]==="/")u=u.indexOf("/static/")===0?R+u.slice(8):R+"html"+u;return f(u,o)};document.addEventListener("submit",e=>{e.preventDefault();alert("Mode demo: aksi disimulasikan dan tidak disimpan.")},true)})()</script><link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+  <body
+    class="role-employee"
+  >
+    
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-brand">
+        <img
+          class="brand-logo"
+          src="../../../img/Logo-App-wide.jpg"
+          alt=""
+          width="70"
+          height="36"
+          decoding="async"
+        />
+        <span>CC Indonesia</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="avatar">NA</div>
+        <div>
+          <div class="sidebar-user-name">
+            Nanda
+          </div>
+          <div class="sidebar-user-role">Employee</div>
+        </div>
+        <div id="notif-bell-wrap" style="margin-left: auto"></div>
+      </div>
+
+      <nav class="sidebar-nav">
+         
+        <a
+          href="../../../html/employee/dashboard/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Absensi
+        </a>
+        <a
+          href="../../../html/employee/history/index.html"
+          class="active"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Riwayat
+        </a>
+        <a
+          href="../../../html/employee/leave/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="9" y1="13" x2="15" y2="13" />
+          </svg>
+          Pengajuan izin
+        </a>
+        <a
+          href="../../../html/employee/shift-swap/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M16 3l4 4-4 4" />
+            <line x1="20" y1="7" x2="7" y2="7" />
+            <path d="M8 21l-4-4 4-4" />
+            <line x1="4" y1="17" x2="17" y2="17" />
+          </svg>
+          Tukar Shift
+        </a>
+        <a
+          href="../../../html/employee/profile/index.html"
+          class=""
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Profil Saya
+        </a>
+
+         
+      </nav>
+
+
+      <div class="sidebar-footer">
+        
+        <div class="lang-switcher" aria-label="Pilih bahasa">
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+        <form method="post" action="../../../html/auth/logout" class="logout-form">
+          <input type="hidden" name="csrf_token" value="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+          <button type="submit" class="sidebar-logout as-link">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </aside>
+        
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-inner">
+        <span class="mobile-topbar-title">CC Indonesia</span>
+        <div
+          class="lang-switcher lang-switcher--mobile"
+          aria-label="Pilih bahasa"
+        >
+           
+          <a
+            href="../../../html/lang/id"
+            class="lang-btn active"
+            title="Bahasa Indonesia"
+            aria-current="true"
+            >ID</a
+          >
+          
+          <a
+            href="../../../html/lang/en"
+            class="lang-btn"
+            title="English (US)"
+            aria-current="false"
+            >EN</a
+          >
+          
+          <a
+            href="../../../html/lang/zh"
+            class="lang-btn"
+            title="中文"
+            aria-current="false"
+            >ZH</a
+          >
+          
+        </div>
+      </div>
+    </div>
+     
+
+    <div class="main-wrap">
+        
+      <main class="page-content" id="main-content">
+        
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-left">
+      <p class="page-header-sub">Nanda Wijaya</p>
+      <p class="page-header-name">Riwayat Kehadiran</p>
+    </div>
+    <div class="page-header-right">
+      <span class="page-header-date-day">Jumat</span>
+      <span class="page-header-date-full">
+        13 November 2026
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="hist-toolbar">
+  <div class="hist-summary" id="hist-summary">
+    <div class="hist-summary-card hsc-present">
+      <div class="hsc-top">
+        <span class="hsc-lbl">Hadir</span>
+        <span class="hsc-ring"><span class="hdot hdot-present"></span></span>
+      </div>
+      <div class="hsc-val"><span class="hsc-num" id="hist-sum-present">—</span><span class="hsc-unit">hari</span></div>
+      <span class="hsc-note hsc-note-present" id="hist-note-present"></span>
+    </div>
+    <div class="hist-summary-card hsc-overtime">
+      <div class="hsc-top">
+        <span class="hsc-lbl">Lembur</span>
+        <span class="hsc-ring"><span class="hdot hdot-overtime"></span></span>
+      </div>
+      <div class="hsc-val"><span class="hsc-num" id="hist-sum-overtime">—</span><span class="hsc-unit">hari</span></div>
+      <span class="hsc-note" id="hist-note-overtime"></span>
+    </div>
+    <div class="hist-summary-card hsc-late">
+      <div class="hsc-top">
+        <span class="hsc-lbl">Terlambat</span>
+        <span class="hsc-ring"><span class="hdot hdot-late"></span></span>
+      </div>
+      <div class="hsc-val"><span class="hsc-num" id="hist-sum-late">—</span><span class="hsc-unit">hari</span></div>
+      <span class="hsc-note hsc-note-late" id="hist-note-late"></span>
+    </div>
+    <div class="hist-summary-card hsc-sick">
+      <div class="hsc-top">
+        <span class="hsc-lbl">Sakit</span>
+        <span class="hsc-ring"><span class="hdot hdot-sick"></span></span>
+      </div>
+      <div class="hsc-val"><span class="hsc-num" id="hist-sum-sick">—</span><span class="hsc-unit">hari</span></div>
+      <span class="hsc-note" id="hist-note-sick"></span>
+    </div>
+    <div class="hist-summary-card hsc-extoff">
+      <div class="hsc-top">
+        <span class="hsc-lbl">Izin</span>
+        <span class="hsc-ring"><span class="hdot hdot-extoff"></span></span>
+      </div>
+      <div class="hsc-val"><span class="hsc-num" id="hist-sum-extoff">—</span><span class="hsc-unit">hari</span></div>
+      <span class="hsc-note" id="hist-note-extoff"></span>
+    </div>
+    <div class="hist-summary-card hsc-absent">
+      <div class="hsc-top">
+        <span class="hsc-lbl">Alpa</span>
+        <span class="hsc-ring"><span class="hdot hdot-absent"></span></span>
+      </div>
+      <div class="hsc-val"><span class="hsc-num" id="hist-sum-absent">—</span><span class="hsc-unit">hari</span></div>
+      <span class="hsc-note hsc-note-absent" id="hist-note-absent"></span>
+    </div>
+    <div class="hist-summary-card hsc-dayoff">
+      <div class="hsc-top">
+        <span class="hsc-lbl">Libur</span>
+        <span class="hsc-ring"><span class="hdot hdot-dayoff"></span></span>
+      </div>
+      <div class="hsc-val"><span class="hsc-num" id="hist-sum-dayoff">—</span><span class="hsc-unit">hari</span></div>
+      <span class="hsc-note" id="hist-note-dayoff"></span>
+    </div>
+  </div>
+
+  <div class="hist-filterbar">
+    <div class="hist-month-nav">
+      <button
+        class="hist-month-btn"
+        onclick="prevMonth()"
+        aria-label="Bulan sebelumnya"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+      </button>
+      <span class="hist-month-label" id="hist-month-label">Memuat...</span>
+      <button
+        class="hist-month-btn"
+        onclick="nextMonth()"
+        aria-label="Bulan berikutnya"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+      </button>
+    </div>
+
+    <button class="btn-download-report" id="hist-download-btn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span>Unduh Laporan</span>
+    </button>
+  </div>
+
+  <div class="hist-controls">
+    <div class="hist-status-filter" id="hist-status-filter">
+      <button class="hsf-btn active" onclick="setFilter(this, 'all')">Semua</button>
+      <button class="hsf-btn f-present" onclick="setFilter(this, 'present')">Hadir</button>
+      <button class="hsf-btn f-overtime" onclick="setFilter(this, 'overtime')">Lembur</button>
+      <button class="hsf-btn f-late" onclick="setFilter(this, 'late')">Terlambat</button>
+      <button class="hsf-btn f-sick" onclick="setFilter(this, 'sick')">Sakit</button>
+      <button class="hsf-btn f-extoff" onclick="setFilter(this, 'extoff')">Izin</button>
+      <button class="hsf-btn f-absent" onclick="setFilter(this, 'absent')">Alpa</button>
+      <button class="hsf-btn f-dayoff" onclick="setFilter(this, 'dayoff')">Libur</button>
+    </div>
+
+    <div class="hist-searchbar">
+      <div class="hist-search-wrap">
+        <svg class="hist-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+        <input
+          type="text"
+          id="hist-search"
+          class="hist-search-input"
+          placeholder="Cari tanggal, shift, catatan..."
+          autocomplete="off"
+        />
+      </div>
+      <div class="hist-shift-dropdown" id="hist-shift-dropdown">
+        <button
+          type="button"
+          class="hist-shift-select"
+          id="hist-shift-filter-btn"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+        >
+          <span id="hist-shift-filter-label">Semua Shift</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hist-shift-caret"><polyline points="6 9 12 15 18 9" /></svg>
+        </button>
+        <ul class="hist-shift-menu" id="hist-shift-menu" role="listbox" aria-label="Filter shift">
+          <li role="option" data-value="all" class="active">Semua Shift</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="hidden" id="hist-year" value="2026" />
+<input type="hidden" id="hist-month" value="11" />
+
+<div class="hist-content" id="hist-content">
+  <div class="hist-list" id="hist-list">
+    <div class="hist-skeleton">
+      <div class="skel-row"></div>
+      <div class="skel-row"></div>
+      <div class="skel-row"></div>
+      <div class="skel-row"></div>
+      <div class="skel-row"></div>
+    </div>
+  </div>
+
+  <div class="hist-table-wrap">
+    <table class="hist-table">
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Status</th>
+          <th>
+            <span class="hth-shift">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Shift
+            </span>
+          </th>
+          <th>Masuk</th>
+          <th>Keluar</th>
+          <th>Durasi</th>
+          <th>Kantor</th>
+        </tr>
+      </thead>
+      <tbody id="hist-table-body">
+        <tr>
+          <td
+            colspan="7"
+            style="text-align:center;padding:2rem;color:var(--text-faint);font-size:.85rem"
+          >
+            Memuat data...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<script>
+  window.HIST_I18N = {
+    present: "Hadir",
+    late: "Terlambat",
+    absent: "Alpa",
+    day_off: "Libur",
+    extra_off: "Izin",
+    sick: "Sakit",
+    remote: "Remote",
+    loading: "Memuat data...",
+    noData: "Tidak ada data",
+  };
+</script>
+
+      </main>
+    </div>
+
+     
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+       
+      <a
+        href="../../../html/employee/dashboard/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+          />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span>Absensi</span>
+      </a>
+      <a
+        href="../../../html/employee/history/index.html"
+        class="active"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+        <span>Riwayat</span>
+      </a>
+      <a
+        href="../../../html/employee/leave/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <span>Izin</span>
+      </a>
+      <a
+        href="../../../html/employee/shift-swap/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M16 3l4 4-4 4" />
+          <line x1="20" y1="7" x2="7" y2="7" />
+          <path d="M8 21l-4-4 4-4" />
+          <line x1="4" y1="17" x2="17" y2="17" />
+        </svg>
+        <span>Tukar Shift</span>
+      </a>
+      <a
+        href="../../../html/employee/profile/index.html"
+        class=""
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>Profil</span>
+      </a>
+      <form method="post" action="../../../html/auth/logout" class="logout-form">
+        <input type="hidden" name="csrf_token" value="ImY1ZDAzNmZlODhiZGZlZjNhYmE4MjRjMzVmMjQxYTk5MDkyMjkyMjIi.avZ7aw.LUAUP_0k4EbZ8ZxxF-yfr78VD7M" />
+        <button type="submit" class="as-link">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </form>
+
+       
+    </nav>
+    
+    
+    <script src="../../../js/core.js"></script>
+    
+    
+<script>
+  const I18N = {
+    histMonths: [
+      "",
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ],
+    histDays: [
+      "Minggu",
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu",
+    ],
+    histStatusPresent: "Hadir",
+    histStatusLate: "Terlambat",
+    histStatusAbsent: "Alpa",
+    histStatusDayOff: "Libur",
+    histStatusExtraOff: "Izin",
+    histStatusSick: "Sakit",
+    histStatusRemote: "Remote",
+    histStatusOvertime: "Lembur",
+    histNoDataTable: "Tidak ada data untuk ditampilkan",
+    histNoData: "Tidak ada data",
+    histNoAttendance: "Belum ada catatan kehadiran untuk bulan ini",
+    histSrcGps: "GPS",
+    histSrcManual: "Manual",
+    histSrcCorrection: "Dikoreksi",
+    histSrcSystem: "Sistem",
+    histAllShifts: "Semua Shift",
+  };
+</script>
+<script src="../../../js/history.js"></script>
+
+    <script src="../../../js/app.js"></script>
+    
+    <script>
+      window.I18N = Object.assign({}, window.I18N, {
+      notifTitle: "Notifikasi",
+      notifMarkAllRead: "Tandai semua dibaca",
+      notifLoading: "Memuat\u2026",
+      notifEmpty: "Tidak ada notifikasi",
+      notifError: "Gagal memuat notifikasi"});
+    </script>
+    <script src="../../../js/notifications.js"></script>
+    <script src="../../../js/push.js"></script>
+    
+    <script>
+      window.TRACKING_CFG = {
+        statusUrl: "/employee/location/status",
+        pingUrl: "/employee/location/ping",
+        intervalSeconds: 600,
+        statusPollSeconds: 60,
+        i18n: {
+          active: "Lokasi dibagikan (GPS)",
+          onDuty: "Lokasi dibagikan",
+          viaOffice: "GPS mati \u00b7 terdeteksi di jaringan kantor",
+          viaIp: "GPS mati \u00b7 perkiraan kasar via IP",
+          gpsOff: "GPS mati \u00b7 lokasi tidak terkirim"
+        }
+      };
+    </script>
+    <script src="../../../js/tracking.js"></script>
+    
+    <script>
+      // Form logout mengirim POST via fetch, lalu redirect manual berdasarkan
+      // JSON {"redirect": "..."} dari server — pola yang sama dengan
+      // login.js. Tanpa ini, submit form native menampilkan JSON mentah
+      // di layar alih-alih membawa user ke halaman login.
+      document.querySelectorAll(".logout-form").forEach(function (form) {
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const btn = form.querySelector("button[type=submit]");
+          if (btn) btn.disabled = true;
+          try { if (window.Push) await window.Push.forgetDevice(); } catch {}
+          try {
+            const res = await fetch(form.action, {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": form.querySelector(
+                  'input[name="csrf_token"]',
+                ).value,
+              },
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              /* respons bukan JSON — abaikan, pakai fallback di bawah */
+            }
+            window.location.href = data.redirect || "/auth/login";
+          } catch {
+            // Gagal terhubung ke server: tetap arahkan ke login supaya
+            // user tidak macet di halaman dengan sesi yang mungkin sudah
+            // tidak valid.
+            window.location.href = "/auth/login";
+          }
+        });
+      });
+    </script>
+    
+  </body>
+</html>

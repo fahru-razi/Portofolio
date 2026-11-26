@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<script src="../../../js/demo_data.js"></script><script src="../../../js/demo_shim.js"></script>
+    <script>
+    (function() {
+        const saved = localStorage.getItem('user_theme_preference') || 'system';
+        let theme = saved;
+        if (saved === 'system') {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ &amp; Panduan Sistem - QA Control Center</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/style.css">
+
+    <style>
+        /* CSS TETAP SAMA SEPERTI SEBELUMNYA */
+        .faq-page-wrap { font-family: 'Inter', sans-serif; background-color: var(--canvas-bg, #F8FAFC); }
+        .faq-page-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .faq-page-title { font-size: 28px; font-weight: 700; letter-spacing: -0.025em; color: var(--text-primary, #0F172A); line-height: 1.15; margin: 0 0 4px; }
+        .faq-page-subtitle { font-size: 13px; color: var(--text-secondary, #475569); margin: 0; line-height: 1.6; max-width: 640px; }
+        .faq-search-outer { min-width: 320px; max-width: 380px; flex-shrink: 0; }
+        .faq-search-wrap { position: relative; }
+        .faq-search-wrap input { width: 100%; height: 40px; padding: 0 58px 0 38px; border: 1px solid var(--border-subtle, #E2E8F0); border-radius: 9px; background: var(--card-bg, #fff); font-size: 12px; color: var(--text-primary, #0F172A); outline: none; font-family: 'Inter', sans-serif; box-shadow: 0 1px 2px rgba(15,23,42,0.04); transition: border-color 0.15s, box-shadow 0.15s; }
+        .faq-search-wrap input:focus { border-color: var(--primary, #0F766E); box-shadow: 0 0 0 2px rgba(15,118,110,0.12); }
+        .faq-search-wrap input::placeholder { color: var(--text-muted, #94A3B8); }
+        .faq-search-wrap .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 17px; color: var(--text-muted, #94A3B8); pointer-events: none; }
+        .faq-search-wrap .kbd-hint { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-secondary, #64748B); background: var(--surface-container-low, #EFF4FF); border: 1px solid var(--border-subtle, #E2E8F0); border-radius: 4px; padding: 2px 5px; white-space: nowrap; }
+        .faq-search-hint { font-size: 11px; color: var(--text-muted, #94A3B8); margin-top: 3px; text-align: right; }
+        .quick-cards-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .quick-card { background: var(--card-bg, #fff); border: 1px solid var(--border-subtle, #E2E8F0); border-radius: 12px; padding: 1rem; box-shadow: 0 1px 2px rgba(15,23,42,0.04); display: flex; flex-direction: column; justify-content: space-between; transition: box-shadow 0.15s, border-color 0.15s; cursor: pointer; }
+        .quick-card:hover { box-shadow: 0 4px 12px -2px rgba(15,23,42,0.08); border-color: rgba(13,148,136,0.35); }
+        .quick-card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+        .quick-card-icon { width: 40px; height: 40px; border-radius: 9px; flex-shrink: 0; background: #f0fdfa; border: 1px solid #ccfbf1; display: flex; align-items: center; justify-content: center; color: var(--primary, #0F766E); }
+        .quick-card-icon .material-symbols-outlined { font-size: 21px; }
+        .quick-card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--primary, #0F766E); }
+        .quick-card-title { font-size: 14px; font-weight: 700; color: var(--text-primary, #0F172A); letter-spacing: -0.01em; line-height: 1.25; margin: 0; }
+        .quick-card-desc { font-size: 12px; color: var(--text-secondary, #475569); margin-bottom: 1rem; line-height: 1.6; }
+        .quick-card-footer { display: flex; align-items: center; justify-content: space-between; }
+        .quick-card-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted, #94A3B8); }
+        .quick-card-cta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--primary, #0F766E); background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.12s; }
+        .quick-card-cta:hover { color: #115E59; }
+        .category-pills { display: flex; align-items: center; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 1rem; scrollbar-width: none; }
+        .category-pills::-webkit-scrollbar { display: none; }
+        .cat-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 9999px; cursor: pointer; border: 1px solid var(--border-subtle, #E2E8F0); font-size: 12px; font-weight: 600; white-space: nowrap; font-family: 'Inter', sans-serif; background: var(--card-bg, #fff); color: var(--text-secondary, #475569); transition: all 0.14s; }
+        .cat-pill:hover { background: #f0fdfa; color: var(--primary, #0F766E); }
+        .cat-pill.active { background: var(--primary, #0F766E); color: #fff; border-color: var(--primary, #0F766E); box-shadow: 0 1px 3px rgba(15,118,110,0.25); }
+        .cat-pill .pill-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; background: rgba(255,255,255,0.22); padding: 1px 6px; border-radius: 9999px; }
+        .cat-pill:not(.active) .pill-count { background: var(--surface-container-low, #EFF4FF); color: var(--text-secondary, #475569); }
+        .faq-main-layout { display: grid; grid-template-columns: 1fr 300px; gap: 1.25rem; align-items: start; }
+        .faq-list { display: flex; flex-direction: column; gap: 8px; }
+        .faq-card { background: var(--card-bg, #fff); border: 1px solid var(--border-subtle, #E2E8F0); border-radius: 12px; box-shadow: 0 1px 2px rgba(15,23,42,0.04); overflow: hidden; transition: box-shadow 0.15s; }
+        .faq-card.open { box-shadow: 0 4px 12px -2px rgba(15,23,42,0.07); }
+        .faq-card.hidden { display: none; }
+        .faq-trigger { width: 100%; padding: 1rem 1.25rem; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: none; border: none; cursor: pointer; transition: background 0.12s; }
+        .faq-trigger:hover { background: rgba(240,253,250,0.6); }
+        .faq-trigger-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+        .faq-num { width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0; background: #f0fdfa; border: 1px solid #ccfbf1; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--primary, #0F766E); }
+        .faq-question { font-size: 14px; font-weight: 600; color: var(--text-primary, #0F172A); letter-spacing: -0.01em; line-height: 1.4; text-align: left; }
+        .faq-trigger-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .faq-tag { padding: 2px 9px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: var(--surface-container, #E5EEFF); color: var(--text-secondary, #475569); white-space: nowrap; }
+        .faq-tag.accent { background: #f0fdfa; color: var(--primary, #0F766E); border: 1px solid #ccfbf1; }
+        .faq-chevron { font-size: 20px; color: #64748B; transition: transform 0.2s; }
+        .faq-card.open .faq-chevron { transform: rotate(180deg); }
+        .faq-body { display: none; padding: 0 1.25rem 1.25rem; }
+        .faq-card.open .faq-body { display: block; }
+        .faq-body-inner { background: var(--surface-container-low, #EFF4FF); border-radius: 9px; padding: 1rem; color: var(--text-secondary, #475569); font-size: 13px; line-height: 1.7; }
+        .faq-body-inner p { margin: 0 0 8px; }
+        .faq-body-inner p:last-child { margin-bottom: 0; }
+        .faq-body-inner ul { padding-left: 1.25rem; margin: 6px 0; }
+        .faq-body-inner li { margin-bottom: 4px; }
+        .faq-body-inner b, .faq-body-inner strong { color: var(--text-primary, #0F172A); }
+        .faq-body-inner code { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #fff; border: 1px solid var(--border-subtle, #E2E8F0); border-radius: 4px; padding: 1px 5px; color: var(--text-primary, #0F172A); }
+        .faq-mini-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0; }
+        .mini-card { background: var(--card-bg, #fff); border: 1px solid var(--border-subtle, #E2E8F0); border-radius: 8px; padding: 10px; font-size: 12px; color: var(--text-secondary, #475569); }
+        .mini-card .mini-title { font-size: 12px; font-weight: 700; color: var(--text-primary, #0F172A); display: block; margin-bottom: 3px; }
+        .status-row { display: flex; align-items: flex-start; gap: 8px; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+        .security-note { display: flex; align-items: flex-start; gap: 8px; background: #f0fdfa; border: 1px solid #ccfbf1; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 12px; color: var(--primary, #0F766E); }
+        .security-note .material-symbols-outlined { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+        .roles-stack { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+        .code-block { background: var(--card-bg, #fff); border: 1px solid var(--border-subtle, #E2E8F0); border-radius: 8px; padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-primary, #0F172A); margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+        .sidebar-right { display: flex; flex-direction: column; gap: 12px; }
+        .sc-card { background: var(--card-bg, #fff); border: 1px solid var(--border-subtle, #E2E8F0); border-radius: 12px; padding: 1.25rem; box-shadow: 0 1px 2px rgba(15,23,42,0.04); }
+        .sc-card.support-card { position: relative; overflow: hidden; }
+        .sc-card.support-card::after { content: ''; position: absolute; right: -32px; bottom: -32px; width: 120px; height: 120px; border-radius: 50%; background: rgba(15,118,110,0.05); pointer-events: none; }
+        .sc-icon { width: 40px; height: 40px; border-radius: 9px; background: var(--primary, #0F766E); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+        .sc-icon .material-symbols-outlined { color: #fff; font-size: 20px; }
+        .sc-title { font-size: 15px; font-weight: 700; color: var(--text-primary, #0F172A); margin: 0 0 6px; letter-spacing: -0.01em; }
+        .sc-desc { font-size: 12px; color: var(--text-secondary, #475569); margin: 0 0 1rem; line-height: 1.6; }
+        .btn-primary-faq { width: 100%; height: 40px; border-radius: 8px; background: var(--primary, #0F766E); color: #fff; border: none; cursor: pointer; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; gap: 7px; transition: background 0.14s; }
+        .btn-primary-faq:hover { background: #115E59; }
+        .btn-primary-faq .material-symbols-outlined { font-size: 17px; }
+        .telemetry-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .telemetry-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted, #94A3B8); }
+        .telemetry-status { display: flex; align-items: center; gap: 5px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #059669; }
+        .telemetry-status .dot { width: 8px; height: 8px; border-radius: 50%; background: #059669; }
+        .metric-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 12px; color: var(--text-secondary, #475569); }
+        .metric-val { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: var(--text-primary, #0F172A); }
+        .progress-wrap { width: 100%; height: 6px; border-radius: 9999px; background: var(--surface-container-low, #EFF4FF); overflow: hidden; margin-bottom: 10px; }
+        .progress-fill { height: 100%; border-radius: 9999px; }
+        .telemetry-footer { border-top: 1px solid var(--border-subtle, #F1F5F9); padding-top: 10px; margin-top: 4px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted, #94A3B8); }
+        .oncall-row { display: flex; align-items: center; gap: 12px; }
+        .oncall-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--primary, #0F766E); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+        .oncall-avatar .material-symbols-outlined { color: #fff; font-size: 20px; }
+        .oncall-online { position: absolute; bottom: 0; right: 0; width: 11px; height: 11px; border-radius: 50%; background: #059669; border: 2px solid #fff; }
+        .oncall-name { font-size: 13px; font-weight: 600; color: var(--text-primary, #0F172A); }
+        .oncall-shift { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted, #94A3B8); }
+        @media (max-width: 1100px) { .faq-main-layout { grid-template-columns: 1fr; } .sidebar-right { display: grid; grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .quick-cards-row { grid-template-columns: 1fr; } .faq-page-header { flex-direction: column; align-items: flex-start; } .faq-search-outer { max-width: 100%; width: 100%; } .sidebar-right { grid-template-columns: 1fr; } }
+    </style>
+<link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+<body>
+
+    <!-- templates/sidebar.html -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  window.tailwind && (tailwind.config = {
+    prefix: 'tw-',
+    corePlugins: { preflight: false },
+    theme: {
+      extend: {
+        colors: {
+          'shell-bg': '#09201F',
+          'shell-surface': '#0E2A29',
+          'shell-border': '#163836',
+          'shell-text': '#F1F5F9',
+          'shell-muted': '#648A86',
+          primary: '#0F766E',
+          'primary-dark': '#0D9488',
+          secondary: '#0284C7'
+        },
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace']
+        }
+      }
+    }
+  });
+</script>
+<style>
+  .material-symbols-outlined { 
+    font-family: 'Material Symbols Outlined' !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 20px !important;
+    line-height: 1 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    word-wrap: normal !important;
+    direction: ltr !important;
+    -webkit-font-smoothing: antialiased !important;
+    -webkit-font-feature-settings: 'liga' !important;
+    font-feature-settings: 'liga' !important;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  }
+  
+  html { overflow-y: scroll !important; }
+  body { padding-right: 0 !important; }
+  @media (min-width: 1024px) {
+    body.has-app-sidebar { padding-left: 256px !important; }
+  }
+  
+  #appSidebar, #appSidebar * {
+    box-sizing: border-box !important;
+    letter-spacing: -0.01em !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+  
+  #appSidebar a { text-decoration: none !important; }
+  #appSidebar button { background: transparent; border: none; box-shadow: none; outline: none; }
+
+  #appSidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 256px !important;
+    min-width: 256px !important;
+    max-width: 256px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    flex: 0 0 256px !important;
+    will-change: transform;
+    contain: layout style paint;
+    z-index: 1050 !important;
+  }
+
+  @media (max-width: 1023.98px) {
+    #appSidebar {
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.4);
+      transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+    #appSidebar:not(.tw-translate-x-0) {
+      transform: translateX(-100%) !important;
+    }
+    #appSidebar.tw-translate-x-0 {
+      transform: translateX(0) !important;
+    }
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+      #appSidebar .tw-flex-shrink-0.tw-p-2 {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom)) !important;
+      }
+    }
+  }
+</style>
+
+<aside id="appSidebar"
+       class="tw-font-sans tw-fixed tw-left-0 tw-top-0 tw-w-64 tw-bg-shell-bg tw-border-r tw-border-shell-border tw-z-50 tw-flex tw-flex-col tw-justify-between tw-select-none -tw-translate-x-full lg:tw-translate-x-0 tw-transition-transform tw-duration-200">
+    <div class="tw-flex tw-flex-col tw-flex-1 tw-min-h-0">
+
+        <!-- Brand -->
+        <div class="tw-h-16 tw-px-4 tw-flex tw-items-center tw-justify-between tw-gap-2 tw-flex-shrink-0" style="border-bottom: 1px solid #163836 !important;">
+            <div class="tw-flex tw-items-center tw-gap-2.5 tw-min-w-0">
+                <div class="tw-w-8 tw-h-8 tw-rounded-lg tw-bg-primary/80 tw-border tw-border-primary-dark/30 tw-flex tw-items-center tw-justify-center tw-shadow-inner tw-flex-shrink-0">
+                    <span class="material-symbols-outlined tw-text-white tw-text-[18px]">verified</span>
+                </div>
+                <div class="tw-flex tw-flex-col tw-min-w-0">
+                    <span class="tw-text-shell-text tw-font-bold tw-text-sm tw-leading-none tw-tracking-tight tw-truncate">CCIndonesia</span>
+                    <span class="tw-font-mono tw-text-primary/80 tw-uppercase tw-tracking-wider tw-text-[10px] tw-mt-1 tw-font-medium tw-truncate">Kelola Task & QR Code</span>
+                </div>
+            </div>
+            <button type="button" onclick="toggleSidebar(false)" class="lg:tw-hidden tw-w-7 tw-h-7 tw-rounded tw-flex tw-items-center tw-justify-center tw-text-shell-muted hover:tw-text-white hover:tw-bg-shell-surface tw-transition-colors tw-flex-shrink-0">
+                <span class="material-symbols-outlined tw-text-[18px]">close</span>
+            </button>
+        </div>
+
+        <!-- Nav (scrollable) -->
+        <div class="tw-overflow-y-auto tw-flex-1 tw-px-2 tw-py-3 tw-space-y-4">
+
+            <!-- OPERATIONS -->
+            <nav class="tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-px-2 tw-pt-1 tw-pb-1 tw-text-[11px] tw-font-semibold tw-uppercase tw-tracking-wider tw-text-shell-muted">Operasional</div>
+
+                
+                
+                <a href="../../../html/supervisor/dashboard/index.html"
+                class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                         tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">space_dashboard</span>
+                    <span>Dashboard</span>
+                </a>
+                
+
+                <a href="../../../html/supervisor/tasks/index.html"
+                class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                         tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">assignment</span>
+                    <span>Manajemen Task</span>
+                </a>
+
+                
+            </nav>
+
+            <!-- ADMINISTRATION (Developer only) -->
+            
+
+            <!-- SYSTEM & ACCOUNT -->
+            <nav class="tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-px-2 tw-pt-1 tw-pb-1 tw-text-[11px] tw-font-semibold tw-uppercase tw-tracking-wider tw-text-shell-muted">Sistem & Akun</div>
+
+                <a href="../../../html/supervisor/support/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">headset_mic</span>
+                    <span>Layanan Pelanggan</span>
+                </a>
+
+                <a href="../../../html/supervisor/faq/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-bg-primary tw-text-white tw-border-primary-dark/40
+                          ">
+                    <span class="material-symbols-outlined tw-text-[18px]">menu_book</span>
+                    <span>FAQ & Panduan</span>
+                </a>
+
+                <a href="../../../html/supervisor/profile/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">manage_accounts</span>
+                    <span>Pengaturan Profil</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="tw-p-2 tw-bg-black/20 tw-border-t tw-border-shell-border tw-flex tw-flex-col tw-gap-2 tw-flex-shrink-0">
+        <div class="tw-flex tw-items-center tw-gap-1 tw-px-1">
+            <div class="dropup">
+                <button class="tw-bg-transparent tw-border-0 tw-shadow-none tw-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-md tw-text-shell-text tw-text-xs tw-font-mono hover:tw-bg-black/30 tw-transition-colors" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    ID
+                </button>
+                <ul class="dropdown-menu shadow-sm border-0 py-1 theme-dropdown-menu">
+                    <li><a class="dropdown-item py-2 px-3 small active" href="#">🇮🇩 Bahasa Indonesia</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small " href="#">🇬🇧 English</a></li>
+                </ul>
+            </div>
+
+            <div class="dropup">
+                <button class="tw-bg-transparent tw-border-0 tw-shadow-none tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 tw-rounded-md tw-text-shell-text hover:tw-bg-black/30 tw-transition-colors" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Theme">
+                    <span class="material-symbols-outlined tw-text-[16px]">wb_sunny</span>
+                </button>
+                <ul class="dropdown-menu shadow-sm border-0 py-1 theme-dropdown-menu">
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('light')">Terang</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('dark')">Gelap</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('system')">Sistem</a></li>
+                </ul>
+            </div>
+
+            <!-- Tombol Logout: HANYA MUNCUL JIKA SUDAH LOGIN -->
+            
+            <a href="#" title="Keluar" class="tw-no-underline tw-ml-auto tw-w-7 tw-h-7 tw-rounded tw-flex tw-items-center tw-justify-center tw-text-shell-muted hover:tw-bg-black/30 hover:tw-text-rose-400 tw-transition-colors">
+                <span class="material-symbols-outlined tw-text-[16px]">logout</span>
+            </a>
+            
+        </div>
+
+        
+        <div class="tw-flex tw-items-center tw-gap-2.5 tw-p-2 tw-rounded-lg tw-bg-shell-surface tw-border tw-border-shell-border">
+            <div class="tw-relative tw-flex-shrink-0">
+                <div class="tw-w-8 tw-h-8 tw-rounded-full tw-bg-primary/20 tw-text-primary tw-border tw-border-primary/30 tw-flex tw-items-center tw-justify-center">
+                    <span class="material-symbols-outlined tw-text-[16px]">person</span>
+                </div>
+            </div>
+            <div class="tw-flex tw-flex-col tw-min-w-0 tw-flex-1">
+                <span class="tw-text-shell-text tw-text-xs tw-font-bold tw-truncate">spv_dewi</span>
+                <span class="tw-font-mono tw-text-primary/90 tw-text-[10px] tw-truncate">Supervisor</span>
+            </div>
+            <span class="tw-w-2 tw-h-2 tw-rounded-full tw-bg-emerald-500 tw-flex-shrink-0"></span>
+        </div>
+        
+    </div>
+</aside>
+
+<!-- Backdrop mobile -->
+<div id="sidebarBackdrop" onclick="toggleSidebar(false)" class="tw-hidden tw-fixed tw-inset-0 tw-bg-black/50 lg:tw-hidden" style="z-index: 1040;"></div>
+
+<script>
+    document.body.classList.add('has-app-sidebar');
+
+    function toggleSidebar(open) {
+        const aside = document.getElementById('appSidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        if (!aside) return;
+        const willOpen = (typeof open === 'boolean') ? open : aside.classList.contains('-tw-translate-x-full');
+        aside.classList.toggle('-tw-translate-x-full', !willOpen);
+        aside.classList.toggle('tw-translate-x-0', willOpen);
+        if (backdrop) backdrop.classList.toggle('tw-hidden', !willOpen);
+    }
+    window.toggleSidebar = toggleSidebar;
+
+    document.getElementById('appSidebar') && document.getElementById('appSidebar').querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+            if (window.innerWidth < 1024) toggleSidebar(false);
+        });
+    });
+</script>
+    <!-- templates/navbar.html -->
+<header class="tw-font-sans tw-sticky tw-top-0 tw-z-40 tw-h-16 tw-flex tw-items-center tw-justify-between tw-gap-3 tw-px-4 md:tw-px-6 tw-flex-shrink-0"
+        style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border-color); backdrop-filter: blur(6px);">
+    <div class="tw-flex tw-items-center tw-gap-3 tw-min-w-0 tw-flex-1">
+        <!-- Hamburger: hanya tampil di mobile, membuka sidebar persistent -->
+        <button type="button" onclick="toggleSidebar(true)"
+                class="lg:tw-hidden tw-w-9 tw-h-9 tw-flex-shrink-0 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-border"
+                style="border-color: var(--border-color); color: var(--text-main);">
+            <span class="material-symbols-outlined tw-text-[20px]">menu</span>
+        </button>
+
+        <!-- BREADCRUMBS DINAMIS BERDASARKAN KATEGORI SIDEBAR -->
+        
+        
+            
+        
+
+        <div class="tw-min-w-0 tw-flex tw-items-center tw-gap-2 tw-text-xs md:tw-text-sm tw-truncate">
+            <span class="material-symbols-outlined tw-text-[16px] tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.5;">home</span>
+            <span style="color: var(--text-main); opacity: 0.3;" class="tw-flex-shrink-0">/</span>
+            <!-- Kategori Sidebar Dinamis -->
+            <span class="tw-font-medium tw-hidden sm:tw-inline tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.7;">Sistem & Akun</span>
+            <span class="tw-hidden sm:tw-inline tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.3;">/</span>
+            
+            <!-- Nama Halaman Aktif -->
+            <span class="tw-font-bold tw-tracking-tight tw-truncate" style="color: var(--text-main);">
+                
+                    FAQ & Panduan
+                
+            </span>
+        </div>
+    </div>
+
+    <div class="tw-flex tw-items-center tw-gap-2 tw-flex-shrink-0">
+        <div class="tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-text-white tw-shadow-sm" style="background-color: var(--primary);">
+            <span class="material-symbols-outlined tw-text-[16px]">person</span>
+        </div>
+    </div>
+</header>
+
+<!-- KOTAK NOTIFIKASI GLOBAL -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 9999; margin-top: 70px; pointer-events: none;">
+    
+        
+    
+</div>
+    
+    <!-- Ambil Role Pengguna Saat Ini -->
+    
+
+    <div class="container-fluid px-4 pb-5 pt-4 faq-page-wrap">
+
+        <!-- ── Page Header ── -->
+        <div class="faq-page-header mb-4" style="display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+            <div class="flex flex-col gap-1.5">
+                <h1 class="title-main text-[22px] sm:text-[24px] text-on-surface">
+                    FAQ &amp; Panduan Operasional Sistem
+                </h1>
+                <div class="flex flex-wrap items-center gap-3">
+                    <p class="desc-text text-[14px] sm:text-[15px] max-w-3xl">
+                        Dokumentasi interaktif, panduan alur kerja, dan jawaban terstruktur atas operasional sistem.
+                    </p>
+                </div>
+            </div>
+            <div class="faq-search-outer">
+                <div class="faq-search-wrap">
+                    <span class="material-symbols-outlined search-icon">manage_search</span>
+                    <input type="text" id="faqSearchInput" placeholder="Cari kata kunci, modul, atau topik...">
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Quick Guide Cards ── -->
+        <div class="quick-cards-row">
+            
+            <!-- Kartu 1: Quickstart (HANYA MUNCUL JIKA BUKAN PUBLIC) -->
+            
+            <div class="quick-card">
+                <div>
+                    <div class="quick-card-top">
+                        <div class="quick-card-icon"><span class="material-symbols-outlined">rocket_launch</span></div>
+                        <div>
+                            <div class="quick-card-label">Mulai Cepat QA</div>
+                            <h3 class="quick-card-title">Panduan Memulai Cepat</h3>
+                        </div>
+                    </div>
+                    <p class="quick-card-desc">Alur kerja verifikasi sampel standar: validasi batch, pemantauan otomatis, dan penyelesaian log pengujian di Dashboard.</p>
+                </div>
+                <div class="quick-card-footer">
+                    <span class="quick-card-meta">Akses Staf Internal</span>
+                    <a href="../../../html/supervisor/dashboard/index.html" class="quick-card-cta text-decoration-none">
+                        Buka Dashboard <span class="material-symbols-outlined">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+            
+
+            <!-- Kartu 2: Hak Akses (MUNCUL UNTUK SEMUA) -->
+            <div class="quick-card">
+                <div>
+                    <div class="quick-card-top">
+                        <div class="quick-card-icon"><span class="material-symbols-outlined">admin_panel_settings</span></div>
+                        <div>
+                            <div class="quick-card-label">Keamanan &amp; Hak</div>
+                            <h3 class="quick-card-title">Matriks Akses RBAC</h3>
+                        </div>
+                    </div>
+                    <p class="quick-card-desc">Pemetaan hak akses sistem: batasan wewenang tiap peran pengguna, termasuk apa yang bisa Anda akses di akun Anda saat ini.</p>
+                </div>
+                <div class="quick-card-footer">
+                    <span class="quick-card-meta">5 Peran Sistem</span>
+                    <a href="#faqList" class="quick-card-cta text-decoration-none">
+                        Baca Matriks <span class="material-symbols-outlined">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Kartu 3: Eskalasi Bug (MUNCUL UNTUK SEMUA) -->
+            <div class="quick-card">
+                <div>
+                    <div class="quick-card-top">
+                        <div class="quick-card-icon"><span class="material-symbols-outlined">emergency_heat</span></div>
+                        <div>
+                            <div class="quick-card-label">Bantuan Sistem</div>
+                            <h3 class="quick-card-title">Laporan Masalah &amp; Bug</h3>
+                        </div>
+                    </div>
+                    <p class="quick-card-desc">Protokol eskalasi keluhan pengguna, cara mengirim tiket bantuan, dan penanganan status oleh tim Developer.</p>
+                </div>
+                <div class="quick-card-footer">
+                    <span class="quick-card-meta">Layanan Pelanggan</span>
+                    <a href="../../../html/supervisor/support/index.html" class="quick-card-cta text-decoration-none">
+                        Buka Bantuan <span class="material-symbols-outlined">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- ── Category Filter Pills ── -->
+        <div class="category-pills" id="categoryPills">
+            <button class="cat-pill active" data-cat="all">Semua Kategori</button>
+            <button class="cat-pill" data-cat="auth">Akun &amp; Profil</button>
+            
+            
+            <button class="cat-pill" data-cat="task">Dashboard &amp; Manajemen Tugas</button>
+            
+            
+            
+            
+            <button class="cat-pill" data-cat="roles">Hak Akses Sistem</button>
+            <button class="cat-pill" data-cat="support">Bantuan &amp; Layanan</button>
+        </div>
+
+        <!-- ── Main Layout: Accordion + Sidebar Kanan ── -->
+        <div class="faq-main-layout">
+
+            <!-- Accordion List -->
+            <div class="faq-list" id="faqList">
+
+                <!-- Q1: AKUN (SEMUA ROLE) -->
+                <div class="faq-card" data-cat="auth">
+                    <button class="faq-trigger">
+                        <div class="faq-trigger-left">
+                            <span class="faq-num">01</span>
+                            <span class="faq-question">Bagaimana cara mengelola profil akun serta kata sandi saya?</span>
+                        </div>
+                        <div class="faq-trigger-right">
+                            <span class="faq-tag accent">Akun</span>
+                            <span class="material-symbols-outlined faq-chevron">expand_more</span>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <div class="faq-body-inner">
+                            <p>Setelah Anda masuk, buka menu <b>Profil Saya</b> untuk memperbarui informasi Anda kapan saja.</p>
+                            <div class="faq-mini-grid-2">
+                                <div class="mini-card">
+                                    <span class="mini-title">1. Menu Navigasi</span>
+                                    Klik tombol "Profil Saya" pada bilah sisi kiri atau menu akun di kanan atas.
+                                </div>
+                                <div class="mini-card">
+                                    <span class="mini-title">2. Kredensial &amp; Profil</span>
+                                    Anda dapat memperbarui kata sandi, email, serta foto profil Anda secara mandiri di halaman profil.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q2 & Q3: DASHBOARD & TASK (HANYA INTERNAL) -->
+                
+                <div class="faq-card" data-cat="task">
+                    <button class="faq-trigger">
+                        <div class="faq-trigger-left">
+                            <span class="faq-num">02</span>
+                            <span class="faq-question">Apa arti metrik dan indikator status tugas di Dashboard?</span>
+                        </div>
+                        <div class="faq-trigger-right">
+                            <span class="faq-tag">Dashboard</span>
+                            <span class="material-symbols-outlined faq-chevron">expand_more</span>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <div class="faq-body-inner">
+                            <p>Dashboard menyajikan metrik pengujian mutu secara langsung. Makna warna indikator:</p>
+                            <div class="faq-mini-grid-2">
+                                <div class="mini-card">
+                                    <div class="status-row">
+                                        <span class="status-dot" style="background:#0d9488;"></span>
+                                        <div><b>Need Sample:</b> Tugas baru yang belum diproses tim QC.</div>
+                                    </div>
+                                </div>
+                                <div class="mini-card">
+                                    <div class="status-row">
+                                        <span class="status-dot" style="background:#0284C7;"></span>
+                                        <div><b>Sample Done:</b> Sampel telah diuji oleh QC.</div>
+                                    </div>
+                                </div>
+                                <div class="mini-card">
+                                    <div class="status-row">
+                                        <span class="status-dot" style="background:#DC2626;"></span>
+                                        <div><b>Revision / Skipped:</b> Ditemukan deviasi dalam tugas.</div>
+                                    </div>
+                                </div>
+                                <div class="mini-card">
+                                    <div class="status-row">
+                                        <span class="status-dot" style="background:#059669;"></span>
+                                        <div><b>Ready / Production:</b> Lulus uji, tugas dikirim ke lini produksi.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-card" data-cat="task">
+                    <button class="faq-trigger">
+                        <div class="faq-trigger-left">
+                            <span class="faq-num">03</span>
+                            <span class="faq-question">Bagaimana alur mengelola dan menyinkronkan data tugas?</span>
+                        </div>
+                        <div class="faq-trigger-right">
+                            <span class="faq-tag">Tugas</span>
+                            <span class="material-symbols-outlined faq-chevron">expand_more</span>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <div class="faq-body-inner">
+                            <p>Alur pengelolaan data ini bergantung pada peran Anda:</p>
+                            <ul>
+                                <li><b>Developer &amp; QC:</b> Mengunggah file (Excel/CSV) di Manajemen Tugas, memperbarui status uji coba, dan melampirkan log sampel.</li>
+                                <li><b>Supervisor &amp; Collector:</b> Memantau hasil data yang sudah diunggah QC melalui Dashboard dan menggunakan fitur pencarian untuk memantau aktivitas proyek secara menyeluruh.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <!-- Q4: DOKUMEN QR (HANYA DEVELOPER & QC) -->
+                
+
+                <!-- Q5: ROLES (SEMUA ROLE) -->
+                <div class="faq-card" data-cat="roles">
+                    <button class="faq-trigger">
+                        <div class="faq-trigger-left">
+                            <span class="faq-num">05</span>
+                            <span class="faq-question">Apa saja tingkatan hak akses (Roles) di sistem ini?</span>
+                        </div>
+                        <div class="faq-trigger-right">
+                            <span class="faq-tag">Akses RBAC</span>
+                            <span class="material-symbols-outlined faq-chevron">expand_more</span>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <div class="faq-body-inner">
+                            <p>Sistem ini menerapkan aturan <i>Role-Based Access Control</i> (RBAC) yang ketat:</p>
+                            <div class="roles-stack">
+                                <div class="mini-card"><b>Developer:</b> Akses tertinggi (Root) — mencakup manajemen akun, tiket bantuan, kontrol penuh tugas, database, dan dokumen.</div>
+                                <div class="mini-card"><b>Quality Control:</b> Tim lapangan yang berhak mengimpor data proyek (Excel/CSV), mengevaluasi tugas, mengubah status, dan mengunggah dokumen referensi PDF.</div>
+                                <div class="mini-card"><b>Supervisor:</b> Manajemen yang memantau kinerja operasional melalui Dashboard eksklusif serta fitur penyaringan tugas tanpa akses mengubah data inti.</div>
+                                <div class="mini-card"><b>Collector:</b> Petugas pemantau internal yang dapat mengakses Dashboard untuk monitoring data secara khusus dengan batasan akses melihat saja.</div>
+                                <div class="mini-card"><b>Public (Guest):</b> Akses mendasar bagi publik, di mana fitur teknis disembunyikan. Hanya berhak mengelola akun pribadi dan menghubungi Layanan Pelanggan.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q6: SUPPORT (SEMUA ROLE) -->
+                <div class="faq-card" data-cat="support">
+                    <button class="faq-trigger">
+                        <div class="faq-trigger-left">
+                            <span class="faq-num">06</span>
+                            <span class="faq-question">Apa yang harus dilakukan jika saya menemukan bug atau masalah di akun saya?</span>
+                        </div>
+                        <div class="faq-trigger-right">
+                            <span class="faq-tag">Bantuan</span>
+                            <span class="material-symbols-outlined faq-chevron">expand_more</span>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <div class="faq-body-inner">
+                            <p>Silakan menuju ke menu <b>Pusat Bantuan &amp; Dukungan</b> (Layanan Pelanggan). Anda dapat mengirimkan keluhan langsung ke tim Developer kami.</p>
+                            <ul>
+                                <li>Tuliskan masalah yang Anda alami secara detail.</li>
+                                <li>Anda juga dapat melampirkan tangkapan layar (screenshot) bukti error agar tim kami dapat mengatasinya lebih cepat.</li>
+                                <li>Pantau riwayat perbaikan masalah Anda di sisi kanan panel Bantuan.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /faq-list -->
+
+            <!-- ── Right Sidebar ── -->
+            <div class="sidebar-right">
+
+                <!-- Support Card -->
+                <div class="sc-card support-card">
+                    <div class="sc-icon"><span class="material-symbols-outlined">headset_mic</span></div>
+                    <h3 class="sc-title">Masih Membutuhkan Bantuan Khusus?</h3>
+                    <p class="sc-desc">Tim Technical Operations siap membantu kendala sistem, pengaturan profil, atau masalah lainnya.</p>
+                    <a href="../../../html/supervisor/support/index.html" class="btn-primary-faq text-decoration-none">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        Buka Pusat Bantuan
+                    </a>
+                </div>
+
+            </div><!-- /sidebar-right -->
+
+        </div><!-- /faq-main-layout -->
+
+    </div>
+
+    <!-- templates/login_modal.html -->
+
+<!-- Bootstrap Modal wrapper — max-width 400px, centered -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+        <div class="modal-content border-0" style="
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 24px 48px -8px rgba(15,23,42,.14), 0 8px 16px -4px rgba(15,23,42,.08);
+            overflow: hidden;
+        ">
+
+            <!-- ── Inline styles scoped to this modal ── -->
+            <style>
+                /* ─ Tokens ─ */
+                #loginModal {
+                    --em7:   #0F766E;
+                    --em6:   #0D9488;
+                    --em5:   #14B8A6;
+                    --em50:  #F0FDFA;
+                    --em100: #CCFBF1;
+                    --em200: #99F6E4;
+                    --slate900: #0F172A;
+                    --slate600: #475569;
+                    --slate400: #94A3B8;
+                    --slate200: #E2E8F0;
+                    --slate100: #F1F5F9;
+                    --slate50:  #F8FAFC;
+                    --red:   #DC2626;
+                    --red-bg: rgba(220,38,38,.07);
+                    --red-border: rgba(220,38,38,.18);
+                    --font: 'Inter', system-ui, sans-serif;
+                    --mono: 'JetBrains Mono', ui-monospace, monospace;
+                }
+
+                /* ─ Field label ─ */
+                #loginModal .lm-label {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    font-size: 10px;
+                    font-weight: 700;
+                    letter-spacing: .07em;
+                    text-transform: uppercase;
+                    color: var(--slate600);
+                    margin-bottom: 6px;
+                    font-family: var(--font);
+                }
+                #loginModal .lm-label a {
+                    font-size: 11px;
+                    font-weight: 600;
+                    letter-spacing: .01em;
+                    text-transform: none;
+                    color: var(--em6);
+                    text-decoration: none;
+                }
+                #loginModal .lm-label a:hover { text-decoration: underline; }
+
+                /* ─ Input wrapper ─ */
+                #loginModal .lm-input-wrap {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                }
+                #loginModal .lm-input-icon {
+                    position: absolute;
+                    left: 12px;
+                    color: var(--slate400);
+                    pointer-events: none;
+                    line-height: 0;
+                    flex-shrink: 0;
+                }
+                #loginModal .lm-input {
+                    width: 100%;
+                    height: 42px;
+                    background: var(--slate50);
+                    border: 1.5px solid var(--slate200);
+                    border-radius: 10px;
+                    padding: 0 40px 0 38px;
+                    font-size: 13px;
+                    font-family: var(--font);
+                    color: var(--slate900);
+                    outline: none;
+                    transition: border-color .15s, box-shadow .15s, background .15s;
+                }
+                #loginModal .lm-input::placeholder { color: var(--slate400); }
+                #loginModal .lm-input:focus {
+                    background: #fff;
+                    border-color: var(--em7);
+                    box-shadow: 0 0 0 3px rgba(15,118,110,.12);
+                }
+
+                /* ─ Toggle eye button ─ */
+                #loginModal .lm-eye {
+                    position: absolute;
+                    right: 11px;
+                    background: none;
+                    border: none;
+                    padding: 4px;
+                    cursor: pointer;
+                    color: var(--slate400);
+                    line-height: 0;
+                    border-radius: 6px;
+                    transition: color .15s, background .15s;
+                }
+                #loginModal .lm-eye:hover { color: var(--slate600); background: var(--slate100); }
+
+                /* ─ Custom checkbox ─ */
+                #loginModal .lm-check-wrap {
+                    display: flex;
+                    align-items: center;
+                    gap: 9px;
+                    cursor: pointer;
+                    user-select: none;
+                }
+                #loginModal .lm-check-wrap input[type="checkbox"] { display: none; }
+                #loginModal .lm-check-box {
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 5px;
+                    border: 1.5px solid var(--slate200);
+                    background: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                    transition: background .15s, border-color .15s;
+                }
+                #loginModal .lm-check-wrap input:checked ~ .lm-check-box {
+                    background: var(--em7);
+                    border-color: var(--em7);
+                }
+                #loginModal .lm-check-box svg { opacity: 0; transition: opacity .12s; }
+                #loginModal .lm-check-wrap input:checked ~ .lm-check-box svg { opacity: 1; }
+                #loginModal .lm-check-label {
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: var(--slate600);
+                    font-family: var(--font);
+                }
+
+                /* ─ Continue button ─ */
+                #loginModal .lm-btn {
+                    width: 100%;
+                    height: 46px;
+                    background: var(--em7);
+                    color: #fff;
+                    border: none;
+                    border-radius: 12px;
+                    font-size: 14px;
+                    font-weight: 700;
+                    font-family: var(--font);
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    transition: background .15s, box-shadow .15s, transform .1s;
+                    box-shadow: 0 4px 12px -2px rgba(15,118,110,.35);
+                    letter-spacing: -.01em;
+                }
+                #loginModal .lm-btn:hover { background: var(--em6); box-shadow: 0 6px 16px -3px rgba(15,118,110,.4); }
+                #loginModal .lm-btn:active { background: #115E59; transform: translateY(1px); }
+                #loginModal .lm-btn:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+
+                /* ─ Error banner ─ */
+                #loginModal .lm-error {
+                    display: none;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 10px 13px;
+                    border-radius: 9px;
+                    background: var(--red-bg);
+                    border: 1px solid var(--red-border);
+                    color: var(--red);
+                    font-size: 12px;
+                    font-weight: 600;
+                    font-family: var(--font);
+                    margin-bottom: 16px;
+                }
+                #loginModal .lm-error.show { display: flex; }
+
+                /* ─ Footer shield ─ */
+                #loginModal .lm-footer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    color: var(--em6);
+                    font-size: 11px;
+                    font-weight: 500;
+                    font-family: var(--font);
+                    margin-top: 18px;
+                }
+
+                /* ─ Divider line below footer icon ─ */
+                #loginModal .lm-dot {
+                    width: 4px;
+                    height: 4px;
+                    border-radius: 50%;
+                    background: var(--slate200);
+                    margin: 10px auto 0;
+                }
+            </style>
+
+            <div class="modal-body" style="padding: 32px 28px 24px;">
+
+                <!-- ── Logo / Brand Icon ── -->
+                <div style="display:flex;justify-content:center;margin-bottom:20px;">
+                    <!-- Outer soft ring -->
+                    <div style="
+                        width: 64px; height: 64px;
+                        border-radius: 50%;
+                        background: var(--em50);
+                        display: flex; align-items: center; justify-content: center;
+                        position: relative;
+                    ">
+                        <!-- Lock icon -->
+                        <div style="
+                            width: 46px; height: 46px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, #0F766E 0%, #0D9488 100%);
+                            display: flex; align-items: center; justify-content: center;
+                            box-shadow: 0 4px 12px -2px rgba(15,118,110,.4);
+                        ">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0110 0v4"/>
+                            </svg>
+                        </div>
+                        <!-- Green checkmark badge -->
+                        <div style="
+                            position: absolute;
+                            bottom: 2px; right: 2px;
+                            width: 20px; height: 20px;
+                            border-radius: 50%;
+                            background: #10B981;
+                            border: 2px solid #ffffff;
+                            display: flex; align-items: center; justify-content: center;
+                        ">
+                            <svg width="10" height="10" viewBox="0 0 20 20" fill="#ffffff">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── Title ── -->
+                <div style="text-align:center; margin-bottom:24px;">
+                    <h5 style="
+                        font-family: 'Inter', sans-serif;
+                        font-size: 20px;
+                        font-weight: 700;
+                        color: #0F172A;
+                        margin: 0 0 5px;
+                        letter-spacing: -.02em;
+                    ">Masuk</h5>
+                    <p style="
+                        font-family: 'Inter', sans-serif;
+                        font-size: 13px;
+                        color: #0D9488;
+                        margin: 0;
+                        font-weight: 400;
+                    ">Masukkan kredensial Anda untuk mengakses sistem</p>
+                </div>
+
+                <!-- ── Error Banner ── -->
+                <div class="lm-error" id="loginErrorContainer" role="alert">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span id="loginErrorText"></span>
+                </div>
+
+                <!-- ── Form ── -->
+                <form id="loginForm" autocomplete="on" style="display:flex;flex-direction:column;gap:16px;">
+
+                    <!-- Username / Email -->
+                    <div>
+                        <div class="lm-label">
+                            <span>Nama Pengguna atau Email</span>
+                        </div>
+                        <div class="lm-input-wrap">
+                            <span class="lm-input-icon">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </span>
+                            <input
+                                class="lm-input"
+                                type="text"
+                                id="loginUsername"
+                                name="username"
+                                placeholder="nama@perusahaan.com"
+                                autocomplete="username"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <div class="lm-label">
+                            <span>Kata Sandi</span>
+                            <a href="#">Lupa kata sandi?</a>
+                        </div>
+                        <div class="lm-input-wrap">
+                            <span class="lm-input-icon">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            </span>
+                            <input
+                                class="lm-input"
+                                type="password"
+                                id="loginPassword"
+                                name="password"
+                                placeholder="••••••••••••"
+                                autocomplete="current-password"
+                                required
+                            >
+                            <button class="lm-eye" type="button" id="togglePwd" aria-label="Toggle password visibility">
+                                <!-- Eye icon (show) -->
+                                <svg id="eyeShow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <!-- Eye-off icon (hide) — shown when password is visible -->
+                                <svg id="eyeHide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember this workstation -->
+                    <div>
+                        <label class="lm-check-wrap">
+                            <input type="checkbox" id="rememberMe" name="remember_me">
+                            <span class="lm-check-box">
+                                <svg width="10" height="10" viewBox="0 0 20 20" fill="#ffffff">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                            </span>
+                            <span class="lm-check-label">Ingat perangkat ini</span>
+                        </label>
+                    </div>
+
+                    <!-- Continue Button -->
+                    <div style="margin-top:4px;">
+                        <button type="submit" class="lm-btn" id="loginBtn">
+                            <span id="loginBtnText">Lanjutkan</span>
+                            <svg id="loginBtnArrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            <!-- Spinner (hidden by default) -->
+                            <svg id="loginBtnSpinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;animation:lm-spin .75s linear infinite;">
+                                <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-opacity=".25"/>
+                                <path d="M21 12a9 9 0 00-9-9" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                </form>
+
+                <!-- ── Footer ── -->
+                <div class="lm-footer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>Dilindungi oleh autentikasi perusahaan</span>
+                </div>
+                <div class="lm-dot"></div>
+
+            </div><!-- /modal-body -->
+        </div><!-- /modal-content -->
+    </div>
+</div>
+
+<!-- ── Keyframes for spinner ── -->
+<style>
+@keyframes lm-spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+
+<!-- ── AJAX Script ── -->
+<script>
+(function () {
+    const form       = document.getElementById('loginForm');
+    const errorEl    = document.getElementById('loginErrorContainer');
+    const errorText  = document.getElementById('loginErrorText');
+    const btn        = document.getElementById('loginBtn');
+    const btnText    = document.getElementById('loginBtnText');
+    const btnArrow   = document.getElementById('loginBtnArrow');
+    const btnSpinner = document.getElementById('loginBtnSpinner');
+    const pwdInput   = document.getElementById('loginPassword');
+    const toggleBtn  = document.getElementById('togglePwd');
+    const eyeShow    = document.getElementById('eyeShow');
+    const eyeHide    = document.getElementById('eyeHide');
+
+    /* ── Toggle password visibility ── */
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            const isText = pwdInput.type === 'text';
+            pwdInput.type = isText ? 'password' : 'text';
+            eyeShow.style.display = isText ? '' : 'none';
+            eyeHide.style.display = isText ? 'none' : '';
+        });
+    }
+
+    /* ── Helpers ── */
+    function setLoading(on) {
+        btn.disabled   = on;
+        btnText.textContent = on ? 'Sedang Mengautentikasi...' : 'Lanjutkan';
+        btnArrow.style.display   = on ? 'none' : '';
+        btnSpinner.style.display = on ? '' : 'none';
+    }
+
+    function showError(msg) {
+        errorText.textContent = msg;
+        errorEl.classList.add('show');
+    }
+
+    function hideError() {
+        errorEl.classList.remove('show');
+        errorText.textContent = '';
+    }
+
+    /* ── Form submit ── */
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideError();
+            setLoading(true);
+
+            try {
+                const res    = await fetch("/login", {
+                    method: 'POST',
+                    body: new FormData(form)
+                });
+                const result = await res.json();
+
+                if (res.ok) {
+                    // Arahkan langsung ke halaman dashboard setelah sukses login
+                    window.location.href = "/dashboard";
+                } else {
+                    showError(result.message);
+                    setLoading(false);
+                }
+            } catch (_) {
+                showError("Sistem tidak tersedia. Silakan coba lagi nanti.");
+                setLoading(false);
+            }
+        });
+    }
+})();
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../../js/script.js"></script>
+
+    <script>
+    (function () {
+        /* ── Accordion Toggle ── */
+        document.querySelectorAll('.faq-trigger').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var card = this.closest('.faq-card');
+                card.classList.toggle('open');
+            });
+        });
+
+        /* ── Category Filter ── */
+        var pills = document.querySelectorAll('.cat-pill');
+        var cards = document.querySelectorAll('.faq-card');
+
+        pills.forEach(function (pill) {
+            pill.addEventListener('click', function () {
+                var cat = this.getAttribute('data-cat');
+                pills.forEach(function (p) { p.classList.remove('active'); });
+                this.classList.add('active');
+                cards.forEach(function (card) {
+                    var match = cat === 'all' || card.getAttribute('data-cat') === cat;
+                    card.classList.toggle('hidden', !match);
+                });
+            });
+        });
+
+        /* ── Search ── */
+        var searchInput = document.getElementById('faqSearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                var term = this.value.toLowerCase().trim();
+                cards.forEach(function (card) {
+                    card.classList.toggle('hidden', term !== '' && !card.textContent.toLowerCase().includes(term));
+                });
+            });
+        }
+    })();
+    </script>
+</body>
+</html>

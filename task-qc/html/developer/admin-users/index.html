@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<script src="../../../js/demo_data.js"></script><script src="../../../js/demo_shim.js"></script>
+    <script>
+    (function() {
+        const saved = localStorage.getItem('user_theme_preference') || 'system';
+        let theme = saved;
+        if (saved === 'system') {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Pengguna - QA System</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/style.css">
+<link rel="stylesheet" href="../../../../avatar.css"><script src="../../../../avatar.js" defer></script></head>
+<body class="has-app-sidebar">
+
+    <!-- SIDEBAR & NAVBAR -->
+    <!-- templates/sidebar.html -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  window.tailwind && (tailwind.config = {
+    prefix: 'tw-',
+    corePlugins: { preflight: false },
+    theme: {
+      extend: {
+        colors: {
+          'shell-bg': '#09201F',
+          'shell-surface': '#0E2A29',
+          'shell-border': '#163836',
+          'shell-text': '#F1F5F9',
+          'shell-muted': '#648A86',
+          primary: '#0F766E',
+          'primary-dark': '#0D9488',
+          secondary: '#0284C7'
+        },
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace']
+        }
+      }
+    }
+  });
+</script>
+<style>
+  .material-symbols-outlined { 
+    font-family: 'Material Symbols Outlined' !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 20px !important;
+    line-height: 1 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    word-wrap: normal !important;
+    direction: ltr !important;
+    -webkit-font-smoothing: antialiased !important;
+    -webkit-font-feature-settings: 'liga' !important;
+    font-feature-settings: 'liga' !important;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  }
+  
+  html { overflow-y: scroll !important; }
+  body { padding-right: 0 !important; }
+  @media (min-width: 1024px) {
+    body.has-app-sidebar { padding-left: 256px !important; }
+  }
+  
+  #appSidebar, #appSidebar * {
+    box-sizing: border-box !important;
+    letter-spacing: -0.01em !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+  
+  #appSidebar a { text-decoration: none !important; }
+  #appSidebar button { background: transparent; border: none; box-shadow: none; outline: none; }
+
+  #appSidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 256px !important;
+    min-width: 256px !important;
+    max-width: 256px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    flex: 0 0 256px !important;
+    will-change: transform;
+    contain: layout style paint;
+    z-index: 1050 !important;
+  }
+
+  @media (max-width: 1023.98px) {
+    #appSidebar {
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.4);
+      transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+    #appSidebar:not(.tw-translate-x-0) {
+      transform: translateX(-100%) !important;
+    }
+    #appSidebar.tw-translate-x-0 {
+      transform: translateX(0) !important;
+    }
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+      #appSidebar .tw-flex-shrink-0.tw-p-2 {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom)) !important;
+      }
+    }
+  }
+</style>
+
+<aside id="appSidebar"
+       class="tw-font-sans tw-fixed tw-left-0 tw-top-0 tw-w-64 tw-bg-shell-bg tw-border-r tw-border-shell-border tw-z-50 tw-flex tw-flex-col tw-justify-between tw-select-none -tw-translate-x-full lg:tw-translate-x-0 tw-transition-transform tw-duration-200">
+    <div class="tw-flex tw-flex-col tw-flex-1 tw-min-h-0">
+
+        <!-- Brand -->
+        <div class="tw-h-16 tw-px-4 tw-flex tw-items-center tw-justify-between tw-gap-2 tw-flex-shrink-0" style="border-bottom: 1px solid #163836 !important;">
+            <div class="tw-flex tw-items-center tw-gap-2.5 tw-min-w-0">
+                <div class="tw-w-8 tw-h-8 tw-rounded-lg tw-bg-primary/80 tw-border tw-border-primary-dark/30 tw-flex tw-items-center tw-justify-center tw-shadow-inner tw-flex-shrink-0">
+                    <span class="material-symbols-outlined tw-text-white tw-text-[18px]">verified</span>
+                </div>
+                <div class="tw-flex tw-flex-col tw-min-w-0">
+                    <span class="tw-text-shell-text tw-font-bold tw-text-sm tw-leading-none tw-tracking-tight tw-truncate">CCIndonesia</span>
+                    <span class="tw-font-mono tw-text-primary/80 tw-uppercase tw-tracking-wider tw-text-[10px] tw-mt-1 tw-font-medium tw-truncate">Kelola Task & QR Code</span>
+                </div>
+            </div>
+            <button type="button" onclick="toggleSidebar(false)" class="lg:tw-hidden tw-w-7 tw-h-7 tw-rounded tw-flex tw-items-center tw-justify-center tw-text-shell-muted hover:tw-text-white hover:tw-bg-shell-surface tw-transition-colors tw-flex-shrink-0">
+                <span class="material-symbols-outlined tw-text-[18px]">close</span>
+            </button>
+        </div>
+
+        <!-- Nav (scrollable) -->
+        <div class="tw-overflow-y-auto tw-flex-1 tw-px-2 tw-py-3 tw-space-y-4">
+
+            <!-- OPERATIONS -->
+            <nav class="tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-px-2 tw-pt-1 tw-pb-1 tw-text-[11px] tw-font-semibold tw-uppercase tw-tracking-wider tw-text-shell-muted">Operasional</div>
+
+                
+                
+                <a href="../../../html/developer/dashboard/index.html"
+                class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                         tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">space_dashboard</span>
+                    <span>Dashboard</span>
+                </a>
+                
+
+                <a href="../../../html/developer/tasks/index.html"
+                class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                         tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">assignment</span>
+                    <span>Manajemen Task</span>
+                </a>
+
+                
+            </nav>
+
+            <!-- ADMINISTRATION (Developer only) -->
+            
+            <nav class="tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-px-2 tw-pt-1 tw-pb-1 tw-text-[11px] tw-font-semibold tw-uppercase tw-tracking-wider tw-text-shell-muted">Administrasi</div>
+
+                <a href="../../../html/developer/admin-users/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-bg-primary tw-text-white tw-border-primary-dark/40
+                          ">
+                    <span class="material-symbols-outlined tw-text-[18px]">group</span>
+                    <span>Manajemen Pengguna</span>
+                </a>
+
+                <a href="../../../html/developer/admin-support/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">confirmation_number</span>
+                    <span>Tiket Dukungan</span>
+                </a>
+            </nav>
+            
+
+            <!-- SYSTEM & ACCOUNT -->
+            <nav class="tw-flex tw-flex-col tw-gap-1">
+                <div class="tw-px-2 tw-pt-1 tw-pb-1 tw-text-[11px] tw-font-semibold tw-uppercase tw-tracking-wider tw-text-shell-muted">Sistem & Akun</div>
+
+                <a href="../../../html/developer/support/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">headset_mic</span>
+                    <span>Layanan Pelanggan</span>
+                </a>
+
+                <a href="../../../html/developer/faq/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">menu_book</span>
+                    <span>FAQ & Panduan</span>
+                </a>
+
+                <a href="../../../html/developer/profile/index.html"
+                   class="tw-no-underline tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border
+                           tw-text-slate-300 hover:tw-bg-shell-surface hover:tw-text-shell-text tw-border-transparent ">
+                    <span class="material-symbols-outlined tw-text-[18px]">manage_accounts</span>
+                    <span>Pengaturan Profil</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="tw-p-2 tw-bg-black/20 tw-border-t tw-border-shell-border tw-flex tw-flex-col tw-gap-2 tw-flex-shrink-0">
+        <div class="tw-flex tw-items-center tw-gap-1 tw-px-1">
+            <div class="dropup">
+                <button class="tw-bg-transparent tw-border-0 tw-shadow-none tw-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-md tw-text-shell-text tw-text-xs tw-font-mono hover:tw-bg-black/30 tw-transition-colors" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    ID
+                </button>
+                <ul class="dropdown-menu shadow-sm border-0 py-1 theme-dropdown-menu">
+                    <li><a class="dropdown-item py-2 px-3 small active" href="#">🇮🇩 Bahasa Indonesia</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small " href="#">🇬🇧 English</a></li>
+                </ul>
+            </div>
+
+            <div class="dropup">
+                <button class="tw-bg-transparent tw-border-0 tw-shadow-none tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 tw-rounded-md tw-text-shell-text hover:tw-bg-black/30 tw-transition-colors" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Theme">
+                    <span class="material-symbols-outlined tw-text-[16px]">wb_sunny</span>
+                </button>
+                <ul class="dropdown-menu shadow-sm border-0 py-1 theme-dropdown-menu">
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('light')">Terang</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('dark')">Gelap</a></li>
+                    <li><a class="dropdown-item py-2 px-3 small" href="javascript:void(0);" onclick="setTheme('system')">Sistem</a></li>
+                </ul>
+            </div>
+
+            <!-- Tombol Logout: HANYA MUNCUL JIKA SUDAH LOGIN -->
+            
+            <a href="#" title="Keluar" class="tw-no-underline tw-ml-auto tw-w-7 tw-h-7 tw-rounded tw-flex tw-items-center tw-justify-center tw-text-shell-muted hover:tw-bg-black/30 hover:tw-text-rose-400 tw-transition-colors">
+                <span class="material-symbols-outlined tw-text-[16px]">logout</span>
+            </a>
+            
+        </div>
+
+        
+        <div class="tw-flex tw-items-center tw-gap-2.5 tw-p-2 tw-rounded-lg tw-bg-shell-surface tw-border tw-border-shell-border">
+            <div class="tw-relative tw-flex-shrink-0">
+                <div class="tw-w-8 tw-h-8 tw-rounded-full tw-bg-primary/20 tw-text-primary tw-border tw-border-primary/30 tw-flex tw-items-center tw-justify-center">
+                    <span class="material-symbols-outlined tw-text-[16px]">person</span>
+                </div>
+            </div>
+            <div class="tw-flex tw-flex-col tw-min-w-0 tw-flex-1">
+                <span class="tw-text-shell-text tw-text-xs tw-font-bold tw-truncate">developer</span>
+                <span class="tw-font-mono tw-text-primary/90 tw-text-[10px] tw-truncate"></span>
+            </div>
+            <span class="tw-w-2 tw-h-2 tw-rounded-full tw-bg-emerald-500 tw-flex-shrink-0"></span>
+        </div>
+        
+    </div>
+</aside>
+
+<!-- Backdrop mobile -->
+<div id="sidebarBackdrop" onclick="toggleSidebar(false)" class="tw-hidden tw-fixed tw-inset-0 tw-bg-black/50 lg:tw-hidden" style="z-index: 1040;"></div>
+
+<script>
+    document.body.classList.add('has-app-sidebar');
+
+    function toggleSidebar(open) {
+        const aside = document.getElementById('appSidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        if (!aside) return;
+        const willOpen = (typeof open === 'boolean') ? open : aside.classList.contains('-tw-translate-x-full');
+        aside.classList.toggle('-tw-translate-x-full', !willOpen);
+        aside.classList.toggle('tw-translate-x-0', willOpen);
+        if (backdrop) backdrop.classList.toggle('tw-hidden', !willOpen);
+    }
+    window.toggleSidebar = toggleSidebar;
+
+    document.getElementById('appSidebar') && document.getElementById('appSidebar').querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+            if (window.innerWidth < 1024) toggleSidebar(false);
+        });
+    });
+</script>
+    <!-- templates/navbar.html -->
+<header class="tw-font-sans tw-sticky tw-top-0 tw-z-40 tw-h-16 tw-flex tw-items-center tw-justify-between tw-gap-3 tw-px-4 md:tw-px-6 tw-flex-shrink-0"
+        style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border-color); backdrop-filter: blur(6px);">
+    <div class="tw-flex tw-items-center tw-gap-3 tw-min-w-0 tw-flex-1">
+        <!-- Hamburger: hanya tampil di mobile, membuka sidebar persistent -->
+        <button type="button" onclick="toggleSidebar(true)"
+                class="lg:tw-hidden tw-w-9 tw-h-9 tw-flex-shrink-0 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-border"
+                style="border-color: var(--border-color); color: var(--text-main);">
+            <span class="material-symbols-outlined tw-text-[20px]">menu</span>
+        </button>
+
+        <!-- BREADCRUMBS DINAMIS BERDASARKAN KATEGORI SIDEBAR -->
+        
+        
+            
+        
+
+        <div class="tw-min-w-0 tw-flex tw-items-center tw-gap-2 tw-text-xs md:tw-text-sm tw-truncate">
+            <span class="material-symbols-outlined tw-text-[16px] tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.5;">home</span>
+            <span style="color: var(--text-main); opacity: 0.3;" class="tw-flex-shrink-0">/</span>
+            <!-- Kategori Sidebar Dinamis -->
+            <span class="tw-font-medium tw-hidden sm:tw-inline tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.7;">Administrasi</span>
+            <span class="tw-hidden sm:tw-inline tw-flex-shrink-0" style="color: var(--text-main); opacity: 0.3;">/</span>
+            
+            <!-- Nama Halaman Aktif -->
+            <span class="tw-font-bold tw-tracking-tight tw-truncate" style="color: var(--text-main);">
+                
+                    Manajemen Pengguna
+                
+            </span>
+        </div>
+    </div>
+
+    <div class="tw-flex tw-items-center tw-gap-2 tw-flex-shrink-0">
+        <div class="tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-text-white tw-shadow-sm" style="background-color: var(--primary);">
+            <span class="material-symbols-outlined tw-text-[16px]">person</span>
+        </div>
+    </div>
+</header>
+
+<!-- KOTAK NOTIFIKASI GLOBAL -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 9999; margin-top: 70px; pointer-events: none;">
+    
+        
+    
+</div>
+
+    <div class="container-fluid px-4 pb-5 pt-4 qc-console">
+
+        <!-- HEADER SECTION -->
+        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-4 mb-4">
+            <div class="d-flex flex-column gap-1">
+                <!-- Menggunakan title-main dan cursor: default untuk menghilangkan caret -->
+                <h1 class="title-main text-on-surface mb-0" style="font-size: clamp(22px, 2.5vw, 24px); font-weight: 700; cursor: default; letter-spacing: -0.02em;">
+                    Manajemen Pengguna
+                </h1>
+                
+                <div class="d-flex flex-wrap align-items-center gap-3 mt-1">
+                    <p class="desc-text mb-0" style="font-size: clamp(14px, 1.5vw, 15px); color: var(--text-muted); cursor: default; max-width: 800px;">
+                        Kelola akun, akses sistem, dan izin pengguna dalam satu tempat.
+                    </p>
+                </div>
+            </div>
+            
+            <button class="btn btn-tm-primary btn-sm px-3 py-2 fw-semibold d-flex align-items-center gap-2 mb-1" data-bs-toggle="modal" data-bs-target="#addUserModal" style="border-radius: 8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                Tambah Akun Baru
+            </button>
+        </div>
+
+        <!-- KPI METRICS CARDS (2 KARTU UTAMA) -->
+        <div class="row g-3 mb-4">
+            <!-- Card 1: Total Pengguna Terdaftar -->
+            <div class="col-12 col-md-6">
+                <div class="card border-0 shadow-xs p-3" style="background-color: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color) !important;">
+                    <div class="d-flex align-items-start justify-content-between mb-2">
+                        <div>
+                            <div class="text-muted fw-semibold" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Pengguna Terdaftar</div>
+                            <div class="d-flex align-items-baseline gap-2 mt-1">
+                                <span class="fw-bold" style="font-size: 28px; color: var(--text-main); letter-spacing: -0.02em;">5</span>
+                            </div>
+                        </div>
+                        <div class="p-2 rounded-3 d-flex align-items-center justify-content-center" style="background-color: rgba(16, 185, 129, 0.1); color: #10B981;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 text-muted pt-2 flex-wrap" style="font-size: 0.78rem; border-top: 1px solid var(--border-color);">
+                        <span class="text-success fw-semibold"><span>4</span> Aktif</span>
+                        <span>•</span>
+                        <span><span>1</span> Offline</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Distribusi Peran QC -->
+            <div class="col-12 col-md-6">
+                <div class="card border-0 shadow-xs p-3" style="background-color: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color) !important;">
+                    <div class="d-flex align-items-start justify-content-between mb-2">
+                        <div>
+                            <div class="text-muted fw-semibold" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;">Distribusi Peran</div>
+                            <div class="d-flex align-items-baseline gap-2 mt-1">
+                                <span class="fw-bold" style="font-size: 28px; color: var(--text-main); letter-spacing: -0.02em;">4 Peran Utama</span>
+                            </div>
+                        </div>
+                        <div class="p-2 rounded-3 d-flex align-items-center justify-content-center" style="background-color: rgba(14, 165, 233, 0.1); color: #0EA5E9;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 text-muted pt-2 text-truncate" style="font-size: 0.78rem; border-top: 1px solid var(--border-color); white-space: nowrap; overflow: hidden;">
+                        
+                        <span>Developer (1)</span><span>•</span>
+                        
+                        <span>Quality Control (2)</span><span>•</span>
+                        
+                        <span>Supervisor (1)</span><span>•</span>
+                        
+                        <span>Publik (1)</span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH & FILTER TOOLBAR (DENGAN INFO & REFRESH DI ATAS) -->
+        <div class="card border-0 shadow-xs mb-3 p-2" style="background-color: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color) !important; overflow: visible !important;">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 px-2 py-1" style="overflow: visible !important;">
+                
+                <!-- Kiri: Input Pencarian & Dropdown Filter -->
+                <div class="d-flex align-items-center gap-2 flex-wrap flex-grow-1">
+                    <!-- Kotak Pencarian -->
+                    <div class="position-relative flex-grow-1" style="min-width: 250px; max-width: 360px;">
+                        <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted d-flex align-items-center">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </span>
+                        <input type="text" id="userSearchInput" class="form-control form-control-sm bg-light border-0 ps-5 py-2" placeholder="Cari username, nama lengkap, atau email..." style="border-radius: 8px; font-size: 0.88rem;">
+                    </div>
+
+                    <!-- Dropdown Filter Role -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0 dropdown-toggle px-3 py-2 text-secondary fw-medium d-flex align-items-center gap-2" type="button" id="roleDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 8px; background-color: var(--dark-soft); font-size: 0.88rem;">
+                            <span id="selectedRoleLabel">Semua Peran</span>
+                        </button>
+                        <ul class="dropdown-menu shadow-sm border-0 py-2" aria-labelledby="roleDropdownBtn" style="font-size: 0.88rem; border-radius: 10px; z-index: 1050;">
+                            <li><a class="dropdown-item py-1.5 px-3 role-filter-item active" href="#" data-role="All">Semua Peran</a></li>
+                            <li><a class="dropdown-item py-1.5 px-3 role-filter-item" href="#" data-role="Developer">Developer</a></li>
+                            <li><a class="dropdown-item py-1.5 px-3 role-filter-item" href="#" data-role="Supervisor">Supervisor</a></li>
+                            <li><a class="dropdown-item py-1.5 px-3 role-filter-item" href="#" data-role="Quality Control">Quality Control</a></li>
+                            <!-- TAMBAHKAN INI -->
+                            <li><a class="dropdown-item py-1.5 px-3 role-filter-item" href="#" data-role="Collector">Collector</a></li>
+                            <li><a class="dropdown-item py-1.5 px-3 role-filter-item" href="#" data-role="Public">Public</a></li>
+                        </ul> 
+                    </div>
+
+                    <!-- Dropdown Filter Status -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0 dropdown-toggle px-3 py-2 text-secondary fw-medium d-flex align-items-center gap-2" type="button" id="statusDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 8px; background-color: var(--dark-soft); font-size: 0.88rem;">
+                            <span id="selectedStatusLabel">Semua Status</span>
+                        </button>
+                        <ul class="dropdown-menu shadow-sm border-0 py-2" aria-labelledby="statusDropdownBtn" style="font-size: 0.88rem; border-radius: 10px; z-index: 1050;">
+                            <li><a class="dropdown-item py-1.5 px-3 status-filter-item active" href="#" data-status="All">Semua Status</a></li>
+                            <li><a class="dropdown-item py-1.5 px-3 status-filter-item" href="#" data-status="Aktif">Aktif</a></li>
+                            <li><a class="dropdown-item py-1.5 px-3 status-filter-item" href="#" data-status="Offline">Offline</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Kanan: Info Jumlah & Tombol Refresh -->
+                <div class="d-flex align-items-center gap-3 ms-auto text-muted" style="font-size: 0.85rem;">
+                    <span id="userCountInfo" class="fw-medium font-monospace" style="font-size: 0.82rem;">Menampilkan total 5 entitas akun sistem</span>
+                    
+                    <!-- Tombol Refresh dengan ID -->
+                    <button type="button" id="refreshUsersBtn" class="btn btn-sm btn-light border-0 p-1.5 text-muted hover-bg" title="Perbarui Data" style="border-radius: 6px; background-color: var(--dark-soft);">
+                        <svg id="refreshIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TABEL USER DENGAN VERTICAL SCROLL & FOOTER MENYATU -->
+        <div class="card border-0 shadow-xs mb-3" style="background-color: var(--bg-surface); border-radius: 12px; border: 1px solid var(--border-color) !important; overflow: hidden;">
+            
+            <!-- Pembungkus tabel dengan batas tinggi & scroll -->
+            <div class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+                <table class="table align-middle mb-0" style="color: var(--text-main); font-size: 0.9rem;">
+                    <thead style="background-color: var(--bg-body); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 10;">
+                        <tr>
+                            <th class="py-3 px-4 text-muted fw-semibold" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background-color: var(--bg-surface);">No</th>
+                            <th class="py-3 text-muted fw-semibold" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background-color: var(--bg-surface);">Pengguna</th>
+                            <th class="py-3 text-muted fw-semibold" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background-color: var(--bg-surface);">Nama Lengkap</th>
+                            <th class="py-3 text-muted fw-semibold" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background-color: var(--bg-surface);">Email</th>
+                            <th class="py-3 text-muted fw-semibold" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background-color: var(--bg-surface);">Peran / Hak Akses</th>
+                            <th class="py-3 text-muted fw-semibold" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background-color: var(--bg-surface);">Status</th>
+                            <th class="py-3 text-muted fw-semibold" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background-color: var(--bg-surface);">Terakhir Aktif</th>
+                            <th class="py-3 text-end px-4 text-muted fw-semibold" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background-color: var(--bg-surface);">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        
+                        <tr class="user-row" 
+                            data-username="developer" 
+                            data-fullname="rina pratama" 
+                            data-email="developer@contoh.id" 
+                            data-role="Developer" 
+                            data-status="Aktif"
+                            style="border-bottom: 1px solid var(--border-color);">
+                            <td class="px-4 text-muted fw-medium row-number">1</td>
+                            <td class="fw-semibold text-main">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span>developer</span>
+                                    
+                                    <span class="badge rounded-pill fw-bold" style="font-size: 10px; background-color: #0F766E; color: #ffffff; padding: 0.25em 0.6em;">SAAT INI</span>
+                                    
+                                </div>
+                            </td>
+                            <td class="text-muted">Rina Pratama</td>
+                            <td class="text-muted">developer@contoh.id</td>
+                            <td>
+                                <form action="/update_user_role/1" method="POST" class="d-flex align-items-center gap-2">
+                                    <select name="new_role" class="form-select form-select-sm bg-light border-0 py-1 px-2 role-select-elem" style="width: 140px; font-size: 0.85rem; border-radius: 6px;">
+                                        <option value="Developer" selected>Developer</option>
+                                        <option value="Supervisor" >Supervisor</option>
+                                        <option value="Quality Control" >Quality Control</option>
+                                        <!-- TAMBAHKAN INI -->
+                                        <option value="Collector" >Collector</option>
+                                        <option value="Public" >Public</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-tm-primary btn-sm py-1 px-2.5 fw-medium" style="font-size: 0.75rem; border-radius: 6px;">Perbarui</button>
+                                </form>
+                            </td>
+                            <td>
+                                
+                                <span class="badge rounded-pill d-inline-flex align-items-center gap-1 px-2.5 py-1 status-badge-elem" data-status-val="Aktif" style="font-size: 0.75rem; font-weight: 600; background-color: #ECFDF5; color: #059669; border: 1px solid #A7F3D0;">
+                                    <span style="width: 6px; height: 6px; border-radius: 50%; background-color: #059669;"></span> Aktif
+                                </span>
+                                
+                            </td>
+                            <td class="text-muted small" style="font-size: 0.82rem;">
+                                
+                                    2026-11-14 08:13:46
+                                
+                            </td>
+                            <td class="text-end px-4">
+                                <div class="d-flex align-items-center justify-content-end gap-2">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm px-2.5 py-1" style="font-size: 0.78rem; border-radius: 6px;"
+                                        data-bs-toggle="modal" data-bs-target="#resetPasswordModal"
+                                        data-user-id="1" 
+                                        data-username="developer"
+                                        data-fullname="Rina Pratama"> <!-- Tambahkan baris ini -->
+                                    Reset Sandi
+                                </button>
+                                    
+                                    <span class="small text-muted fst-italic px-1" style="font-size: 0.75rem;">Akun Anda</span>
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="user-row" 
+                            data-username="qc_andi" 
+                            data-fullname="andi saputra" 
+                            data-email="qc_andi@contoh.id" 
+                            data-role="Quality Control" 
+                            data-status="Aktif"
+                            style="border-bottom: 1px solid var(--border-color);">
+                            <td class="px-4 text-muted fw-medium row-number">2</td>
+                            <td class="fw-semibold text-main">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span>qc_andi</span>
+                                    
+                                </div>
+                            </td>
+                            <td class="text-muted">Andi Saputra</td>
+                            <td class="text-muted">qc_andi@contoh.id</td>
+                            <td>
+                                <form action="/update_user_role/2" method="POST" class="d-flex align-items-center gap-2">
+                                    <select name="new_role" class="form-select form-select-sm bg-light border-0 py-1 px-2 role-select-elem" style="width: 140px; font-size: 0.85rem; border-radius: 6px;">
+                                        <option value="Developer" >Developer</option>
+                                        <option value="Supervisor" >Supervisor</option>
+                                        <option value="Quality Control" selected>Quality Control</option>
+                                        <!-- TAMBAHKAN INI -->
+                                        <option value="Collector" >Collector</option>
+                                        <option value="Public" >Public</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-tm-primary btn-sm py-1 px-2.5 fw-medium" style="font-size: 0.75rem; border-radius: 6px;">Perbarui</button>
+                                </form>
+                            </td>
+                            <td>
+                                
+                                <span class="badge rounded-pill d-inline-flex align-items-center gap-1 px-2.5 py-1 status-badge-elem" data-status-val="Aktif" style="font-size: 0.75rem; font-weight: 600; background-color: #ECFDF5; color: #059669; border: 1px solid #A7F3D0;">
+                                    <span style="width: 6px; height: 6px; border-radius: 50%; background-color: #059669;"></span> Aktif
+                                </span>
+                                
+                            </td>
+                            <td class="text-muted small" style="font-size: 0.82rem;">
+                                
+                                    2026-11-14 07:33:46
+                                
+                            </td>
+                            <td class="text-end px-4">
+                                <div class="d-flex align-items-center justify-content-end gap-2">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm px-2.5 py-1" style="font-size: 0.78rem; border-radius: 6px;"
+                                        data-bs-toggle="modal" data-bs-target="#resetPasswordModal"
+                                        data-user-id="2" 
+                                        data-username="qc_andi"
+                                        data-fullname="Andi Saputra"> <!-- Tambahkan baris ini -->
+                                    Reset Sandi
+                                </button>
+                                    
+                                    <form action="/admin/users/delete/2" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini secara permanen?');">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm px-2 py-1" style="font-size: 0.78rem; border-radius: 6px;">Hapus</button>
+                                    </form>
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="user-row" 
+                            data-username="qc_budi" 
+                            data-fullname="budi santoso" 
+                            data-email="qc_budi@contoh.id" 
+                            data-role="Quality Control" 
+                            data-status="Aktif"
+                            style="border-bottom: 1px solid var(--border-color);">
+                            <td class="px-4 text-muted fw-medium row-number">3</td>
+                            <td class="fw-semibold text-main">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span>qc_budi</span>
+                                    
+                                </div>
+                            </td>
+                            <td class="text-muted">Budi Santoso</td>
+                            <td class="text-muted">qc_budi@contoh.id</td>
+                            <td>
+                                <form action="/update_user_role/3" method="POST" class="d-flex align-items-center gap-2">
+                                    <select name="new_role" class="form-select form-select-sm bg-light border-0 py-1 px-2 role-select-elem" style="width: 140px; font-size: 0.85rem; border-radius: 6px;">
+                                        <option value="Developer" >Developer</option>
+                                        <option value="Supervisor" >Supervisor</option>
+                                        <option value="Quality Control" selected>Quality Control</option>
+                                        <!-- TAMBAHKAN INI -->
+                                        <option value="Collector" >Collector</option>
+                                        <option value="Public" >Public</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-tm-primary btn-sm py-1 px-2.5 fw-medium" style="font-size: 0.75rem; border-radius: 6px;">Perbarui</button>
+                                </form>
+                            </td>
+                            <td>
+                                
+                                <span class="badge rounded-pill d-inline-flex align-items-center gap-1 px-2.5 py-1 status-badge-elem" data-status-val="Aktif" style="font-size: 0.75rem; font-weight: 600; background-color: #ECFDF5; color: #059669; border: 1px solid #A7F3D0;">
+                                    <span style="width: 6px; height: 6px; border-radius: 50%; background-color: #059669;"></span> Aktif
+                                </span>
+                                
+                            </td>
+                            <td class="text-muted small" style="font-size: 0.82rem;">
+                                
+                                    2026-11-14 06:53:46
+                                
+                            </td>
+                            <td class="text-end px-4">
+                                <div class="d-flex align-items-center justify-content-end gap-2">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm px-2.5 py-1" style="font-size: 0.78rem; border-radius: 6px;"
+                                        data-bs-toggle="modal" data-bs-target="#resetPasswordModal"
+                                        data-user-id="3" 
+                                        data-username="qc_budi"
+                                        data-fullname="Budi Santoso"> <!-- Tambahkan baris ini -->
+                                    Reset Sandi
+                                </button>
+                                    
+                                    <form action="/admin/users/delete/3" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini secara permanen?');">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm px-2 py-1" style="font-size: 0.78rem; border-radius: 6px;">Hapus</button>
+                                    </form>
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="user-row" 
+                            data-username="spv_dewi" 
+                            data-fullname="dewi anggraini" 
+                            data-email="spv_dewi@contoh.id" 
+                            data-role="Supervisor" 
+                            data-status="Aktif"
+                            style="border-bottom: 1px solid var(--border-color);">
+                            <td class="px-4 text-muted fw-medium row-number">4</td>
+                            <td class="fw-semibold text-main">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span>spv_dewi</span>
+                                    
+                                </div>
+                            </td>
+                            <td class="text-muted">Dewi Anggraini</td>
+                            <td class="text-muted">spv_dewi@contoh.id</td>
+                            <td>
+                                <form action="/update_user_role/4" method="POST" class="d-flex align-items-center gap-2">
+                                    <select name="new_role" class="form-select form-select-sm bg-light border-0 py-1 px-2 role-select-elem" style="width: 140px; font-size: 0.85rem; border-radius: 6px;">
+                                        <option value="Developer" >Developer</option>
+                                        <option value="Supervisor" selected>Supervisor</option>
+                                        <option value="Quality Control" >Quality Control</option>
+                                        <!-- TAMBAHKAN INI -->
+                                        <option value="Collector" >Collector</option>
+                                        <option value="Public" >Public</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-tm-primary btn-sm py-1 px-2.5 fw-medium" style="font-size: 0.75rem; border-radius: 6px;">Perbarui</button>
+                                </form>
+                            </td>
+                            <td>
+                                
+                                <span class="badge rounded-pill d-inline-flex align-items-center gap-1 px-2.5 py-1 status-badge-elem" data-status-val="Aktif" style="font-size: 0.75rem; font-weight: 600; background-color: #ECFDF5; color: #059669; border: 1px solid #A7F3D0;">
+                                    <span style="width: 6px; height: 6px; border-radius: 50%; background-color: #059669;"></span> Aktif
+                                </span>
+                                
+                            </td>
+                            <td class="text-muted small" style="font-size: 0.82rem;">
+                                
+                                    2026-11-14 06:13:46
+                                
+                            </td>
+                            <td class="text-end px-4">
+                                <div class="d-flex align-items-center justify-content-end gap-2">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm px-2.5 py-1" style="font-size: 0.78rem; border-radius: 6px;"
+                                        data-bs-toggle="modal" data-bs-target="#resetPasswordModal"
+                                        data-user-id="4" 
+                                        data-username="spv_dewi"
+                                        data-fullname="Dewi Anggraini"> <!-- Tambahkan baris ini -->
+                                    Reset Sandi
+                                </button>
+                                    
+                                    <form action="/admin/users/delete/4" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini secara permanen?');">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm px-2 py-1" style="font-size: 0.78rem; border-radius: 6px;">Hapus</button>
+                                    </form>
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="user-row" 
+                            data-username="guest/publik" 
+                            data-fullname="public guest" 
+                            data-email="guest@contoh.id" 
+                            data-role="Publik" 
+                            data-status="Offline"
+                            style="border-bottom: 1px solid var(--border-color);">
+                            <td class="px-4 text-muted fw-medium row-number">5</td>
+                            <td class="fw-semibold text-main">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span>Guest/Publik</span>
+                                    
+                                </div>
+                            </td>
+                            <td class="text-muted">Public Guest</td>
+                            <td class="text-muted">guest@contoh.id</td>
+                            <td>
+                                <form action="/update_user_role/5" method="POST" class="d-flex align-items-center gap-2">
+                                    <select name="new_role" class="form-select form-select-sm bg-light border-0 py-1 px-2 role-select-elem" style="width: 140px; font-size: 0.85rem; border-radius: 6px;">
+                                        <option value="Developer" >Developer</option>
+                                        <option value="Supervisor" >Supervisor</option>
+                                        <option value="Quality Control" >Quality Control</option>
+                                        <!-- TAMBAHKAN INI -->
+                                        <option value="Collector" >Collector</option>
+                                        <option value="Public" >Public</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-tm-primary btn-sm py-1 px-2.5 fw-medium" style="font-size: 0.75rem; border-radius: 6px;">Perbarui</button>
+                                </form>
+                            </td>
+                            <td>
+                                
+                                <span class="badge rounded-pill d-inline-flex align-items-center gap-1 px-2.5 py-1 status-badge-elem" data-status-val="Offline" style="font-size: 0.75rem; font-weight: 600; background-color: #F1F5F9; color: #64748B; border: 1px solid #CBD5E1;">
+                                    <span style="width: 6px; height: 6px; border-radius: 50%; background-color: #94A3B8;"></span> Offline
+                                </span>
+                                
+                            </td>
+                            <td class="text-muted small" style="font-size: 0.82rem;">
+                                
+                                    2026-11-14 05:33:46
+                                
+                            </td>
+                            <td class="text-end px-4">
+                                <div class="d-flex align-items-center justify-content-end gap-2">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm px-2.5 py-1" style="font-size: 0.78rem; border-radius: 6px;"
+                                        data-bs-toggle="modal" data-bs-target="#resetPasswordModal"
+                                        data-user-id="5" 
+                                        data-username="Guest/Publik"
+                                        data-fullname="Public Guest"> <!-- Tambahkan baris ini -->
+                                    Reset Sandi
+                                </button>
+                                    
+                                    <form action="/admin/users/delete/5" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini secara permanen?');">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm px-2 py-1" style="font-size: 0.78rem; border-radius: 6px;">Hapus</button>
+                                    </form>
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- FOOTER INFORMASI MENYATU DI BAWAH TABEL -->
+            <div class="px-4 py-3" style="background-color: var(--bg-surface); border-top: 1px solid var(--border-color);">
+                <span id="footerPaginationInfo" class="text-muted" 
+                    data-show-id="Menampilkan" 
+                    data-of-id="dari total" 
+                    data-entity-id="entitas akun sistem"
+                    style="font-size: 0.85rem; font-family: monospace;">
+                    Menampilkan total 5 entitas akun sistem
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==========================================
+         MODAL TAMBAH AKUN (REDESIGN APEX QA)
+         ========================================== -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 650px;">
+            <div class="modal-content modal-content-apex border-0">
+                <!-- Top Accent Banner -->
+                <div class="modal-accent-teal"></div>
+                
+                <!-- Modal Header -->
+                <div class="px-4 pt-4 pb-3 border-bottom border-light">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="modal-icon-badge bg-teal-soft text-teal-primary border-teal-subtle">
+                                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h5 class="fw-bold mb-0 text-main tracking-tight">Tambah Akun Pengguna Baru</h5>
+                                </div>
+                                <p class="text-muted small mb-0 mt-1">Buat kredensial login dan tetapkan tingkat otorisasi / peran.</p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" style="filter: var(--btn-close-filter, none);"></button>
+                    </div>
+                </div>
+
+                <!-- Form Body -->
+                <form action="/admin/users/add" method="POST">
+                    <div class="modal-body px-4 py-4" style="background-color: var(--modal-bg);">
+                        <div class="row g-4">
+                            <!-- Username -->
+                            <div class="col-md-6">
+                                <label class="form-label font-label-md text-main mb-1">Nama Pengguna Sistem <span class="text-danger">*</span></label>
+                                <div class="input-icon-wrapper">
+                                    <span class="icon-left fw-bold">@</span>
+                                    <!-- Tambahkan event oninput untuk membatasi karakter secara otomatis -->
+                                    <input type="text" class="form-control form-control-apex bg-light" name="username" id="usernameInput" placeholder="cth: user_operator_01" oninput="sanitizeUsernameInput(this)" required>
+                                </div>
+                                <div class="form-text mt-1" style="font-size: 0.7rem;">Hanya huruf kecil, angka, dan garis bawah tanpa spasi.</div>
+                            </div>
+                            <!-- Nama Lengkap -->
+                            <div class="col-md-6">
+                                <label class="form-label font-label-md text-main mb-1">Nama Lengkap Pengguna <span class="text-danger">*</span></label>
+                                <div class="input-icon-wrapper">
+                                    <span class="icon-left">
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    </span>
+                                    <input type="text" class="form-control form-control-apex" name="nama_lengkap" placeholder="Nama lengkap" required>
+                                </div>
+                                <div class="form-text mt-1" style="font-size: 0.7rem;">Digunakan untuk jejak audit digital.</div>
+                            </div>
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label class="form-label font-label-md text-main mb-1">Email <span class="text-danger">*</span></label>
+                                <div class="input-icon-wrapper">
+                                    <span class="icon-left">
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                    </span>
+                                    <input type="email" class="form-control form-control-apex" name="email" placeholder="operator@gmail.com" required>
+                                </div>
+                                <div class="form-text mt-1" style="font-size: 0.7rem;">Email yang valid dan aktif</div>
+                            </div>
+                            <!-- Password -->
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <label class="form-label font-label-md text-main mb-0">Kata Sandi Sementara <span class="text-danger">*</span></label>
+                                    <span class="badge bg-emerald-soft text-emerald-primary border-emerald-subtle rounded px-1" style="font-size: 0.65rem;"></span>
+                                </div>
+                                <div class="input-icon-wrapper">
+                                    <span class="icon-left">
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                    </span>
+                                    <input type="text" class="form-control form-control-apex font-monospace" name="password" id="tempPasswordInput" placeholder="Minimal 6 karakter" required>
+                                    <button class="btn border-0 position-absolute end-0 top-50 translate-middle-y text-muted" type="button" onclick="togglePasswordVisibility('tempPasswordInput', this)">
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Role Dropdown -->
+                            <div class="col-12 mt-2">
+                                <label class="form-label font-label-md text-main mb-1">Hak Akses / Tingkat Divisi (Peran) <span class="text-danger">*</span></label>
+                                <select class="form-select form-select-apex font-label-md py-2" name="role" required>
+                                    <!-- Opsi default yang kosong dan tidak bisa dipilih kembali -->
+                                    <option value="" disabled selected hidden>-- Pilih Peran --</option>
+                                    <option value="Quality Control">Quality Control</option>
+                                    <option value="Supervisor">Supervisor</option>
+                                    <option value="Developer">Developer</option>
+                                    <option value="Collector">Collector</option>
+                                </select>
+                                
+                                <!-- Role Scope Info Box -->
+                                <div class="mt-2 p-3 rounded-3 d-flex align-items-center gap-2 bg-teal-soft border-teal-subtle">
+                                    <svg width="16" height="16" class="text-teal-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <div class="text-teal-dark" style="font-size: 0.72rem; line-height: 1.4;">
+                                        <span class="fw-bold">Wewenang Peran:</span> Menentukan batasan aksi seperti akses menu, modifikasi data, dan konfigurasi master sistem.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer Actions -->
+                    <div class="px-4 py-3 border-top d-flex justify-content-between align-items-center" style="background-color: rgba(0,0,0,0.02);">
+                        <div class="text-muted d-none d-sm-flex align-items-center gap-2" style="font-size: 0.7rem;">
+                            <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #10B981;"></span>
+                            Audit trail tersinkronisasi otomatis
+                        </div>
+                        <div class="d-flex gap-2 w-100 justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary py-2 px-3 fw-semibold text-xs" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary d-flex align-items-center gap-2 py-2 px-4 fw-semibold text-xs text-white" style="background-color: var(--tm-primary); border-color: var(--tm-primary);">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                Simpan & Buat Akun
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL RESET PASSWORD (REDESIGN APEX QA)
+         ========================================== -->
+    <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+            <div class="modal-content modal-content-apex border-0">
+                <!-- Top Accent Banner -->
+                <div class="modal-accent-amber"></div>
+                
+                <!-- Modal Header -->
+                <div class="px-4 pt-4 pb-3 border-bottom border-light bg-light-subtle">
+                    <div class="d-flex align-items-start justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="modal-icon-badge bg-amber-soft text-amber-primary border-amber-subtle">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-main">Setel Ulang Kata Sandi</h6>
+                                <p class="text-muted mb-0 mt-1" style="font-size: 0.7rem;">Otorisasi Kredensial Langsung</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="resetPasswordForm" method="POST" action="/admin/users/reset_password/0">
+                    <div class="modal-body px-4 py-3" style="background-color: var(--modal-bg);">
+                        
+                        <!-- Target User Badge -->
+                        <div class="p-2 mb-3 rounded-3 border d-flex align-items-center justify-content-between bg-light">
+                            <div class="d-flex align-items-center gap-2">
+                                <div id="resetPasswordInitials" class="rounded-circle text-white d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 0.75rem; background-color: var(--tm-primary);">U</div>
+                                <div>
+                                    <span id="resetPasswordUsername" class="fw-bold text-main d-block" style="font-size: 0.8rem;">Nama Pengguna</span>
+                                    <span id="resetPasswordFullname" class="text-muted" style="font-size: 0.7rem;">Nama Lengkap</span>
+                                </div>
+                            </div>
+                            <span class="badge bg-emerald-soft text-emerald-primary px-2 py-1">Target</span>
+                        </div>
+
+                        <!-- Form Inputs -->
+                        <div class="mb-3">
+                            <label class="form-label font-label-md text-main mb-1">Kata Sandi Baru</label>
+                            <input type="password" class="form-control form-control-apex font-monospace" id="new_password" name="new_password" placeholder="••••••••" required minlength="6">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label font-label-md text-main mb-1">Konfirmasi Kata Sandi</label>
+                            <input type="password" class="form-control form-control-apex font-monospace" id="confirm_password" placeholder="••••••••" required minlength="6">
+                            <div class="form-text mt-1" style="font-size: 0.7rem;">Minimal 6 karakter dengan enkripsi SHA-256.</div>
+                        </div>
+
+                        <!-- Invalidate Session Checkbox -->
+                        <div class="mb-2 mt-1">
+                            <label class="d-flex align-items-center gap-2 cursor-pointer text-muted" style="font-size: 0.75rem;">
+                                <input type="checkbox" class="form-check-input mt-0 shadow-none" checked>
+                                Putuskan seluruh sesi aktif saat ini
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="px-4 py-3 text-center border-top bg-light">
+                        <button type="submit" class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2 text-white fw-semibold text-xs" style="background-color: var(--tm-primary); border-color: var(--tm-primary); border-radius: 10px;">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
+                            Simpan Kata Sandi Baru
+                        </button>
+                        <div class="mt-2 text-muted" style="font-size: 0.65rem;">Pemberitahuan SMS & Webhook dikirim ke operator</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Bootstrap JS & App Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../../js/script.js"></script>
+
+</body>
+</html>

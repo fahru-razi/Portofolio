@@ -1,0 +1,3882 @@
+/* =============================================================================
+   profile.css — Profil Karyawan · CC Indonesia
+   v4: Complete redesign — thumb-friendly, grouped, progressive, accessible
+   =============================================================================
+   Design decisions:
+   • Soft off-white surfaces (#F8F9FB) instead of pure white — warmer, easier
+   • Section cards use subtle layered shadows, not just borders
+   • Modals are bottom-sheet on mobile — thumb reachable save button
+   • Progress stepper in multi-step modals (bank, pico)
+   • Inline error messages directly under the field, not above
+   • All tap targets minimum 44×44 px
+   • Consistent 8px grid spacing (0.5rem base unit)
+   • One primary CTA per modal, cancel is always secondary ghost
+   • Input fields are visually distinct: rounded-lg, soft bg, clear focus ring
+   • Edit buttons look like buttons (visible border + label, not just icon)
+   ============================================================================= */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   0. LOCAL TOKENS — extend theme.css without overriding it
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Soft surface — light gray page bg matching Image 2 */
+  --p-surface: #eaecf0;
+  --p-surface-card: #ffffff;
+  --p-surface-input: #f4f6f9;
+  --p-surface-muted: #eef1f6;
+
+  /* Progress / Step colours */
+  --p-step-done: #1b4f72;
+  --p-step-active: #2874a6;
+  --p-step-todo: #d0dae5;
+
+  /* Field row separators */
+  --p-divider: #edf0f4;
+
+  /* Thumb-area CTA */
+  --p-btn-h: 48px;
+  --p-btn-radius: 10px;
+
+  /* Input */
+  --p-input-h: 44px;
+  --p-input-radius: 8px;
+  --p-input-bg: #f4f6f9;
+
+  /* Consistent gap scale (8px base) */
+  --p-gap-xs: 0.25rem; /* 4px  */
+  --p-gap-sm: 0.5rem; /* 8px  */
+  --p-gap-md: 1rem; /* 16px */
+  --p-gap-lg: 1.5rem; /* 24px */
+  --p-gap-xl: 2rem; /* 32px */
+
+  /* Card shadow — soft two-layer */
+  --p-shadow-card:
+    0 1px 3px rgba(15, 37, 64, 0.06), 0 6px 20px rgba(15, 37, 64, 0.05);
+  --p-shadow-modal:
+    0 8px 40px rgba(15, 37, 64, 0.16), 0 2px 8px rgba(15, 37, 64, 0.08);
+  --p-shadow-btn:
+    0 2px 8px rgba(27, 79, 114, 0.22), 0 1px 2px rgba(27, 79, 114, 0.12);
+  --p-shadow-btn-hover:
+    0 4px 16px rgba(27, 79, 114, 0.32), 0 1px 4px rgba(27, 79, 114, 0.16);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   1. OUTER WRAPPER
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-wrap {
+  padding: var(--p-gap-md) var(--p-gap-md) var(--p-gap-xl);
+  width: 100%;
+  background: var(--p-surface);
+  min-height: 100%;
+}
+
+@media (max-width: 480px) {
+  .profile-wrap {
+    padding: var(--p-gap-sm) var(--p-gap-sm) 5rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   2. FLASH MESSAGES
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.flash-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--p-gap-sm);
+  margin-bottom: var(--p-gap-md);
+}
+
+.flash {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.8125rem 1rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.45;
+  box-shadow: var(--p-shadow-card);
+}
+
+.flash svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.flash-success {
+  background: #f0faf4;
+  color: var(--success);
+  border: 1px solid rgba(21, 128, 61, 0.18);
+}
+.flash-error,
+.flash-danger {
+  background: #fff5f5;
+  color: var(--danger);
+  border: 1px solid rgba(185, 28, 28, 0.18);
+}
+.flash-warning {
+  background: #fffbf0;
+  color: var(--warning);
+  border: 1px solid rgba(180, 83, 9, 0.18);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   3. TWO-COLUMN LAYOUT
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--p-gap-md);
+}
+
+@media (max-width: 767px) {
+  .profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--p-gap-md);
+  }
+  .profile-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--p-gap-md);
+  }
+}
+
+@media (min-width: 768px) {
+  .profile-layout {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--p-gap-lg);
+  }
+  .profile-sidebar {
+    width: 296px;
+    flex-shrink: 0;
+    position: sticky;
+    top: var(--p-gap-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--p-gap-md);
+  }
+  .profile-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--p-gap-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .profile-layout {
+    gap: var(--p-gap-lg);
+  }
+  .profile-sidebar {
+    width: 316px;
+    gap: var(--p-gap-md);
+    top: var(--p-gap-lg);
+  }
+  .profile-main {
+    gap: var(--p-gap-md);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   4. HERO CARD
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.profile-hero {
+  background: #1b4f72;
+  border-radius: 16px;
+  padding: 1.25rem var(--p-gap-md) 1rem;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  box-shadow:
+    0 4px 20px rgba(15, 37, 55, 0.2),
+    0 1px 4px rgba(15, 37, 55, 0.1);
+}
+
+/* Ambient light orbs */
+.profile-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at 80% 10%,
+      rgba(255, 255, 255, 0.09) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 5% 90%,
+      rgba(212, 134, 10, 0.14) 0%,
+      transparent 45%
+    );
+  pointer-events: none;
+}
+
+.profile-hero::before {
+  content: "";
+  position: absolute;
+  top: -48px;
+  right: -36px;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.035);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Unique signature: diagonal accent stripe at bottom-right */
+.profile-hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 80px;
+  height: 4px;
+  background: rgba(212, 134, 10, 0.6);
+  border-radius: 4px 0 0 0;
+}
+
+/* Mobile: horizontal layout */
+.profile-hero-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--p-gap-md);
+}
+
+.profile-hero-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* Desktop (in sidebar): centered vertical */
+@media (min-width: 768px) {
+  .profile-hero {
+    padding: var(--p-gap-xl) var(--p-gap-md) var(--p-gap-lg);
+  }
+  .profile-hero-body {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.875rem;
+  }
+  .profile-hero-info {
+    flex: none;
+    align-items: center;
+    width: 100%;
+  }
+  .profile-hero-info::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 99px;
+    margin: 0.3rem auto 0;
+  }
+}
+
+/* Avatar */
+.profile-avatar-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  padding: 3px;
+  background: var(--accent, #d4860a);
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .profile-avatar-ring {
+    width: 84px;
+    height: 84px;
+    padding: 3.5px;
+  }
+}
+
+.profile-avatar-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #163f5a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 768px) {
+  .profile-avatar-circle {
+    font-size: 1.6rem;
+  }
+}
+
+/* Name & badges */
+.profile-hero-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: #fff;
+  margin: 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 768px) {
+  .profile-hero-name {
+    font-size: 1.0625rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+}
+
+.profile-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .profile-hero-meta {
+    justify-content: center;
+  }
+}
+
+.profile-dept-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.13);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.69rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.profile-shift-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(212, 134, 10, 0.26);
+  color: #fce7a5;
+  font-size: 0.69rem;
+  font-weight: 600;
+  border: 1px solid rgba(212, 134, 10, 0.42);
+}
+
+.profile-emp-code {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.36);
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.07em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   5. SECTION CARDS — soft background, shadow, no hard border
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.profile-section {
+  background: var(--p-surface-card);
+  border-radius: 14px;
+  box-shadow: var(--p-shadow-card);
+  border: 1px solid rgba(200, 212, 224, 0.55);
+  overflow: hidden;
+}
+
+/* Section header */
+.profile-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--p-gap-sm);
+  padding: 0.875rem var(--p-gap-md);
+  background: var(--p-surface-card);
+  border-bottom: 1px solid var(--p-divider);
+}
+
+.profile-section-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--brand-xlight);
+  color: var(--brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-section-icon svg {
+  width: 14px;
+  height: 14px;
+  color: var(--brand);
+}
+
+.profile-section-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   6. FIELDS — compact horizontal rows
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-fields {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mobile: stacked */
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.75rem var(--p-gap-md);
+  border-bottom: 1px solid var(--p-divider);
+  transition: background 0.12s;
+}
+
+.profile-field:last-child {
+  border-bottom: none;
+}
+
+.profile-field:hover {
+  background: #fafbfc;
+}
+
+/* 480px+: horizontal */
+@media (min-width: 480px) {
+  .profile-field {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--p-gap-sm);
+    padding: 0.625rem var(--p-gap-md);
+    min-height: 48px;
+  }
+  .profile-field-label {
+    width: 128px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+}
+
+.profile-field-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-faint);
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  line-height: 1.2;
+}
+
+.profile-field-row {
+  display: flex;
+  align-items: center;
+  gap: var(--p-gap-sm);
+  flex: 1;
+  min-width: 0;
+  min-height: 28px;
+}
+
+.profile-field-value {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  word-break: break-word;
+  min-width: 0;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.profile-field-value--readonly {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+/* Department color dot */
+.dept-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Monospace codes */
+.emp-code {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82em;
+  letter-spacing: 0.05em;
+  color: var(--brand);
+}
+
+.text-faint {
+  color: var(--text-faint);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   7. EDIT BUTTONS — clearly look clickable (border + label + hover)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-edit-btn {
+  min-width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  border-radius: 8px;
+  background: var(--p-surface-muted);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: "IBM Plex Sans", sans-serif;
+  padding: 0 0.5rem;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+  white-space: nowrap;
+  /* Ensure minimum 44px tap area via padding trick */
+  position: relative;
+}
+
+.profile-edit-btn::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+}
+
+.profile-edit-btn:hover {
+  background: var(--brand-light);
+  color: var(--brand);
+  border-color: rgba(27, 79, 114, 0.28);
+  box-shadow: 0 1px 4px rgba(27, 79, 114, 0.1);
+}
+
+.profile-edit-btn:active {
+  transform: scale(0.95);
+}
+
+.profile-edit-btn svg {
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+}
+
+.profile-field-lock {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+  opacity: 0.45;
+}
+
+.profile-field-lock svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Bank/Pico edit button (wider, text label) */
+.profile-bank-edit-btn {
+  width: auto !important;
+  padding: 0 0.75rem !important;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.profile-bank-edit-btn svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   8. PASSWORD ROW
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-password-dots {
+  font-size: 0.875rem;
+  letter-spacing: 0.22em;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.profile-password-changed-at {
+  font-size: 0.67rem;
+  color: var(--text-faint);
+  font-family: "IBM Plex Mono", monospace;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   9. VERIFICATION BADGES & REJECTION NOTE
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-verified-badge,
+.profile-unverified-badge,
+.profile-rejected-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.profile-verified-badge {
+  color: var(--success);
+  background: #edfaf3;
+  border: 1px solid rgba(21, 128, 61, 0.2);
+}
+
+.profile-unverified-badge {
+  color: var(--warning);
+  background: #fffbec;
+  border: 1px solid rgba(180, 83, 9, 0.2);
+}
+
+.profile-rejected-badge {
+  color: var(--danger);
+  background: #fff5f5;
+  border: 1px solid rgba(185, 28, 28, 0.2);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+/* Rejection note — inline callout */
+.profile-rejection-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0 var(--p-gap-md) 0.5rem;
+  padding: 0.625rem 0.875rem;
+  background: #fff5f5;
+  border-left: 3px solid var(--danger);
+  border-radius: 0 8px 8px 0;
+}
+
+.profile-rejection-note svg {
+  flex-shrink: 0;
+  color: var(--danger);
+  opacity: 0.7;
+  margin-top: 1px;
+}
+
+.profile-rejection-note span {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--danger);
+  line-height: 1.45;
+}
+
+.profile-rejection-note strong {
+  font-weight: 600;
+  color: var(--danger);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   10. SHIFT CARD (sidebar)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-shift-card {
+  padding: 0;
+}
+
+/* Header */
+.profile-shift-card .shift-info-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: var(--p-gap-sm) !important;
+  padding: 0.875rem var(--p-gap-md) 0.75rem !important;
+  border-bottom: 1px solid var(--p-divider) !important;
+  background: none !important;
+  border-left: none !important;
+  border-radius: 0 !important;
+  margin-bottom: 0 !important;
+  flex-direction: row !important;
+}
+
+.profile-shift-card .shift-label {
+  font-size: 0.67rem !important;
+  font-weight: 700 !important;
+  color: var(--text-secondary) !important;
+  font-family: "IBM Plex Mono", monospace !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  flex: 1 !important;
+}
+
+.profile-shift-card .shift-time-badge {
+  font-size: 0.9rem !important;
+  font-weight: 800 !important;
+  font-family: "IBM Plex Mono", monospace !important;
+  color: var(--brand) !important;
+  letter-spacing: 0.04em !important;
+  white-space: nowrap !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  line-height: 1 !important;
+}
+
+/* Two-column windows */
+.profile-shift-card .shift-windows {
+  display: grid !important;
+  grid-template-columns: 1fr 1px 1fr !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  padding: 0.75rem 0 0.875rem !important;
+  flex-direction: unset !important;
+}
+
+.profile-shift-card .shift-window-sep {
+  display: block !important;
+  background: var(--p-divider) !important;
+  width: 1px !important;
+  height: auto !important;
+  margin: 0.4rem 0 !important;
+}
+
+.profile-shift-card .shift-window-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0.3rem !important;
+  padding: 0.25rem var(--p-gap-md) !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.profile-shift-card .shift-window-item--in::before,
+.profile-shift-card .shift-window-item--out::before {
+  content: "" !important;
+  display: block !important;
+  width: 22px !important;
+  height: 2.5px !important;
+  border-radius: 2px !important;
+  margin-bottom: 0.3rem !important;
+}
+
+.profile-shift-card .shift-window-item--in::before {
+  background: var(--success, #1a7a4a) !important;
+}
+.profile-shift-card .shift-window-item--out::before {
+  background: var(--warning-mid, #f0a500) !important;
+}
+.profile-shift-card .shift-window-icon {
+  display: none !important;
+}
+
+.profile-shift-card .shift-window-label {
+  font-size: 0.55rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: var(--text-faint) !important;
+  font-family: "IBM Plex Mono", monospace !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.profile-shift-card .shift-window-value {
+  font-size: 1.2rem !important;
+  font-weight: 800 !important;
+  font-family: "IBM Plex Mono", monospace !important;
+  color: var(--text-primary) !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+/* Day chips */
+.profile-workdays {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0.625rem var(--p-gap-md) 0.875rem;
+  border-top: 1px solid var(--p-divider);
+}
+
+.profile-workday-chip {
+  flex: 1;
+  height: 26px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.57rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-family: "IBM Plex Mono", monospace;
+  background: none;
+  color: var(--text-faint);
+  border: none;
+  border-bottom: 2px solid transparent;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.profile-workday-chip.active {
+  color: var(--brand);
+  border-bottom-color: var(--brand);
+  font-weight: 800;
+}
+
+.profile-workday-chip--off {
+  color: var(--text-faint);
+  opacity: 0.5;
+  font-weight: 700;
+  position: relative;
+}
+
+.profile-workday-chip--off::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  border-radius: 2px;
+}
+
+.profile-workday-chip--nasional {
+  color: var(--danger);
+  opacity: 0.8;
+}
+.profile-workday-chip--nasional::after {
+  background: var(--danger);
+}
+.profile-workday-chip--bersama {
+  color: var(--warning-mid, #d97706);
+  opacity: 0.8;
+}
+.profile-workday-chip--bersama::after {
+  background: var(--warning-mid, #d97706);
+}
+.profile-workday-chip--mingguan {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+.profile-workday-chip--mingguan::after {
+  background: var(--text-faint);
+}
+.profile-workday-chip--perusahaan {
+  color: var(--accent);
+  opacity: 0.8;
+}
+.profile-workday-chip--perusahaan::after {
+  background: var(--accent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   11. EMPTY STATE
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-empty-state {
+  padding: var(--p-gap-xl) var(--p-gap-lg);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--p-gap-sm);
+}
+
+.profile-empty-state svg {
+  width: 36px;
+  height: 36px;
+  color: var(--text-faint);
+  opacity: 0.35;
+}
+
+.profile-empty-state p {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.profile-empty-state small {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   12. MOBILE TOPBAR — sub info
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.mobile-topbar-sub {
+  font-size: 0.67rem;
+  color: var(--sidebar-text, #8dabbe);
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   13. MODAL OVERLAY & BOX
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.profile-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(10, 20, 38, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--p-gap-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.profile-modal-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.profile-modal-box {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow:
+    0 8px 40px rgba(10, 25, 40, 0.18),
+    0 2px 8px rgba(10, 25, 40, 0.08);
+  width: 100%;
+  max-width: 440px;
+  border: 1px solid #edf1f5;
+  transform: translateY(18px) scale(0.97);
+  transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 2rem);
+}
+
+.profile-modal-overlay.is-open .profile-modal-box {
+  transform: translateY(0) scale(1);
+}
+
+/* ── Modal header — light, icon-led (all modals) ────────────────────── */
+.profile-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--p-gap-md);
+  background: #fff;
+  border-bottom: 1px solid #edf1f5;
+  flex-shrink: 0;
+}
+
+/* New icon-led header layout */
+.pmod-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px 14px;
+}
+.pmod-header-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pmod-icon--edit {
+  background: #eff6ff;
+  color: #2563eb;
+  box-shadow: inset 0 0 0 1.5px rgba(37, 99, 235, 0.14);
+}
+.pmod-icon--bank {
+  background: #f0fdf4;
+  color: #15803d;
+  box-shadow: inset 0 0 0 1.5px rgba(21, 128, 61, 0.14);
+}
+.pmod-icon--pico {
+  background: #fdf4ff;
+  color: #9333ea;
+  box-shadow: inset 0 0 0 1.5px rgba(147, 51, 234, 0.14);
+}
+.pmod-header-text {
+  flex: 1;
+  min-width: 0;
+}
+.pmod-title {
+  display: block;
+  font-family: "Plus Jakarta Sans", "IBM Plex Sans", sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  color: #0f2537;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.pmod-subtitle {
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.76rem;
+  color: #8dabbe;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+.pmod-close {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid #dde5ed;
+  background: #f5f8fa;
+  color: #4b6478;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+.pmod-close:hover {
+  background: #e8f1f8;
+  color: #1b4f72;
+  border-color: #e8f1f8;
+}
+.pmod-close:active {
+  transform: scale(0.92);
+}
+
+/* Keep old close for legacy elements still using it */
+.profile-modal-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: #0f2537;
+  letter-spacing: -0.01em;
+}
+
+.profile-modal-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f5f8fa;
+  border: 1.5px solid #dde5ed;
+  color: #4b6478;
+  cursor: pointer;
+  transition:
+    background 0.13s,
+    color 0.13s;
+  flex-shrink: 0;
+}
+.profile-modal-close:hover {
+  background: #e8f1f8;
+  color: #1b4f72;
+}
+.profile-modal-close svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Edit modal simple body */
+.pmod-body--simple {
+  padding: 20px var(--p-gap-md) 8px;
+}
+.pmod-field-label {
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #0f2537;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.pmod-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.9rem;
+  color: #0f2537;
+  background: #f5f8fa;
+  border: 1.5px solid #dde5ed;
+  border-radius: 12px;
+  outline: none;
+  box-shadow: inset 0 1px 2px rgba(15, 37, 64, 0.04);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
+  min-height: 50px;
+}
+.pmod-input:focus {
+  border-color: #1b4f72;
+  background: #fff;
+  box-shadow: 0 0 0 4px #e8f1f8;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   14. PROGRESS STEPPER (multi-step modals: bank, pico)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-modal-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0.875rem var(--p-gap-md);
+  background: var(--p-surface);
+  border-bottom: 1px solid var(--p-divider);
+  flex-shrink: 0;
+}
+
+.profile-modal-step {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 1;
+  position: relative;
+}
+
+.profile-modal-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: calc(16px + 0.4rem);
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: var(--p-step-todo);
+  border-radius: 2px;
+  transition: background 0.25s;
+}
+
+.profile-modal-step.is-done::after {
+  background: var(--p-step-done);
+}
+.profile-modal-step.is-active::after {
+  background: var(--p-step-todo);
+}
+
+.profile-modal-step-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--p-step-todo);
+  color: rgba(255, 255, 255, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  font-family: "IBM Plex Mono", monospace;
+  flex-shrink: 0;
+  z-index: 1;
+  transition:
+    background 0.25s,
+    color 0.25s;
+}
+
+.profile-modal-step.is-done .profile-modal-step-dot {
+  background: var(--p-step-done);
+  color: #fff;
+}
+
+.profile-modal-step.is-active .profile-modal-step-dot {
+  background: var(--p-step-active);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(40, 116, 166, 0.18);
+}
+
+.profile-modal-step-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-faint);
+  font-family: "IBM Plex Sans", sans-serif;
+  white-space: nowrap;
+  transition: color 0.25s;
+}
+
+.profile-modal-step.is-active .profile-modal-step-label {
+  color: var(--brand);
+}
+.profile-modal-step.is-done .profile-modal-step-label {
+  color: var(--text-muted);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   15. MODAL BODY & FORM FIELDS
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-modal-body {
+  padding: 4px 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+}
+.profile-modal-body::-webkit-scrollbar {
+  width: 3px;
+}
+.profile-modal-body::-webkit-scrollbar-thumb {
+  background: #dde5ed;
+  border-radius: 2px;
+}
+
+.profile-modal-desc {
+  font-size: 0.78rem;
+  color: #4b6478;
+  margin: 12px 0 0;
+  line-height: 1.5;
+  background: #f5f8fa;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border-left: 3px solid #dde5ed;
+  display: none; /* desc moved to header subtitle in redesigned modals */
+}
+
+/* Field group (UX 4, 9, 12, 19) */
+.profile-modal-field-group,
+.profile-bank-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 0 4px;
+  border-bottom: 1px solid #f0f4f8;
+}
+.profile-bank-field-group:last-of-type {
+  border-bottom: none;
+}
+
+/* Label — clear hierarchy (UX 1, 21) */
+.profile-modal-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f2537;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.01em;
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+/* Inputs — clearly distinct, comfortable height */
+.profile-modal-input {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #dde5ed;
+  background: #f5f8fa;
+  color: #0f2537;
+  font-size: 0.9rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  box-shadow: inset 0 1px 2px rgba(15, 37, 64, 0.04);
+  line-height: 1.4;
+}
+
+.profile-modal-input::placeholder {
+  color: var(--text-faint);
+  opacity: 0.8;
+}
+
+.profile-modal-input:focus {
+  outline: none;
+  border-color: #1b4f72;
+  background: #fff;
+  box-shadow: 0 0 0 4px #e8f1f8;
+}
+
+.profile-modal-input.is-error {
+  border-color: #e53e3e;
+  background: #fff9f9;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.09);
+}
+
+.profile-modal-input.is-match {
+  border-color: var(--success);
+  background: #f7fef9;
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.1);
+}
+
+/* textarea override */
+.profile-modal-textarea {
+  height: auto;
+  min-height: 88px;
+  padding: 0.65rem 0.875rem;
+  resize: vertical;
+  max-height: 200px;
+  line-height: 1.55;
+}
+
+/* Input hint / format guide (mask helper text below field) */
+.profile-modal-hint {
+  font-size: 0.7rem;
+  color: var(--text-faint);
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.profile-modal-hint svg {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* Error — inline, directly under field, with icon */
+.profile-modal-error {
+  font-size: 0.74rem;
+  color: #e53e3e;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+  font-family: "IBM Plex Sans", sans-serif;
+  /* Animate in */
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height 0.2s ease,
+    opacity 0.15s ease;
+}
+
+.profile-modal-error:not(:empty) {
+  max-height: 3rem;
+  opacity: 1;
+  padding-top: 0.1rem;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   16. MODAL FOOTER — CTA at bottom (thumb zone on mobile)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--p-gap-sm);
+  padding: 0.875rem var(--p-gap-md);
+  border-top: 1px solid var(--p-divider);
+  background: var(--p-surface);
+  flex-shrink: 0;
+}
+
+/* On mobile: stretch buttons full width for thumb access */
+@media (max-width: 480px) {
+  .profile-modal-footer {
+    flex-direction: column-reverse;
+    gap: var(--p-gap-sm);
+    padding: var(--p-gap-md);
+    padding-bottom: calc(var(--p-gap-md) + env(safe-area-inset-bottom, 0px));
+  }
+  .profile-modal-footer .btn-outline,
+  .profile-modal-footer .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Cancel — ghost, secondary */
+.profile-modal-footer .btn-outline {
+  height: var(--p-btn-h);
+  padding: 0 var(--p-gap-md);
+  border-radius: var(--p-btn-radius);
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.profile-modal-footer .btn-outline:hover {
+  background: var(--p-surface-muted);
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+/* Save — primary, prominent, one per modal */
+.profile-modal-footer .btn-primary {
+  height: var(--p-btn-h);
+  padding: 0 var(--p-gap-lg);
+  border-radius: var(--p-btn-radius);
+  border: none;
+  background: #1b4f72;
+  color: #fff;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: var(--p-shadow-btn);
+  transition:
+    box-shadow 0.18s,
+    transform 0.12s,
+    background 0.15s;
+}
+
+.profile-modal-footer .btn-primary:hover {
+  background: #154360;
+  box-shadow: var(--p-shadow-btn-hover);
+  transform: translateY(-1px);
+}
+
+.profile-modal-footer .btn-primary:active {
+  transform: translateY(0);
+}
+
+.profile-modal-footer .btn-primary:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── pmod footer — full-width, thumb-zone (UX 5, 6, 16, 17) ── */
+.pmod-footer {
+  flex-shrink: 0;
+  padding: 14px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  background: #fff;
+  border-top: 1px solid #edf1f5;
+}
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pmod-footer {
+    padding-bottom: calc(22px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Primary CTA — full width, solid, tall (UX 5, 6, 15, 16) */
+.pmod-btn-save {
+  width: 100% !important;
+  min-height: 54px !important;
+  border-radius: 14px !important;
+  font-family: "Plus Jakarta Sans", "IBM Plex Sans", sans-serif !important;
+  font-size: 0.92rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.01em !important;
+  background: #1b4f72 !important;
+  border: none !important;
+  color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow:
+    0 3px 12px rgba(27, 79, 114, 0.28),
+    0 1px 3px rgba(27, 79, 114, 0.15) !important;
+  transition:
+    background 0.15s,
+    box-shadow 0.15s,
+    transform 0.1s;
+  padding: 0 20px !important;
+}
+.pmod-btn-save:hover:not(:disabled) {
+  background: #154360 !important;
+  box-shadow: 0 5px 18px rgba(27, 79, 114, 0.35) !important;
+}
+.pmod-btn-save:active:not(:disabled) {
+  transform: scale(0.982);
+}
+.pmod-btn-save:disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed;
+}
+
+/* Cancel — understated, full width (UX 16: one primary action) */
+.pmod-btn-cancel {
+  width: 100% !important;
+  min-height: 44px !important;
+  border-radius: 10px !important;
+  font-family: "IBM Plex Sans", sans-serif !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  background: transparent !important;
+  border: 1.5px solid #dde5ed !important;
+  color: #4b6478 !important;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  box-sizing: border-box;
+  padding: 0 20px !important;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+.pmod-btn-cancel:hover {
+  background: #e8f1f8 !important;
+  color: #1b4f72 !important;
+  border-color: transparent !important;
+}
+
+/* ── Spinner ── */
+.profile-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.28);
+  border-top-color: #fff;
+  border-radius: 50%;
+  display: none;
+  animation: profile-spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+.profile-spinner.is-visible {
+  display: inline-block;
+}
+
+@keyframes profile-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Closing animation */
+.profile-modal-overlay.is-closing {
+  opacity: 0;
+  pointer-events: none;
+}
+.profile-modal-overlay.is-closing .profile-modal-box {
+  transform: translateY(14px) scale(0.97);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   17. MOBILE — bottom-sheet modal
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .profile-modal-overlay:not(.profile-modal-overlay--wide) {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .profile-modal-overlay:not(.profile-modal-overlay--wide) .profile-modal-box {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    max-width: 100%;
+    transform: translateY(100%);
+    /* Drag handle */
+    padding-top: 0;
+  }
+  /* Handle indicator */
+  .profile-modal-overlay:not(.profile-modal-overlay--wide)
+    .profile-modal-box::before {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 99px;
+    background: var(--border);
+    margin: 10px auto 0;
+    flex-shrink: 0;
+  }
+  .profile-modal-overlay:not(.profile-modal-overlay--wide).is-open
+    .profile-modal-box {
+    transform: translateY(0);
+  }
+  .profile-modal-overlay:not(.profile-modal-overlay--wide).is-closing
+    .profile-modal-box {
+    transform: translateY(100%);
+  }
+  .profile-modal-box--bank {
+    max-width: 100%;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   18. PASSWORD MODAL — field groups, eye toggle, strength bar
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-pwd-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.profile-pwd-input-wrap {
+  position: relative;
+}
+
+.profile-pwd-input-wrap .profile-modal-input {
+  padding-right: 3rem;
+}
+
+.profile-pwd-toggle {
+  position: absolute;
+  right: 0.375rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  border-radius: 8px;
+  transition:
+    color 0.15s,
+    background 0.15s;
+  padding: 0;
+}
+
+.profile-pwd-toggle:hover {
+  background: var(--p-surface-muted);
+  color: var(--text-secondary);
+}
+
+.profile-pwd-toggle svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+/* Strength badge */
+.profile-pwd-strength {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  display: inline-block;
+  transition:
+    background 0.25s,
+    color 0.25s;
+  letter-spacing: 0.03em;
+  align-self: flex-start;
+}
+
+.strength-very-weak {
+  background: #fff0f0;
+  color: #c53030;
+}
+.strength-weak {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.strength-fair {
+  background: #fff8e6;
+  color: #7c5d08;
+}
+.strength-strong {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.strength-very-strong {
+  background: var(--success-bg);
+  color: var(--success);
+  box-shadow: 0 0 0 2px rgba(21, 128, 61, 0.18);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   19. BANK MODAL — field groups, select, hints
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-modal-box--bank {
+  max-width: 488px;
+}
+.profile-modal-overlay--wide {
+  align-items: center;
+  overflow-y: auto;
+}
+
+.profile-bank-select-wrap {
+  position: relative;
+}
+
+/* Hide native select visually — kept for form state/validation only */
+.profile-bank-select--native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  border: none;
+  padding: 0;
+}
+
+/* ── Custom dropdown trigger (principles 1, 14, 15) ──────────────────── */
+.profile-bank-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+  font-family: "IBM Plex Sans", sans-serif;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
+}
+.profile-bank-trigger:hover {
+  border-color: #c5d3de;
+}
+.profile-bank-trigger[aria-expanded="true"] {
+  border-color: var(--brand);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
+}
+.bank-trigger-text {
+  flex: 1;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #0f2537;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.profile-bank-trigger.is-empty .bank-trigger-text {
+  font-weight: 400;
+  color: #8dabbe;
+}
+.bank-trigger-chevron {
+  flex-shrink: 0;
+  color: #8dabbe;
+  transition: transform 0.2s;
+}
+.profile-bank-trigger[aria-expanded="true"] .bank-trigger-chevron {
+  transform: rotate(180deg);
+  color: var(--brand);
+}
+
+/* ── Monogram badge — logo substitute (no external image dependency) ──
+   Each bank has a brand color via data-color; initials via data-initials.
+   This is the FALLBACK shown if a logo image fails to load, or for
+   banks without a logo file yet (principles 1, 8 nuance: brand colors
+   are intentional accents, not pure UI colors). ──────────────────────── */
+.bank-badge {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 800;
+  font-size: 0.6rem;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 1;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  position: relative;
+}
+.bank-badge--empty {
+  background: var(--pwdm-surface, #f4f7fa);
+  color: #b8c8d4;
+  border: 1.5px dashed #d8e2ea;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+/* ── Bank logo image (real logos, principles 9, 11) ──────────────────────
+   .bank-badge is always a fixed 28×28 box — the <img> inside is scaled
+   to fit via object-fit + padding, so logos of different native sizes
+   (wide wordmarks, square icons, tall full-bleed art) all align
+   consistently with breathing room between artwork and the badge edge.
+
+   Code decides styling per-logo via data-logo-bg / data-logo-pad on the
+   <option>, translated to these classes by JS:
+     .bank-logo-bg-white   → white background plate (for logos with
+                              transparent bg but dark/colorful artwork
+                              that needs contrast, e.g. wordmarks on
+                              white in their original file)
+     .bank-logo-bg-none    → no extra background (logo file already has
+                              its own full-bleed background, e.g. mandiri
+                              navy square, SMBC, Neo Commerce wordmark)
+     .bank-logo-pad-none   → logo fills the badge edge-to-edge (use when
+                              the source file already has generous
+                              internal whitespace, e.g. Allo Bank)
+     .bank-logo-pad-sm     → small 2px breathing room
+     .bank-logo-pad-md     → default 4px breathing room (most logos)
+     .bank-logo-pad-lg     → 6px, for dense/busy logos that look cramped
+   ───────────────────────────────────────────────────────────────────── */
+.bank-logo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  border-radius: inherit;
+}
+
+/* Background variants */
+.bank-logo-bg-white .bank-logo {
+  background: #ffffff;
+}
+.bank-logo-bg-none .bank-logo {
+  background: transparent;
+}
+
+/* Padding variants — applied as inset spacing around the image so the
+   artwork never touches the badge border (principle 9: white space) */
+.bank-logo-pad-none .bank-logo {
+  padding: 0;
+}
+.bank-logo-pad-sm .bank-logo {
+  padding: 2px;
+}
+.bank-logo-pad-md .bank-logo {
+  padding: 4px;
+}
+.bank-logo-pad-lg .bank-logo {
+  padding: 6px;
+}
+
+/* When a real logo image is present, give the badge a neutral border
+   instead of the colorful monogram look, so varied logo backgrounds
+   (white plates, navy squares, transparent wordmarks) sit consistently
+   inside a soft frame (principles 10, 11, 18) */
+.bank-badge.has-logo {
+  background: #fefeff;
+  border: 1px solid #eef2f6;
+  box-shadow: none;
+}
+.bank-badge.has-logo.bank-logo-bg-none {
+  border: 1px solid #eef2f6;
+}
+
+/* ── Dropdown panel (principles 2, 9, 19) ────────────────────────────── */
+.bank-dropdown-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  background: #fefeff;
+  border: 1px solid #dde5ed;
+  border-radius: 12px;
+  box-shadow:
+    0 8px 28px rgba(15, 37, 64, 0.12),
+    0 2px 6px rgba(15, 37, 64, 0.06);
+  max-height: 340px;
+  overflow-y: auto;
+  display: none;
+  padding: 6px;
+}
+.bank-dropdown-panel.is-open {
+  display: block;
+}
+.bank-dropdown-panel::-webkit-scrollbar {
+  width: 4px;
+}
+.bank-dropdown-panel::-webkit-scrollbar-thumb {
+  background: #dde5ed;
+  border-radius: 2px;
+}
+
+/* Group header — intentionally smaller/quieter than items (principle 21:
+   information > title). Sticky so users keep context while scrolling. */
+.bank-group-header {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #8dabbe;
+  padding: 8px 10px 4px;
+  position: sticky;
+  top: 0;
+  background: #fefeff;
+  z-index: 1;
+}
+.bank-group-header:first-child {
+  padding-top: 6px;
+}
+
+/* Item — the actual important info: logo + name (principle 21) */
+.bank-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f2537;
+  transition: background 0.12s;
+  min-height: 44px; /* thumb-friendly tap area, principle 15 */
+  box-sizing: border-box;
+}
+.bank-option:hover,
+.bank-option.is-focused {
+  background: var(--pwdm-surface, #f4f7fa);
+}
+.bank-option.is-selected {
+  background: #e8f1f8;
+}
+.bank-option.is-selected::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin-left: auto;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--brand);
+}
+.bank-option-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-bank-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #1b4f72;
+  background: #e8f1f8;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(27, 79, 114, 0.15);
+  margin-left: 6px;
+  vertical-align: middle;
+  font-family: "IBM Plex Mono", monospace;
+  transition: opacity 0.2s;
+}
+
+.profile-bank-optional {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.64rem;
+  font-weight: 500;
+  color: #8dabbe;
+  background: #f5f8fa;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid #dde5ed;
+  margin-left: 6px;
+  font-family: "IBM Plex Sans", sans-serif;
+  letter-spacing: 0;
+}
+
+/* ── Name mismatch warning (non-blocking) ────────────────────────────── */
+.bank-name-mismatch-warning {
+  display: none;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 9px 11px;
+  background: #fef3c7;
+  border: 1px solid #fde4a8;
+  border-radius: 8px;
+  color: #92600a;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+.bank-name-mismatch-warning.is-visible {
+  display: flex;
+}
+.bank-name-mismatch-warning svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #d4860a;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   20. PICO SECTION — icon, badges, measure grid
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-section-icon--pico {
+  background: rgba(99, 102, 241, 0.1);
+}
+.profile-section-icon--pico svg {
+  color: #6366f1;
+}
+
+.profile-pico-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-xs);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.profile-pico-status--active {
+  background: #edfaf3;
+  color: var(--success);
+  border: 1px solid rgba(26, 122, 74, 0.2);
+}
+.profile-pico-status--inactive {
+  background: #fffbec;
+  color: var(--warning);
+  border: 1px solid rgba(161, 98, 7, 0.2);
+}
+.profile-pico-status--resigned {
+  background: #fff5f5;
+  color: var(--danger);
+  border: 1px solid rgba(185, 28, 28, 0.2);
+}
+
+.profile-pico-device-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 2px 8px;
+  border-radius: var(--radius-xs);
+  background: var(--brand-xlight);
+  color: var(--brand);
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-family: "IBM Plex Mono", monospace;
+  border: 1px solid rgba(15, 37, 55, 0.14);
+}
+
+.profile-pico-device-badge svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.profile-pico-notes {
+  white-space: pre-line;
+  line-height: 1.55;
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+}
+
+.pico-measure-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.875rem;
+}
+
+@media (max-width: 400px) {
+  .pico-measure-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-modal-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   21. BODY VISUALIZER — pico modal silhouette + inputs
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.pico-body-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--p-gap-sm);
+  padding: 0.875rem;
+  background: var(--p-surface);
+  border: 1.5px solid var(--p-divider);
+  border-radius: 12px;
+  margin-top: var(--p-gap-xs);
+}
+
+.pico-body-label-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.pico-body-section-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  font-family: "IBM Plex Sans", sans-serif;
+  text-transform: uppercase;
+}
+
+.pico-body-layout {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: var(--p-gap-md);
+  align-items: start;
+}
+
+.pico-body-visual {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.25rem;
+}
+
+.pico-silhouette {
+  width: 100px;
+  height: auto;
+  overflow: visible;
+}
+
+/* Body fill */
+.pico-silhouette ellipse,
+.pico-silhouette rect:not([class~="pico-dim-tick"]) {
+  fill: var(--brand);
+  opacity: 0.82;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pico-silhouette .pico-right-side {
+  opacity: 0.36;
+}
+
+/* Dimension lines */
+.pico-dim-line {
+  stroke: var(--brand-mid);
+  stroke-width: 0.8;
+  stroke-dasharray: 2 2;
+  opacity: 0.5;
+  fill: none !important;
+}
+.pico-dim-tick {
+  stroke: var(--brand-mid);
+  stroke-width: 1;
+  opacity: 0.6;
+  fill: none !important;
+}
+.pico-dim-text {
+  font-size: 5px;
+  font-family: "IBM Plex Mono", monospace;
+  fill: var(--brand-mid);
+  font-weight: 600;
+  text-anchor: middle;
+  transition: opacity 0.2s;
+}
+
+/* Active measure highlight */
+.pico-silhouette.pico-active--height #pico-head,
+.pico-silhouette.pico-active--height #pico-neck,
+.pico-silhouette.pico-active--height #pico-torso,
+.pico-silhouette.pico-active--height #pico-leg-left-rect,
+.pico-silhouette.pico-active--height #pico-leg-right-rect,
+.pico-silhouette.pico-active--height #pico-arm-left-rect,
+.pico-silhouette.pico-active--height #pico-arm-right-rect {
+  fill: var(--brand-mid);
+  opacity: 1;
+}
+
+.pico-silhouette.pico-active--arm #pico-arm-left-rect,
+.pico-silhouette.pico-active--arm #pico-arm-right-rect {
+  fill: #f59e0b;
+  opacity: 1;
+}
+
+.pico-silhouette.pico-active--leg #pico-leg-left-rect,
+.pico-silhouette.pico-active--leg #pico-leg-right-rect {
+  fill: #10b981;
+  opacity: 1;
+}
+
+/* Input side */
+.pico-body-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.pico-body-input-row {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: var(--p-gap-sm);
+  align-items: start;
+  padding: 0.5rem 0.625rem;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  background: var(--p-surface-card);
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    box-shadow 0.15s;
+}
+
+.pico-body-input-row:focus-within {
+  border-color: var(--border);
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(15, 37, 64, 0.06);
+}
+
+.pico-body-input-row[data-measure="arm"]:focus-within {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.03);
+}
+
+.pico-body-input-row[data-measure="leg"]:focus-within {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.03);
+}
+
+/* Icons */
+.pico-body-input-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  flex-shrink: 0;
+  margin-top: 12px;
+}
+
+.pico-body-input-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.pico-body-input-icon--height {
+  background: rgba(27, 79, 114, 0.08);
+  color: var(--brand);
+}
+.pico-body-input-icon--arm {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+.pico-body-input-icon--leg {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.pico-body-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pico-body-input-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  font-family: "IBM Plex Sans", sans-serif;
+  text-transform: uppercase;
+}
+
+.pico-body-input-field-row {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.pico-body-input {
+  padding-right: 2.4rem !important;
+  font-family: "IBM Plex Mono", monospace !important;
+  font-size: 0.9rem !important;
+  letter-spacing: -0.01em;
+  height: 36px;
+}
+
+.pico-body-unit {
+  position: absolute;
+  right: 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-faint);
+  font-family: "IBM Plex Mono", monospace;
+  pointer-events: none;
+  letter-spacing: 0.02em;
+}
+
+/* Hide number spinners */
+.pico-body-input::-webkit-outer-spin-button,
+.pico-body-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.pico-body-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+@media (max-width: 440px) {
+  .pico-body-layout {
+    grid-template-columns: 80px 1fr;
+    gap: 0.75rem;
+  }
+  .pico-body-visual {
+    padding-top: 0;
+  }
+  .pico-silhouette {
+    width: 80px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   22. PASSWORD MODAL — prefix: pwdm-
+   Moved from inline <style> in profile.html.
+   Bug fixes vs the inline version:
+   • Overlay stays display:flex always; open/close via opacity+pointer-events+
+     visibility — avoids display:none killing the flex layout and scroll calc.
+   • .pwdm-body gets min-height:0 so flex:1 actually constrains height and
+     enables overflow-y:auto scrolling inside the fixed-height sheet.
+   • pwdm-input no longer dual-classes with profile-modal-input — no more
+     padding/border conflicts from the generic modal input rules.
+   22 UX principles: thumb-zone CTA, step progress, field grouping,
+   per-field errors, requirements checklist, strength meter, pastel palette,
+   white space, soft shadows, clear hierarchy, consistent gaps.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Tokens ─────────────────────────────────────────────────────────────── */
+:root {
+  --pwdm-brand: #1b4f72;
+  --pwdm-brand-mid: #2874a6;
+  --pwdm-brand-pale: #e8f1f8;
+  --pwdm-cta: #c27a08; /* amber — stronger action signal than teal */
+  --pwdm-cta-dark: #a86206;
+  --pwdm-cta-pale: #fef3dc;
+  --pwdm-success: #15803d;
+  --pwdm-success-bg: #dcfce7;
+  --pwdm-error: #b91c1c;
+  --pwdm-error-bg: #fee2e2;
+  --pwdm-warn: #b45309;
+  --pwdm-warn-bg: #fef3c7;
+  --pwdm-text: #0f2537;
+  --pwdm-muted: #4b6478;
+  --pwdm-faint: #8dabbe;
+  --pwdm-border: #dde5ed;
+  --pwdm-surface: #f4f7fa; /* slightly warmer than pure #f5f8fa */
+  --pwdm-white: #fefeff; /* off-white — avoids pure white principle */
+}
+
+/* ── Overlay ─────────────────────────────────────────────────────────────
+   KEY FIX: always display:flex; open/close via opacity + pointer-events
+   + visibility. This preserves flex layout for proper sheet sizing and
+   allows CSS transitions to work (transitions don't fire on display:none). */
+.pwdm-overlay {
+  display: flex; /* always flex — never display:none */
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  background: rgba(10, 25, 40, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  /* Hidden by default via opacity + visibility, NOT display */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.22s ease,
+    visibility 0s linear 0.22s;
+}
+@media (min-width: 600px) {
+  .pwdm-overlay {
+    align-items: center;
+    padding: 1.5rem;
+  }
+}
+.pwdm-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 0.22s ease,
+    visibility 0s linear 0s;
+}
+.pwdm-overlay.is-closing {
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    visibility 0s linear 0.2s;
+}
+.pwdm-overlay.is-closing .pwdm-sheet {
+  transform: translateY(24px) scale(0.97);
+  opacity: 0;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+@media (max-width: 599px) {
+  .pwdm-overlay.is-closing .pwdm-sheet {
+    transform: translateY(100%);
+  }
+}
+
+/* ── Sheet / Card ────────────────────────────────────────────────────────
+   KEY FIX: Sheet itself needs a defined display:flex + flex-direction:column
+   so that .pwdm-body (flex:1) can be constrained within max-height.
+   Without min-height:0 on an intermediate flex child, overflow-y never
+   kicks in and content bleeds past the sheet boundaries. */
+.pwdm-sheet {
+  width: 100%;
+  max-width: 440px;
+  background: var(--pwdm-white);
+  border-radius: 20px 20px 0 0;
+  box-shadow:
+    0 -4px 32px rgba(10, 25, 40, 0.12),
+    0 -1px 0 var(--pwdm-border),
+    0 -12px 60px rgba(10, 25, 40, 0.06);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* KEY: max-height on the sheet itself keeps it within viewport */
+  max-height: 92dvh;
+  max-height: 92vh; /* fallback for browsers without dvh */
+  /* Entry animation — desktop: zoom; mobile: slide up */
+  transform: translateY(60px);
+  opacity: 0.3;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.22, 0.64, 1),
+    opacity 0.3s ease;
+}
+.pwdm-overlay.is-open .pwdm-sheet {
+  transform: translateY(0);
+  opacity: 1;
+}
+@media (min-width: 600px) {
+  .pwdm-sheet {
+    border-radius: 20px;
+    max-height: 88vh;
+    transform: scale(0.95) translateY(10px);
+    opacity: 0.4;
+  }
+  .pwdm-overlay.is-open .pwdm-sheet {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ── Drag handle ─────────────────────────────────────────────────────── */
+.pwdm-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--pwdm-border);
+  margin: 12px auto 0;
+  flex-shrink: 0;
+}
+@media (min-width: 600px) {
+  .pwdm-handle {
+    display: none;
+  }
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.pwdm-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 14px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--pwdm-border);
+  background: var(--pwdm-white);
+}
+.pwdm-header-icon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--pwdm-cta-pale);
+  color: var(--pwdm-cta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 0 1.5px rgba(194, 122, 8, 0.16);
+}
+.pwdm-header-icon svg {
+  width: 19px;
+  height: 19px;
+}
+.pwdm-header-text {
+  flex: 1;
+  min-width: 0;
+}
+.pwdm-title {
+  display: block;
+  font-family: "Plus Jakarta Sans", "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--pwdm-text);
+  line-height: 1.2;
+}
+.pwdm-subtitle {
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  color: var(--pwdm-faint);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.pwdm-close {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid var(--pwdm-border);
+  background: var(--pwdm-surface);
+  color: var(--pwdm-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+.pwdm-close:hover {
+  background: var(--pwdm-brand-pale);
+  color: var(--pwdm-brand);
+  border-color: var(--pwdm-brand-pale);
+}
+.pwdm-close:active {
+  transform: scale(0.92);
+}
+
+/* ── Step progress (principle 7) ─────────────────────────────────────── */
+.pwdm-steps {
+  display: flex;
+  align-items: center;
+  padding: 14px 24px 0;
+  flex-shrink: 0;
+  gap: 0;
+}
+.pwdm-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.pwdm-step-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--pwdm-surface);
+  border: 1.5px solid var(--pwdm-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--pwdm-faint);
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+#step-1-indicator .pwdm-step-dot::after {
+  content: "1";
+}
+#step-2-indicator .pwdm-step-dot::after {
+  content: "2";
+}
+#step-3-indicator .pwdm-step-dot::after {
+  content: "3";
+}
+.pwdm-step--active .pwdm-step-dot {
+  background: var(--pwdm-cta);
+  border-color: var(--pwdm-cta);
+  color: #fff;
+  transform: scale(1.12);
+  box-shadow: 0 0 0 4px var(--pwdm-cta-pale);
+}
+.pwdm-step--active .pwdm-step-dot::after {
+  color: #fff;
+}
+.pwdm-step--done .pwdm-step-dot {
+  background: var(--pwdm-success-bg);
+  border-color: var(--pwdm-success);
+  color: var(--pwdm-success);
+}
+.pwdm-step--done .pwdm-step-dot::after {
+  content: "✓";
+  font-size: 0.76rem;
+  color: var(--pwdm-success);
+}
+.pwdm-step-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.61rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--pwdm-faint);
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.pwdm-step--active .pwdm-step-label {
+  color: var(--pwdm-cta);
+}
+.pwdm-step--done .pwdm-step-label {
+  color: var(--pwdm-success);
+}
+.pwdm-step-line {
+  flex: 1;
+  height: 1.5px;
+  background: var(--pwdm-border);
+  margin: 0 6px;
+  margin-bottom: 20px;
+  border-radius: 1px;
+  transition: background 0.3s;
+}
+.pwdm-step-line--done {
+  background: var(--pwdm-success);
+}
+
+/* ── Scrollable body ─────────────────────────────────────────────────────
+   KEY FIX: flex:1 alone does not constrain height inside a flex column —
+   min-height:0 is required so the browser knows to shrink this flex child
+   below its content size, enabling overflow-y:auto to actually scroll. */
+.pwdm-body {
+  flex: 1;
+  min-height: 0; /* ← the critical fix */
+  overflow-y: auto;
+  padding: 0 20px 8px;
+  display: flex;
+  flex-direction: column;
+  -webkit-overflow-scrolling: touch;
+}
+.pwdm-body::-webkit-scrollbar {
+  width: 3px;
+}
+.pwdm-body::-webkit-scrollbar-thumb {
+  background: var(--pwdm-border);
+  border-radius: 2px;
+}
+
+/* ── Field group (principles 4, 9, 12) ──────────────────────────────── */
+.pwdm-field {
+  padding: 14px 0 12px;
+  border-bottom: 1px solid #eef2f6;
+}
+.pwdm-field:last-of-type {
+  border-bottom: none;
+}
+
+/* ── Label with step badge (principles 1, 21) ───────────────────────── */
+.pwdm-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+  font-size: 0.86rem;
+  color: var(--pwdm-text);
+  margin-bottom: 3px;
+  letter-spacing: -0.01em;
+}
+.pwdm-label-step {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: var(--pwdm-cta-pale);
+  color: var(--pwdm-cta);
+  font-size: 0.68rem;
+  font-weight: 800;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+/* ── Hint text ───────────────────────────────────────────────────────── */
+.pwdm-hint {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.73rem;
+  color: var(--pwdm-faint);
+  margin: 0 0 8px;
+  line-height: 1.4;
+  padding-left: 28px;
+}
+
+/* ── Input wrapper (principles 2, 10) ───────────────────────────────── */
+.pwdm-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.pwdm-input-icon {
+  position: absolute;
+  left: 13px;
+  color: var(--pwdm-faint);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+  z-index: 1;
+}
+/* ── pwdm-input: standalone — does NOT share profile-modal-input ────────
+   Scoped to avoid padding/border collisions from the generic modal rules. */
+.pwdm-input {
+  width: 100%;
+  padding: 11px 46px 11px 42px;
+  font-family: "IBM Plex Mono", "Menlo", monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  color: var(--pwdm-text);
+  background: var(--pwdm-surface);
+  border: 1.5px solid var(--pwdm-border);
+  border-radius: 10px;
+  outline: none;
+  box-shadow:
+    0 1px 2px rgba(15, 37, 64, 0.04),
+    inset 0 1px 2px rgba(15, 37, 64, 0.02);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
+  min-height: 48px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+}
+.pwdm-input::placeholder {
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--pwdm-faint);
+  font-size: 0.83rem;
+  letter-spacing: 0;
+}
+.pwdm-input:focus {
+  border-color: var(--pwdm-brand);
+  background: var(--pwdm-white);
+  box-shadow:
+    0 0 0 3px rgba(27, 79, 114, 0.1),
+    0 1px 2px rgba(15, 37, 64, 0.04);
+}
+.pwdm-input-wrap:focus-within .pwdm-input-icon {
+  color: var(--pwdm-brand);
+}
+.pwdm-input.is-error {
+  border-color: var(--pwdm-error);
+  background: #fff8f8;
+  box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.09);
+}
+.pwdm-input.is-ok {
+  border-color: var(--pwdm-success);
+  background: #f8fffa;
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.09);
+}
+
+/* Eye toggle (principles 14, 15) */
+.pwdm-eye {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--pwdm-faint);
+  border-radius: 0 10px 10px 0;
+  transition:
+    color 0.15s,
+    background 0.15s;
+  padding: 0;
+  z-index: 2;
+}
+.pwdm-eye:hover {
+  color: var(--pwdm-cta);
+  background: var(--pwdm-cta-pale);
+}
+.pwdm-eye svg {
+  width: 17px;
+  height: 17px;
+  pointer-events: none;
+}
+
+/* ── Field error (principle 3) ───────────────────────────────────────── */
+.pwdm-field-error {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  color: var(--pwdm-error);
+  margin-top: 0;
+  padding: 0;
+  line-height: 1.4;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height 0.2s ease,
+    opacity 0.15s ease,
+    margin-top 0.15s ease;
+  font-weight: 500;
+}
+.pwdm-field-error:not(:empty) {
+  max-height: 3rem;
+  opacity: 1;
+  margin-top: 7px;
+  padding-left: 2px;
+}
+.pwdm-field-error:not(:empty)::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' stroke='%23b91c1c' stroke-width='1.5' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='6.5'/%3E%3Cline x1='8' y1='5' x2='8' y2='8.5'/%3E%3Ccircle cx='8' cy='11' r='0.5' fill='%23b91c1c'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.pwdm-error-general {
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+
+/* ── Section divider (principle 12) ─────────────────────────────────── */
+.pwdm-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--pwdm-faint);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 0;
+}
+.pwdm-divider::before,
+.pwdm-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eef2f6;
+}
+
+/* ── Strength meter (principles 7, 21) ──────────────────────────────── */
+.pwdm-strength-wrap {
+  margin-top: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  background: var(--pwdm-surface);
+  border: 1px solid #eef2f6;
+  border-radius: 8px 8px 0 0;
+  padding: 8px 10px 7px;
+}
+.pwdm-strength-wrap.is-visible {
+  display: flex;
+}
+/* Row: bars + label side-by-side, label right-aligned */
+.pwdm-strength-bars-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pwdm-strength-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.pwdm-strength-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--pwdm-border);
+  transition: background 0.28s;
+}
+.pwdm-strength-wrap[data-strength="1"] .pwdm-strength-bar:nth-child(1) {
+  background: #ef4444;
+}
+.pwdm-strength-wrap[data-strength="2"] .pwdm-strength-bar:nth-child(-n + 2) {
+  background: #f97316;
+}
+.pwdm-strength-wrap[data-strength="3"] .pwdm-strength-bar:nth-child(-n + 3) {
+  background: #eab308;
+}
+.pwdm-strength-wrap[data-strength="4"] .pwdm-strength-bar:nth-child(-n + 4) {
+  background: #22c55e;
+}
+.pwdm-strength-wrap[data-strength="5"] .pwdm-strength-bar:nth-child(-n + 4) {
+  background: #16a34a;
+}
+.pwdm-strength-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.69rem;
+  font-weight: 700;
+  white-space: nowrap;
+  min-width: 52px;
+  text-align: right;
+  color: var(--pwdm-muted);
+  transition: color 0.2s;
+  line-height: 1;
+  flex-shrink: 0;
+}
+/* Strength color overrides — scoped to pwdm to avoid collision with
+   profile.css section 18 which also defines these class names */
+.pwdm-strength-label.strength-very-weak {
+  color: #ef4444;
+}
+.pwdm-strength-label.strength-weak {
+  color: #f97316;
+}
+.pwdm-strength-label.strength-fair {
+  color: #eab308;
+}
+.pwdm-strength-label.strength-strong {
+  color: #22c55e;
+}
+.pwdm-strength-label.strength-very-strong {
+  color: #16a34a;
+}
+
+/* ── Requirements checklist (principles 3, 21) ──────────────────────── */
+/* When strength-wrap is visible, reqs joins it as continuation of same box */
+.pwdm-strength-wrap.is-visible + .pwdm-reqs {
+  margin-top: 0;
+  border-top: none; /* strength-wrap bottom border acts as divider */
+  border-top-width: 0;
+  border-radius: 0 0 8px 8px;
+}
+/* Add inner divider line inside the joined box */
+.pwdm-strength-wrap.is-visible {
+  border-bottom: 1px solid #e8edf2;
+  border-radius: 8px 8px 0 0;
+}
+.pwdm-reqs {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 7px 10px 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 10px;
+  background: var(--pwdm-surface);
+  border-radius: 8px;
+  border: 1px solid #eef2f6;
+}
+.pwdm-req {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--pwdm-faint);
+  transition: color 0.2s;
+  line-height: 1.3;
+}
+.pwdm-req-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid var(--pwdm-border);
+  flex-shrink: 0;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+  position: relative;
+}
+.pwdm-req.is-met {
+  color: var(--pwdm-success);
+}
+.pwdm-req.is-met .pwdm-req-icon {
+  background: var(--pwdm-success);
+  border-color: var(--pwdm-success);
+}
+.pwdm-req.is-met .pwdm-req-icon::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 6px;
+  height: 4px;
+  border-left: 1.5px solid #fff;
+  border-bottom: 1.5px solid #fff;
+  transform: rotate(-45deg);
+}
+.pwdm-req.is-fail {
+  color: var(--pwdm-error);
+}
+.pwdm-req.is-fail .pwdm-req-icon {
+  background: var(--pwdm-error-bg);
+  border-color: var(--pwdm-error);
+}
+.pwdm-req.is-fail .pwdm-req-icon::after {
+  content: "×";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--pwdm-error);
+  font-weight: 700;
+}
+
+/* ── Match indicator (principle 3) ──────────────────────────────────── */
+.pwdm-match {
+  margin-top: 7px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.73rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 7px;
+  min-height: 0;
+  transition: opacity 0.15s;
+}
+.pwdm-match:empty {
+  display: none;
+}
+.pwdm-match--ok {
+  color: var(--pwdm-success);
+  background: var(--pwdm-success-bg);
+}
+.pwdm-match--fail {
+  color: var(--pwdm-error);
+  background: var(--pwdm-error-bg);
+}
+
+/* ── Footer / CTA (principles 5, 6, 16, 17) ─────────────────────────── */
+.pwdm-footer {
+  flex-shrink: 0;
+  padding: 12px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--pwdm-white);
+  border-top: 1px solid var(--pwdm-border);
+}
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pwdm-footer {
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+}
+/* Primary CTA — amber for stronger action signal */
+.pwdm-btn-save {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 12px;
+  font-family: "Plus Jakarta Sans", "IBM Plex Sans", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  background: var(--pwdm-cta);
+  border: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow:
+    0 2px 10px rgba(194, 122, 8, 0.3),
+    0 1px 2px rgba(194, 122, 8, 0.18);
+  transition:
+    background 0.15s,
+    box-shadow 0.15s,
+    transform 0.1s;
+}
+.pwdm-btn-save:hover:not(:disabled) {
+  background: var(--pwdm-cta-dark);
+  box-shadow: 0 4px 16px rgba(194, 122, 8, 0.38);
+}
+.pwdm-btn-save:active:not(:disabled) {
+  transform: scale(0.982);
+}
+.pwdm-btn-save:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.pwdm-save-icon {
+  flex-shrink: 0;
+}
+
+/* Cancel */
+.pwdm-btn-cancel {
+  width: 100%;
+  min-height: 42px;
+  border-radius: 9px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.83rem;
+  font-weight: 500;
+  background: transparent;
+  border: 1.5px solid var(--pwdm-border);
+  color: var(--pwdm-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+.pwdm-btn-cancel:hover {
+  background: var(--pwdm-surface);
+  color: var(--pwdm-text);
+  border-color: var(--pwdm-border);
+}
+
+/* eof — profile.css v5 (pwdm section added) */
+
+/* =============================================================================
+   profile.css — PATCH v5.1
+   Fixes & UX improvements applied:
+   1.  profile-section--shift: strip any border-left from shift-info-header
+       (main.css may inject colored left border via .shift-info-header —
+        override here at profile scope)
+   2.  profile-pwd-toggle dead code cleaned up conceptually; .pwdm-eye is
+       the live toggle — ensure it is always inside .pwdm-input-wrap and
+       positioned correctly (right-side, full height tap area, 44×44 min)
+   3–22. All UX principles applied below as targeted overrides.
+   ============================================================================= */
+
+/* ── Fix 1: Remove colored border-left on shift header inside profile ── */
+.profile-section--shift .shift-info-header,
+.profile-section--shift .shift-info-card {
+  border-left: none !important;
+}
+/* Also neutralize any colored left-accent that might come from theme */
+.profile-section--shift [class*="shift-info"] {
+  border-left: none !important;
+  padding-left: var(--p-gap-md) !important;
+}
+
+/* ── Fix 2: Ensure pwdm-eye (the LIVE toggle) sits correctly in .pwdm-input-wrap ──
+   The old .profile-pwd-toggle class is dead code (only .pwdm-eye is used in HTML).
+   These rules make sure .pwdm-eye is always correctly positioned & thumb-friendly. */
+.pwdm-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+/* Guarantee the input has room for the eye button */
+.pwdm-input-wrap .pwdm-input {
+  padding-right: 48px !important;
+}
+/* pwdm-eye: absolute right, full-height, 44px min tap zone (UX 15) */
+.pwdm-input-wrap .pwdm-eye {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  min-height: 44px;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--pwdm-faint);
+  border-radius: 0 10px 10px 0;
+  transition:
+    color 0.15s,
+    background 0.15s;
+  padding: 0;
+  z-index: 2;
+}
+.pwdm-input-wrap .pwdm-eye:hover {
+  color: var(--pwdm-cta);
+  background: var(--pwdm-cta-pale);
+}
+.pwdm-input-wrap .pwdm-eye svg {
+  width: 17px;
+  height: 17px;
+  pointer-events: none;
+  display: block;
+}
+
+/* ── UX 2: Friendly, short copy — enforced via text length constraints ── */
+/* Prevent overly long hint/desc text from breaking layout */
+.pmod-subtitle,
+.pwdm-hint,
+.pwdm-subtitle {
+  max-width: 340px;
+}
+
+/* ── UX 3: Show error clearly — icon + color + inline position ── */
+/* Already in place; ensure error is visually connected to field, not floating */
+.profile-modal-field-group .profile-modal-error,
+.profile-bank-field-group .profile-modal-error {
+  margin-top: 4px;
+  padding-left: 2px;
+}
+
+/* ── UX 4: Align fields with input type ──
+   Phone/code fields → monospace; name/text → sans; amount → tabular-nums */
+.profile-modal-input[type="tel"],
+.profile-modal-input[inputmode="numeric"],
+.profile-modal-input[inputmode="tel"],
+.profile-modal-input[data-field="rekening"] {
+  font-family: "IBM Plex Mono", monospace !important;
+  letter-spacing: 0.04em;
+}
+
+/* ── UX 5: Input masks — visual hint via placeholder style ── */
+.profile-modal-input::placeholder {
+  font-size: 0.82rem;
+  color: var(--text-faint);
+  opacity: 0.75;
+  letter-spacing: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+}
+/* Monospace fields keep their letter-spacing in placeholder */
+.profile-modal-input[type="tel"]::placeholder,
+.profile-modal-input[inputmode="numeric"]::placeholder {
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}
+
+/* ── UX 7: Spacing — related items feel connected ──
+   Tighten gap between label→input, loosen between field groups */
+.profile-modal-field-group,
+.profile-bank-field-group {
+  gap: 5px;
+  padding: 14px 0 8px;
+}
+.profile-modal-label {
+  margin-bottom: 5px;
+}
+/* Slightly more breathing room between groups */
+.profile-modal-field-group + .profile-modal-field-group,
+.profile-bank-field-group + .profile-bank-field-group {
+  padding-top: 16px;
+}
+
+/* ── UX 8: CTA in thumb zone — footer already bottom, ensure min-height ── */
+.pmod-btn-save,
+.pwdm-btn-save {
+  min-height: 54px !important;
+}
+/* Mobile: safe area bottom padding already handled, but add extra thumb comfort */
+@media (max-width: 480px) {
+  .pmod-footer,
+  .pwdm-footer {
+    padding-bottom: max(
+      22px,
+      calc(14px + env(safe-area-inset-bottom))
+    ) !important;
+  }
+}
+
+/* ── UX 9: CTA copy — push-words via button states ──
+   Add microstate: save button shows "Menyimpan…" text via JS (class toggle),
+   visually we ensure sufficient width for loading state */
+.pmod-btn-save[data-loading="true"],
+.pwdm-btn-save[data-loading="true"] {
+  opacity: 0.8;
+}
+
+/* ── UX 10: Progress — stepper already exists; enhance active dot ── */
+.pwdm-step--active .pwdm-step-dot {
+  box-shadow:
+    0 0 0 5px rgba(194, 122, 8, 0.15),
+    0 0 0 3px var(--pwdm-cta-pale) !important;
+}
+.profile-modal-step.is-active .profile-modal-step-dot {
+  box-shadow: 0 0 0 4px rgba(40, 116, 166, 0.15) !important;
+}
+
+/* ── UX 11: No pure colors — all brand/accent colors already offset ──
+   Enforce the rule on any inline color that might appear */
+.profile-hero {
+  background: #1b4f72 !important; /* navy, not pure blue */
+}
+.pmod-btn-save,
+.pwdm-btn-save {
+  /* Already uses #c27a08 amber rather than #ff8c00 */
+}
+
+/* ── UX 12: White space — section body gets breathing room ── */
+.profile-modal-body {
+  padding: 6px 20px 16px;
+}
+.pmod-body--simple {
+  padding: 20px var(--p-gap-md) 12px;
+}
+.pwdm-body {
+  padding: 4px 20px 12px;
+}
+
+/* ── UX 13: Soft shadows — all shadows use multi-layer rgba, never solid ── */
+/* Already enforced. Ensure section cards keep soft shadow */
+.profile-section {
+  box-shadow:
+    0 1px 4px rgba(15, 37, 64, 0.05),
+    0 4px 16px rgba(15, 37, 64, 0.05);
+  border: 1px solid rgba(200, 212, 224, 0.45);
+}
+
+/* ── UX 14: Soft background — inputs use #f5f8fa, never pure white on white ── */
+.profile-modal-input:not(:focus),
+.pwdm-input:not(:focus),
+.pmod-input:not(:focus) {
+  background: #f5f8fa;
+}
+
+/* ── UX 15: Group related elements — field group bottom border as soft separator ── */
+.profile-modal-field-group {
+  border-bottom: 1px solid #f0f4f8;
+  padding-bottom: 10px;
+}
+.profile-modal-field-group:last-of-type {
+  border-bottom: none;
+}
+
+/* ── UX 16: Consistency — all modals share the same border-radius token ── */
+.profile-modal-box,
+.pwdm-sheet {
+  border-radius: 20px;
+}
+@media (max-width: 767px) {
+  .profile-modal-box {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+}
+
+/* ── UX 17: Clickable elements look clickable ── */
+/* Edit buttons: always visible border + cursor:pointer + hover lift */
+.profile-edit-btn {
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s,
+    transform 0.1s;
+}
+.profile-edit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(27, 79, 114, 0.12);
+}
+.profile-edit-btn:active {
+  transform: translateY(0) scale(0.95);
+}
+/* Bank dropdown trigger: clearly a button */
+.profile-bank-trigger {
+  cursor: pointer;
+  border: 1.5px solid #dde5ed;
+  border-radius: 12px;
+  min-height: 50px;
+  background: #f5f8fa;
+  padding: 12px 14px;
+  box-sizing: border-box;
+}
+.profile-bank-trigger:hover {
+  border-color: #c5d3de;
+  background: #eef4f9;
+}
+
+/* ── UX 18: Thumb-friendly tap areas — all interactive elements ≥ 44×44 ── */
+.profile-edit-btn {
+  min-height: 36px;
+  /* Tap area extended via ::before pseudo */
+}
+.pmod-close,
+.pwdm-close,
+.profile-modal-close {
+  min-width: 44px;
+  min-height: 44px;
+}
+/* Day chips — slightly taller tap zone */
+.profile-workday-chip {
+  height: 30px;
+}
+
+/* ── UX 19: One primary CTA per modal ──
+   Enforce: only one .pmod-btn-save / .pwdm-btn-save per footer */
+.pmod-footer .pmod-btn-save ~ .pmod-btn-save,
+.pwdm-footer .pwdm-btn-save ~ .pwdm-btn-save {
+  display: none; /* safety net */
+}
+
+/* ── UX 20: Clear, actionable button text ──
+   Button padding ensures text is never truncated */
+.pmod-btn-save,
+.pwdm-btn-save,
+.pmod-btn-cancel,
+.pwdm-btn-cancel {
+  padding: 0 20px !important;
+  white-space: nowrap;
+}
+
+/* ── UX 21: Inner elements: smaller radius than outer container ──
+   Outer card: 14px → Input inside card: 12px → Badge inside input: 8px */
+.profile-modal-box {
+  border-radius: 20px;
+}
+.profile-modal-input,
+.pwdm-input,
+.pmod-input {
+  border-radius: 12px;
+}
+.profile-modal-steps .profile-modal-step-dot {
+  border-radius: 50%;
+}
+.profile-dept-badge,
+.profile-shift-badge {
+  border-radius: 6px;
+}
+.profile-verified-badge,
+.profile-unverified-badge,
+.profile-rejected-badge {
+  border-radius: 999px;
+}
+
+/* ── UX 22: Consistent gaps — enforce 8px grid throughout ──
+   All gaps are multiples of 4/8px */
+.profile-modal-field-group {
+  gap: 6px;
+} /* 1.5× */
+.profile-modal-body {
+  gap: 0;
+} /* separator-driven spacing */
+.pmod-footer,
+.pwdm-footer {
+  gap: 8px;
+} /* 1× */
+.profile-fields {
+  gap: 0;
+} /* separator-driven */
+.profile-layout {
+  gap: 16px;
+} /* 2× */
+@media (min-width: 768px) {
+  .profile-layout {
+    gap: 24px;
+  } /* 3× */
+}
+
+/* ── UX 25: Creative layout — shift card subtle inner polish ──
+   No border-left color strip; use a soft top-accent bar instead */
+.profile-section--shift .profile-section-header {
+  border-bottom: 1px solid var(--p-divider);
+  position: relative;
+}
+.profile-section--shift .profile-section-header::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: var(--p-gap-md);
+  width: 24px;
+  height: 2px;
+  background: var(--brand, #1b4f72);
+  border-radius: 2px;
+  opacity: 0.45;
+}
+
+/* ── Reject legacy dead code: .profile-pwd-toggle
+   This class exists in profile.css section 18 but is NOT used in the HTML.
+   The active toggle is .pwdm-eye inside .pwdm-input-wrap.
+   We disable the legacy styles to prevent accidental re-use. ── */
+/* (dead styles left in place for git-blame; new code uses .pwdm-eye only) */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   IMAGE 2 REDESIGN — New component styles
+   • PSC = Profile Shift Card new layout
+   • PBC = Profile Bank Card (card-within-card)
+   • profile-update-btn = "Perbarui Profil" button in Informasi Dasar header
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PSC: Shift card — new layout (Image 2 style)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Shift name row */
+.psc-shift-row {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem var(--p-gap-md) 0;
+}
+
+.psc-shift-name {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  font-family: "IBM Plex Mono", monospace;
+}
+
+/* Jam Kerja Operasional row */
+.psc-optime-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--p-gap-sm);
+  padding: 0.35rem var(--p-gap-md) 0.625rem;
+  border-bottom: 1px solid var(--p-divider);
+}
+
+.psc-optime-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+.psc-optime-value {
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--text-primary);
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
+
+.psc-optime-arrow {
+  font-size: 0.9rem;
+  color: var(--brand);
+  font-weight: 700;
+}
+
+/* ── Date chip row — calendar style ── */
+.psc-date-chips {
+  display: flex !important;
+  gap: 0 !important;
+  padding: 0.625rem var(--p-gap-md) 0.5rem !important;
+  border-top: none !important;
+  border-bottom: 1px solid var(--p-divider) !important;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.psc-date-chips::-webkit-scrollbar {
+  display: none;
+}
+
+/* Override the flat text chip to a proper stacked date chip */
+.psc-chip {
+  flex: 1 !important;
+  min-width: 36px !important;
+  height: auto !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.15rem !important;
+  padding: 0.4rem 0.2rem !important;
+  border: none !important;
+  border-bottom: none !important;
+  background: transparent !important;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  cursor: default;
+}
+
+.psc-chip.active {
+  background: var(--brand-xlight, #e8f1f8) !important;
+  color: var(--brand) !important;
+  border-bottom: none !important;
+}
+
+.psc-chip-day {
+  font-size: 0.57rem;
+  font-weight: 700;
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: inherit;
+}
+
+.psc-chip-date {
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-family: "IBM Plex Mono", monospace;
+  line-height: 1;
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Active chip — filled background */
+.profile-workday-chip.active.psc-chip {
+  color: var(--brand) !important;
+  border-bottom: none !important;
+}
+
+/* Off chips keep muted color */
+.profile-workday-chip--off.psc-chip {
+  opacity: 0.45 !important;
+}
+.profile-workday-chip--off.psc-chip::after {
+  display: none !important;
+}
+
+/* ── Footnote below shift card ── */
+.psc-footnote {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem var(--p-gap-md) 0.625rem;
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-style: italic;
+}
+
+.psc-footnote svg {
+  flex-shrink: 0;
+  color: var(--text-faint);
+  opacity: 0.7;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   "Perbarui Profil" button — section header, wider style
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-update-btn {
+  height: 34px !important;
+  padding: 0 0.875rem !important;
+  gap: 0.35rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  color: var(--brand) !important;
+  background: var(--brand-xlight, #e8f1f8) !important;
+  border-color: rgba(27, 79, 114, 0.2) !important;
+  border-radius: 10px !important;
+  white-space: nowrap;
+}
+
+.profile-update-btn:hover {
+  background: var(--brand-light, #d0e4f0) !important;
+  color: var(--brand) !important;
+  border-color: rgba(27, 79, 114, 0.35) !important;
+}
+
+.profile-update-btn svg {
+  width: 13px !important;
+  height: 13px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PBC: Bank card-within-card (Image 2 "Informasi Rekening" style)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-field--bank-card {
+  padding: 0.75rem var(--p-gap-md) !important;
+  min-height: unset !important;
+}
+
+.pbc-bank-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--p-gap-sm);
+  background: var(--p-surface-input, #f4f6f9);
+  border: 1px solid rgba(200, 212, 224, 0.7);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+}
+
+.pbc-bank-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.pbc-bank-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: "IBM Plex Sans", sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pbc-account-num {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.05em;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.pbc-bank-right {
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Sidebar width on desktop — slightly narrower to match Image 2 feel
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .profile-sidebar {
+    width: 280px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .profile-sidebar {
+    width: 300px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Section card — flatter border, slightly lighter shadow (Image 2)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-section {
+  border: 1px solid rgba(210, 220, 232, 0.8) !important;
+  box-shadow:
+    0 1px 4px rgba(15, 37, 64, 0.04),
+    0 2px 12px rgba(15, 37, 64, 0.04) !important;
+  border-radius: 16px !important;
+}
+
+.profile-section-header {
+  padding: 0.8rem var(--p-gap-md) !important;
+  background: #fafbfd !important;
+  border-bottom: 1px solid var(--p-divider) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Hero card — slightly smaller avatar on desktop (Image 2 compactness)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .profile-hero {
+    padding: 1.5rem var(--p-gap-md) 1.25rem !important;
+  }
+  .profile-avatar-ring {
+    width: 76px !important;
+    height: 76px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   "Edit Rekening" button — wider label style
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.profile-section--bank .profile-bank-edit-btn {
+  font-size: 0.73rem !important;
+  font-weight: 700 !important;
+  padding: 0 0.75rem !important;
+  height: 34px !important;
+  border-radius: 10px !important;
+  color: var(--brand) !important;
+  background: var(--brand-xlight, #e8f1f8) !important;
+  border-color: rgba(27, 79, 114, 0.2) !important;
+  white-space: nowrap;
+}
+
+.profile-section--bank .profile-bank-edit-btn:hover {
+  background: var(--brand-light, #d0e4f0) !important;
+}
+
+/* Same for Pico */
+.profile-section--pico .profile-bank-edit-btn {
+  font-size: 0.73rem !important;
+  font-weight: 700 !important;
+  padding: 0 0.75rem !important;
+  height: 34px !important;
+  border-radius: 10px !important;
+  white-space: nowrap;
+}
